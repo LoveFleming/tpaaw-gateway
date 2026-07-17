@@ -1,0 +1,12 @@
+{
+  "name": "@paaw/gateway",
+  "version": "0.1.0",
+  "description": "PAAW Gateway — DevOps management platform for PAAW",
+  "type": "module",
+  "main": "src/server.mjs",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "node --watch src/server.mjs"
+  },
+  "dependencies": {}
+}

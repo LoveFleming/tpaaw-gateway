@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAAW Gateway</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f0f1a; --card: #1a1a2e; --border: #2d2d44;
+    --text: #e0e0e0; --dim: #888; --accent: #f59e0b;
+    --green: #10b981; --red: #ef4444; --blue: #3b82f6;
+  }
+  body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .app { max-width: 960px; margin: 0 auto; padding: 20px; }
+  h1 { font-size: 1.5rem; margin-bottom: 20px; color: var(--accent); }
+  .nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .nav button { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-size: 0.85rem; }
+  .nav button.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .row:last-child { border: none; }
+  .label { color: var(--dim); font-size: 0.85rem; }
+  .value { font-weight: 600; font-size: 0.9rem; }
+  .badge { padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+  .badge.green { background: #065f46; color: #6ee7b7; }
+  .badge.red { background: #7f1d1d; color: #fca5a5; }
+  .badge.yellow { background: #78350f; color: #fcd34d; }
+  .badge.blue { background: #1e3a5f; color: #93c5fd; }
+  .btn { padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+  .btn.primary { background: var(--accent); color: #000; }
+  .btn.danger { background: var(--red); color: #fff; }
+  .btn.success { background: var(--green); color: #fff; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .event { font-size: 0.8rem; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .event .ts { color: var(--dim); margin-right: 8px; }
+  .event .type { font-weight: 600; margin-right: 8px; }
+  .login-form { max-width: 360px; margin: 80px auto; }
+  .login-form input { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 0.9rem; margin-bottom: 12px; }
+  .login-form .btn { width: 100%; }
+  .progress { color: var(--accent); animation: pulse 1.5s infinite; padding: 20px; text-align: center; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  pre { font-size: 0.75rem; color: var(--dim); overflow-x: auto; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="progress">Loading...</div>
+</div>
+<script>
+// ── State ──
+let token = localStorage.getItem("paaw-gw-token");
+let currentUser = null;
+let currentPage = "dashboard";
+let data = {};
+let upgrading = false;
+
+// ── API helper ──
+async function api(path, method = "GET", body) {
+  const opts = { method, headers: { "Content-Type": "application/json" } };
+  if (token) opts.headers.Authorization = "Bearer " + token;
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  if (res.status === 401) {
+    token = null;
+    localStorage.removeItem("paaw-gw-token");
+    render();
+    return null;
+  }
+  return res.json();
+}
+
+// ── Init ──
+async function init() {
+  if (token) {
+    const me = await api("/api/auth/me");
+    if (me) { currentUser = me; render(); return; }
+  }
+  render();
+}
+init();
+
+// Auto-refresh every 15s
+setInterval(() => { if (token) refresh(); }, 15000);
+
+// ── Render ──
+function render() {
+  const app = document.getElementById("app");
+  if (!token || !currentUser) {
+    app.innerHTML = renderLogin();
+    return;
+  }
+  app.innerHTML = renderShell();
+  refresh();
+}
+
+function renderLogin() {
+  return [
+    '<div class="login-form card">',
+    '  <h2>🔐 PAAW Gateway Login</h2>',
+    '  <input id="gw-user" placeholder="User ID" autocomplete="username">',
+    '  <input id="gw-pass" type="password" placeholder="Password" autocomplete="current-password">',
+    '  <button class="btn primary" onclick="doLogin()">Login</button>',
+    '</div>'
+  ].join("\n");
+}
+
+async function doLogin() {
+  const userId = document.getElementById("gw-user").value;
+  const password = document.getElementById("gw-pass").value;
+  const result = await api("/api/auth/login", "POST", { userId, password });
+  if (result && result.token) {
+    token = result.token;
+    currentUser = result.user;
+    localStorage.setItem("paaw-gw-token", token);
+    render();
+  } else {
+    alert("Login failed");
+  }
+}
+
+function doLogout() {
+  token = null;
+  currentUser = null;
+  localStorage.removeItem("paaw-gw-token");
+  render();
+}
+
+function renderShell() {
+  const pages = [
+    { id: "dashboard", icon: "📊", label: "Dashboard" },
+    { id: "version", icon: "📦", label: "Version" },
+    { id: "backup", icon: "💾", label: "Backup" },
+    { id: "events", icon: "📋", label: "Event Log" },
+  ];
+  if (currentUser.role === "admin") {
+    pages.push({ id: "users", icon: "👥", label: "Users" });
+  }
+  const navButtons = pages.map(function(p) {
+    return '<button onclick="switchPage(\'' + p.id + '\')" class="' + (currentPage === p.id ? "active" : "") + '">' + p.icon + " " + p.label + "</button>";
+  }).join("");
+  return [
+    "<h1>⚙️ PAAW Gateway</h1>",
+    '<div class="nav">',
+    navButtons,
+    '<button onclick="doLogout()" style="margin-left:auto">🚪 Logout</button>',
+    "</div>",
+    '<div id="page-content"><div class="progress">Loading...</div></div>'
+  ].join("\n");
+}
+
+function switchPage(page) {
+  currentPage = page;
+  document.querySelectorAll(".nav button").forEach(function(b) {
+    b.classList.toggle("active", b.textContent.indexOf(page) >= 0);
+  });
+  refresh();
+}
+
+async function refresh() {
+  if (!token) return;
+  var d = await api("/api/dashboard");
+  if (!d) return;
+  data = d;
+  if (currentPage === "backup") {
+    var bk = await api("/api/backups");
+    if (bk) data.backupsAll = bk.backups;
+  }
+  if (currentPage === "events") {
+    var ev = await api("/api/events?limit=50");
+    if (ev) data.eventsAll = ev.events;
+  }
+  renderPage();
+}
+
+function renderPage() {
+  var el = document.getElementById("page-content");
+  if (!el) return;
+  switch (currentPage) {
+    case "dashboard": el.innerHTML = renderDashboard(); break;
+    case "version": el.innerHTML = renderVersion(); break;
+    case "backup": el.innerHTML = renderBackup(); break;
+    case "events": el.innerHTML = renderEvents(); break;
+    case "users": el.innerHTML = renderUsers(); break;
+  }
+}
+
+function fmtTime(sec) {
+  if (!sec || sec <= 0) return "—";
+  if (sec > 86400) return Math.floor(sec/86400) + "d " + Math.floor((sec%86400)/3600) + "h";
+  if (sec > 3600) return Math.floor(sec/3600) + "h " + Math.floor((sec%3600)/60) + "m";
+  return Math.floor(sec/60) + "m";
+}
+
+function statusBadge(st) {
+  if (st === "running") return '<span class="badge green">Running</span>';
+  if (st === "crashed") return '<span class="badge red">Crashed</span>';
+  return '<span class="badge yellow">Stopped</span>';
+}
+
+function renderDashboard() {
+  var d = data;
+  var s = d.system || {};
+  var h = d.health || {};
+  var srv = s.paawServer || {};
+  var rows = [];
+  rows.push(rowHTML("PAAW Version", s.version || "?"));
+  rows.push(rowHTML("Node", s.nodeVersion || "?"));
+  rows.push(rowHTML("Platform", (s.platform || "?") + " " + (s.arch || "")));
+  rows.push(rowHTML("Gateway Uptime", fmtTime(s.uptime)));
+  rows.push(rowHTML("Memory", "RSS " + (s.memory ? s.memory.rss : "?") + " | Heap " + (s.memory ? s.memory.heapUsed : "?") + "/" + (s.memory ? s.memory.heapTotal : "?")));
+
+  var serverRows = [];
+  serverRows.push(rowHTML("Status", statusBadge(srv.status)));
+  serverRows.push(rowHTML("PID", srv.pid || "—"));
+  serverRows.push(rowHTML("Uptime", fmtTime(srv.uptime)));
+  serverRows.push(rowHTML("Health", h.ok ? '<span class="badge green">Healthy</span>' : '<span class="badge red">' + (h.detail || "?") + "</span>"));
+  serverRows.push(rowHTML("Restart Count", String(srv.restartCount || 0)));
+
+  var serverButtons = '<div class="btn-row">';
+  if (srv.status === "running") {
+    serverButtons += '<button class="btn danger" onclick="doServerAction(\'stop\')">⏹ Stop</button>';
+  } else {
+    serverButtons += '<button class="btn success" onclick="doServerAction(\'start\')">▶ Start</button>';
+  }
+  serverButtons += '<button class="btn primary" onclick="doServerAction(\'restart\')">🔄 Restart</button>';
+  serverButtons += "</div>";
+
+  var g = s.git || {};
+  var gitRows = [];
+  gitRows.push(rowHTML("Branch", g.branch || "?"));
+  gitRows.push(rowHTML("Commit", (g.commit || "?") + " (" + (g.date ? g.date.slice(0,19) : "?") + ")"));
+  gitRows.push(rowHTML("Behind", g.behind > 0 ? '<span class="badge yellow">' + g.behind + " commits behind</span>" : '<span class="badge green">Up to date</span>'));
+  gitRows.push(rowHTML("Dirty", g.dirty ? '<span class="badge yellow">Yes</span>' : '<span class="badge green">Clean</span>'));
+
+  var bk = d.backups || {};
+  var backupRows = [];
+  backupRows.push(rowHTML("Total", (bk.total || 0) + " backups"));
+  backupRows.push(rowHTML("Latest", bk.latest ? bk.latest.date + " (" + bk.latest.sizeMB + " MB)" : "—"));
+
+  return [
+    cardHTML("🖥️ System", rows.join("")),
+    cardHTML("⚡ PAAW Server", serverRows.join("") + serverButtons),
+    cardHTML("📂 Git", gitRows.join("")),
+    cardHTML("💾 Backups", backupRows.join(""))
+  ].join("");
+}
+
+function renderVersion() {
+  var g = (data.system && data.system.git) || {};
+  var rows = [];
+  rows.push(rowHTML("Version", data.version || "?"));
+  rows.push(rowHTML("Branch", g.branch || "?"));
+  rows.push(rowHTML("Commit", g.commit || "?"));
+  rows.push(rowHTML("Date", g.date ? g.date.slice(0,19) : "?"));
+  rows.push(rowHTML("Behind remote", g.behind > 0 ? g.behind + " commits" : "Up to date"));
+
+  var upgradeSection = "";
+  if (currentUser.role === "admin") {
+    if (upgrading) {
+      upgradeSection = '<div class="progress">⏳ Upgrading... do not close this page</div>';
+    } else {
+      upgradeSection = [
+        '<p style="font-size:0.85rem;color:var(--dim);margin-bottom:12px">This will: git stash → git pull → npm install → restart PAAW Server</p>',
+        '<div class="btn-row">',
+        '<button class="btn primary" onclick="doUpgrade()">🔄 Upgrade Now</button>',
+        '</div>'
+      ].join("");
+    }
+  }
+
+  var dirtySection = "";
+  if (g.dirty) {
+    dirtySection = cardHTML("⚠️ Uncommitted Changes", "<pre>" + ((g.statusLines || []).join("\n")) + "</pre>");
+  }
+
+  return cardHTML("📦 Current Version", rows.join("")) + cardHTML("🔄 Upgrade", upgradeSection) + dirtySection;
+}
+
+function renderBackup() {
+  var backups = data.backupsAll || [];
+  var rows = [];
+  if (backups.length === 0) {
+    rows.push('<div style="color:var(--dim);padding:12px 0">No backups yet</div>');
+  } else {
+    backups.forEach(function(b) {
+      var restoreBtn = currentUser.role === "admin"
+        ? '<button class="btn primary" style="font-size:0.75rem;padding:4px 12px" onclick="doRestore(\'' + b.filename + "')\">📂 Restore</button>"
+        : "";
+      rows.push(rowHTML(b.date + " (" + b.sizeMB + " MB)", restoreBtn));
+    });
+  }
+
+  var createBtn = '<div class="btn-row" style="margin-bottom:12px"><button class="btn success" onclick="doBackup()">🔄 Create Backup Now</button></div>';
+
+  return cardHTML("💾 Backups", createBtn + rows.join(""));
+}
+
+function renderEvents() {
+  var evts = data.eventsAll || data.events || [];
+  var rows = [];
+  evts.forEach(function(e) {
+    rows.push('<div class="event"><span class="ts">' + (e.ts || "").slice(11,19) + '</span><span class="type">' + e.type + "</span>" + e.detail + "</div>");
+  });
+  if (rows.length === 0) rows.push('<div style="color:var(--dim)">No events</div>');
+  return cardHTML("📋 Recent Events", rows.join(""));
+}
+
+function renderUsers() {
+  var users = (config && config.users) || [];
+  // We don't have config in frontend, use dashboard data if available
+  var rows = [];
+  // Show current user at least
+  rows.push(rowHTML(currentUser.name, '<span class="badge ' + (currentUser.role === "admin" ? "yellow" : "blue") + '">' + currentUser.role + "</span>"));
+  return cardHTML("👥 Users", rows.join(""));
+}
+
+// ── Helpers ──
+function rowHTML(label, value) {
+  return '<div class="row"><span class="label">' + label + '</span><span class="value">' + value + "</span></div>";
+}
+
+function cardHTML(title, content) {
+  return '<div class="card"><h2>' + title + "</h2>" + content + "</div>";
+}
+
+// ── Actions ──
+async function doServerAction(action) {
+  await api("/api/server/" + action, "POST");
+  setTimeout(refresh, 2000);
+}
+
+async function doUpgrade() {
+  if (!confirm("Upgrade PAAW? This will restart the server.")) return;
+  upgrading = true;
+  renderPage();
+  var result = await api("/api/upgrade", "POST");
+  upgrading = false;
+  if (result && result.ok) {
+    alert("✅ Upgrade successful! Version: " + (result.version || "?"));
+  } else {
+    alert("❌ Upgrade failed: " + ((result && result.error) || "unknown"));
+  }
+  refresh();
+}
+
+async function doBackup() {
+  var result = await api("/api/backups/create", "POST");
+  if (result && result.ok) alert("✅ Backup created: " + result.filename);
+  else alert("❌ Backup failed: " + ((result && result.error) || "?"));
+  refresh();
+}
+
+async function doRestore(filename) {
+  if (!confirm("Restore from " + filename + "? This will replace current data and restart the server.")) return;
+  var result = await api("/api/backups/restore/" + filename, "POST");
+  if (result && result.ok) alert("✅ Restored from " + filename);
+  else alert("❌ Restore failed: " + ((result && result.error) || "?"));
+  refresh();
+}
+</script>
+</body>
+</html>

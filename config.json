@@ -1,0 +1,15 @@
+{
+  "port": 4199,
+  "paawRoot": "../tPAAW",
+  "paawServerCmd": "node packages/server/src/index.mjs",
+  "paawServerPort": 4097,
+  "backupDir": "../tPAAW/backups",
+  "backupSchedule": "0 3 * * *",
+  "maxBackups": 7,
+  "autoStartPaaw": false,
+  "users": [
+    { "id": "admin", "name": "Fleming", "role": "admin", "passwordHash": "changeme" }
+  ],
+  "sessionSecret": "paaw-gateway-secret-change-me",
+  "sessionMaxAge": 86400000
+}
