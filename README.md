@@ -93,3 +93,9 @@ Dashboard「設定」卡可直接改這兩個值（存 `gateway.json`，即時�
 
 環境變數 `PAAW_PACKAGE_URL` / `PAAW_HOME` 仍優先；被 env 蓋過時 UI 顯示 🔒 提示。
 API：`GET/POST /api/settings`（body `{"packageServer":"…","paawHome":"…"}`，空字串 = 清除）。
+
+### 啟動後自動開瀏覽器
+
+PAAW 啟動成功（UI 按 ▶️/🔁）自動開瀏覽器 tab 顯示 PAAW。
+關閉：`PAAW_OPEN_BROWSER=0` 或 gateway.json `"openBrowser": false`。
+跨平台：macOS `open` / Windows `start` / Linux `xdg-open`（headless 環境靜默跳過）。

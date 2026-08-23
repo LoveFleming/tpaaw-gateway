@@ -457,6 +457,21 @@ function paawRunning() {
   return !!(paawChild && paawChild.exitCode === null);
 }
 
+// 啟動成功後自動開瀏覽器（預設開；PAAW_OPEN_BROWSER=0 或 gateway.json openBrowser:false 關）
+const OPEN_BROWSER = process.env.PAAW_OPEN_BROWSER !== "0" && GATEWAY_CFG.openBrowser !== false;
+
+function openBrowserTab(url) {
+  try {
+    if (process.platform === "darwin") {
+      spawn("open", [url], { detached: true, stdio: "ignore" }).unref();
+    } else if (process.platform === "win32") {
+      spawn("cmd", ["/c", "start", "", url], { detached: true, stdio: "ignore" }).unref();
+    } else {
+      spawn("xdg-open", [url], { detached: true, stdio: "ignore" }).on("error", () => {}).unref();
+    }
+  } catch {}
+}
+
 async function uiStart() {
   if (paawRunning()) return { ok: false, message: "PAAW 已在執行中" };
   const current = await readCurrent();
@@ -477,6 +492,10 @@ async function uiStart() {
       paawChildVersion = null;
     }
   });
+  if (OPEN_BROWSER) {
+    openBrowserTab(`http://127.0.0.1:${PORT}/`);
+    jobLog(`已開瀏覽器 → http://127.0.0.1:${PORT}/`);
+  }
   return { ok: true, message: `PAAW ${current.version} 已上線 → http://127.0.0.1:${PORT}/` };
 }
 
