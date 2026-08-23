@@ -4,3 +4,4 @@ data/
 logs/
 current.json*
 gateway.json
+.paaw/

@@ -1,1 +1,0 @@
-{"root":"/Users/steward/App/tpaaw-gateway","adapter":"js-ts","generatedAt":"2026-08-22T01:20:07.008Z","fileCount":1,"signature":"2:js-ts:1:1784290139","deps":{"src/server.mjs":[]},"rdeps":{"src/server.mjs":[]},"externals":{"src/server.mjs":["http","fs","path","child_process","crypto","url"]},"pkgCount":{"http":1,"fs":1,"path":1,"child_process":1,"crypto":1,"url":1}}

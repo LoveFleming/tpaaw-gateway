@@ -1,1 +1,0 @@
-{"ts":"2026-08-22T01:53:20.899Z","agent":"handover","action":"support","summary":"完成 @paaw/gateway Release Unit 交接簡報","details":"向新人簡報 @paaw/gateway：PAAW Server 的守護者（:4199 管 :4097），單檔 Node.js 無依賴。8 features 全 active、0 API 映射（route 未抽出）、0 測試、0 runbook、僅 1 commit。已誠實標註知識缺口。","affectedFiles":[],"result":"clarified","priority":"medium"}
