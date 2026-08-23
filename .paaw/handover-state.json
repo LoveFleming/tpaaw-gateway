@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-22T00:24:51.961Z",
+  "initialized": true,
+  "currentState": {
+    "branch": "main",
+    "headSha": "ff850fd",
+    "dirtyCount": 33,
+    "dirtyFiles": [
+      "?? .paaw/agents/_config.json",
+      "?? .paaw/agents/coding.architect.json",
+      "?? .paaw/agents/coding.developer.json",
+      "?? .paaw/agents/coding.doc-writer.json",
+      "?? .paaw/agents/coding.em.json",
+      "?? .paaw/agents/coding.handover.json",
+      "?? .paaw/agents/coding.helpdesk.json",
+      "?? .paaw/agents/coding.ops.json",
+      "?? .paaw/agents/coding.qa.json",
+      "?? .paaw/agents/coding.rm.json",
+      "?? .paaw/agents/coding.tester.json",
+      "?? .paaw/changelog/CHANGELOG.md",
+      "?? .paaw/code-intelligence/api-function-map.json",
+      "?? .paaw/code-intelligence/call-graph.json",
+      "?? .paaw/code-intelligence/dependency-graph.json",
+      "?? .paaw/code-intelligence/file-map.json",
+      "?? .paaw/code-intelligence/status-cache.json",
+      "?? .paaw/code-intelligence/summary.json",
+      "?? .paaw/code-intelligence/symbol-index.json",
+      "?? .paaw/code-intelligence/test-code-map.json",
+      "?? .paaw/code-intelligence/test-intelligence.json",
+      "?? .paaw/coding-memory/conversations/coding.architect/active.json",
+      "?? .paaw/coding-memory/conversations/coding.em/active.json",
+      "?? .paaw/coding-memory/dispatch-log.jsonl",
+      "?? .paaw/cu-status.json",
+      "?? .paaw/decisions/DECISIONS.md",
+      "?? .paaw/em/config.json",
+      "?? .paaw/features/FEATURES.json",
+      "?? .paaw/features/FILE-FEATURES.json",
+      "?? .paaw/features/tree-sitter-analysis.txt"
+    ],
+    "unpushedCount": 0,
+    "unpushedCommits": []
+  },
+  "workingPlan": {
+    "activeTasks": [],
+    "activeCount": 0
+  },
+  "changes": {
+    "recentCommits": [
+      {
+        "hash": "ff850fd",
+        "date": "2026-07-17T20:09:45+08:00",
+        "subject": "init: PAAW Gateway — standalone DevOps management platform"
+      }
+    ]
+  },
+  "issues": [],
+  "decisions": {
+    "file": null,
+    "recent": []
+  },
+  "nextAction": {
+    "step": "commit",
+    "reason": "33 個未提交檔案",
+    "detail": [
+      "?? .paaw/agents/_config.json",
+      "?? .paaw/agents/coding.architect.json",
+      "?? .paaw/agents/coding.developer.json",
+      "?? .paaw/agents/coding.doc-writer.json",
+      "?? .paaw/agents/coding.em.json"
+    ]
+  }
+}

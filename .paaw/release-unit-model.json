@@ -1,0 +1,259 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-22T01:03:22.346Z",
+  "headSha": "ff850fd",
+  "root": null,
+  "summary": {
+    "features": 8,
+    "apis": 0,
+    "apisWithFeature": 0,
+    "files": 1,
+    "filesMapped": 1,
+    "tests": 0,
+    "commits": 1,
+    "commitLimit": 200
+  },
+  "sources": {
+    "apiMapGeneratedAt": null,
+    "testMapGeneratedAt": null,
+    "depGraphGeneratedAt": null,
+    "featuresUpdatedAt": "2026-08-21T16:07:22.384Z"
+  },
+  "features": [
+    {
+      "id": "F-001",
+      "name": "HTTP Server Core",
+      "status": "active",
+      "description": "Raw Node.js HTTP server for the gateway with JSON response helper (sendJSON) and request body parsing (readBody); foundation for all gateway endpoints. Note: route definitions were not extracted, so specific endpoint paths are unmapped pending a re-scan.",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-002",
+      "name": "PAAW Process Lifecycle Management",
+      "status": "active",
+      "description": "Start, stop, and restart the managed PAAW service via child process control (startPaaw, stopPaaw, restartPaaw); the core DevOps control function of the gateway",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-003",
+      "name": "Configuration Management",
+      "status": "active",
+      "description": "Load and persist gateway configuration to disk (loadConfig, saveConfig) using fs",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-004",
+      "name": "Version & Upgrade Management",
+      "status": "active",
+      "description": "Version introspection and self-upgrade of the PAAW installation: current version detection, git repository info, latest version lookup, and upgrade execution (getCurrentVersion, getGitInfo, getLatestVersion, upgradePaaw)",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-005",
+      "name": "Backup & Restore",
+      "status": "active",
+      "description": "Create, list, and restore backups of the PAAW installation (createBackup, listBackups, restoreBackup)",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-006",
+      "name": "Health Monitoring",
+      "status": "active",
+      "description": "Service-level and system-level health checks (healthCheckPaaw, getSystemHealth) for monitoring the managed service and host",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-007",
+      "name": "Session Authentication",
+      "status": "active",
+      "description": "Session-based access control for the gateway using crypto-generated/validated sessions (createSession, validateSession)",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    },
+    {
+      "id": "F-008",
+      "name": "Event Logging",
+      "status": "active",
+      "description": "Structured event logging of gateway operations for diagnostics and audit trail (logEvent)",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 1,
+      "lastChangeAt": "2026-07-17T20:09:45+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ]
+    }
+  ],
+  "apis": [],
+  "tests": [],
+  "changes": [
+    {
+      "hash": "ff850fd",
+      "date": "2026-07-17T20:09:45+08:00",
+      "subject": "init: PAAW Gateway — standalone DevOps management platform",
+      "kind": "other",
+      "files": 6,
+      "featureIds": [
+        "F-001",
+        "F-002",
+        "F-003",
+        "F-004",
+        "F-005",
+        "F-006",
+        "F-007",
+        "F-008"
+      ]
+    }
+  ],
+  "knowledgeGaps": {
+    "featuresWithoutTests": [
+      "F-001",
+      "F-002",
+      "F-003",
+      "F-004",
+      "F-005",
+      "F-006",
+      "F-007",
+      "F-008"
+    ],
+    "featuresWithoutRunbooks": [
+      "F-001",
+      "F-002",
+      "F-003",
+      "F-004",
+      "F-005",
+      "F-006",
+      "F-007",
+      "F-008"
+    ],
+    "apisWithoutFeature": [],
+    "filesWithoutFeature": 0,
+    "hotUnmappedFiles": [
+      {
+        "file": ".gitignore",
+        "commits": 1
+      },
+      {
+        "file": "README.md",
+        "commits": 1
+      },
+      {
+        "file": "config.json",
+        "commits": 1
+      },
+      {
+        "file": "package.json",
+        "commits": 1
+      },
+      {
+        "file": "public/index.html",
+        "commits": 1
+      }
+    ]
+  }
+}

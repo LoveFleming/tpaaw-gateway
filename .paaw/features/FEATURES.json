@@ -1,0 +1,189 @@
+{
+  "features": [
+    {
+      "name": "HTTP Server Core",
+      "description": "Raw Node.js HTTP server for the gateway with JSON response helper (sendJSON) and request body parsing (readBody); foundation for all gateway endpoints. Note: route definitions were not extracted, so specific endpoint paths are unmapped pending a re-scan.",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "core",
+        "api"
+      ],
+      "id": "F-001",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "PAAW Process Lifecycle Management",
+      "description": "Start, stop, and restart the managed PAAW service via child process control (startPaaw, stopPaaw, restartPaaw); the core DevOps control function of the gateway",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "core",
+        "devops"
+      ],
+      "id": "F-002",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "Configuration Management",
+      "description": "Load and persist gateway configuration to disk (loadConfig, saveConfig) using fs",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "core",
+        "config"
+      ],
+      "id": "F-003",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "Version & Upgrade Management",
+      "description": "Version introspection and self-upgrade of the PAAW installation: current version detection, git repository info, latest version lookup, and upgrade execution (getCurrentVersion, getGitInfo, getLatestVersion, upgradePaaw)",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "devops",
+        "versioning"
+      ],
+      "id": "F-004",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "Backup & Restore",
+      "description": "Create, list, and restore backups of the PAAW installation (createBackup, listBackups, restoreBackup)",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "devops",
+        "data"
+      ],
+      "id": "F-005",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "Health Monitoring",
+      "description": "Service-level and system-level health checks (healthCheckPaaw, getSystemHealth) for monitoring the managed service and host",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "devops",
+        "monitoring"
+      ],
+      "id": "F-006",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "Session Authentication",
+      "description": "Session-based access control for the gateway using crypto-generated/validated sessions (createSession, validateSession)",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "security",
+        "core"
+      ],
+      "id": "F-007",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    },
+    {
+      "name": "Event Logging",
+      "description": "Structured event logging of gateway operations for diagnostics and audit trail (logEvent)",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "observability",
+        "audit"
+      ],
+      "id": "F-008",
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-08-21T16:07:22.384Z",
+      "updatedAt": "2026-08-21T16:07:22.384Z"
+    }
+  ],
+  "updatedAt": "2026-08-21T16:07:22.384Z"
+}

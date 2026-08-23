@@ -1,0 +1,130 @@
+{
+  "timestamp": 1787405315510,
+  "data": {
+    "architecture": {
+      "score": 25,
+      "items": [
+        {
+          "name": "PROJECT.md",
+          "status": "warn",
+          "detail": "Template only"
+        },
+        {
+          "name": "Architecture Map",
+          "status": "missing",
+          "detail": "Run Code Understanding"
+        },
+        {
+          "name": "Decision Records",
+          "status": "missing",
+          "detail": "No ADRs"
+        },
+        {
+          "name": "Entry Points",
+          "status": "ok",
+          "detail": "package.json found"
+        }
+      ]
+    },
+    "api": {
+      "score": 15,
+      "items": [
+        {
+          "name": "API Contract",
+          "status": "missing",
+          "detail": "Missing"
+        },
+        {
+          "name": "Error Mapping",
+          "status": "missing",
+          "detail": "Missing"
+        },
+        {
+          "name": "Runbooks",
+          "status": "missing",
+          "detail": "None"
+        },
+        {
+          "name": "API Endpoints",
+          "status": "info",
+          "detail": "Unknown"
+        }
+      ]
+    },
+    "test": {
+      "score": 0,
+      "items": [
+        {
+          "name": "API Test Payloads",
+          "status": "missing",
+          "detail": "Missing"
+        },
+        {
+          "name": "Unit Tests",
+          "status": "missing",
+          "detail": "None found"
+        },
+        {
+          "name": "Coverage Gaps",
+          "status": "warn",
+          "detail": "1 untested file(s)"
+        },
+        {
+          "name": "E2E Tests",
+          "status": "missing",
+          "detail": "Not configured"
+        }
+      ]
+    },
+    "docs": {
+      "score": 55,
+      "items": [
+        {
+          "name": "README",
+          "status": "ok",
+          "detail": "36d ago"
+        },
+        {
+          "name": "FAQ",
+          "status": "missing",
+          "detail": "Missing"
+        },
+        {
+          "name": "Changelog",
+          "status": "warn",
+          "detail": "Template only"
+        },
+        {
+          "name": "Tracked Files",
+          "status": "info",
+          "detail": "5 files"
+        }
+      ]
+    },
+    "maintainability": {
+      "score": 30,
+      "items": [
+        {
+          "name": "Coding Standards",
+          "status": "missing",
+          "detail": "Missing"
+        },
+        {
+          "name": "Git Status",
+          "status": "warn",
+          "detail": "1 uncommitted"
+        },
+        {
+          "name": "Error Handling",
+          "status": "warn",
+          "detail": "Limited try/catch"
+        },
+        {
+          "name": "Dependencies",
+          "status": "info",
+          "detail": "0 packages"
+        }
+      ]
+    }
+  }
+}

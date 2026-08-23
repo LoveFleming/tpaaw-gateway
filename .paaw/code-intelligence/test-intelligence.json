@@ -1,0 +1,26 @@
+{
+  "testFiles": [],
+  "testToCode": [],
+  "codeToTest": {},
+  "whatToRun": {},
+  "coverageGaps": [
+    {
+      "file": "src/server.mjs",
+      "functionCount": 19,
+      "exportCount": 0
+    }
+  ],
+  "featureToTests": [],
+  "stats": {
+    "totalTestFiles": 0,
+    "byType": {
+      "unit": 0,
+      "integration": 0,
+      "e2e": 0
+    },
+    "totalMappings": 0,
+    "coverageGapFiles": 1,
+    "coverageRate": "0.0%",
+    "featureTestCoverage": 0
+  }
+}

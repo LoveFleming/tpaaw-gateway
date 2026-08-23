@@ -1,0 +1,248 @@
+{
+  "nodes": [
+    {
+      "id": "src/server.mjs:loadConfig",
+      "name": "loadConfig",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:saveConfig",
+      "name": "saveConfig",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:logEvent",
+      "name": "logEvent",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:startPaaw",
+      "name": "startPaaw",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:stopPaaw",
+      "name": "stopPaaw",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:restartPaaw",
+      "name": "restartPaaw",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:getCurrentVersion",
+      "name": "getCurrentVersion",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:getGitInfo",
+      "name": "getGitInfo",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:getLatestVersion",
+      "name": "getLatestVersion",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:upgradePaaw",
+      "name": "upgradePaaw",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server.mjs:listBackups",
+      "name": "listBackups",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:createBackup",
+      "name": "createBackup",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:restoreBackup",
+      "name": "restoreBackup",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:healthCheckPaaw",
+      "name": "healthCheckPaaw",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server.mjs:getSystemHealth",
+      "name": "getSystemHealth",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:createSession",
+      "name": "createSession",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:validateSession",
+      "name": "validateSession",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:sendJSON",
+      "name": "sendJSON",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:readBody",
+      "name": "readBody",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    }
+  ],
+  "edges": [
+    {
+      "caller": "src/server.mjs:sendJSON",
+      "callee": "res.writeHead",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:sendJSON",
+      "callee": "res.end",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:sendJSON",
+      "callee": "JSON.stringify",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "resolve",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "JSON.parse",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "resolve",
+      "type": "direct",
+      "resolved": false
+    }
+  ],
+  "callersOf": {
+    "res.writeHead": [
+      "src/server.mjs:sendJSON"
+    ],
+    "res.end": [
+      "src/server.mjs:sendJSON"
+    ],
+    "JSON.stringify": [
+      "src/server.mjs:sendJSON"
+    ],
+    "req.on": [
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody"
+    ],
+    "resolve": [
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody"
+    ],
+    "JSON.parse": [
+      "src/server.mjs:readBody"
+    ]
+  },
+  "calleesOf": {
+    "src/server.mjs:sendJSON": [
+      "res.writeHead",
+      "res.end",
+      "JSON.stringify"
+    ],
+    "src/server.mjs:readBody": [
+      "req.on",
+      "req.on",
+      "resolve",
+      "JSON.parse",
+      "resolve"
+    ]
+  },
+  "stats": {
+    "totalFunctions": 19,
+    "totalCalls": 8,
+    "resolvedCalls": 0,
+    "unresolvedCalls": 8
+  }
+}

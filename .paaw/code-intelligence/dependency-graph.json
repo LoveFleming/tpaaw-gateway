@@ -1,0 +1,67 @@
+{
+  "files": {
+    "src/server.mjs": {
+      "path": "src/server.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "http",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    }
+  },
+  "edges": [],
+  "stats": {
+    "totalFiles": 1,
+    "totalEdges": 0,
+    "resolvedImports": 0,
+    "unresolvedImports": 8
+  }
+}

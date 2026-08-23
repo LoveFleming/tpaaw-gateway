@@ -1,12 +1,17 @@
 {
-  "name": "@paaw/gateway",
+  "name": "tpaaw-gateway",
   "version": "0.1.0",
-  "description": "PAAW Gateway — DevOps management platform for PAAW",
+  "description": "PAAW Gateway — install / update / run PAAW (bootloader)",
   "type": "module",
-  "main": "src/server.mjs",
+  "bin": { "paaw-gateway": "gateway.mjs" },
   "scripts": {
-    "start": "node src/server.mjs",
-    "dev": "node --watch src/server.mjs"
+    "dev": "node gateway.mjs",
+    "start": "node gateway.mjs",
+    "update": "node gateway.mjs update",
+    "status": "node gateway.mjs status"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fflate": "^0.8.2"
+  },
+  "engines": { "node": ">=20" }
 }

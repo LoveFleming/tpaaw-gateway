@@ -1,4 +1,6 @@
 node_modules/
-events.jsonl
-config.local.json
-backups/
+versions/
+data/
+logs/
+current.json*
+gateway.json

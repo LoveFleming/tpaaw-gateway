@@ -1,0 +1,1 @@
+{"root":"/Users/steward/App/tpaaw-gateway","adapter":"js-ts","generatedAt":"2026-08-22T01:20:07.019Z","signature":"v1:js-ts:1:1784290139","totalFiles":1,"totalLoc":707,"avgComplexity":159,"testFiles":0,"testRatio":0,"largest":[{"file":"src/server.mjs","loc":707}],"complex":[{"file":"src/server.mjs","loc":707,"complexity":159,"perLoc":0.22}],"longFiles":1,"duplicatedNames":[]}

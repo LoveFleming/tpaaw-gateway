@@ -1,0 +1,69 @@
+The scan input failed before any code could be read: the `find` command errored out because its grouping parentheses weren't escaped, so **no file tree was produced** — I have zero source files to analyze. Per the rules ("read ACTUAL source code, don't guess"), I will not fabricate modules, APIs, or models. Here is the honest result:
+
+```json
+{
+  "projectName": "@paaw/gateway",
+  "projectType": "other",
+  "language": "unknown — scan failed, no files readable",
+  "framework": "unknown",
+  "runtime": "Node.js ecosystem (inferred from npm-style package name only, unverified)",
+  "summary": "Could not be determined — the file-tree scan failed (shell syntax error), and the only signal is a single init commit describing the project as a 'standalone DevOps management platform', which is unverified.",
+  "entryPoints": [],
+  "keyDirectories": {
+    "source": null,
+    "tests": null,
+    "config": null,
+    "docs": null
+  },
+  "modules": [],
+  "apis": [],
+  "errorCodes": [],
+  "dataModels": [],
+  "techDebt": [
+    {
+      "area": "Scan tooling: project file enumeration failed — unescaped parentheses in find command caused /bin/sh syntax error",
+      "severity": "high",
+      "suggestion": "Escape the grouping parens as \\( ... \\) or replace the find command with `git ls-files`; re-run the scan before generating any inventory."
+    }
+  ],
+  "healthGaps": {
+    "missingApiSpec": true,
+    "missingErrorMap": true,
+    "missingTests": true,
+    "missingStandards": true,
+    "missingArchitecture": true,
+    "missingDecisions": true
+  }
+}
+```
+
+### What went wrong
+
+The generated command ran as:
+
+```sh
+find . -type f ( -name '*.ts' -o ... ) ...
+```
+
+Bare `(` is a shell metacharacter, so `/bin/sh` aborted with a syntax error before `find` executed. The backslashes were stripped somewhere in the pipeline that assembled the command.
+
+### Fix
+
+Escape the parens (note `\\(` / `\\)` when the command passes through another shell layer):
+
+```sh
+find . -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.mjs' -o -name '*.js' -o -name '*.cjs' -o -name '*.jsx' -o -name '*.py' -o -name '*.java' -o -name '*.go' -o -name '*.rb' -o -name '*.php' \) \
+  -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/.paaw/*' \
+  -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/coverage/*' \
+  -not -path '*/data/semgrep-rules/*'
+```
+
+More robust alternative — since this is a git repo, skip `find` entirely and avoid the escaping hazard:
+
+```sh
+git ls-files -- ':(exclude)*.lock' | grep -E '\.(ts|tsx|mjs|js|cjs|jsx|py|java|go|rb|php)$'
+```
+
+### Next step
+
+Re-run the scan with a working file tree (and ideally the full `package.json` contents — the dependencies list also came through empty). With actual source files, I can produce a real inventory: module dependency graph, API surface, error code registry, and an accurate `healthGaps` assessment.

@@ -1,0 +1,34 @@
+# Project Source Analysis (Tree-sitter)
+Parsed 1 of 1 source files
+Languages: javascript(1)
+
+## src/server.mjs [javascript]
+  Imports:
+    * ← http
+    * ← fs
+    * ← path
+    * ← child_process
+    * ← crypto
+    * ← url
+    * ← path
+    * ← fs
+  Functions:
+    function loadConfig()
+    function saveConfig()
+    function logEvent(type, detail, userId = "system")
+    function startPaaw()
+    function stopPaaw()
+    function restartPaaw()
+    function getCurrentVersion()
+    function getGitInfo()
+    function getLatestVersion()
+    async function upgradePaaw(userId = "system")
+    function listBackups()
+    function createBackup(userId = "system")
+    function restoreBackup(filename, userId = "system")
+    async function healthCheckPaaw()
+    function getSystemHealth()
+    function createSession(userId)
+    function validateSession(token)
+    arrow sendJSON(code, data)
+    arrow readBody()

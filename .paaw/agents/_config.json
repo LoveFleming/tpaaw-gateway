@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "initialized": true,
+  "initializedAt": "2026-08-21T16:05:22.092Z",
+  "globalCrewIds": [
+    "coding.architect",
+    "coding.developer",
+    "coding.doc-writer",
+    "coding.handover",
+    "coding.helpdesk",
+    "coding.ops",
+    "coding.qa",
+    "coding.rm",
+    "coding.tester"
+  ],
+  "customAgents": [],
+  "models": {},
+  "skillBindings": {},
+  "contextOverrides": {}
+}

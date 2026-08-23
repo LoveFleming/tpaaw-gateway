@@ -1,0 +1,218 @@
+{
+  "files": [
+    {
+      "file": "src/server.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "http",
+          "names": []
+        },
+        {
+          "source": "fs",
+          "names": []
+        },
+        {
+          "source": "path",
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "names": []
+        },
+        {
+          "source": "url",
+          "names": []
+        },
+        {
+          "source": "path",
+          "names": []
+        },
+        {
+          "source": "fs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "loadConfig",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "saveConfig",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "logEvent",
+          "kind": "function",
+          "async": false,
+          "params": "(type, detail, userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stopPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "restartPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getCurrentVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getGitInfo",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getLatestVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "upgradePaaw",
+          "kind": "function",
+          "async": true,
+          "params": "(userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "listBackups",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "restoreBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(filename, userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "healthCheckPaaw",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getSystemHealth",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createSession",
+          "kind": "function",
+          "async": false,
+          "params": "(userId)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "validateSession",
+          "kind": "function",
+          "async": false,
+          "params": "(token)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "sendJSON",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, data)",
+          "callCount": 3,
+          "calls": [
+            "res.writeHead",
+            "res.end",
+            "JSON.stringify"
+          ]
+        },
+        {
+          "name": "readBody",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 5,
+          "calls": [
+            "req.on",
+            "req.on",
+            "resolve",
+            "JSON.parse",
+            "resolve"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    }
+  ],
+  "stats": {
+    "totalFiles": 1,
+    "parsedFiles": 1,
+    "errors": 0,
+    "languages": {
+      "javascript": 1
+    }
+  }
+}

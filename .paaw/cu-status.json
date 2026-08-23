@@ -1,0 +1,45 @@
+{
+  "steps": {
+    "scan": {
+      "status": "done",
+      "size": 2872,
+      "updatedAt": "2026-08-21T16:06:50.776Z"
+    },
+    "architecture": {
+      "status": "pending"
+    },
+    "feature-map": {
+      "status": "done",
+      "size": 2879,
+      "updatedAt": "2026-08-21T16:07:22.387Z"
+    },
+    "api-spec": {
+      "status": "pending"
+    },
+    "code-intelligence": {
+      "status": "done",
+      "summary": "19 functions",
+      "updatedAt": "2026-08-21T16:07:22.411Z"
+    },
+    "test-intelligence": {
+      "status": "done",
+      "summary": "0 tests",
+      "updatedAt": "2026-08-21T16:07:22.424Z"
+    },
+    "error-mapping": {
+      "status": "pending"
+    },
+    "security-scan": {
+      "status": "pending"
+    },
+    "standards": {
+      "status": "pending"
+    },
+    "overview": {
+      "status": "pending"
+    },
+    "change-intelligence": {
+      "status": "pending"
+    }
+  }
+}

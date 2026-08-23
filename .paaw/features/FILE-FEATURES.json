@@ -1,0 +1,71 @@
+{
+  "files": {
+    "src/server.mjs": [
+      {
+        "id": "F-001",
+        "name": "HTTP Server Core",
+        "tags": [
+          "core",
+          "api"
+        ]
+      },
+      {
+        "id": "F-002",
+        "name": "PAAW Process Lifecycle Management",
+        "tags": [
+          "core",
+          "devops"
+        ]
+      },
+      {
+        "id": "F-003",
+        "name": "Configuration Management",
+        "tags": [
+          "core",
+          "config"
+        ]
+      },
+      {
+        "id": "F-004",
+        "name": "Version & Upgrade Management",
+        "tags": [
+          "devops",
+          "versioning"
+        ]
+      },
+      {
+        "id": "F-005",
+        "name": "Backup & Restore",
+        "tags": [
+          "devops",
+          "data"
+        ]
+      },
+      {
+        "id": "F-006",
+        "name": "Health Monitoring",
+        "tags": [
+          "devops",
+          "monitoring"
+        ]
+      },
+      {
+        "id": "F-007",
+        "name": "Session Authentication",
+        "tags": [
+          "security",
+          "core"
+        ]
+      },
+      {
+        "id": "F-008",
+        "name": "Event Logging",
+        "tags": [
+          "observability",
+          "audit"
+        ]
+      }
+    ]
+  },
+  "updatedAt": "2026-08-21T16:07:22.385Z"
+}

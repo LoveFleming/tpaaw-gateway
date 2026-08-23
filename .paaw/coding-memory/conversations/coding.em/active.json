@@ -1,0 +1,14 @@
+{
+  "_meta": {
+    "crewId": "coding.em",
+    "lastUpdated": "2026-08-22T13:28:37.449Z",
+    "messageCount": 1
+  },
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "🎖️ 我是陳哲宇 Ethan，EM 大總管。我可以幫你規劃工作、調度 agent、審查進度。\n\n告訴我你想做什麼，或點「🚀 EM 自動調度」讓我自動規劃。",
+      "ts": "2026-08-21T15:44:16.302Z"
+    }
+  ]
+}
