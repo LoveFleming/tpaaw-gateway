@@ -30,6 +30,12 @@
   .badge.ok{color:var(--green);border-color:var(--green)}
   .badge.new{color:var(--amber);border-color:var(--amber)}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .setrow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .setrow:last-of-type{border-bottom:none}
+  .setrow label{color:var(--dim);font-size:13px;padding-top:8px}
+  input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13.5px;color:var(--text);font-family:ui-monospace,Menlo,monospace}
+  input:focus{outline:none;border-color:var(--blue)}
+  .lock{display:block;color:var(--amber);font-size:12px;margin-top:4px}
   .chip{font-size:12px;padding:3px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);color:var(--text)}
   .chip.cur{border-color:var(--green);color:var(--green);font-weight:600}
   button{cursor:pointer;border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:600;background:var(--panel2);color:var(--text);border:1px solid var(--line)}
@@ -86,6 +92,29 @@
       </div>
       <div class="note" id="updateNote"></div>
     </div>
+  </div>
+
+  <!-- 設定 -->
+  <div class="card" style="margin-top:14px">
+    <h2>設定（存 gateway.json）</h2>
+    <div class="setrow">
+      <label>Package Server URL</label>
+      <div class="setctl">
+        <input id="inServer" placeholder="http://localhost:4180">
+        <span class="lock" id="lockServer" style="display:none">🔒 環境變數 PAAW_PACKAGE_URL 蓋過此設定</span>
+      </div>
+    </div>
+    <div class="setrow">
+      <label>PAAW Home 路徑</label>
+      <div class="setctl">
+        <input id="inHome" placeholder="（空 = 使用目前目錄）">
+        <span class="lock" id="lockHome" style="display:none">🔒 環境變數 PAAW_HOME 蓋過此設定</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="btnSave">💾 儲存設定</button>
+    </div>
+    <div class="note" id="setNote"></div>
   </div>
 
   <!-- 活動 log -->
@@ -187,7 +216,39 @@ $("btnStop").onclick = () => act("/api/stop", "⏹ 停止");
 $("btnRestart").onclick = () => act("/api/restart", "🔁 重啟");
 $("btnUpdate").onclick = () => act("/api/update", "🔄 更新");
 
+async function loadSettings() {
+  try {
+    const s = await api("/api/settings");
+    if (document.activeElement !== $("inServer")) $("inServer").value = s.packageServer.source === "default" ? "" : s.packageServer.value;
+    if (document.activeElement !== $("inHome")) $("inHome").value = s.paawHome.source === "cwd" ? "" : s.paawHome.value;
+    $("lockServer").style.display = s.packageServer.envLocked ? "" : "none";
+    $("lockHome").style.display = s.paawHome.envLocked ? "" : "none";
+  } catch {}
+}
+
+$("btnSave").onclick = async () => {
+  $("btnSave").disabled = true;
+  $("setNote").textContent = "儲存中…";
+  try {
+    const res = await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ packageServer: $("inServer").value, paawHome: $("inHome").value }),
+    });
+    const r = await res.json();
+    $("setNote").textContent = res.ok
+      ? `✓ 已儲存${r.changed.length ? "：" + r.changed.join(", ") : "（無變更）"}${r.ignored.length ? "；⚠ 被忽略：" + r.ignored.join("; ") : ""}`
+      : `⚠ ${r.message}`;
+  } catch (e) {
+    $("setNote").textContent = `⚠ ${e}`;
+  }
+  $("btnSave").disabled = false;
+  loadSettings();
+  refresh();
+};
+
 refresh();
+loadSettings();
 setInterval(refresh, 2000);
 </script>
 </body>

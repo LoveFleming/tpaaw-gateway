@@ -84,3 +84,12 @@ API（UI 同款，可 script 化）：`GET /api/status` `GET /api/log`、`POST /
 Env：`PAAW_GW_PORT`（4290）、`PAAW_GW_HOST`（預設 127.0.0.1 僅本機）
 
 注意：UI 模式下 PAAW 是 gateway 的 child — Ctrl+C gateway 會一併停 PAAW。
+
+### 設定（UI 內建）
+
+Dashboard「設定」卡可直接改這兩個值（存 `gateway.json`，即時生效、不必重啟 gateway）：
+- **Package Server URL** — 清空回到預設 `http://localhost:4180`
+- **PAAW Home 路徑** — 絕對路徑；改了之後 versions/data/logs 全部改長在新路徑（PAAW 執行中會要求先停止）
+
+環境變數 `PAAW_PACKAGE_URL` / `PAAW_HOME` 仍優先；被 env 蓋過時 UI 顯示 🔒 提示。
+API：`GET/POST /api/settings`（body `{"packageServer":"…","paawHome":"…"}`，空字串 = 清除）。

@@ -49,11 +49,23 @@ try {
 } catch {}
 
 // 佈局根目錄優先序：PAAW_HOME env > gateway.json.paawHome > cwd
-const HOME = resolve(process.env.PAAW_HOME || GATEWAY_CFG.paawHome || process.cwd());
-const VERSIONS_DIR = join(HOME, "versions");
-const DATA_DIR = join(HOME, "data");
-const CURRENT_FILE = join(HOME, "current.json");
-const LOGS_DIR = join(HOME, "logs");
+// （let + applyHome — UI 改 paawHome 可即時重算，不必重啟 gateway）
+let HOME, VERSIONS_DIR, DATA_DIR, CURRENT_FILE, LOGS_DIR;
+function applyHome() {
+  HOME = resolve(process.env.PAAW_HOME || GATEWAY_CFG.paawHome || process.cwd());
+  VERSIONS_DIR = join(HOME, "versions");
+  DATA_DIR = join(HOME, "data");
+  CURRENT_FILE = join(HOME, "current.json");
+  LOGS_DIR = join(HOME, "logs");
+}
+applyHome();
+
+async function saveGatewayCfg() {
+  const file = join(process.cwd(), "gateway.json");
+  const tmp = file + ".tmp";
+  await writeFile(tmp, JSON.stringify(GATEWAY_CFG, null, 2) + "\n", "utf-8");
+  await rename(tmp, file);
+}
 const PORT = process.env.PAAW_PORT || "4097";
 // 自動更新預設關（start 只跑 current；首裝仍會安裝）：PAAW_AUTO_UPDATE=1 或 gateway.json autoUpdate:true 才開
 const AUTO_UPDATE = process.env.PAAW_AUTO_UPDATE === "1" || GATEWAY_CFG.autoUpdate === true;
@@ -548,6 +560,61 @@ async function cmdUI() {
         const html = await readFile(join(UI_DIR, "index.html"), "utf-8");
         res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
         return res.end(html);
+      }
+      if (method === "GET" && url === "/api/settings") {
+        const envPs = !!process.env.PAAW_PACKAGE_URL;
+        const envHome = !!process.env.PAAW_HOME;
+        return jsonOut(200, {
+          packageServer: {
+            value: await loadPackageServerUrl(),
+            source: envPs ? "env" : GATEWAY_CFG.packageServer ? "config" : "default",
+            envLocked: envPs,
+          },
+          paawHome: {
+            value: HOME,
+            source: envHome ? "env" : GATEWAY_CFG.paawHome ? "config" : "cwd",
+            envLocked: envHome,
+          },
+        });
+      }
+      if (method === "POST" && url === "/api/settings") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        let body = "";
+        req.on("data", (c) => (body += c));
+        await new Promise((r) => req.on("end", r));
+        let parsed = {};
+        try { parsed = body ? JSON.parse(body) : {}; } catch { return jsonOut(400, { ok: false, message: "body 不是合法 JSON" }); }
+        const changed = [];
+        const ignored = [];
+        if (parsed.packageServer !== undefined && process.env.PAAW_PACKAGE_URL) ignored.push("packageServer（環境變數 PAAW_PACKAGE_URL 優先）");
+        if (typeof parsed.packageServer === "string" && !process.env.PAAW_PACKAGE_URL) {
+          const v = parsed.packageServer.trim().replace(/\/$/, "");
+          if (v) {
+            if (!/^https?:\/\//.test(v)) return jsonOut(400, { ok: false, message: "package server 必須是 http(s):// 開頭" });
+            GATEWAY_CFG.packageServer = v;
+          } else {
+            delete GATEWAY_CFG.packageServer;
+          }
+          changed.push("packageServer");
+        }
+        if (parsed.paawHome !== undefined && process.env.PAAW_HOME) ignored.push("paawHome（環境變數 PAAW_HOME 優先）");
+        if (typeof parsed.paawHome === "string" && !process.env.PAAW_HOME) {
+          if (paawRunning()) return jsonOut(409, { ok: false, message: "PAAW 執行中 — 先停止再改安裝路徑" });
+          const v = parsed.paawHome.trim();
+          if (v) {
+            if (!v.startsWith("/") && !/^[A-Za-z]:[\\\/]/.test(v)) return jsonOut(400, { ok: false, message: "安裝路徑必須是絕對路徑" });
+            GATEWAY_CFG.paawHome = resolve(v);
+          } else {
+            delete GATEWAY_CFG.paawHome;
+          }
+          applyHome();
+          changed.push("paawHome");
+        }
+        if (changed.length) {
+          await saveGatewayCfg();
+          jobLog(`設定已更新：${changed.join(", ")}（寫入 gateway.json）`);
+        }
+        return jsonOut(200, { ok: true, changed, ignored, home: HOME, packageServer: await loadPackageServerUrl() });
       }
       if (method === "GET" && url === "/api/status") return jsonOut(200, await uiStatus());
       if (method === "GET" && url === "/api/log") return jsonOut(200, { lines: job.lines });
