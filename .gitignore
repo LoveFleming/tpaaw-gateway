@@ -1,7 +1,5 @@
 node_modules/
 versions/
-data/
-logs/
-current.json*
-gateway.json
-.paaw/
+state.json
+*.log
+.DS_Store
