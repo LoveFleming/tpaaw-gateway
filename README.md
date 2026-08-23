@@ -67,3 +67,20 @@ GET stable.json → semver 比對 → 下載（串流算 sha256）
 | `PAAW_SKIP_NPM_I=1` | - | 跳過 npm install（debug） |
 
 Windows：不需要 symlink（current.json 是 pointer file）；emoji 自動降級 ASCII（WT_SESSION 偵測）。
+
+## UI 模式（dashboard）
+
+```bash
+npm start        # = gateway ui → http://127.0.0.1:4290/
+npm run run      # 直接跑 PAAW（不開 UI）
+```
+
+UI 可以：
+- 看 PAAW 狀態（執行中/版本/開啟連結）、current / stable / 已安裝版本、data 播種狀態
+- **自己決定**何時 ▶️啟動 / ⏹停止 / 🔁重啟 / 🔄更新（有新版會亮黃色徽章；更新裝完按重啟生效）
+- 活動記錄面板（每 2 秒輪詢）
+
+API（UI 同款，可 script 化）：`GET /api/status` `GET /api/log`、`POST /api/{start,stop,restart,update}`
+Env：`PAAW_GW_PORT`（4290）、`PAAW_GW_HOST`（預設 127.0.0.1 僅本機）
+
+注意：UI 模式下 PAAW 是 gateway 的 child — Ctrl+C gateway 會一併停 PAAW。

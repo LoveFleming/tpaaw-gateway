@@ -1,17 +1,22 @@
 {
   "name": "tpaaw-gateway",
   "version": "0.1.0",
-  "description": "PAAW Gateway — install / update / run PAAW (bootloader)",
+  "description": "PAAW Gateway \u2014 install / update / run PAAW (bootloader)",
   "type": "module",
-  "bin": { "paaw-gateway": "gateway.mjs" },
+  "bin": {
+    "paaw-gateway": "gateway.mjs"
+  },
   "scripts": {
-    "dev": "node gateway.mjs",
-    "start": "node gateway.mjs",
+    "dev": "node gateway.mjs ui",
+    "start": "node gateway.mjs ui",
+    "run": "node gateway.mjs start",
     "update": "node gateway.mjs update",
     "status": "node gateway.mjs status"
   },
   "dependencies": {
     "fflate": "^0.8.2"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }

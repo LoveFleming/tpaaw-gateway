@@ -29,6 +29,7 @@
  *   PAAW_SKIP_NPM_I   =1 跳過 npm install（debug 用）
  */
 
+import http from "node:http";
 import { createHash } from "node:crypto";
 import { createWriteStream } from "node:fs";
 import { cp, mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
@@ -306,10 +307,10 @@ async function cmdStatus() {
   }
 }
 
-async function cmdUpdate() {
+// 更新核心邏輯（CLI 與 UI 共用；失敗 throw，不 process.exit）
+async function updateLogic() {
   const server = await loadPackageServerUrl();
   const current = await readCurrent();
-  const installed = await listInstalledVersions();
 
   let manifest;
   try {
@@ -319,10 +320,9 @@ async function cmdUpdate() {
   } catch (e) {
     if (current) {
       L.warn(`package server 連不上（${e.message}）— 照跑現有版本 ${current.version}`);
-      return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false };
+      return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false, note: `package server 連不上，照跑 ${current.version}` };
     }
-    L.err(`package server 連不上且本機無任何版本 — 無法安裝`);
-    process.exit(1);
+    throw new Error(`package server 連不上且本機無任何版本 — 無法安裝（${e.message}）`);
   }
 
   const haveVersion = current && current.version === manifest.version;
@@ -330,11 +330,11 @@ async function cmdUpdate() {
 
   if (haveVersion) {
     L.info(`已是最新版 ${current.version}`);
-    return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false };
+    return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false, note: `已是最新版 ${current.version}` };
   }
   if (!newer) {
     L.warn(`stable ${manifest.version} 不比 current ${current?.version || "none"} 新 — 不降級（要指定版請手動）`);
-    return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false };
+    return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false, note: `stable ${manifest.version} 不比 current 新，不降級` };
   }
 
   L.info(`發現新版 ${manifest.version}${current ? `（current ${current.version}）` : "（首次安裝）"}`);
@@ -342,7 +342,11 @@ async function cmdUpdate() {
   // 安裝成功即切 current（staged 已驗 sha+骨架+npm install；
   // 若之後 start 啟動失敗，回滾分支會把 current 寫回舊版 — 鏈條仍閉合）
   await writeCurrentAtomic(manifest.version);
-  return { versionDir, version: manifest.version, updated: true };
+  return { versionDir, version: manifest.version, updated: true, note: `已安裝並切到 ${manifest.version}` };
+}
+
+async function cmdUpdate() {
+  return updateLogic();
 }
 
 // 更新失敗（下載/sha/解壓/驗證/npm install）不該讓使用者沒東西可跑 —— fallback current
@@ -419,6 +423,181 @@ function hangAround(child) {
   child.on("exit", (code) => process.exit(code ?? 0));
 }
 
+// ---------- UI 模式（dashboard：看資訊、決定更新/啟動）----------
+
+let paawChild = null; // 受監管的 PAAW process
+let paawChildVersion = null; // 實際啟動的版本（update 切 current 後、重啟前會與 current 不同）
+const job = { active: false, kind: null, lines: [], error: null, message: null, startedAt: null, finishedAt: null };
+
+function jobLog(line) {
+  job.lines.push(`[${new Date().toLocaleTimeString()}] ${line}`);
+  if (job.lines.length > 200) job.lines.splice(0, job.lines.length - 200);
+}
+
+function paawRunning() {
+  return !!(paawChild && paawChild.exitCode === null);
+}
+
+async function uiStart() {
+  if (paawRunning()) return { ok: false, message: "PAAW 已在執行中" };
+  const current = await readCurrent();
+  if (!current) return { ok: false, message: "尚未安裝任何版本 — 先接「更新」" };
+  const versionDir = join(VERSIONS_DIR, current.version);
+  if (!existsSync(versionDir)) return { ok: false, message: `versions/${current.version}/ 不存在 — 先跑更新` };
+  jobLog(`檢查 data / 依賴…`);
+  await ensureData(versionDir);
+  await installDeps(versionDir);
+  jobLog(`啟動 PAAW ${current.version}（port ${PORT}）…`);
+  const child = await startAndVerify(versionDir, current.version);
+  if (!child) return { ok: false, message: `PAAW ${current.version} 啟動失敗（詳情見 gateway 終端機輸出）` };
+  paawChild = child;
+  paawChildVersion = current.version;
+  child.on("exit", () => {
+    if (paawChild === child) {
+      paawChild = null;
+      paawChildVersion = null;
+    }
+  });
+  return { ok: true, message: `PAAW ${current.version} 已上線 → http://127.0.0.1:${PORT}/` };
+}
+
+async function uiStop() {
+  if (!paawRunning()) return { ok: false, message: "PAAW 未在執行" };
+  jobLog("停止 PAAW…");
+  await killChild(paawChild);
+  paawChild = null;
+  paawChildVersion = null;
+  return { ok: true, message: "PAAW 已停止" };
+}
+
+async function uiUpdate() {
+  jobLog("檢查 package server stable …");
+  const r = await updateLogic();
+  if (r.updated) {
+    jobLog(`已安裝 ${r.version}（重啟後生效）`);
+    return { ok: true, message: `已更新到 ${r.version} — 按「重啟」生效` };
+  }
+  return { ok: true, message: r.note || `目前已是最新版 ${r.version}` };
+}
+
+async function runJob(kind, fn) {
+  if (job.active) return false;
+  job.active = true;
+  job.kind = kind;
+  job.lines = [];
+  job.error = null;
+  job.message = null;
+  job.startedAt = Date.now();
+  job.finishedAt = null;
+  (async () => {
+    try {
+      const r = await fn();
+      job.message = r.message;
+      jobLog(r.ok === false ? `⚠ ${r.message}` : `✓ ${r.message}`);
+    } catch (e) {
+      job.error = String((e && e.message) || e);
+      jobLog(`✗ ${job.error}`);
+    } finally {
+      job.active = false;
+      job.finishedAt = Date.now();
+    }
+  })();
+  return true;
+}
+
+async function uiStatus() {
+  const current = await readCurrent();
+  const installed = await listInstalledVersions();
+  const server = await loadPackageServerUrl();
+  let stable = null;
+  try {
+    const res = await fetch(`${server}/stable.json`, { signal: AbortSignal.timeout(3000) });
+    if (res.ok) stable = await res.json();
+  } catch {}
+  return {
+    home: HOME,
+    packageServer: server,
+    current: current ? current.version : null,
+    installed,
+    stable: stable ? stable.version : null,
+    stableSize: stable ? stable.size : null,
+    stableNewer: !!(stable && (!current || semverGt(stable.version, current.version))),
+    dataSeeded: existsSync(DATA_DIR),
+    autoUpdate: AUTO_UPDATE,
+    running: paawRunning(),
+    runningVersion: paawRunning() ? paawChildVersion : null,
+    paawUrl: `http://127.0.0.1:${PORT}/`,
+    job: { active: job.active, kind: job.kind, error: job.error, message: job.message },
+  };
+}
+
+async function cmdUI() {
+  const UI_PORT = parseInt(process.env.PAAW_GW_PORT || "4290", 10);
+  const UI_HOST = process.env.PAAW_GW_HOST || "127.0.0.1";
+  const UI_DIR = join(dirname(fileURLToPath(import.meta.url)), "ui");
+
+  const srv = http.createServer(async (req, res) => {
+    const url = (req.url || "/").split("?")[0];
+    const method = req.method;
+    const jsonOut = (code, obj) => {
+      res.writeHead(code, { "Content-Type": "application/json; charset=utf-8" });
+      res.end(JSON.stringify(obj, null, 2));
+    };
+    try {
+      if (method === "GET" && (url === "/" || url === "/index.html")) {
+        const html = await readFile(join(UI_DIR, "index.html"), "utf-8");
+        res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+        return res.end(html);
+      }
+      if (method === "GET" && url === "/api/status") return jsonOut(200, await uiStatus());
+      if (method === "GET" && url === "/api/log") return jsonOut(200, { lines: job.lines });
+      if (method === "POST" && url === "/api/update") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        runJob("update", uiUpdate);
+        return jsonOut(202, { ok: true, message: "更新已開始" });
+      }
+      if (method === "POST" && url === "/api/start") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        runJob("start", uiStart);
+        return jsonOut(202, { ok: true, message: "啟動中" });
+      }
+      if (method === "POST" && url === "/api/stop") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        runJob("stop", uiStop);
+        return jsonOut(202, { ok: true, message: "停止中" });
+      }
+      if (method === "POST" && url === "/api/restart") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        runJob("restart", async () => {
+          if (paawRunning()) await uiStop();
+          return uiStart();
+        });
+        return jsonOut(202, { ok: true, message: "重啟中" });
+      }
+      return jsonOut(404, { error: "not found" });
+    } catch (e) {
+      return jsonOut(500, { error: String((e && e.message) || e) });
+    }
+  });
+
+  await new Promise((r) => srv.listen(UI_PORT, UI_HOST, r));
+  console.log(`\n⚙️  PAAW Gateway UI → http://${UI_HOST}:${UI_PORT}/\n`);
+  console.log(`    home:  ${HOME}`);
+  console.log(`    PAAW:  http://127.0.0.1:${PORT}/ （由 UI 決定何時啟動）`);
+  console.log(`    離開：Ctrl+C（會一併停止 PAAW）\n`);
+
+  const bye = async () => {
+    if (paawRunning()) await killChild(paawChild);
+    process.exit(0);
+  };
+  process.on("SIGINT", bye);
+  process.on("SIGTERM", bye);
+  process.on("exit", () => {
+    if (paawChild && paawChild.exitCode === null) paawChild.kill("SIGTERM");
+  });
+  // UI server 本身 keeps process alive
+}
+
 // ---------- main ----------
 
 const cmd = process.argv[2] || "start";
@@ -428,7 +607,8 @@ else if (cmd === "update") {
   L.ok("update 完成");
 }
 else if (cmd === "start") await cmdStart();
+else if (cmd === "ui") await cmdUI();
 else {
-  console.error(`未知指令：${cmd}（可用：start | update | status）`);
+  console.error(`未知指令：${cmd}（可用：ui | start | update | status）`);
   process.exit(1);
 }

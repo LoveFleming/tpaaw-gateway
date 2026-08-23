@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAAW Gateway</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1d2130; --line:#2a2f42;
+    --text:#e7eaf3; --dim:#8b93a7; --green:#34d399; --red:#f87171; --blue:#60a5fa; --amber:#fbbf24;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;font-size:14px}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--dim);font-size:12.5px;margin-bottom:22px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .card h2{font-size:13px;color:var(--dim);margin:0 0 12px;font-weight:600;letter-spacing:.5px}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .big{font-size:26px;font-weight:700}
+  .kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:13px}
+  .kv:last-child{border-bottom:none}
+  .kv .k{color:var(--dim)}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .dot.on{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .dot.off{background:var(--red)}
+  .badge{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--dim)}
+  .badge.ok{color:var(--green);border-color:var(--green)}
+  .badge.new{color:var(--amber);border-color:var(--amber)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .chip{font-size:12px;padding:3px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);color:var(--text)}
+  .chip.cur{border-color:var(--green);color:var(--green);font-weight:600}
+  button{cursor:pointer;border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:600;background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+  button:hover:not(:disabled){border-color:var(--blue)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button.primary{background:#2563eb;border-color:#2563eb;color:#fff}
+  button.primary:disabled{background:#2563eb}
+  button.danger{color:var(--red)}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .log{background:#0b0d13;border:1px solid var(--line);border-radius:10px;padding:12px 14px;height:220px;overflow-y:auto;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.7;white-space:pre-wrap}
+  .log .err{color:var(--red)}
+  .log .empty{color:var(--dim)}
+  a{color:var(--blue);text-decoration:none}
+  .note{color:var(--amber);font-size:12.5px;margin-top:10px;min-height:16px}
+  .foot{margin-top:26px;color:var(--dim);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>⚙️ PAAW Gateway</h1>
+  <div class="sub" id="sub">載入中…</div>
+
+  <div class="grid">
+    <!-- PAAW 狀態 -->
+    <div class="card">
+      <h2>PAAW 狀態</h2>
+      <div class="row" style="margin-bottom:10px">
+        <span class="dot off" id="runDot"></span>
+        <span class="big" id="runState">未執行</span>
+        <span class="badge" id="runVer"></span>
+        <a id="paawLink" href="#" target="_blank" style="display:none">開啟 PAAW ↗</a>
+      </div>
+      <div class="kv"><span class="k">current 版本</span><span id="curVersion">—</span></div>
+      <div class="kv"><span class="k">stable 最新</span><span id="stableVersion">—</span></div>
+      <div class="kv"><span class="k">data 資料</span><span id="dataState">—</span></div>
+      <div class="actions">
+        <button id="btnStart" class="primary">▶️ 啟動</button>
+        <button id="btnStop" class="danger">⏹ 停止</button>
+        <button id="btnRestart">🔁 重啟</button>
+      </div>
+    </div>
+
+    <!-- 版本 -->
+    <div class="card">
+      <h2>版本管理</h2>
+      <div class="row" style="margin-bottom:10px">
+        <span id="newBadge" class="badge" style="display:none"></span>
+        <span id="upToDate" class="badge ok" style="display:none">✓ 已是最新</span>
+      </div>
+      <div class="kv"><span class="k">已安裝版本</span><span id="installedCount">0</span></div>
+      <div class="chips" id="chips"></div>
+      <div class="actions">
+        <button id="btnUpdate" class="primary">🔄 更新</button>
+      </div>
+      <div class="note" id="updateNote"></div>
+    </div>
+  </div>
+
+  <!-- 活動 log -->
+  <div class="card" style="margin-top:14px">
+    <h2>活動記錄</h2>
+    <div class="log" id="log"><span class="empty">（尚無活動）</span></div>
+  </div>
+
+  <div class="foot">PAAW Gateway · 自動更新 <span id="autoBadge"></span> · 更新永遠手動確認，data/ 永不覆蓋</div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let busy = false;
+
+async function api(path, method) {
+  const res = await fetch(path, method ? { method } : undefined);
+  return res.json().catch(() => ({}));
+}
+
+function renderLog(lines) {
+  const el = $("log");
+  if (!lines || lines.length === 0) {
+    el.innerHTML = '<span class="empty">（尚無活動）</span>';
+    return;
+  }
+  const html = lines.map((l) => {
+    const cls = l.includes("✗") ? "err" : "";
+    return `<div class="${cls}">${l.replace(/</g, "&lt;")}</div>`;
+  }).join("");
+  if (el.innerHTML !== html) el.innerHTML = html;
+  el.scrollTop = el.scrollHeight;
+}
+
+async function refresh() {
+  let s;
+  try { s = await api("/api/status"); } catch { return; }
+  $("sub").textContent = `${s.home} · package server ${s.packageServer}`;
+
+  // PAAW 狀態
+  $("runDot").className = "dot " + (s.running ? "on" : "off");
+  $("runState").textContent = s.running ? "執行中" : "未執行";
+  $("runVer").textContent = s.runningVersion ? `v${s.runningVersion}` : "";
+  $("paawLink").style.display = s.running ? "" : "none";
+  $("paawLink").href = s.paawUrl;
+
+  $("curVersion").textContent = s.current ? `v${s.current}` : "未安裝";
+  const st = s.stable ? `v${s.stable}${s.stableSize ? `（${(s.stableSize/1048576).toFixed(1)} MB）` : ""}` : "（連不上）";
+  $("stableVersion").textContent = st;
+  $("dataState").textContent = s.dataSeeded ? "已播種（更新不覆蓋）" : "未播種";
+
+  // 版本 chips
+  $("installedCount").textContent = s.installed.length;
+  $("chips").innerHTML = s.installed.map((v) =>
+    `<span class="chip${v === s.current ? " cur" : ""}">${v === s.current ? "● " : ""}${v}</span>`
+  ).join("") || '<span class="chip">none</span>';
+
+  // 更新提示
+  if (s.stableNewer) {
+    $("newBadge").style.display = "";
+    $("newBadge").className = "badge new";
+    $("newBadge").textContent = `⬆ 有新版 ${s.stable} 可用`;
+    $("upToDate").style.display = "none";
+  } else if (s.current && s.stable) {
+    $("newBadge").style.display = "none";
+    $("upToDate").style.display = "";
+  } else {
+    $("newBadge").style.display = "none";
+    $("upToDate").style.display = "none";
+  }
+
+  // job 狀態
+  busy = s.job.active;
+  const jobMsg = s.job.error ? `⚠ ${s.job.error}` : s.job.message || "";
+  $("updateNote").textContent = jobMsg;
+
+  ["btnStart", "btnStop", "btnRestart", "btnUpdate"].forEach((id) => { $(id).disabled = busy; });
+  $("btnStop").disabled = busy || !s.running;
+  $("btnStart").disabled = busy || s.running;
+  $("btnRestart").disabled = busy || !s.current;
+
+  $("autoBadge").textContent = s.autoUpdate ? "開" : "關（預設）";
+
+  const log = await api("/api/log");
+  renderLog(log.lines);
+}
+
+async function act(path, btnLabel) {
+  const r = await api(path, "POST");
+  if (r.message) {
+    const el = $("log");
+    el.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${btnLabel}…</div>` + el.innerHTML;
+  }
+  refresh();
+}
+
+$("btnStart").onclick = () => act("/api/start", "▶️ 啟動");
+$("btnStop").onclick = () => act("/api/stop", "⏹ 停止");
+$("btnRestart").onclick = () => act("/api/restart", "🔁 重啟");
+$("btnUpdate").onclick = () => act("/api/update", "🔄 更新");
+
+refresh();
+setInterval(refresh, 2000);
+</script>
+</body>
+</html>
