@@ -271,15 +271,22 @@ async function startAndVerify(versionDir, version) {
 
 // ---------- 安裝一個版本（staged）----------
 
-async function installVersion(manifest) {
+async function installVersion(manifest, server) {
   const v = manifest.version;
   const versionDir = join(VERSIONS_DIR, v);
   const tmpDir = join(VERSIONS_DIR, `${v}.tmp`);
   const zipPath = join(HOME, "logs", `paaw-${v}.zip`);
 
-  L.info(`下載 ${manifest.url} …`);
+  // 下載 URL：優先用「剛 fetch stable.json 成功的同一台 server」組（同源保證，
+  // 不受 manifest.url 缺失/寫死舊位址影響）；manifest.url 只當無 server 時的 fallback
+  const dlUrl = server
+    ? `${server}/packages/${v}/paaw.zip`
+    : (manifest.url && /^https?:\/\//.test(manifest.url) ? manifest.url : null);
+  if (!dlUrl) throw new Error("無法決定下載 URL（manifest 無 url 且未傳 server）");
+
+  L.info(`下載 ${dlUrl} …`);
   await mkdir(LOGS_DIR, { recursive: true });
-  const { size } = await downloadVerified(manifest.url, manifest.sha256, zipPath, manifest.size);
+  const { size } = await downloadVerified(dlUrl, manifest.sha256, zipPath, manifest.size);
   L.ok(`sha256 驗證通過（${(size / 1048576).toFixed(1)} MB）`);
 
   L.info(`解壓 → versions/${v}.tmp …`);
@@ -350,7 +357,7 @@ async function updateLogic() {
   }
 
   L.info(`發現新版 ${manifest.version}${current ? `（current ${current.version}）` : "（首次安裝）"}`);
-  const versionDir = await installVersion(manifest);
+  const versionDir = await installVersion(manifest, server);
   // 安裝成功即切 current（staged 已驗 sha+骨架+npm install；
   // 若之後 start 啟動失敗，回滾分支會把 current 寫回舊版 — 鏈條仍閉合）
   await writeCurrentAtomic(manifest.version);
