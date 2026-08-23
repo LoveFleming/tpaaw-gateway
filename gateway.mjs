@@ -24,7 +24,8 @@
  *   PAAW_HOME         佈局根目錄（預設 process.cwd()）
  *   PAAW_PORT         PAAW port（預設 4097）
  *   PAAW_WS_PORT      PTY-WS port（預設 4098）
- *   PAAW_AUTO_UPDATE  =0 關閉自動更新（只跑 current 版本）
+ *   PAAW_AUTO_UPDATE  =1 開啟自動更新（預設關：start 只跑 current，要更新手動跑 npm run update）
+ *   PAAW_HOME         佈局根目錄（預設 process.cwd()，也可寫 gateway.json 的 paawHome）
  *   PAAW_SKIP_NPM_I   =1 跳過 npm install（debug 用）
  */
 
@@ -40,13 +41,21 @@ import { unzipSync } from "fflate";
 // ---------- 常數 / 工具 ----------
 
 const VERSION_RE = /^\d+\.\d+\.\d+$/;
-const HOME = resolve(process.env.PAAW_HOME || process.cwd());
+// gateway.json（執行目錄下）：{ packageServer, paawHome, autoUpdate }
+let GATEWAY_CFG = {};
+try {
+  GATEWAY_CFG = JSON.parse(await readFile(join(process.cwd(), "gateway.json"), "utf-8"));
+} catch {}
+
+// 佈局根目錄優先序：PAAW_HOME env > gateway.json.paawHome > cwd
+const HOME = resolve(process.env.PAAW_HOME || GATEWAY_CFG.paawHome || process.cwd());
 const VERSIONS_DIR = join(HOME, "versions");
 const DATA_DIR = join(HOME, "data");
 const CURRENT_FILE = join(HOME, "current.json");
 const LOGS_DIR = join(HOME, "logs");
 const PORT = process.env.PAAW_PORT || "4097";
-const AUTO_UPDATE = process.env.PAAW_AUTO_UPDATE !== "0";
+// 自動更新預設關（start 只跑 current；首裝仍會安裝）：PAAW_AUTO_UPDATE=1 或 gateway.json autoUpdate:true 才開
+const AUTO_UPDATE = process.env.PAAW_AUTO_UPDATE === "1" || GATEWAY_CFG.autoUpdate === true;
 
 // emoji 降級：非 TTY / dumb terminal / Windows 舊 console → ASCII
 const EMOJI_OK =
@@ -77,10 +86,7 @@ function semverGt(a, b) {
 
 async function loadPackageServerUrl() {
   if (process.env.PAAW_PACKAGE_URL) return process.env.PAAW_PACKAGE_URL.replace(/\/$/, "");
-  try {
-    const cfg = JSON.parse(await readFile(join(HOME, "gateway.json"), "utf-8"));
-    if (cfg.packageServer) return cfg.packageServer.replace(/\/$/, "");
-  } catch {}
+  if (GATEWAY_CFG.packageServer) return GATEWAY_CFG.packageServer.replace(/\/$/, "");
   return "http://localhost:4180";
 }
 
@@ -293,7 +299,11 @@ async function cmdStatus() {
   console.log(`installed       ${installed.join(", ") || "none"}`);
   console.log(`stable latest   ${stable || "（無法連線）"}`);
   console.log(`data/           ${existsSync(DATA_DIR) ? "已存在（更新永不覆蓋）" : "未播種"}`);
-  console.log(`auto update     ${AUTO_UPDATE ? "on" : "off（PAAW_AUTO_UPDATE=0）"}`);
+  console.log(`auto update     ${AUTO_UPDATE ? "on（PAAW_AUTO_UPDATE=1 或 gateway.json autoUpdate）" : "off（預設；更新手動跑 npm run update）"}`);
+  if (current && stable && semverGt(stable, current.version) && !AUTO_UPDATE) {
+    console.log(`
+  ⬆ 有新版 ${stable} 可用 — npm run update 更新`);
+  }
 }
 
 async function cmdUpdate() {
@@ -327,13 +337,11 @@ async function cmdUpdate() {
     return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false };
   }
 
-  if (!AUTO_UPDATE && current) {
-    L.info(`有新版 ${manifest.version} 但 auto update 關閉 — 照跑 ${current.version}`);
-    return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false };
-  }
-
   L.info(`發現新版 ${manifest.version}${current ? `（current ${current.version}）` : "（首次安裝）"}`);
   const versionDir = await installVersion(manifest);
+  // 安裝成功即切 current（staged 已驗 sha+骨架+npm install；
+  // 若之後 start 啟動失敗，回滾分支會把 current 寫回舊版 — 鏈條仍閉合）
+  await writeCurrentAtomic(manifest.version);
   return { versionDir, version: manifest.version, updated: true };
 }
 
@@ -352,7 +360,22 @@ async function safeUpdate() {
 }
 
 async function cmdStart() {
-  const { versionDir, version, updated } = await safeUpdate();
+  const current = await readCurrent();
+
+  // 預設行為：有 current 就直接跑（不碰 package server、不檢查更新）
+  // 更新永遠手動：npm run update；除非 PAAW_AUTO_UPDATE=1 / gateway.json autoUpdate:true
+  let versionDir, version, updated = false;
+  if (!current || AUTO_UPDATE) {
+    ({ versionDir, version, updated } = await safeUpdate());
+  } else {
+    version = current.version;
+    versionDir = join(VERSIONS_DIR, version);
+    if (!existsSync(versionDir)) {
+      L.err(`current 指向 ${version} 但 versions/${version}/ 不存在 — 跑 npm run update 修復`);
+      process.exit(1);
+    }
+    L.info(`自動更新關閉 — 直接跑 current ${version}（要更新：npm run update）`);
+  }
 
   if (!existsSync(versionDir)) {
     L.err(`versions/${version}/ 不存在 — 先跑 update`);

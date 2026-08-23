@@ -16,9 +16,11 @@ PAAW_PACKAGE_URL=http://192.168.8.189:4180 npm start
 
 | 指令 | 行為 |
 |---|---|
-| `npm start`（= `paaw-gateway start`） | 檢查更新 → 安裝 → 播種 → 啟動 → verify |
-| `npm run update` | 只更新不啟動 |
-| `npm run status` | current / installed / stable / data 現況 |
+| `npm start`（= `paaw-gateway start`） | 有 current 直接跑（**不檢查更新**）；首次無 current 才安裝 stable |
+| `npm run update` | 手動更新到 stable 最新（安裝+驗證，不啟動） |
+| `npm run status` | current / installed / stable / data 現況；有新版會提示 |
+
+**自動更新預設關**（同 OpenClaw 安全預設）。要開：`PAAW_AUTO_UPDATE=1 npm start`，或在 gateway.json 寫 `"autoUpdate": true`。
 
 ## 目錄佈局（長在執行目錄，物理隔離）
 
@@ -43,15 +45,25 @@ GET stable.json → semver 比對 → 下載（串流算 sha256）
 
 任何一步失敗：current.json 不動 → 自動回滾啟動上一版；壞版本目錄保留現場。
 
-## 環境變數
+## 環境變數 / gateway.json
 
-| 變數 | 預設 | 說明 |
+環境變數（優先）或執行目錄下的 `gateway.json`：
+
+```json
+{
+  "packageServer": "http://192.168.8.189:4180",
+  "paawHome": "/Users/me/my-paaw-data",
+  "autoUpdate": false
+}
+```
+
+| 來源 | 預設 | 說明 |
 |---|---|---|
-| `PAAW_PACKAGE_URL` | `http://localhost:4180` | package server（或寫 `gateway.json` 的 `packageServer`） |
-| `PAAW_HOME` | process.cwd() | 佈局根目錄 |
+| `PAAW_PACKAGE_URL` / `packageServer` | `http://localhost:4180` | package server 位址 |
+| `PAAW_HOME` / `paawHome` | process.cwd() | **安裝路徑**（versions/data/logs 長逼） |
 | `PAAW_PORT` | 4097 | PAAW port |
 | `PAAW_WS_PORT` | 4098 | PTY-WS port |
-| `PAAW_AUTO_UPDATE=0` | on | 關閉自動更新（只跑 current） |
+| `PAAW_AUTO_UPDATE=1` / `"autoUpdate": true` | off | 開啟自動更新 |
 | `PAAW_SKIP_NPM_I=1` | - | 跳過 npm install（debug） |
 
 Windows：不需要 symlink（current.json 是 pointer file）；emoji 自動降級 ASCII（WT_SESSION 偵測）。
