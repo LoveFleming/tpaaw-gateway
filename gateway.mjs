@@ -220,7 +220,7 @@ async function ensureData(versionDir) {
 // ---------- 啟動 + verify（GET / 200 才算活）----------
 
 function startPaaw(versionDir) {
-  const env = { ...process.env, PAAW_PORT: PORT };
+  const env = { ...process.env, PAAW_PORT: PORT, PAAW_DATA_HOME: DATA_DIR };
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
   const tsxBin = join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
   const child = spawn(process.execPath, [tsxBin, "packages/server/src/paaw-server.mjs"], {
