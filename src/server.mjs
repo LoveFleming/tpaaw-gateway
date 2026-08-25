@@ -17,7 +17,7 @@
 import { createServer } from "http";
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from "fs";
 import { join, resolve, basename } from "path";
-import { execSync, spawn } from "child_process";
+import { execSync, execFileSync, spawn } from "child_process";
 import { randomUUID } from "crypto";
 import { fileURLToPath } from "url";
 
@@ -262,7 +262,7 @@ async function upgradePaaw(userId = "system") {
 function listBackups() {
   if (!existsSync(BACKUP_DIR)) return [];
   return readdirSync(BACKUP_DIR)
-    .filter(f => f.startsWith("paaw-backup-") && f.endsWith(".tar.gz"))
+    .filter(f => /^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(f))
     .map(f => {
       const stat = statSync(join(BACKUP_DIR, f));
       const dateMatch = f.match(/paaw-backup-(\d{8}-\d{4})/);
@@ -282,6 +282,9 @@ function createBackup(userId = "system") {
 
   const dateStr = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19).replace("T", "-");
   const filename = `paaw-backup-${dateStr.slice(0, 13)}.tar.gz`;
+  if (!/^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(filename)) {
+    throw new Error("Invalid backup filename: " + filename);
+  }
   const filepath = join(BACKUP_DIR, filename);
 
   logEvent("backup_start", "Creating backup...", userId);
@@ -289,8 +292,7 @@ function createBackup(userId = "system") {
   try {
     // Backup data/ and .paaw/ directories
     const dirs = ["data", ".paaw"].filter(d => existsSync(join(PAAW_ROOT, d)));
-    const tarCmd = `tar czf "${filepath}" ${dirs.join(" ")}`;
-    execSync(tarCmd, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
+    execFileSync("tar", ["czf", filepath, ...dirs], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
 
     // Clean up old backups
     const backups = listBackups();
@@ -310,6 +312,9 @@ function createBackup(userId = "system") {
 }
 
 function restoreBackup(filename, userId = "system") {
+  if (!/^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(filename)) {
+    return { ok: false, error: "Invalid backup filename" };
+  }
   const filepath = join(BACKUP_DIR, filename);
   if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" };
 
@@ -323,7 +328,7 @@ function restoreBackup(filename, userId = "system") {
     createBackup("system-restore-safety");
 
     // Extract
-    execSync(`tar xzf "${filepath}"`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
+    execFileSync("tar", ["xzf", filepath], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
 
     // Restart
     startPaaw();
