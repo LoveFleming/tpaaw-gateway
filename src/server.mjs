@@ -264,7 +264,7 @@ function listBackups() {
   return readdirSync(BACKUP_DIR)
     .filter(f => /^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(f))
     .map(f => {
-      const stat = statSync(join(BACKUP_DIR, f));
+      const stat = statSync(join(BACKUP_DIR, f)); // nosemgrep: f already whitelist-validated by regex on line above
       const dateMatch = f.match(/paaw-backup-(\d{8}-\d{4})/);
       return {
         filename: f,
@@ -291,7 +291,7 @@ function createBackup(userId = "system") {
 
   try {
     // Backup data/ and .paaw/ directories
-    const dirs = ["data", ".paaw"].filter(d => existsSync(join(PAAW_ROOT, d)));
+    const dirs = ["data", ".paaw"].filter(d => existsSync(join(PAAW_ROOT, d))); // nosemgrep: d is from hardcoded ["data", ".paaw"] list, not user input
     execFileSync("tar", ["czf", filepath, ...dirs], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
 
     // Clean up old backups
@@ -315,8 +315,8 @@ function restoreBackup(filename, userId = "system") {
   if (!/^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(filename)) {
     return { ok: false, error: "Invalid backup filename" };
   }
-  const filepath = join(BACKUP_DIR, filename);
-  if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" };
+  const filepath = join(BACKUP_DIR, filename); // nosemgrep: filename regex-validated on line above
+  if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" }; // nosemgrep: filepath from validated filename
 
   logEvent("restore_start", `Restoring from ${filename}...`, userId);
 
