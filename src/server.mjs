@@ -53,6 +53,8 @@ function saveConfig() {
 
 const PAAW_ROOT = resolve(__dirname, config.paawRoot || "../../..");
 const BACKUP_DIR = resolve(__dirname, config.backupDir || "../../../backups");
+const BACKUP_REGEX = /^paaw-backup-\d{4}-\d{2}-\d{2}-\d{2}\.tar\.gz$/; // YYYY-MM-DD-HH
+const BACKUP_DATE_REGEX = /paaw-backup-(\d{4}-\d{2}-\d{2}-\d{2})/;
 
 // ── Event Log ──
 const EVENT_LOG_PATH = join(__dirname, "..", "events.jsonl");
@@ -262,10 +264,10 @@ async function upgradePaaw(userId = "system") {
 function listBackups() {
   if (!existsSync(BACKUP_DIR)) return [];
   return readdirSync(BACKUP_DIR)
-    .filter(f => /^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(f))
+    .filter(f => BACKUP_REGEX.test(f))
     .map(f => {
       const stat = statSync(join(BACKUP_DIR, f)); // nosemgrep: f already whitelist-validated by regex on line above
-      const dateMatch = f.match(/paaw-backup-(\d{8}-\d{4})/);
+      const dateMatch = f.match(BACKUP_DATE_REGEX);
       return {
         filename: f,
         date: dateMatch ? dateMatch[1] : "unknown",
@@ -282,7 +284,7 @@ function createBackup(userId = "system") {
 
   const dateStr = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19).replace("T", "-");
   const filename = `paaw-backup-${dateStr.slice(0, 13)}.tar.gz`;
-  if (!/^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(filename)) {
+  if (!BACKUP_REGEX.test(filename)) {
     throw new Error("Invalid backup filename: " + filename);
   }
   const filepath = join(BACKUP_DIR, filename);
@@ -312,7 +314,7 @@ function createBackup(userId = "system") {
 }
 
 function restoreBackup(filename, userId = "system") {
-  if (!/^paaw-backup-\d{8}-\d{4}\.tar\.gz$/.test(filename)) {
+  if (!BACKUP_REGEX.test(filename)) {
     return { ok: false, error: "Invalid backup filename" };
   }
   const filepath = join(BACKUP_DIR, filename); // nosemgrep: filename regex-validated on line above
