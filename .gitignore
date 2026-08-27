@@ -3,3 +3,7 @@ versions/
 state.json
 *.log
 .DS_Store
+current.json
+gateway.json
+data/
+.paaw/
