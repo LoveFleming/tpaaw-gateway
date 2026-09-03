@@ -11,7 +11,8 @@
     "start": "node gateway.mjs ui",
     "run": "node gateway.mjs start",
     "update": "node gateway.mjs update",
-    "status": "node gateway.mjs status"
+    "status": "node gateway.mjs status",
+    "test": "node --test tests/**/*.test.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.2"

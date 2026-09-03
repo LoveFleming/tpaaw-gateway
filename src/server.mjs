@@ -16,16 +16,19 @@
 
 import { createServer } from "http";
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from "fs";
-import { join, resolve, basename } from "path";
+import { join, resolve, basename, dirname } from "path";
 import { execSync, execFileSync, spawn } from "child_process";
 import { randomUUID } from "crypto";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-import { dirname } from "path";
 
 // ── Config ──
-const CONFIG_PATH = join(__dirname, "..", "config.json");
+// Test-only knob: PAAW_CONFIG overrides the config path (same isolation
+// pattern as PAAW_ROOT / PAAW_BACKUP_DIR / PAAW_EVENT_LOG / PAAW_MAX_BACKUPS).
+// E2E tests use this to spawn the server against a throwaway config and
+// never touch the developer's real gateway on :4199.
+const CONFIG_PATH = process.env.PAAW_CONFIG || join(__dirname, "..", "config.json");
 let config = loadConfig();
 
 function loadConfig() {
@@ -51,13 +54,15 @@ function saveConfig() {
   writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2), "utf-8");
 }
 
-const PAAW_ROOT = resolve(__dirname, config.paawRoot || "../../..");
-const BACKUP_DIR = resolve(__dirname, config.backupDir || "../../../backups");
-const BACKUP_REGEX = /^paaw-backup-\d{4}-\d{2}-\d{2}-\d{2}\.tar\.gz$/; // YYYY-MM-DD-HH
-const BACKUP_DATE_REGEX = /paaw-backup-(\d{4}-\d{2}-\d{2}-\d{2})/;
+const PAAW_ROOT = resolve(__dirname, process.env.PAAW_ROOT || config.paawRoot || "../../..");
+const BACKUP_DIR = resolve(__dirname, process.env.PAAW_BACKUP_DIR || config.backupDir || "../../../backups");
+export const BACKUP_REGEX = /^paaw-backup-\d{4}-\d{2}-\d{2}-\d{2}\.tar\.gz$/; // YYYY-MM-DD-HH
+export const BACKUP_DATE_REGEX = /paaw-backup-(\d{4}-\d{2}-\d{2}-\d{2})/;
+// Test-only knob: PAAW_MAX_BACKUPS overrides config.maxBackups when set
+const MAX_BACKUPS = Number(process.env.PAAW_MAX_BACKUPS ?? config.maxBackups ?? 7);
 
 // ── Event Log ──
-const EVENT_LOG_PATH = join(__dirname, "..", "events.jsonl");
+const EVENT_LOG_PATH = process.env.PAAW_EVENT_LOG || join(__dirname, "..", "events.jsonl");
 const events = [];
 
 function logEvent(type, detail, userId = "system") {
@@ -261,7 +266,7 @@ async function upgradePaaw(userId = "system") {
 }
 
 // ── Backup Manager ──
-function listBackups() {
+export function listBackups() {
   if (!existsSync(BACKUP_DIR)) return [];
   return readdirSync(BACKUP_DIR)
     .filter(f => BACKUP_REGEX.test(f))
@@ -279,7 +284,7 @@ function listBackups() {
     .sort((a, b) => b.created.localeCompare(a.created));
 }
 
-function createBackup(userId = "system") {
+export function createBackup(userId = "system") {
   if (!existsSync(BACKUP_DIR)) mkdirSync(BACKUP_DIR, { recursive: true });
 
   const dateStr = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19).replace("T", "-");
@@ -298,8 +303,8 @@ function createBackup(userId = "system") {
 
     // Clean up old backups
     const backups = listBackups();
-    if (backups.length > config.maxBackups) {
-      const toDelete = backups.slice(config.maxBackups);
+    if (backups.length > MAX_BACKUPS) {
+      const toDelete = backups.slice(MAX_BACKUPS);
       for (const old of toDelete) {
         try { unlinkSync(join(BACKUP_DIR, old.filename)); } catch {}
       }
@@ -313,7 +318,7 @@ function createBackup(userId = "system") {
   }
 }
 
-function restoreBackup(filename, userId = "system") {
+export function restoreBackup(filename, userId = "system") {
   if (!BACKUP_REGEX.test(filename)) {
     return { ok: false, error: "Invalid backup filename" };
   }
@@ -873,6 +878,10 @@ setInterval(() => { if (token) refresh(); }, 15000);
 }
 */
 // ── Start Gateway ──
+// Main guard: only auto-listen when executed directly (node src/server.mjs).
+// Being imported (e.g. by unit tests) must not bind the port or spawn anything.
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
 server.listen(config.port, () => {
   console.log(`[PAAW Gateway] ⚙️ Running on http://localhost:${config.port}`);
   console.log(`[PAAW Gateway] PAAW root: ${PAAW_ROOT}`);
@@ -886,3 +895,4 @@ server.listen(config.port, () => {
     }, 1000);
   }
 });
+}
