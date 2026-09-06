@@ -2,6 +2,23 @@
 
 像 OpenClaw 一樣安裝/更新 PAAW：`npm start` 一條命令 → 檢查版本 → 下載驗證 → 安裝 → 啟動。
 
+## Feature 對照
+
+| Feature | 說明 | 相關章節 |
+|---------|------|----------|
+| **F20260904-001 Gateway CLI Bootloader** | npm-start CLI：安裝、更新、啟動 bundle | 快速開始、更新流程 |
+| **F20260904-002 Gateway Dashboard Server** | Web dashboard（src/server.mjs）：登入/session、config 管理 | UI 模式、docs/api.md |
+| **F20260904-003 Gateway Backup & Restore** | 備份列表 / 建立 / 還原 | 備份還原 |
+
+## 這個 repo 有兩個角色
+
+| 角色 | 檔案 | Port | 用途 |
+|---|---|---|---|
+| **Bootloader**（本 README 主體） | `gateway.mjs` | UI 4290 | 安裝 / 更新 / 啟停 PAAW app（zip 發佈流程） |
+| **Gateway Admin**（見[下方章節](#gateway-admin-管理平台4199)） | `src/server.mjs` | 4199 | 開發實例的 DevOps 管理平台：進程管理、git 升級、備份還原、事件日誌 |
+
+完整 API 文件：[`docs/api.md`](docs/api.md)（22 個 endpoint，含 request/response 範例）。
+
 ## 快速開始（使用者視角）
 
 ```bash
@@ -99,3 +116,73 @@ API：`GET/POST /api/settings`（body `{"packageServer":"…","paawHome":"…"}`
 PAAW 啟動成功（UI 按 ▶️/🔁）自動開瀏覽器 tab 顯示 PAAW。
 關閉：`PAAW_OPEN_BROWSER=0` 或 gateway.json `"openBrowser": false`。
 跨平台：macOS `open` / Windows `start` / Linux `xdg-open`（headless 環境靜默跳過）。
+
+---
+
+## Gateway Admin 管理平台（:4199）
+
+`src/server.mjs` 是**獨立於 bootloader 的 DevOps 管理平台**，管理的是「開發實例」（git repo 形態的 PAAW，即 `config.json` 的 `paawRoot`），與 bootloader 的 zip 安裝流程是兩條不同的路。
+
+### 啟動
+
+```bash
+node src/server.mjs        # http://127.0.0.1:4199/
+```
+
+守護者角色：gateway 不依賴 PAAW Server 運行 —— PAAW 掛了它還活著，可以看事件、還原備份、重啟。`autoStartPaaw: true` 可在啟動時自動帶起 PAAW。
+
+### 功能
+
+- **登入認證** — 帳號在 `config.json` 的 `users[]`，登入換 Bearer token（24h 效期，記憶體 session）
+- **進程管理** — start / stop / restart PAAW Server（health check 輪詢、crash 自動偵測）
+- **版本升級** — `git stash → git pull → npm install → restart`，dashboard 可看 branch / commit / dirty / 落後數
+- **備份 & 還原** — 見下節
+- **事件日誌** — 所有操作（login、backup、restore、upgrade、crash）寫 JSONL audit trail
+- **系統健康** — Node 記憶體、uptime、PAAW 進程狀態
+
+### 備份 & 還原
+
+- **備份內容**：`paawRoot` 下的 `data/` 與 `.paaw/` 兩個目錄，`tar czf` 打包
+- **檔名固定格式**：`paaw-backup-YYYY-MM-DD-HH.tar.gz`（regex 驗證，防 path traversal）
+- **排程**：`backupSchedule`（cron 語法，預設每天 03:00）；dashboard 也可手動建立
+- **輪替**：保留 `maxBackups` 份（預設 7），超過自動刪最舊
+- **還原**：停止 PAAW → **先自動建一份 safety 備份** → 解開 tar → 重啟 PAAW
+
+### config.json
+
+```json
+{
+  "port": 4199,
+  "paawRoot": "../tPAAW",
+  "paawServerCmd": "node packages/server/src/index.mjs",
+  "paawServerPort": 4097,
+  "backupDir": "../tPAAW/backups",
+  "backupSchedule": "0 3 * * *",
+  "maxBackups": 7,
+  "autoStartPaaw": false,
+  "users": [{ "id": "admin", "name": "Fleming", "role": "admin", "passwordHash": "changeme" }],
+  "sessionSecret": "paaw-gateway-secret-change-me",
+  "sessionMaxAge": 86400000
+}
+```
+
+環境變數 `PAAW_CONFIG` / `PAAW_ROOT` / `PAAW_BACKUP_DIR` / `PAAW_EVENT_LOG` / `PAAW_MAX_BACKUPS` 可覆蓋（主要供測試隔離用）。完整欄位說明見 [`docs/api.md`](docs/api.md#3-configjson-admin-server-設定)。
+
+## 測試
+
+```bash
+npm test    # node --test tests/**/*.test.mjs
+```
+
+| 類型 | 檔案 | 涵蓋 |
+|---|---|---|
+| Unit | `tests/unit/backup.test.mjs` | 備份建立 / 輪替 / 還原 / 檔名 regex 驗證 |
+| E2E | `tests/e2e/gateway-backup-auth.test.mjs` | 登入認證流程、backup API、401 未授權防護 |
+
+測試以 temp dir + 隨機 port 隔離，不會碰到開發者本機正在跑的 gateway（:4199）或 PAAW（:4097）。
+
+## 安全注意事項
+
+- `config.json` 目前**未進版控**（.gitignore 已排除），但仍請確認 repo 內不含真實密碼
+- `users[].passwordHash` 欄位目前為**明文比對**（login 直接 `===` 比對）—— 若要對外開放 port，應先改為 hash + salt（已知技術債，見 issue tracker）
+- Admin server 預設只聽本機；`sessionSecret` 部署前請換掉預設值

@@ -6,10 +6,5 @@ state.json
 current.json
 gateway.json
 data/
-# Release unit 資產（2026-09-06 Fleming 定調：.paaw 進版控）— 只排除 runtime 垃圾
-.paaw/logs/
-.paaw/tmp/
-.paaw/api-logs/
-.paaw/cu-debug.log
-.paaw/deps-cache.json
-.paaw/metrics-cache.json
+# Release unit 資產（2026-09-06：.paaw 100% 進版控 — runtime log 在 PAAW log/ 中央目錄）
+# versions/ = 更新備份 legacy 位置（寫入者未定案前先留著 ignore）
