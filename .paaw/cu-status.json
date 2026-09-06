@@ -1,0 +1,40 @@
+{
+  "steps": {
+    "scan": {
+      "status": "done",
+      "size": 6016,
+      "codeMtime": 1788090871126.399,
+      "updatedAt": "2026-09-06T08:07:43.684Z"
+    },
+    "feature-map": {
+      "status": "done",
+      "summary": "2 features (v2)",
+      "codeMtime": 1788090871126.399,
+      "updatedAt": "2026-09-06T08:09:15.601Z"
+    },
+    "code-intelligence": {
+      "status": "done",
+      "summary": "64 functions",
+      "codeMtime": 1788090871126.399,
+      "updatedAt": "2026-09-06T08:09:15.630Z"
+    },
+    "test-intelligence": {
+      "status": "done",
+      "summary": "2 tests",
+      "codeMtime": 1788090871126.399,
+      "updatedAt": "2026-09-06T08:09:15.658Z"
+    },
+    "error-codes": {
+      "status": "done",
+      "summary": "13 codes / conventions=none",
+      "codeMtime": 1788090871126.399,
+      "updatedAt": "2026-09-06T08:09:40.408Z"
+    },
+    "c4-model": {
+      "status": "done",
+      "summary": "0 external / 4 containers",
+      "codeMtime": 1788090871126.399,
+      "updatedAt": "2026-09-06T08:09:53.411Z"
+    }
+  }
+}

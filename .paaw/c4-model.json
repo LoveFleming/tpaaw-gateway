@@ -1,0 +1,67 @@
+{
+  "scannedAt": "2026-09-06T08:09:53.408Z",
+  "method": "llm-v1",
+  "system": {
+    "name": "tpaaw-gateway",
+    "description": "一個 gateway 型 release unit。從環境變數命名推測，系統由多個服務組成：PAAW 主服務、PAAW WebSocket 服務、bridge 服務與 Vite 前端開發伺服器，彼此以 port 區分。"
+  },
+  "containers": [
+    {
+      "name": "paaw-main",
+      "type": "gateway",
+      "technology": "未知（無 framework 證據）",
+      "description": "PAAW 主要服務，port 由 PAAW_PORT 指定（值未知）",
+      "evidence": [
+        "env: PAAW_PORT (versions/0.2.0/.env.example)"
+      ]
+    },
+    {
+      "name": "paaw-ws",
+      "type": "app",
+      "technology": "WebSocket（依 KEY 命名推斷）",
+      "description": "PAAW WebSocket 服務，port 由 PAAW_WS_PORT 指定",
+      "evidence": [
+        "env: PAAW_WS_PORT (versions/0.2.0/.env.example)"
+      ]
+    },
+    {
+      "name": "bridge",
+      "type": "app",
+      "technology": "",
+      "description": "橋接服務，port 由 BRIDGE_PORT 指定，用途待確認（可能連接 PAAW 與 Vite 前端）",
+      "evidence": [
+        "env: BRIDGE_PORT (versions/0.2.0/.env.example)"
+      ]
+    },
+    {
+      "name": "frontend",
+      "type": "frontend",
+      "technology": "Vite",
+      "description": "Vite 前端開發伺服器，port 由 VITE_PORT 指定",
+      "evidence": [
+        "env: VITE_PORT (versions/0.2.0/.env.example)"
+      ]
+    }
+  ],
+  "externalSystems": [],
+  "relationships": [
+    {
+      "from": "paaw-main",
+      "to": "paaw-ws",
+      "protocol": "未確認（可能 tcp/ws 內部通訊）",
+      "description": "推測主服務與 WebSocket 服務搭配運作（僅命名推斷，無直接證據）"
+    },
+    {
+      "from": "bridge",
+      "to": "paaw-main",
+      "protocol": "未確認",
+      "description": "推測 bridge 服務橋接主服務與前端（命名推斷）"
+    }
+  ],
+  "notes": "證據極少：沒有 deps manifest、docker-compose、EXPOSE 或任何 connection URI，僅有 4 個 port 相關 env KEY。因此 (1) 無法確認任何 DB/cache/queue/外部 API/LLM provider 依賴——不是沒有，而是本輪收集沒抓到；(2) 各服務的 type 與內部關係皆為 KEY 命名推渷，可信度中低；(3) 若 manifest 位於 versions/0.2.0/ 子目錄而未被掃到，建議補收集 package.json / requirements.txt 等再重跑。",
+  "stats": {
+    "containers": 4,
+    "external": 0,
+    "relationships": 2
+  }
+}

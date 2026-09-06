@@ -1,0 +1,47 @@
+{
+  "files": {
+    "gateway.mjs": [
+      {
+        "id": "F20260906-001",
+        "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+        "tags": [
+          "bootloader",
+          "staged-install",
+          "auto-update",
+          "version-management",
+          "process-supervisor",
+          "local-dashboard"
+        ]
+      }
+    ],
+    "src/server.mjs": [
+      {
+        "id": "F20260906-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
+        "tags": [
+          "gateway",
+          "auth",
+          "session",
+          "bearer-token",
+          "backup",
+          "restore"
+        ]
+      }
+    ],
+    "tests/e2e/gateway-backup-auth.test.mjs": [
+      {
+        "id": "F20260906-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
+        "tags": [
+          "gateway",
+          "auth",
+          "session",
+          "bearer-token",
+          "backup",
+          "restore"
+        ]
+      }
+    ]
+  },
+  "updatedAt": "2026-09-06T08:09:15.600Z"
+}

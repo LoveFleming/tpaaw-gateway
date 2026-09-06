@@ -1,0 +1,129 @@
+I have not been given the actual file contents — only the file tree, package name, dependency list, and git log. Per spec-miner constraints ("ground all observations in actual code evidence"), the analysis below is limited to what can be evidenced from structure and commit history. Items marked as inferred should be validated by reading `src/server.mjs` and `gateway.mjs` before further Knowledge Base generation.
+
+```json
+{
+  "projectName": "tpaaw-gateway",
+  "projectType": "web-app",
+  "language": "JavaScript (ESM, .mjs)",
+  "framework": "None detected (dependency list contains only `fflate`; likely a zero-dependency Node HTTP server with a custom dashboard UI)",
+  "runtime": "Node.js",
+  "summary": "A standalone DevOps gateway/bootloader for the PAAW coding application — handles install, update, run (spawn with PAAW_DATA_HOME), auto-open browser dashboard, and secured backup/restore — for end users self-hosting PAAW.",
+  "entryPoints": [
+    "gateway.mjs",
+    "src/server.mjs"
+  ],
+  "keyDirectories": {
+    "source": "src/",
+    "tests": "tests/",
+    "config": ". (root — gateway.json is runtime-generated per git log; no committed config dir observed)",
+    "docs": null
+  },
+  "modules": [
+    {
+      "name": "server",
+      "path": "src/server.mjs",
+      "responsibility": "Main gateway HTTP server: dashboard UI (info cards, settings for package server URL / PAAW home, update/launch controls), backup list/auth, backup restore via validated paths, testability hooks. Largest module — likely needs decomposition.",
+      "dependsOn": ["config-state", "backup-manager", "paaw-process-manager", "fflate"],
+      "exports": ["UNVERIFIED — requires reading src/server.mjs"]
+    },
+    {
+      "name": "cli-bootloader",
+      "path": "gateway.mjs",
+      "responsibility": "CLI entry / `npm start` — boots the dashboard server; historically the install/update/run bootloader (MVP commit).",
+      "dependsOn": ["server"],
+      "exports": ["UNVERIFIED — requires reading gateway.mjs"]
+    },
+    {
+      "name": "backup-manager",
+      "path": "likely within src/server.mjs (no separate file exists)",
+      "responsibility": "Backup listing, auth (e2e-tested), filename validation (YYYY-MM-DD-HH regex), restore with command-injection-safe spawn. Security-sensitive after two fix commits.",
+      "dependsOn": [],
+      "exports": ["UNVERIFIED — inline in server.mjs"]
+    },
+    {
+      "name": "paaw-process-manager",
+      "path": "likely within src/server.mjs",
+      "responsibility": "Spawns PAAW with PAAW_DATA_HOME=HOME/data; opens browser tab on successful start; supports configurable install path.",
+      "dependsOn": [],
+      "exports": ["UNVERIFIED — inline in server.mjs"]
+    },
+    {
+      "name": "config-state",
+      "path": "runtime files: gateway.json / current.json / versions/ / data/ (gitignored)",
+      "responsibility": "Persistent gateway configuration (auto-update default off, install path, package server URL) and runtime state.",
+      "dependsOn": [],
+      "exports": []
+    }
+  ],
+  "apis": [
+    {
+      "method": "GET",
+      "path": "UNKNOWN",
+      "file": "src/server.mjs",
+      "hasRequestSchema": false,
+      "hasResponseSchema": false,
+      "hasErrorMapping": false,
+      "hasTestPayload": false
+    }
+  ],
+  "errorCodes": [
+    {
+      "code": "UNKNOWN — no error code registry observed in file tree",
+      "type": "unknown",
+      "file": "src/server.mjs (probable)",
+      "hasRunbook": false
+    }
+  ],
+  "dataModels": [
+    {
+      "name": "gateway-config (gateway.json)",
+      "file": "runtime-generated, schema likely defined in src/server.mjs",
+      "fields": ["installPath (inferred)", "packageServerUrl (inferred)", "autoUpdate (inferred, default off)"],
+      "persistence": "file"
+    },
+    {
+      "name": "backup-archive",
+      "file": "src/server.mjs (filename validation regex YYYY-MM-DD-HH)",
+      "fields": ["filename matching YYYY-MM-DD-HH format"],
+      "persistence": "file"
+    }
+  ],
+  "techDebt": [
+    {
+      "area": "Monolithic src/server.mjs — dashboard UI, HTTP routing, backup auth/restore, PAAW process management, and config state all appear to live in one file",
+      "severity": "high",
+      "suggestion": "Split into modules (router, backup, process-manager, config, ui) before adding features; e2e tests exist to guard the refactor."
+    },
+    {
+      "area": "Security-sensitive backup restore (two recent fixes: command injection, path validation, semgrep suppression)",
+      "severity": "high",
+      "suggestion": "Consolidate path validation into one allowlist util; add security regression tests beyond the two existing test files; document why semgrep finding was suppressed."
+    },
+    {
+      "area": "No API spec, error-code registry, or architecture docs",
+      "severity": "medium",
+      "suggestion": "Generate KB artifacts (API spec from server routes, error map, architecture doc) — see healthGaps."
+    },
+    {
+      "area": "Only 2 test files for a security-critical surface (backup auth e2e + backup unit)",
+      "severity": "medium",
+      "suggestion": "Add tests for update flow, spawn/PAAW_DATA_HOME env, config persistence, and restore edge cases."
+    },
+    {
+      "area": "Mixed-language commit messages (Chinese/English) and no docs directory",
+      "severity": "low",
+      "suggestion": "Adopt a commit-message and docs convention; add README/architecture notes."
+    }
+  ],
+  "healthGaps": {
+    "missingApiSpec": true,
+    "missingErrorMap": true,
+    "missingTests": true,
+    "missingStandards": true,
+    "missingArchitecture": true,
+    "missingDecisions": true
+  }
+}
+```
+
+**Critical caveat for next steps:** this scan is a structural inference only. The `apis`, `errorCodes`, and `exports` fields contain placeholders because `src/server.mjs` and `gateway.mjs` contents were not provided. Before generating any downstream KB artifact, read those two files (plus both test files for observable-behavior evidence) and re-run this scan with real code evidence.

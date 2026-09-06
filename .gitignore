@@ -6,4 +6,10 @@ state.json
 current.json
 gateway.json
 data/
-.paaw/
+# Release unit 資產（2026-09-06 Fleming 定調：.paaw 進版控）— 只排除 runtime 垃圾
+.paaw/logs/
+.paaw/tmp/
+.paaw/api-logs/
+.paaw/cu-debug.log
+.paaw/deps-cache.json
+.paaw/metrics-cache.json

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "initialized": true,
+  "initializedAt": "2026-09-06T08:06:29.469Z",
+  "globalCrewIds": [
+    "coding.architect",
+    "coding.developer",
+    "coding.doc-writer",
+    "coding.handover",
+    "coding.helpdesk",
+    "coding.ops",
+    "coding.qa",
+    "coding.rm",
+    "coding.tester"
+  ],
+  "customAgents": [],
+  "models": {},
+  "skillBindings": {
+    "coding.architect": [
+      "api-designer",
+      "architecture-designer",
+      "software-architect",
+      "spec-miner"
+    ],
+    "coding.developer": [
+      "typescript-pro",
+      "javascript-pro",
+      "devops-engineer",
+      "logging-error-codes"
+    ],
+    "coding.doc-writer": [
+      "code-documenter"
+    ],
+    "coding.handover": [
+      "handover-briefing",
+      "decision-archaeology",
+      "newcomer-onboarding",
+      "handover-pack"
+    ],
+    "coding.helpdesk": [
+      "debugging-wizard",
+      "newcomer-onboarding"
+    ],
+    "coding.ops": [
+      "decision-archaeology",
+      "debugging-wizard",
+      "sre-engineer"
+    ],
+    "coding.qa": [
+      "secure-code-guardian",
+      "security-reviewer",
+      "code-reviewer"
+    ],
+    "coding.tester": [
+      "test-master",
+      "playwright-expert"
+    ]
+  },
+  "contextOverrides": {}
+}

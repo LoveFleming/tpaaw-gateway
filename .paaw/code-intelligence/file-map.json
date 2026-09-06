@@ -1,0 +1,865 @@
+{
+  "files": [
+    {
+      "file": "gateway.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:http",
+          "names": []
+        },
+        {
+          "source": "node:crypto",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:fs/promises",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "fflate",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "applyHome",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "saveGatewayCfg",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "logFile",
+          "kind": "function",
+          "async": false,
+          "params": "(line)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semverGt",
+          "kind": "function",
+          "async": false,
+          "params": "(a, b)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "loadPackageServerUrl",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "readCurrent",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "writeCurrentAtomic",
+          "kind": "function",
+          "async": true,
+          "params": "(version)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "listInstalledVersions",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "downloadVerified",
+          "kind": "function",
+          "async": true,
+          "params": "(url, sha256Expected, destPath, sizeExpected)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "extractZip",
+          "kind": "function",
+          "async": true,
+          "params": "(zipPath, destDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "verifySkeleton",
+          "kind": "function",
+          "async": true,
+          "params": "(dir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "run",
+          "kind": "function",
+          "async": false,
+          "params": "(cmd, args, cwd)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "installDeps",
+          "kind": "function",
+          "async": true,
+          "params": "(versionDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "ensureData",
+          "kind": "function",
+          "async": true,
+          "params": "(versionDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "(versionDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "waitForHealthy",
+          "kind": "function",
+          "async": true,
+          "params": "(timeoutMs = 90000)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "killChild",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startAndVerify",
+          "kind": "function",
+          "async": true,
+          "params": "(versionDir, version)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "installVersion",
+          "kind": "function",
+          "async": true,
+          "params": "(manifest, server)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "cmdStatus",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "updateLogic",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "cmdUpdate",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "safeUpdate",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "cmdStart",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "hangAround",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "bye",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 2,
+          "calls": [
+            "child.kill",
+            "process.exit"
+          ]
+        },
+        {
+          "name": "jobLog",
+          "kind": "function",
+          "async": false,
+          "params": "(line)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "paawRunning",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "openBrowserTab",
+          "kind": "function",
+          "async": false,
+          "params": "(url)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiStart",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiStop",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiUpdate",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "runJob",
+          "kind": "function",
+          "async": true,
+          "params": "(kind, fn)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiStatus",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "cmdUI",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "jsonOut",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, obj)",
+          "callCount": 3,
+          "calls": [
+            "res.writeHead",
+            "res.end",
+            "JSON.stringify"
+          ]
+        },
+        {
+          "name": "bye",
+          "kind": "arrow",
+          "async": true,
+          "params": "()",
+          "callCount": 3,
+          "calls": [
+            "paawRunning",
+            "killChild",
+            "process.exit"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/index.html",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/settings",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/status",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/log",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/update",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/start",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/stop",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/restart",
+          "handler": ""
+        }
+      ],
+      "components": []
+    },
+    {
+      "file": "tests/unit/backup.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "loadServer",
+          "kind": "function",
+          "async": true,
+          "params": "(extraEnv = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "makePaawData",
+          "kind": "function",
+          "async": false,
+          "params": "(dbContent = \"db-v1\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "seedNamedBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(filename, mtime)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "makeRealBackupArchive",
+          "kind": "function",
+          "async": false,
+          "params": "(filename)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:net",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getFreePort",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "sleep",
+          "kind": "arrow",
+          "async": false,
+          "params": "(ms)",
+          "callCount": 1,
+          "calls": [
+            "setTimeout"
+          ]
+        },
+        {
+          "name": "jsonReq",
+          "kind": "function",
+          "async": true,
+          "params": "(base, path, { method = \"GET\", token, body } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startGateway",
+          "kind": "function",
+          "async": true,
+          "params": "(configOverrides = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stopGateway",
+          "kind": "function",
+          "async": true,
+          "params": "(g)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/server.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "variable",
+          "name": "BACKUP_REGEX",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "BACKUP_DATE_REGEX",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "listBackups",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "createBackup",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "restoreBackup",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "http",
+          "names": []
+        },
+        {
+          "source": "fs",
+          "names": []
+        },
+        {
+          "source": "path",
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "names": []
+        },
+        {
+          "source": "url",
+          "names": []
+        },
+        {
+          "source": "fs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "loadConfig",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "saveConfig",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "logEvent",
+          "kind": "function",
+          "async": false,
+          "params": "(type, detail, userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stopPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "restartPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getCurrentVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getGitInfo",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getLatestVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "upgradePaaw",
+          "kind": "function",
+          "async": true,
+          "params": "(userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "listBackups",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "restoreBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(filename, userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "healthCheckPaaw",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getSystemHealth",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createSession",
+          "kind": "function",
+          "async": false,
+          "params": "(userId)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "validateSession",
+          "kind": "function",
+          "async": false,
+          "params": "(token)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "sendJSON",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, data)",
+          "callCount": 3,
+          "calls": [
+            "res.writeHead",
+            "res.end",
+            "JSON.stringify"
+          ]
+        },
+        {
+          "name": "readBody",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 5,
+          "calls": [
+            "req.on",
+            "req.on",
+            "resolve",
+            "JSON.parse",
+            "resolve"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/auth/me",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/health",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/dashboard",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/version",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/upgrade",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/server/start",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/server/stop",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/server/restart",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/backups",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/backups/create",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/events",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/users",
+          "handler": ""
+        }
+      ],
+      "components": []
+    }
+  ],
+  "stats": {
+    "totalFiles": 4,
+    "parsedFiles": 4,
+    "errors": 0,
+    "languages": {
+      "javascript": 4
+    }
+  }
+}

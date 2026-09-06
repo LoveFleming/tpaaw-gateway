@@ -1,0 +1,154 @@
+{
+  "findings": [
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.detect-non-literal-fs-filename",
+      "severity": "WARNING",
+      "rawSeverity": "WARNING",
+      "confidence": "LOW",
+      "category": "security",
+      "cwe": [
+        "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      ],
+      "message": "Detected that function argument `f` has entered the fs module. An attacker could potentially control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are validated.",
+      "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
+      "line": 274,
+      "column": 29,
+      "endLine": 274,
+      "snippet": "requires login",
+      "fix": null,
+      "references": [
+        "https://owasp.org/www-community/attacks/Path_Traversal"
+      ]
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.path-traversal.path-join-resolve-traversal",
+      "severity": "WARNING",
+      "rawSeverity": "WARNING",
+      "confidence": "LOW",
+      "category": "security",
+      "cwe": [
+        "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      ],
+      "message": "Detected possible user input going into a `path.join` or `path.resolve` function. This could possibly lead to a path traversal vulnerability,  where the attacker can access arbitrary files stored in the file system. Instead, be sure to sanitize or validate user input first.",
+      "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
+      "line": 274,
+      "column": 46,
+      "endLine": 274,
+      "snippet": "requires login",
+      "fix": null,
+      "references": [
+        "https://owasp.org/www-community/attacks/Path_Traversal"
+      ]
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.detect-non-literal-fs-filename",
+      "severity": "WARNING",
+      "rawSeverity": "WARNING",
+      "confidence": "LOW",
+      "category": "security",
+      "cwe": [
+        "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      ],
+      "message": "Detected that function argument `d` has entered the fs module. An attacker could potentially control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are validated.",
+      "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
+      "line": 301,
+      "column": 59,
+      "endLine": 301,
+      "snippet": "requires login",
+      "fix": null,
+      "references": [
+        "https://owasp.org/www-community/attacks/Path_Traversal"
+      ]
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.path-traversal.path-join-resolve-traversal",
+      "severity": "WARNING",
+      "rawSeverity": "WARNING",
+      "confidence": "LOW",
+      "category": "security",
+      "cwe": [
+        "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      ],
+      "message": "Detected possible user input going into a `path.join` or `path.resolve` function. This could possibly lead to a path traversal vulnerability,  where the attacker can access arbitrary files stored in the file system. Instead, be sure to sanitize or validate user input first.",
+      "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
+      "line": 301,
+      "column": 75,
+      "endLine": 301,
+      "snippet": "requires login",
+      "fix": null,
+      "references": [
+        "https://owasp.org/www-community/attacks/Path_Traversal"
+      ]
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.path-traversal.path-join-resolve-traversal",
+      "severity": "WARNING",
+      "rawSeverity": "WARNING",
+      "confidence": "LOW",
+      "category": "security",
+      "cwe": [
+        "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      ],
+      "message": "Detected possible user input going into a `path.join` or `path.resolve` function. This could possibly lead to a path traversal vulnerability,  where the attacker can access arbitrary files stored in the file system. Instead, be sure to sanitize or validate user input first.",
+      "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
+      "line": 325,
+      "column": 37,
+      "endLine": 325,
+      "snippet": "requires login",
+      "fix": null,
+      "references": [
+        "https://owasp.org/www-community/attacks/Path_Traversal"
+      ]
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.detect-non-literal-fs-filename",
+      "severity": "WARNING",
+      "rawSeverity": "WARNING",
+      "confidence": "LOW",
+      "category": "security",
+      "cwe": [
+        "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      ],
+      "message": "Detected that function argument `filename` has entered the fs module. An attacker could potentially control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are validated.",
+      "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
+      "line": 326,
+      "column": 19,
+      "endLine": 326,
+      "snippet": "requires login",
+      "fix": null,
+      "references": [
+        "https://owasp.org/www-community/attacks/Path_Traversal"
+      ]
+    }
+  ],
+  "stats": {
+    "total": 6,
+    "bySeverity": {
+      "WARNING": 6
+    },
+    "byCategory": {
+      "security": 6
+    },
+    "filesScanned": [
+      "/Users/steward/App/tpaaw-gateway/gateway.mjs",
+      "/Users/steward/App/tpaaw-gateway/src/server.mjs"
+    ],
+    "filesAffected": 1,
+    "rulesRun": 3,
+    "rulePacks": [
+      "/Users/steward/App/tPAAW/data/semgrep-rules/javascript",
+      "/Users/steward/App/tPAAW/data/semgrep-rules/typescript",
+      "/Users/steward/App/tPAAW/data/semgrep-rules/problem-based-packs"
+    ]
+  },
+  "raw": {
+    "version": "1.169.0",
+    "paths": {
+      "scanned": [
+        "/Users/steward/App/tpaaw-gateway/gateway.mjs",
+        "/Users/steward/App/tpaaw-gateway/src/server.mjs"
+      ]
+    }
+  },
+  "scannedAt": "2026-09-06T09:12:58.847307+00:00"
+}

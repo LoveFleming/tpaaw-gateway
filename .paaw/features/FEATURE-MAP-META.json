@@ -1,0 +1,36 @@
+{
+  "method": "deterministic-v2",
+  "scannedAt": "2026-09-06T08:09:15.600Z",
+  "stats": {
+    "files": 4,
+    "edges": 1,
+    "entries": 22,
+    "clusters": 2,
+    "shared": 0,
+    "orphans": 0,
+    "tests": {
+      "total": 2,
+      "mapped": 1,
+      "unmapped": 1
+    },
+    "edgeCoverage": 100
+  },
+  "shared": [],
+  "orphans": [],
+  "unmappedTests": [
+    "tests/unit/backup.test.mjs"
+  ],
+  "enrichment": {
+    "loops": 2,
+    "ok": 2,
+    "degraded": 0,
+    "resumed": 0,
+    "totalTurns": 4,
+    "totalMs": 91682,
+    "usage": {
+      "promptTokens": 0,
+      "completionTokens": 0
+    }
+  },
+  "note": "骨架 = 進入點 reach + Jaccard 聚類（數學決定論，重跑不變）；grade=deterministic。長肉 = 每 feature 一個獨立 agent loop（core-read，多輪讀 code）；orphan 分組 grade=utility（建議，人類定案）。"
+}

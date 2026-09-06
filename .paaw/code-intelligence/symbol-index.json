@@ -1,0 +1,1736 @@
+{
+  "symbols": [
+    {
+      "type": "function",
+      "name": "applyHome",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "saveGatewayCfg",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "logFile",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(line)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semverGt",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(a, b)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "loadPackageServerUrl",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "readCurrent",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "writeCurrentAtomic",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(version)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "listInstalledVersions",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "downloadVerified",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(url, sha256Expected, destPath, sizeExpected)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "extractZip",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(zipPath, destDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "verifySkeleton",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(dir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "run",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(cmd, args, cwd)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "installDeps",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(versionDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "ensureData",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(versionDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startPaaw",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(versionDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "waitForHealthy",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(timeoutMs = 90000)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "killChild",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startAndVerify",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(versionDir, version)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "installVersion",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(manifest, server)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "cmdStatus",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "updateLogic",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "cmdUpdate",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "safeUpdate",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "cmdStart",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "hangAround",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "bye",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "jobLog",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(line)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "paawRunning",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "openBrowserTab",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(url)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiStart",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiStop",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiUpdate",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "runJob",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(kind, fn)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiStatus",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "cmdUI",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "jsonOut",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(code, obj)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "bye",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": true,
+      "params": "()",
+      "callCount": 3
+    },
+    {
+      "type": "route",
+      "name": "GET /index.html",
+      "file": "gateway.mjs",
+      "method": "GET",
+      "path": "/index.html"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/settings",
+      "file": "gateway.mjs",
+      "method": "GET",
+      "path": "/api/settings"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/settings",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/settings"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/status",
+      "file": "gateway.mjs",
+      "method": "GET",
+      "path": "/api/status"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/log",
+      "file": "gateway.mjs",
+      "method": "GET",
+      "path": "/api/log"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/update",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/update"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/start",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/start"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/stop",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/stop"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/restart",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/restart"
+    },
+    {
+      "type": "function",
+      "name": "loadServer",
+      "file": "tests/unit/backup.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(extraEnv = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "makePaawData",
+      "file": "tests/unit/backup.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(dbContent = \"db-v1\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "seedNamedBackup",
+      "file": "tests/unit/backup.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(filename, mtime)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "makeRealBackupArchive",
+      "file": "tests/unit/backup.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(filename)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getFreePort",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "sleep",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(ms)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "jsonReq",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(base, path, { method = \"GET\", token, body } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startGateway",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(configOverrides = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stopGateway",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(g)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "loadConfig",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "saveConfig",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "logEvent",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(type, detail, userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startPaaw",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stopPaaw",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "restartPaaw",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getCurrentVersion",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getGitInfo",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getLatestVersion",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "upgradePaaw",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "listBackups",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "createBackup",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "restoreBackup",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(filename, userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "healthCheckPaaw",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getSystemHealth",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "createSession",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(userId)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "validateSession",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(token)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "sendJSON",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(code, data)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "readBody",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 5
+    },
+    {
+      "type": "export",
+      "name": "BACKUP_REGEX",
+      "file": "src/server.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "BACKUP_DATE_REGEX",
+      "file": "src/server.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "listBackups",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "createBackup",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "restoreBackup",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "route",
+      "name": "POST /api/auth/login",
+      "file": "src/server.mjs",
+      "method": "POST",
+      "path": "/api/auth/login"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/auth/me",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/auth/me"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/health",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/health"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/dashboard",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/dashboard"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/version",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/version"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/upgrade",
+      "file": "src/server.mjs",
+      "method": "POST",
+      "path": "/api/upgrade"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/server/start",
+      "file": "src/server.mjs",
+      "method": "POST",
+      "path": "/api/server/start"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/server/stop",
+      "file": "src/server.mjs",
+      "method": "POST",
+      "path": "/api/server/stop"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/server/restart",
+      "file": "src/server.mjs",
+      "method": "POST",
+      "path": "/api/server/restart"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/backups",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/backups"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/backups/create",
+      "file": "src/server.mjs",
+      "method": "POST",
+      "path": "/api/backups/create"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/events",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/events"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/users",
+      "file": "src/server.mjs",
+      "method": "GET",
+      "path": "/api/users"
+    }
+  ],
+  "byName": {
+    "applyHome": [
+      {
+        "type": "function",
+        "name": "applyHome",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "saveGatewayCfg": [
+      {
+        "type": "function",
+        "name": "saveGatewayCfg",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "logFile": [
+      {
+        "type": "function",
+        "name": "logFile",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(line)",
+        "callCount": 0
+      }
+    ],
+    "semverGt": [
+      {
+        "type": "function",
+        "name": "semverGt",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(a, b)",
+        "callCount": 0
+      }
+    ],
+    "loadPackageServerUrl": [
+      {
+        "type": "function",
+        "name": "loadPackageServerUrl",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "readCurrent": [
+      {
+        "type": "function",
+        "name": "readCurrent",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "writeCurrentAtomic": [
+      {
+        "type": "function",
+        "name": "writeCurrentAtomic",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(version)",
+        "callCount": 0
+      }
+    ],
+    "listInstalledVersions": [
+      {
+        "type": "function",
+        "name": "listInstalledVersions",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "downloadVerified": [
+      {
+        "type": "function",
+        "name": "downloadVerified",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(url, sha256Expected, destPath, sizeExpected)",
+        "callCount": 0
+      }
+    ],
+    "extractZip": [
+      {
+        "type": "function",
+        "name": "extractZip",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(zipPath, destDir)",
+        "callCount": 0
+      }
+    ],
+    "verifySkeleton": [
+      {
+        "type": "function",
+        "name": "verifySkeleton",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(dir)",
+        "callCount": 0
+      }
+    ],
+    "run": [
+      {
+        "type": "function",
+        "name": "run",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(cmd, args, cwd)",
+        "callCount": 0
+      }
+    ],
+    "installDeps": [
+      {
+        "type": "function",
+        "name": "installDeps",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(versionDir)",
+        "callCount": 0
+      }
+    ],
+    "ensureData": [
+      {
+        "type": "function",
+        "name": "ensureData",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(versionDir)",
+        "callCount": 0
+      }
+    ],
+    "startPaaw": [
+      {
+        "type": "function",
+        "name": "startPaaw",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(versionDir)",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "startPaaw",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "waitForHealthy": [
+      {
+        "type": "function",
+        "name": "waitForHealthy",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(timeoutMs = 90000)",
+        "callCount": 0
+      }
+    ],
+    "killChild": [
+      {
+        "type": "function",
+        "name": "killChild",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      }
+    ],
+    "startAndVerify": [
+      {
+        "type": "function",
+        "name": "startAndVerify",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(versionDir, version)",
+        "callCount": 0
+      }
+    ],
+    "installVersion": [
+      {
+        "type": "function",
+        "name": "installVersion",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(manifest, server)",
+        "callCount": 0
+      }
+    ],
+    "cmdStatus": [
+      {
+        "type": "function",
+        "name": "cmdStatus",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "updateLogic": [
+      {
+        "type": "function",
+        "name": "updateLogic",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "cmdUpdate": [
+      {
+        "type": "function",
+        "name": "cmdUpdate",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "safeUpdate": [
+      {
+        "type": "function",
+        "name": "safeUpdate",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "cmdStart": [
+      {
+        "type": "function",
+        "name": "cmdStart",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "hangAround": [
+      {
+        "type": "function",
+        "name": "hangAround",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      }
+    ],
+    "bye": [
+      {
+        "type": "function",
+        "name": "bye",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 2
+      },
+      {
+        "type": "function",
+        "name": "bye",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": true,
+        "params": "()",
+        "callCount": 3
+      }
+    ],
+    "jobLog": [
+      {
+        "type": "function",
+        "name": "jobLog",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(line)",
+        "callCount": 0
+      }
+    ],
+    "paawRunning": [
+      {
+        "type": "function",
+        "name": "paawRunning",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "openBrowserTab": [
+      {
+        "type": "function",
+        "name": "openBrowserTab",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(url)",
+        "callCount": 0
+      }
+    ],
+    "uiStart": [
+      {
+        "type": "function",
+        "name": "uiStart",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "uiStop": [
+      {
+        "type": "function",
+        "name": "uiStop",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "uiUpdate": [
+      {
+        "type": "function",
+        "name": "uiUpdate",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "runJob": [
+      {
+        "type": "function",
+        "name": "runJob",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(kind, fn)",
+        "callCount": 0
+      }
+    ],
+    "uiStatus": [
+      {
+        "type": "function",
+        "name": "uiStatus",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "cmdUI": [
+      {
+        "type": "function",
+        "name": "cmdUI",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "jsonOut": [
+      {
+        "type": "function",
+        "name": "jsonOut",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, obj)",
+        "callCount": 3
+      }
+    ],
+    "GET /index.html": [
+      {
+        "type": "route",
+        "name": "GET /index.html",
+        "file": "gateway.mjs",
+        "method": "GET",
+        "path": "/index.html"
+      }
+    ],
+    "GET /api/settings": [
+      {
+        "type": "route",
+        "name": "GET /api/settings",
+        "file": "gateway.mjs",
+        "method": "GET",
+        "path": "/api/settings"
+      }
+    ],
+    "POST /api/settings": [
+      {
+        "type": "route",
+        "name": "POST /api/settings",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/settings"
+      }
+    ],
+    "GET /api/status": [
+      {
+        "type": "route",
+        "name": "GET /api/status",
+        "file": "gateway.mjs",
+        "method": "GET",
+        "path": "/api/status"
+      }
+    ],
+    "GET /api/log": [
+      {
+        "type": "route",
+        "name": "GET /api/log",
+        "file": "gateway.mjs",
+        "method": "GET",
+        "path": "/api/log"
+      }
+    ],
+    "POST /api/update": [
+      {
+        "type": "route",
+        "name": "POST /api/update",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/update"
+      }
+    ],
+    "POST /api/start": [
+      {
+        "type": "route",
+        "name": "POST /api/start",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/start"
+      }
+    ],
+    "POST /api/stop": [
+      {
+        "type": "route",
+        "name": "POST /api/stop",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/stop"
+      }
+    ],
+    "POST /api/restart": [
+      {
+        "type": "route",
+        "name": "POST /api/restart",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/restart"
+      }
+    ],
+    "loadServer": [
+      {
+        "type": "function",
+        "name": "loadServer",
+        "file": "tests/unit/backup.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(extraEnv = {})",
+        "callCount": 0
+      }
+    ],
+    "makePaawData": [
+      {
+        "type": "function",
+        "name": "makePaawData",
+        "file": "tests/unit/backup.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(dbContent = \"db-v1\")",
+        "callCount": 0
+      }
+    ],
+    "seedNamedBackup": [
+      {
+        "type": "function",
+        "name": "seedNamedBackup",
+        "file": "tests/unit/backup.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(filename, mtime)",
+        "callCount": 0
+      }
+    ],
+    "makeRealBackupArchive": [
+      {
+        "type": "function",
+        "name": "makeRealBackupArchive",
+        "file": "tests/unit/backup.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(filename)",
+        "callCount": 0
+      }
+    ],
+    "getFreePort": [
+      {
+        "type": "function",
+        "name": "getFreePort",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "sleep": [
+      {
+        "type": "function",
+        "name": "sleep",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(ms)",
+        "callCount": 1
+      }
+    ],
+    "jsonReq": [
+      {
+        "type": "function",
+        "name": "jsonReq",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(base, path, { method = \"GET\", token, body } = {})",
+        "callCount": 0
+      }
+    ],
+    "startGateway": [
+      {
+        "type": "function",
+        "name": "startGateway",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(configOverrides = {})",
+        "callCount": 0
+      }
+    ],
+    "stopGateway": [
+      {
+        "type": "function",
+        "name": "stopGateway",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(g)",
+        "callCount": 0
+      }
+    ],
+    "loadConfig": [
+      {
+        "type": "function",
+        "name": "loadConfig",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "saveConfig": [
+      {
+        "type": "function",
+        "name": "saveConfig",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "logEvent": [
+      {
+        "type": "function",
+        "name": "logEvent",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(type, detail, userId = \"system\")",
+        "callCount": 0
+      }
+    ],
+    "stopPaaw": [
+      {
+        "type": "function",
+        "name": "stopPaaw",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "restartPaaw": [
+      {
+        "type": "function",
+        "name": "restartPaaw",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getCurrentVersion": [
+      {
+        "type": "function",
+        "name": "getCurrentVersion",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getGitInfo": [
+      {
+        "type": "function",
+        "name": "getGitInfo",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getLatestVersion": [
+      {
+        "type": "function",
+        "name": "getLatestVersion",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "upgradePaaw": [
+      {
+        "type": "function",
+        "name": "upgradePaaw",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(userId = \"system\")",
+        "callCount": 0
+      }
+    ],
+    "listBackups": [
+      {
+        "type": "function",
+        "name": "listBackups",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "listBackups",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "createBackup": [
+      {
+        "type": "function",
+        "name": "createBackup",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(userId = \"system\")",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createBackup",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "restoreBackup": [
+      {
+        "type": "function",
+        "name": "restoreBackup",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(filename, userId = \"system\")",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "restoreBackup",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "healthCheckPaaw": [
+      {
+        "type": "function",
+        "name": "healthCheckPaaw",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getSystemHealth": [
+      {
+        "type": "function",
+        "name": "getSystemHealth",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "createSession": [
+      {
+        "type": "function",
+        "name": "createSession",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(userId)",
+        "callCount": 0
+      }
+    ],
+    "validateSession": [
+      {
+        "type": "function",
+        "name": "validateSession",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(token)",
+        "callCount": 0
+      }
+    ],
+    "sendJSON": [
+      {
+        "type": "function",
+        "name": "sendJSON",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, data)",
+        "callCount": 3
+      }
+    ],
+    "readBody": [
+      {
+        "type": "function",
+        "name": "readBody",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 5
+      }
+    ],
+    "BACKUP_REGEX": [
+      {
+        "type": "export",
+        "name": "BACKUP_REGEX",
+        "file": "src/server.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "BACKUP_DATE_REGEX": [
+      {
+        "type": "export",
+        "name": "BACKUP_DATE_REGEX",
+        "file": "src/server.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "POST /api/auth/login": [
+      {
+        "type": "route",
+        "name": "POST /api/auth/login",
+        "file": "src/server.mjs",
+        "method": "POST",
+        "path": "/api/auth/login"
+      }
+    ],
+    "GET /api/auth/me": [
+      {
+        "type": "route",
+        "name": "GET /api/auth/me",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/auth/me"
+      }
+    ],
+    "GET /api/health": [
+      {
+        "type": "route",
+        "name": "GET /api/health",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/health"
+      }
+    ],
+    "GET /api/dashboard": [
+      {
+        "type": "route",
+        "name": "GET /api/dashboard",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/dashboard"
+      }
+    ],
+    "GET /api/version": [
+      {
+        "type": "route",
+        "name": "GET /api/version",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/version"
+      }
+    ],
+    "POST /api/upgrade": [
+      {
+        "type": "route",
+        "name": "POST /api/upgrade",
+        "file": "src/server.mjs",
+        "method": "POST",
+        "path": "/api/upgrade"
+      }
+    ],
+    "POST /api/server/start": [
+      {
+        "type": "route",
+        "name": "POST /api/server/start",
+        "file": "src/server.mjs",
+        "method": "POST",
+        "path": "/api/server/start"
+      }
+    ],
+    "POST /api/server/stop": [
+      {
+        "type": "route",
+        "name": "POST /api/server/stop",
+        "file": "src/server.mjs",
+        "method": "POST",
+        "path": "/api/server/stop"
+      }
+    ],
+    "POST /api/server/restart": [
+      {
+        "type": "route",
+        "name": "POST /api/server/restart",
+        "file": "src/server.mjs",
+        "method": "POST",
+        "path": "/api/server/restart"
+      }
+    ],
+    "GET /api/backups": [
+      {
+        "type": "route",
+        "name": "GET /api/backups",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/backups"
+      }
+    ],
+    "POST /api/backups/create": [
+      {
+        "type": "route",
+        "name": "POST /api/backups/create",
+        "file": "src/server.mjs",
+        "method": "POST",
+        "path": "/api/backups/create"
+      }
+    ],
+    "GET /api/events": [
+      {
+        "type": "route",
+        "name": "GET /api/events",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/events"
+      }
+    ],
+    "GET /api/users": [
+      {
+        "type": "route",
+        "name": "GET /api/users",
+        "file": "src/server.mjs",
+        "method": "GET",
+        "path": "/api/users"
+      }
+    ]
+  },
+  "stats": {
+    "total": 92,
+    "functions": 65,
+    "classes": 0,
+    "exports": 5,
+    "routes": 22,
+    "components": 0
+  }
+}

@@ -1,0 +1,541 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-06T08:09:53.777Z",
+  "headSha": "e72385d",
+  "tableHashes": {
+    "features": "fc786a7b62e0492b",
+    "apis": "45b998c4c192216f",
+    "tests": "43aa317381fcd54b",
+    "changes": "cdae8c37a60b7a09",
+    "knowledgeGaps": "2e7bb741c8821525"
+  },
+  "root": null,
+  "summary": {
+    "features": 2,
+    "apis": 22,
+    "apisWithFeature": 22,
+    "files": 4,
+    "filesMapped": 3,
+    "tests": 1,
+    "commits": 15,
+    "commitLimit": 200
+  },
+  "sources": {
+    "apiMapGeneratedAt": null,
+    "testMapGeneratedAt": null,
+    "depGraphGeneratedAt": null,
+    "featuresUpdatedAt": "2026-09-06T08:09:15.600Z"
+  },
+  "features": [
+    {
+      "id": "F20260906-001",
+      "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+      "status": "active",
+      "description": "單檔 gateway.mjs 同時承擔兩種角色：CLI（start / update / status）與本地管理儀表板（ui，HTTP server 綁 127.0.0.1:4290，即 skeleton 中的 9 個 API）。管 PAAW 在使用者機器上的完整生命週期 — 套包下載安裝、版本切換、data 播種、PAAW 子程序的啟動/停止/重啟，以及 gateway 自身設定（package server、paawHome）的讀寫。UI 模式下 PAAW 以 child process 受 gateway 監管，gateway 退出會一併帶走 PAAW。",
+      "fileCount": 1,
+      "files": [
+        "gateway.mjs"
+      ],
+      "apis": [
+        "GET /api/log",
+        "POST /api/restart",
+        "GET /api/settings",
+        "POST /api/settings",
+        "POST /api/start",
+        "GET /api/status",
+        "POST /api/stop",
+        "POST /api/update",
+        "GET /index.html"
+      ],
+      "apiCount": 9,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 7,
+      "lastChangeAt": "2026-08-23T15:48:34+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-runbook"
+      ],
+      "_h": "eefb489f49bbf742"
+    },
+    {
+      "id": "F20260906-002",
+      "name": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
+      "status": "active",
+      "description": "單檔 HTTP 伺服器（src/server.mjs，port 4199）構成的獨立管理平台，獨立於 PAAW Server（:4097）運行、扮演守護者角色。涵蓋 Bearer token 認證、PAAW Server 進程 start/stop/restart、tar.gz 備份與還原、git 升級流程、健康監控 dashboard、用戶列表與事件稽核日誌，並附帶管理 UI（public/index.html）。",
+      "fileCount": 1,
+      "files": [
+        "src/server.mjs"
+      ],
+      "apis": [
+        "POST /api/auth/login",
+        "GET /api/auth/me",
+        "GET /api/backups",
+        "POST /api/backups/create",
+        "GET /api/dashboard",
+        "GET /api/events",
+        "GET /api/health",
+        "POST /api/server/restart",
+        "POST /api/server/start",
+        "POST /api/server/stop",
+        "POST /api/upgrade",
+        "GET /api/users",
+        "GET /api/version"
+      ],
+      "apiCount": 13,
+      "tests": [
+        {
+          "file": "tests/e2e/gateway-backup-auth.test.mjs",
+          "kind": "e2e"
+        }
+      ],
+      "testCount": 5,
+      "changeCount": 5,
+      "lastChangeAt": "2026-09-03T20:49:39+08:00",
+      "knowledgeGaps": [
+        "no-runbook"
+      ],
+      "_h": "cd174d233e87a1c9"
+    }
+  ],
+  "apis": [
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "ce6735570539a2f1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "ba14b7522e7efb2a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/backups",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "8df3436076911c3d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/backups/create",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "53279cbb52c1ed91"
+    },
+    {
+      "method": "GET",
+      "path": "/api/dashboard",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "10f34f3fbca7a915"
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "b0d1f3155381bc72"
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "00cd07f9626b37cf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/log",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "743e54d85d3634dc"
+    },
+    {
+      "method": "POST",
+      "path": "/api/restart",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "bf6ce7beb43b94a4"
+    },
+    {
+      "method": "POST",
+      "path": "/api/server/restart",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "a97f768897b6e6c1"
+    },
+    {
+      "method": "POST",
+      "path": "/api/server/start",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "1ce059ef475b041d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/server/stop",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "5b17a8715ded1868"
+    },
+    {
+      "method": "GET",
+      "path": "/api/settings",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "0f00d3a30814fabc"
+    },
+    {
+      "method": "POST",
+      "path": "/api/settings",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "5a45563ae0a4dc65"
+    },
+    {
+      "method": "POST",
+      "path": "/api/start",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "00dc64806def8973"
+    },
+    {
+      "method": "GET",
+      "path": "/api/status",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "d5ec206d78285df4"
+    },
+    {
+      "method": "POST",
+      "path": "/api/stop",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "c7de927f7fa68e78"
+    },
+    {
+      "method": "POST",
+      "path": "/api/update",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "762f67a1c6d17b0c"
+    },
+    {
+      "method": "POST",
+      "path": "/api/upgrade",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "855ff408a65643c2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "4f37530330b70117"
+    },
+    {
+      "method": "GET",
+      "path": "/api/version",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "44d27306f9c55f6e"
+    },
+    {
+      "method": "GET",
+      "path": "/index.html",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "0f188ba33560aeef"
+    }
+  ],
+  "tests": [
+    {
+      "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
+      "productionFile": "src/server.mjs",
+      "testCount": 5,
+      "kind": "e2e",
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "bb69d4709655c435"
+    }
+  ],
+  "changes": [
+    {
+      "hash": "e72385d",
+      "date": "2026-09-03T20:49:39+08:00",
+      "subject": "test(server): add e2e tests for backup auth and testability hooks",
+      "kind": "chore",
+      "files": 4,
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "662df57494851b4a"
+    },
+    {
+      "hash": "d940eb9",
+      "date": "2026-08-27T10:50:33+08:00",
+      "subject": "chore: .gitignore 補 runtime state — current.json/gateway.json/data/.paaw 不進版控",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "a6c1f3d4a8da4dd4"
+    },
+    {
+      "hash": "9e57db2",
+      "date": "2026-08-25T22:38:26+08:00",
+      "subject": "fix(backup): correct filename regex to match YYYY-MM-DD-HH format",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "3143fbd01be1c7d8"
+    },
+    {
+      "hash": "e8c453d",
+      "date": "2026-08-25T22:03:18+08:00",
+      "subject": "fix(backup): suppress semgrep false-positive on validated backup paths",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "8e8274272d362f7b"
+    },
+    {
+      "hash": "a8eb20b",
+      "date": "2026-08-25T21:55:26+08:00",
+      "subject": "fix(server): eliminate command injection in backup restore",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "68fa2db57162f1c6"
+    },
+    {
+      "hash": "fac5510",
+      "date": "2026-08-23T21:10:13+08:00",
+      "subject": "chore: .gitignore 補強 — versions/ runtime 目錄與 state 不進版控（公開 repo 防洩漏）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "a0cd44795b59ad28"
+    },
+    {
+      "hash": "69285f1",
+      "date": "2026-08-23T15:48:34+08:00",
+      "subject": "feat: spawn PAAW 帶 PAAW_DATA_HOME=HOME/data",
+      "kind": "feat",
+      "files": 1,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "8e28d0697ca7c4af"
+    },
+    {
+      "hash": "a4e1d30",
+      "date": "2026-08-23T15:36:51+08:00",
+      "subject": "feat: PAAW 啟動成功自動開瀏覽器 tab",
+      "kind": "feat",
+      "files": 2,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "730f0074ccfbf539"
+    },
+    {
+      "hash": "dabedb2",
+      "date": "2026-08-23T15:05:34+08:00",
+      "subject": "fix: update 失敗 Failed to parse URL from undefined",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "58b43559d9205b80"
+    },
+    {
+      "hash": "3f0fbcb",
+      "date": "2026-08-23T14:18:14+08:00",
+      "subject": "feat: UI 設定卡 — package server URL + PAAW home 可在 dashboard 直接改",
+      "kind": "feat",
+      "files": 3,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "44e3a449c5c552cf"
+    },
+    {
+      "hash": "e6c70c6",
+      "date": "2026-08-23T14:05:29+08:00",
+      "subject": "feat: Gateway UI — 看資訊、自己決定更新/啟動（npm start = dashboard）",
+      "kind": "feat",
+      "files": 4,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "e4a25fd6be2c95c0"
+    },
+    {
+      "hash": "eada6f5",
+      "date": "2026-08-23T13:57:54+08:00",
+      "subject": "feat: 自動更新預設關 + 安裝路徑可指定（gateway.json）",
+      "kind": "feat",
+      "files": 2,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "3794811a4f6f9a2e"
+    },
+    {
+      "hash": "d4ffe77",
+      "date": "2026-08-23T13:45:19+08:00",
+      "subject": "chore: 排除 .paaw/（PAAW coding app 工作狀態，非 repo 內容）",
+      "kind": "chore",
+      "files": 41,
+      "featureIds": [],
+      "_h": "98f61c3a9427a4dd"
+    },
+    {
+      "hash": "b50cec6",
+      "date": "2026-08-23T13:44:33+08:00",
+      "subject": "tpaaw-gateway MVP — PAAW bootloader（install / update / run）",
+      "kind": "other",
+      "files": 45,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "839d8fff22c0679f"
+    },
+    {
+      "hash": "ff850fd",
+      "date": "2026-07-17T20:09:45+08:00",
+      "subject": "init: PAAW Gateway — standalone DevOps management platform",
+      "kind": "other",
+      "files": 6,
+      "featureIds": [
+        "F20260906-002"
+      ],
+      "_h": "d973b3ae4a8e482d"
+    }
+  ],
+  "knowledgeGaps": {
+    "featuresWithoutTests": [
+      "F20260906-001"
+    ],
+    "featuresWithoutRunbooks": [
+      "F20260906-001",
+      "F20260906-002"
+    ],
+    "apisWithoutFeature": [],
+    "filesWithoutFeature": 1,
+    "hotUnmappedFiles": [
+      {
+        "file": "README.md",
+        "commits": 6
+      },
+      {
+        "file": ".gitignore",
+        "commits": 5
+      },
+      {
+        "file": "package.json",
+        "commits": 4
+      },
+      {
+        "file": "ui/index.html",
+        "commits": 2
+      },
+      {
+        "file": "config.json",
+        "commits": 1
+      },
+      {
+        "file": "package-lock.json",
+        "commits": 1
+      },
+      {
+        "file": "public/index.html",
+        "commits": 1
+      },
+      {
+        "file": "tests/unit/backup.test.mjs",
+        "commits": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "testFiles": [
+    {
+      "file": "tests/unit/backup.test.mjs",
+      "type": "unit",
+      "functionCount": 4,
+      "functionNames": [
+        "loadServer",
+        "makePaawData",
+        "seedNamedBackup",
+        "makeRealBackupArchive"
+      ]
+    },
+    {
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "type": "e2e",
+      "functionCount": 5,
+      "functionNames": [
+        "getFreePort",
+        "sleep",
+        "jsonReq",
+        "startGateway",
+        "stopGateway"
+      ]
+    }
+  ],
+  "testToCode": [
+    {
+      "testFile": "tests/unit/backup.test.mjs",
+      "testType": "unit",
+      "functionCount": 4,
+      "matches": []
+    },
+    {
+      "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
+      "testType": "e2e",
+      "functionCount": 5,
+      "matches": [
+        {
+          "productionFile": "src/server.mjs",
+          "matchType": "import",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "codeToTest": {
+    "src/server.mjs": [
+      {
+        "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
+        "testType": "e2e",
+        "testedFunctions": []
+      }
+    ]
+  },
+  "whatToRun": {
+    "src/server.mjs": [
+      {
+        "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
+        "testType": "e2e",
+        "reason": "Tests this file"
+      }
+    ]
+  },
+  "coverageGaps": [
+    {
+      "file": "gateway.mjs",
+      "functionCount": 37,
+      "exportCount": 0
+    }
+  ],
+  "featureToTests": [
+    {
+      "featureId": "F20260906-002",
+      "featureName": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
+      "tests": [
+        "tests/e2e/gateway-backup-auth.test.mjs"
+      ]
+    }
+  ],
+  "stats": {
+    "totalTestFiles": 2,
+    "byType": {
+      "unit": 1,
+      "integration": 0,
+      "e2e": 1
+    },
+    "totalMappings": 1,
+    "coverageGapFiles": 1,
+    "coverageRate": "50.0%",
+    "featureTestCoverage": 1
+  }
+}

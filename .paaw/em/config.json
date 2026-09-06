@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "dispatchStrategy": "balanced",
+  "autoExecute": {
+    "tests": true,
+    "docs": true,
+    "refactor": false,
+    "securityFix": false,
+    "breakingChange": false
+  },
+  "taskDecomposition": {
+    "maxSubtasks": 10,
+    "defaultEffort": "S",
+    "requireEstimate": true
+  },
+  "reporting": {
+    "format": "summary",
+    "includeCodeChanges": true,
+    "includeActionLog": true
+  },
+  "model": {
+    "planning": "",
+    "dispatch": ""
+  },
+  "dispatchableAgents": [],
+  "blockedAgents": [],
+  "planningScope": {
+    "gitChanges": true,
+    "openIssues": true,
+    "openTasks": true,
+    "securityFindings": true,
+    "codeIntelligence": false,
+    "testCoverage": true
+  }
+}

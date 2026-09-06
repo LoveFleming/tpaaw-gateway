@@ -1,0 +1,195 @@
+{
+  "features": [
+    {
+      "id": "F20260906-001",
+      "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+      "description": "單檔 gateway.mjs 同時承擔兩種角色：CLI（start / update / status）與本地管理儀表板（ui，HTTP server 綁 127.0.0.1:4290，即 skeleton 中的 9 個 API）。管 PAAW 在使用者機器上的完整生命週期 — 套包下載安裝、版本切換、data 播種、PAAW 子程序的啟動/停止/重啟，以及 gateway 自身設定（package server、paawHome）的讀寫。UI 模式下 PAAW 以 child process 受 gateway 監管，gateway 退出會一併帶走 PAAW。",
+      "bizLogic": "更新走 staged install：GET {server}/stable.json → semver 比對（只升級不降級）→ 串流下載 zip 邊算 sha256（不符即拒裝，防竄改/損毀）→ 解壓含 zip-slip 防護 → 驗證關鍵檔骨架（packages/server/src/paaw-server.mjs、packages/ui/dist/index.html、package.json、data-seed）→ rename 定版到 versions/<x.y.z>/ → npm install（失敗 retry --omit=optional）。使用者資料隔離：data/ 只在首次安裝從 data-seed 播種，之後任何更新永不覆蓋。current.json 是版本唯一真實來源（tmp+rename 原子寫入），指向最後驗證過的版本；啟動以 GET / 200（90 秒逾時）為健康判準，啟動失敗自動回滾到 current 指向的舊版且壞版目錄保留現場。UI 的操作走單一 job 互斥模型：同一時間只允許一個 update/start/stop/restart job，執",
+      "status": "active",
+      "codeFiles": [
+        "gateway.mjs"
+      ],
+      "apis": [
+        {
+          "method": "GET",
+          "path": "/api/log",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/restart",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/settings",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/start",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/status",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/stop",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/update",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/index.html",
+          "file": "gateway.mjs"
+        }
+      ],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "bootloader",
+        "staged-install",
+        "auto-update",
+        "version-management",
+        "process-supervisor",
+        "local-dashboard"
+      ],
+      "grade": "deterministic",
+      "evidence": {
+        "kinds": {
+          "http": 9
+        },
+        "entryCount": 9,
+        "reachFiles": 1,
+        "method": "entry-reach-jaccard",
+        "enrichedBy": "agent-loop"
+      },
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-09-06T08:09:15.600Z",
+      "updatedAt": "2026-09-06T08:09:15.600Z"
+    },
+    {
+      "id": "F20260906-002",
+      "name": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
+      "description": "單檔 HTTP 伺服器（src/server.mjs，port 4199）構成的獨立管理平台，獨立於 PAAW Server（:4097）運行、扮演守護者角色。涵蓋 Bearer token 認證、PAAW Server 進程 start/stop/restart、tar.gz 備份與還原、git 升級流程、健康監控 dashboard、用戶列表與事件稽核日誌，並附帶管理 UI（public/index.html）。",
+      "bizLogic": "認證：POST /api/auth/login 以 userId+password 明文比對 config.users 的 passwordHash 欄位，成功後發 randomUUID token 存 in-memory Map，超過 sessionMaxAge（預設 24h）自動失效；除 /api/auth/login、/api/health、/ 外所有路由都要求 Authorization: Bearer <token>（缺 'Bearer ' 前綴一律 401），admin-only 路由為 /api/upgrade、/api/server/start|stop|restart、/api/users（回 403 'Admin only'），其餘（backup、dashboard、events、version）只需合法 session。備份：以 execFileSync('tar', czf) 打包 PAAW_ROOT 下的 data/ 與 .paaw/，檔名強制符合 /^paaw-backup-\\d{4}-\\d{2}-\\d{2}-\\d{2}\\.tar\\.gz$/（BACKUP_",
+      "status": "active",
+      "codeFiles": [
+        "src/server.mjs"
+      ],
+      "apis": [
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/auth/me",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/backups/create",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/backups",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/dashboard",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/events",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/health",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/server/restart",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/server/start",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/server/stop",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/upgrade",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/users",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/version",
+          "file": "src/server.mjs"
+        }
+      ],
+      "tests": [
+        "tests/e2e/gateway-backup-auth.test.mjs"
+      ],
+      "runbooks": [],
+      "tags": [
+        "gateway",
+        "auth",
+        "session",
+        "bearer-token",
+        "backup",
+        "restore"
+      ],
+      "grade": "deterministic",
+      "evidence": {
+        "kinds": {
+          "http": 13
+        },
+        "entryCount": 13,
+        "reachFiles": 1,
+        "method": "entry-reach-jaccard",
+        "enrichedBy": "agent-loop"
+      },
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-09-06T08:09:15.600Z",
+      "updatedAt": "2026-09-06T08:09:15.600Z"
+    }
+  ],
+  "updatedAt": "2026-09-06T08:09:15.600Z"
+}

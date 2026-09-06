@@ -1,0 +1,145 @@
+# Project Source Analysis (Tree-sitter)
+Parsed 4 of 4 source files
+Languages: javascript(4)
+
+## gateway.mjs [javascript]
+  Imports:
+    * ← node:http
+    * ← node:crypto
+    * ← node:fs
+    * ← node:fs/promises
+    * ← node:fs
+    * ← node:child_process
+    * ← node:path
+    * ← node:url
+    * ← fflate
+  Functions:
+    function applyHome()
+    async function saveGatewayCfg()
+    function logFile(line)
+    function semverGt(a, b)
+    async function loadPackageServerUrl()
+    async function readCurrent()
+    async function writeCurrentAtomic(version)
+    async function listInstalledVersions()
+    async function downloadVerified(url, sha256Expected, destPath, sizeExpected)
+    async function extractZip(zipPath, destDir)
+    async function verifySkeleton(dir)
+    function run(cmd, args, cwd)
+    async function installDeps(versionDir)
+    async function ensureData(versionDir)
+    function startPaaw(versionDir)
+    async function waitForHealthy(timeoutMs = 90000)
+    function killChild(child)
+    async function startAndVerify(versionDir, version)
+    async function installVersion(manifest, server)
+    async function cmdStatus()
+    async function updateLogic()
+    async function cmdUpdate()
+    async function safeUpdate()
+    async function cmdStart()
+    function hangAround(child)
+    arrow bye()
+    function jobLog(line)
+    function paawRunning()
+    function openBrowserTab(url)
+    async function uiStart()
+    async function uiStop()
+    async function uiUpdate()
+    async function runJob(kind, fn)
+    async function uiStatus()
+    async function cmdUI()
+    arrow jsonOut(code, obj)
+    async arrow bye()
+  Routes:
+    GET /index.html
+    GET /api/settings
+    POST /api/settings
+    GET /api/status
+    GET /api/log
+    POST /api/update
+    POST /api/start
+    POST /api/stop
+    POST /api/restart
+
+## tests/unit/backup.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← node:fs
+    * ← node:os
+    * ← node:path
+    * ← node:child_process
+  Functions:
+    async function loadServer(extraEnv = {})
+    function makePaawData(dbContent = "db-v1")
+    function seedNamedBackup(filename, mtime)
+    function makeRealBackupArchive(filename)
+
+## tests/e2e/gateway-backup-auth.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← node:fs
+    * ← node:net
+    * ← node:os
+    * ← node:path
+    * ← node:child_process
+    * ← node:url
+    * ← ../../src/server.mjs
+  Functions:
+    function getFreePort()
+    arrow sleep(ms)
+    async function jsonReq(base, path, { method = "GET", token, body } = {})
+    async function startGateway(configOverrides = {})
+    async function stopGateway(g)
+
+## src/server.mjs [javascript]
+  Imports:
+    * ← http
+    * ← fs
+    * ← path
+    * ← child_process
+    * ← crypto
+    * ← url
+    * ← fs
+  Exports:
+    variable: BACKUP_REGEX
+    variable: BACKUP_DATE_REGEX
+    function: listBackups
+    function: createBackup
+    function: restoreBackup
+  Functions:
+    function loadConfig()
+    function saveConfig()
+    function logEvent(type, detail, userId = "system")
+    function startPaaw()
+    function stopPaaw()
+    function restartPaaw()
+    function getCurrentVersion()
+    function getGitInfo()
+    function getLatestVersion()
+    async function upgradePaaw(userId = "system")
+    function listBackups()
+    function createBackup(userId = "system")
+    function restoreBackup(filename, userId = "system")
+    async function healthCheckPaaw()
+    function getSystemHealth()
+    function createSession(userId)
+    function validateSession(token)
+    arrow sendJSON(code, data)
+    arrow readBody()
+  Routes:
+    POST /api/auth/login
+    GET /api/auth/me
+    GET /api/health
+    GET /api/dashboard
+    GET /api/version
+    POST /api/upgrade
+    POST /api/server/start
+    POST /api/server/stop
+    POST /api/server/restart
+    GET /api/backups
+    POST /api/backups/create
+    GET /api/events
+    GET /api/users

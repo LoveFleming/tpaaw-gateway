@@ -1,0 +1,581 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/index.html",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/settings",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/settings",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/status",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/log",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/update",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/start",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/stop",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/restart",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/dashboard",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/version",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/upgrade",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/server/start",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/server/stop",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/server/restart",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/backups",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/backups/create",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "file": "src/server.mjs",
+      "handler": "sendJSON",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "totalRoutes": 22,
+    "withHandler": 22,
+    "withoutHandler": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "mappings": [
+    {
+      "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
+      "productionFile": "src/server.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 5
+    }
+  ],
+  "stats": {
+    "totalTestFiles": 2,
+    "matchedTests": 1,
+    "totalTestedFunctions": 0
+  }
+}

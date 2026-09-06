@@ -1,0 +1,246 @@
+{
+  "files": {
+    "gateway.mjs": {
+      "path": "gateway.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:http",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:crypto",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs/promises",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "fflate",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/unit/backup.test.mjs": {
+      "path": "tests/unit/backup.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/e2e/gateway-backup-auth.test.mjs": {
+      "path": "tests/e2e/gateway-backup-auth.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:net",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "resolved": true,
+          "targetFile": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "src/server.mjs": {
+      "path": "src/server.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "http",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "tests/e2e/gateway-backup-auth.test.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "BACKUP_REGEX",
+        "BACKUP_DATE_REGEX",
+        "listBackups",
+        "createBackup",
+        "restoreBackup"
+      ]
+    }
+  },
+  "edges": [
+    {
+      "from": "tests/e2e/gateway-backup-auth.test.mjs",
+      "to": "src/server.mjs",
+      "names": []
+    }
+  ],
+  "stats": {
+    "totalFiles": 4,
+    "totalEdges": 1,
+    "resolvedImports": 1,
+    "unresolvedImports": 30
+  }
+}
