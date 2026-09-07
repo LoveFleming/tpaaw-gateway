@@ -91,6 +91,11 @@
         <button id="btnUpdate" class="primary">🔄 更新</button>
       </div>
       <div class="note" id="updateNote"></div>
+      <div class="actions" style="margin-top:10px">
+        <input type="file" id="fileZip" accept=".zip" style="display:none">
+        <button id="btnUpload">⬆️ 手動上傳 zip 安裝</button>
+      </div>
+      <div class="note" id="uploadNote">没接 package server 也能裝：選 paaw-x.y.z.zip 直接變成可安裝版本</div>
     </div>
   </div>
 
@@ -191,7 +196,7 @@ async function refresh() {
   const jobMsg = s.job.error ? `⚠ ${s.job.error}` : s.job.message || "";
   $("updateNote").textContent = jobMsg;
 
-  ["btnStart", "btnStop", "btnRestart", "btnUpdate"].forEach((id) => { $(id).disabled = busy; });
+  ["btnStart", "btnStop", "btnRestart", "btnUpdate", "btnUpload"].forEach((id) => { $(id).disabled = busy; });
   $("btnStop").disabled = busy || !s.running;
   $("btnStart").disabled = busy || s.running;
   $("btnRestart").disabled = busy || !s.current;
@@ -215,6 +220,28 @@ $("btnStart").onclick = () => act("/api/start", "▶️ 啟動");
 $("btnStop").onclick = () => act("/api/stop", "⏹ 停止");
 $("btnRestart").onclick = () => act("/api/restart", "🔁 重啟");
 $("btnUpdate").onclick = () => act("/api/update", "🔄 更新");
+
+$("btnUpload").onclick = () => $("fileZip").click();
+$("fileZip").onchange = async () => {
+  const f = $("fileZip").files[0];
+  if (!f) return;
+  if (!/\.zip$/i.test(f.name)) { $("uploadNote").textContent = `⚠ ${f.name} 不是 zip`; $("fileZip").value = ""; return; }
+  $("btnUpload").disabled = true;
+  $("uploadNote").textContent = `上傳中 ${f.name}（${(f.size / 1048576).toFixed(1)} MB）…`;
+  try {
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/zip", "X-Filename": encodeURIComponent(f.name) },
+      body: f,
+    });
+    const r = await res.json().catch(() => ({}));
+    $("uploadNote").textContent = res.ok ? "✓ 已開始安裝（進度見活動記錄）" : `⚠ ${r.message || res.status}`;
+  } catch (e) {
+    $("uploadNote").textContent = `⚠ ${e}`;
+  }
+  $("fileZip").value = "";
+  refresh();
+};
 
 async function loadSettings() {
   try {

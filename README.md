@@ -35,6 +35,7 @@ PAAW_PACKAGE_URL=http://192.168.8.189:4180 npm start
 |---|---|
 | `npm start`（= `paaw-gateway start`） | 有 current 直接跑（**不檢查更新**）；首次無 current 才安裝 stable |
 | `npm run update` | 手動更新到 stable 最新（安裝+驗證，不啟動） |
+| `npm run upload -- paaw-x.y.z.zip` | **手動上傳 zip 安裝（2026-09-07）**：不需 package server，zip 內 paaw-manifest.json 帶版本 |
 | `npm run status` | current / installed / stable / data 現況；有新版會提示 |
 
 **自動更新預設關**（同 OpenClaw 安全預設）。要開：`PAAW_AUTO_UPDATE=1 npm start`，或在 gateway.json 寫 `"autoUpdate": true`。

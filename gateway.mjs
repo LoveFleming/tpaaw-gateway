@@ -35,9 +35,9 @@ import { createWriteStream } from "node:fs";
 import { cp, mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
-import { dirname, join, resolve, sep } from "node:path";
+import { dirname, join, resolve, sep, basename } from "node:path";
 import { fileURLToPath } from "node:url";
-import { unzipSync } from "fflate";
+import { unzipSync, strFromU8 } from "fflate";
 
 // ---------- 常數 / 工具 ----------
 
@@ -271,10 +271,26 @@ async function startAndVerify(versionDir, version) {
 
 // ---------- 安裝一個版本（staged）----------
 
-async function installVersion(manifest, server) {
-  const v = manifest.version;
+// 共用尾段：解壓 tmp → 驗骨架 → rename 定版 → npm install（下載流程與手動上傳共用）
+async function stageInstall(zipPath, v) {
   const versionDir = join(VERSIONS_DIR, v);
   const tmpDir = join(VERSIONS_DIR, `${v}.tmp`);
+  L.info(`解壓 → versions/${v}.tmp …`);
+  await rm(tmpDir, { recursive: true, force: true });
+  await extractZip(zipPath, tmpDir);
+  await verifySkeleton(tmpDir);
+
+  await rm(versionDir, { recursive: true, force: true });
+  await rename(tmpDir, versionDir);
+  L.ok(`versions/${v}/ 定版`);
+
+  await installDeps(versionDir);
+  await rm(zipPath, { force: true });
+  return versionDir;
+}
+
+async function installVersion(manifest, server) {
+  const v = manifest.version;
   const zipPath = join(HOME, "logs", `paaw-${v}.zip`);
 
   // 下載 URL：優先用「剛 fetch stable.json 成功的同一台 server」組（同源保證，
@@ -289,18 +305,45 @@ async function installVersion(manifest, server) {
   const { size } = await downloadVerified(dlUrl, manifest.sha256, zipPath, manifest.size);
   L.ok(`sha256 驗證通過（${(size / 1048576).toFixed(1)} MB）`);
 
-  L.info(`解壓 → versions/${v}.tmp …`);
-  await rm(tmpDir, { recursive: true, force: true });
-  await extractZip(zipPath, tmpDir);
-  await verifySkeleton(tmpDir);
+  return await stageInstall(zipPath, v);
+}
 
-  await rm(versionDir, { recursive: true, force: true });
-  await rename(tmpDir, versionDir);
-  L.ok(`versions/${v}/ 定版`);
+// ---------- 手動上傳 zip 安裝（2026-09-07 Fleming：不依賴 paaw-package 也能裝）----------
 
-  await installDeps(versionDir);
-  await rm(zipPath, { force: true });
-  return versionDir;
+// 讀 zip 內建的 paaw-manifest.json（只解這一個 entry，不用全解）
+function readZipManifest(buf) {
+  try {
+    const entries = unzipSync(new Uint8Array(buf), { filter: (f) => f.name === "paaw-manifest.json" });
+    const e = entries["paaw-manifest.json"];
+    return e ? JSON.parse(strFromU8(e)) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function installUploadedZip(zipBuf, label) {
+  const sha256 = createHash("sha256").update(zipBuf).digest("hex");
+  L.info(`收到上傳包 ${label}（${(zipBuf.length / 1048576).toFixed(1)} MB，sha256=${sha256.slice(0, 16)}…）`);
+
+  // 版本來源：zip 內 paaw-manifest.json 優先；没帶就從檔名 paaw-x.y.z.zip 兄弟拿
+  const m = readZipManifest(zipBuf);
+  let v = m && typeof m.version === "string" && VERSION_RE.test(m.version) ? m.version : null;
+  if (!v) {
+    const base = String(label || "").replace(/^.*[\\/]/, "");
+    const fm = base.match(/^paaw-(\d+\.\d+\.\d+)\.zip$/i);
+    if (fm) v = fm[1];
+  }
+  if (!v) throw new Error("zip 內無 paaw-manifest.json、檔名也不符 paaw-x.y.z.zip — 無法判斷版本（拒裝）");
+  if (m && m.product && m.product !== "paaw") throw new Error(`paaw-manifest.json product=${m.product} 不是 paaw 包`);
+
+  await mkdir(LOGS_DIR, { recursive: true });
+  const zipPath = join(HOME, "logs", `paaw-${v}.upload.zip`);
+  await writeFile(zipPath, zipBuf);
+
+  const versionDir = await stageInstall(zipPath, v);
+  await writeCurrentAtomic(v);
+  L.ok(`手動安裝完成：versions/${v}/ 已定版並切 current（重啟後生效）`);
+  return { ok: true, version: v, versionDir, message: `已上傳安裝 ${v} — 按「重啟」生效` };
 }
 
 // ---------- 指令 ----------
@@ -649,6 +692,33 @@ async function cmdUI() {
         runJob("update", uiUpdate);
         return jsonOut(202, { ok: true, message: "更新已開始" });
       }
+      if (method === "POST" && url === "/api/upload") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        // 手動上傳 zip 安裝（2026-09-07）：raw body = zip bytes，版本從 zip 內 paaw-manifest.json 讀
+        const ct = (req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
+        if (!/^(application\/(x-)?zip|application\/octet-stream)$/.test(ct)) {
+          return jsonOut(415, { ok: false, message: `Content-Type「${ct}」不支援 — 上傳 zip 檔本身（application/zip）` });
+        }
+        const chunks = [];
+        let size = 0;
+        let tooBig = false;
+        req.on("data", (c) => {
+          size += c.length;
+          if (size > 600 * 1024 * 1024) { tooBig = true; req.destroy(); return; }
+          chunks.push(c);
+        });
+        await new Promise((r) => { req.on("end", r); req.on("close", r); req.on("error", r); });
+        if (tooBig) return jsonOut(413, { ok: false, message: "包超過 600MB 上限" });
+        if (!chunks.length) return jsonOut(400, { ok: false, message: "空 body（没收到 zip 內容）" });
+        const buf = Buffer.concat(chunks);
+        let fname = "upload.zip";
+        try { if (req.headers["x-filename"]) fname = decodeURIComponent(req.headers["x-filename"]); } catch {}
+        runJob("upload", async () => {
+          jobLog(`⬆️ 上傳安裝 ${fname}（${(buf.length / 1048576).toFixed(1)} MB）…`);
+          return await installUploadedZip(buf, fname);
+        });
+        return jsonOut(202, { ok: true, message: "上傳安裝已開始（進度見活動記錄）" });
+      }
       if (method === "POST" && url === "/api/start") {
         if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
         runJob("start", uiStart);
@@ -699,9 +769,17 @@ else if (cmd === "update") {
   await cmdUpdate();
   L.ok("update 完成");
 }
+else if (cmd === "upload") {
+  // 手動上傳 zip 安裝：paaw-gateway upload paaw-1.0.0.zip（不依賴 package server）
+  const p = process.argv[3];
+  if (!p) { console.error("用法：paaw-gateway upload <paaw-x.y.z.zip>"); process.exit(1); }
+  const buf = await readFile(resolve(p));
+  await installUploadedZip(buf, basename(p));
+  L.ok("upload 完成");
+}
 else if (cmd === "start") await cmdStart();
 else if (cmd === "ui") await cmdUI();
 else {
-  console.error(`未知指令：${cmd}（可用：ui | start | update | status）`);
+  console.error(`未知指令：${cmd}（可用：ui | start | update | upload | status）`);
   process.exit(1);
 }

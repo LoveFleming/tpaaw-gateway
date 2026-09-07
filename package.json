@@ -11,6 +11,7 @@
     "start": "node gateway.mjs ui",
     "run": "node gateway.mjs start",
     "update": "node gateway.mjs update",
+    "upload": "node gateway.mjs upload",
     "status": "node gateway.mjs status",
     "test": "node --test tests/**/*.test.mjs"
   },
