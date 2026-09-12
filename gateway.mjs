@@ -33,7 +33,7 @@ import http from "node:http";
 import { createHash } from "node:crypto";
 import { createWriteStream } from "node:fs";
 import { cp, mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, statSync, openSync, readSync, closeSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { dirname, join, resolve, sep, basename } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -220,7 +220,9 @@ async function ensureData(versionDir) {
 // ---------- 啟動 + verify（GET / 200 才算活）----------
 
 function startPaaw(versionDir) {
-  const env = { ...process.env, PAAW_PORT: PORT, PAAW_DATA_HOME: DATA_DIR };
+  // 2026-09-12：PAAW_LOG_HOME 指 data/log — log 跨版本持久（gateway 更新換 version dir 不歸零），
+  // gateway UI 的 /api/paaw-log 讀固定路徑就能看完整歷史
+  const env = { ...process.env, PAAW_PORT: PORT, PAAW_DATA_HOME: DATA_DIR, PAAW_LOG_HOME: join(DATA_DIR, "log") };
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
   const tsxBin = join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
   const child = spawn(process.execPath, [tsxBin, "packages/server/src/paaw-server.mjs"], {
@@ -687,6 +689,37 @@ async function cmdUI() {
       }
       if (method === "GET" && url === "/api/status") return jsonOut(200, await uiStatus());
       if (method === "GET" && url === "/api/log") return jsonOut(200, { lines: job.lines });
+      // ── GET /api/paaw-log — PAAW server console（2026-09-12 Fleming：gateway UI 也要看得到 PAAW log）
+      // 讀 PAAW 的 server-console.log：先 HOME/data/log（新 startPaaw 帶 PAAW_LOG_HOME，跨版本持久），
+      // 沒有再 fallback current version dir 的 log/（舊版啟動留下的）。offset 輪詢同 PAAW /api/logs/console 模式。
+      if (method === "GET" && url === "/api/paaw-log") {
+        const q = new URL(req.url, "http://localhost").searchParams;
+        const candidates = [join(DATA_DIR, "log", "server-console.log")];
+        try {
+          const cur = await readCurrent();
+          if (cur?.version) candidates.push(join(VERSIONS_DIR, cur.version, "log", "server-console.log"));
+        } catch {}
+        let file = null;
+        for (const c of candidates) if (existsSync(c)) { file = c; break; }
+        if (!file) return jsonOut(200, { exists: false, size: 0, nextOffset: 0, data: "" });
+        try {
+          const st = statSync(file);
+          const offset = Math.max(0, Math.min(parseInt(q.get("offset") || "0", 10) || 0, st.size));
+          const len = Math.min(st.size - offset, 512 * 1024);
+          let data = "";
+          if (len > 0) {
+            const fd = openSync(file, "r");
+            try {
+              const buf = Buffer.alloc(len);
+              readSync(fd, buf, 0, len, offset);
+              data = buf.toString("utf-8");
+            } finally { try { closeSync(fd); } catch {} }
+          }
+          return jsonOut(200, { exists: true, file, size: st.size, nextOffset: offset + Buffer.byteLength(data, "utf-8"), data });
+        } catch (err) {
+          return jsonOut(500, { error: err.message });
+        }
+      }
       if (method === "POST" && url === "/api/update") {
         if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
         runJob("update", uiUpdate);

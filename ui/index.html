@@ -122,6 +122,20 @@
     <div class="note" id="setNote"></div>
   </div>
 
+  <!-- PAAW server log（2026-09-12 Fleming：gateway 啟動 PAAW 後 UI 也要看得到 PAAW log） -->
+  <div class="card" style="margin-top:14px">
+    <h2>📜 PAAW Server Log <button id="btnPaawLogToggle" style="font-size:12px;padding:2px 10px;border:1px solid #d6d3d1;border-radius:6px;background:#fff;cursor:pointer">顯示</button></h2>
+    <div id="paawLogWrap" style="display:none">
+      <div class="row" style="margin-bottom:8px">
+        <button id="btnPlFollow" style="font-size:12px;padding:2px 10px;border:1px solid #d6d3d1;border-radius:6px;background:#fff;cursor:pointer">⬇ following</button>
+        <button id="btnPlRefresh" style="font-size:12px;padding:2px 10px;border:1px solid #d6d3d1;border-radius:6px;background:#fff;cursor:pointer">↻ 重讀</button>
+        <span class="note" id="plMeta"></span>
+      </div>
+      <div class="log" id="paawLogBox" style="height:320px"><span class="empty">（載入中…）</span></div>
+      <div class="note">PAAW server 的完整 console（啟動訊息、API 錯誤、agent 載入）。跨版本持久：更新 PAAW 後 log 照舊累積。重啟 PAAW 會有 ═══ start ═══ 分隔線。</div>
+    </div>
+  </div>
+
   <!-- 活動 log -->
   <div class="card" style="margin-top:14px">
     <h2>活動記錄</h2>
@@ -277,6 +291,36 @@ $("btnSave").onclick = async () => {
 refresh();
 loadSettings();
 setInterval(refresh, 2000);
+
+// ── 📜 PAAW Server Log（2026-09-12）：offset 輪詢，只在 panel 開著時拉 ──
+let plOffset = 0, plText = "", plFollow = true, plTimer = null, plOpen = false;
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function plRender() {
+  const box = $("paawLogBox");
+  box.innerHTML = plText ? `<pre style="margin:0;white-space:pre-wrap;word-break:break-all">${esc(plText)}</pre>` : '<span class="empty">（PAAW 尚未產生 log — 按 ▶️ 啟動 PAAW 後道裡會顯示 server console）</span>';
+  if (plFollow) box.scrollTop = box.scrollHeight;
+}
+async function plPoll() {
+  if (!plOpen) return;
+  try {
+    const r = await fetch(`/api/paaw-log?offset=${plOffset}`);
+    const d = await r.json();
+    if (d.exists && d.data) { plOffset = d.nextOffset; plText = (plText + d.data).slice(-400000); plRender(); $("plMeta").textContent = `${(d.size / 1024).toFixed(0)} KB`; }
+    else if (!d.exists) { plRender(); }
+  } catch {}
+  plTimer = setTimeout(plPoll, 3000);
+}
+$("btnPaawLogToggle").onclick = () => {
+  plOpen = !plOpen;
+  $("paawLogWrap").style.display = plOpen ? "" : "none";
+  $("btnPaawLogToggle").textContent = plOpen ? "隱藏" : "顯示";
+  if (plOpen) plPoll(); else if (plTimer) { clearTimeout(plTimer); plTimer = null; }
+};
+$("btnPlFollow").onclick = () => {
+  plFollow = !plFollow;
+  $("btnPlFollow").textContent = plFollow ? "⬇ following" : "⏸ paused";
+};
+$("btnPlRefresh").onclick = () => { plOffset = 0; plText = ""; plRender(); if (!plTimer && plOpen) plPoll(); };
 </script>
 </body>
 </html>
