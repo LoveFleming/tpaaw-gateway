@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-06T08:09:53.777Z",
-  "headSha": "e72385d",
+  "generatedAt": "2026-09-13T06:44:57.100Z",
+  "headSha": "69c2fbe",
   "tableHashes": {
-    "features": "fc786a7b62e0492b",
+    "features": "7b64aef9866b9b44",
     "apis": "45b998c4c192216f",
     "tests": "43aa317381fcd54b",
-    "changes": "cdae8c37a60b7a09",
-    "knowledgeGaps": "2e7bb741c8821525"
+    "changes": "199fce6e1e4e96dd",
+    "knowledgeGaps": "922056093843dc5f"
   },
   "root": null,
   "summary": {
@@ -17,14 +17,14 @@
     "files": 4,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 15,
+    "commits": 21,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-09-06T08:09:15.600Z"
+    "featuresUpdatedAt": "2026-09-07T13:12:59.559Z"
   },
   "features": [
     {
@@ -50,13 +50,13 @@
       "apiCount": 9,
       "tests": [],
       "testCount": 0,
-      "changeCount": 7,
-      "lastChangeAt": "2026-08-23T15:48:34+08:00",
+      "changeCount": 9,
+      "lastChangeAt": "2026-09-12T19:52:14+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "eefb489f49bbf742"
+      "_h": "753ac312fc21b62f"
     },
     {
       "id": "F20260906-002",
@@ -334,6 +334,64 @@
   ],
   "changes": [
     {
+      "hash": "69c2fbe",
+      "date": "2026-09-12T19:52:14+08:00",
+      "subject": "gateway UI 可看 PAAW server log（📜 PAAW Server Log 面板）",
+      "kind": "other",
+      "files": 2,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "affbbf26de207b4b"
+    },
+    {
+      "hash": "dc9c1a5",
+      "date": "2026-09-07T18:53:41+08:00",
+      "subject": "feat: 手動上傳 zip 安裝 — 不需要 paaw-package 也能發版（2026-09-07 Fleming）",
+      "kind": "feat",
+      "files": 4,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "ce828a7442eda370"
+    },
+    {
+      "hash": "b0a4049",
+      "date": "2026-09-06T20:29:41+08:00",
+      "subject": "chore: 同步三目錄架構 — .paaw 零例外（runtime log 全在 PAAW log/）+ developer prompt rev 2026-09-06-g（$PAAW_APP_CONSOLE_DIR）",
+      "kind": "chore",
+      "files": 4,
+      "featureIds": [],
+      "_h": "9389a73f4e1431c3"
+    },
+    {
+      "hash": "92eebe5",
+      "date": "2026-09-06T19:12:00+08:00",
+      "subject": "docs: developer prompt 對齊 app-console 日期檔名（_promptRev 2026-09-06-f）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "03a204434728d176"
+    },
+    {
+      "hash": "4a9ee9d",
+      "date": "2026-09-06T18:50:47+08:00",
+      "subject": "docs: agent prompt 對齊 .paaw 進版控紀律（_promptRev 2026-09-06-e）",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "ae62b2d810798c9d"
+    },
+    {
+      "hash": "88d2db8",
+      "date": "2026-09-06T18:50:24+08:00",
+      "subject": "feat: .paaw 進版控 — release unit 資產（2026-09-06 Fleming 定調）",
+      "kind": "feat",
+      "files": 174,
+      "featureIds": [],
+      "_h": "254ff076ce612976"
+    },
+    {
       "hash": "e72385d",
       "date": "2026-09-03T20:49:39+08:00",
       "subject": "test(server): add e2e tests for backup auth and testability hooks",
@@ -506,22 +564,26 @@
     "hotUnmappedFiles": [
       {
         "file": "README.md",
-        "commits": 6
+        "commits": 8
       },
       {
         "file": ".gitignore",
-        "commits": 5
+        "commits": 7
       },
       {
         "file": "package.json",
-        "commits": 4
+        "commits": 5
       },
       {
         "file": "ui/index.html",
-        "commits": 2
+        "commits": 4
       },
       {
         "file": "config.json",
+        "commits": 1
+      },
+      {
+        "file": "docs/api.md",
         "commits": 1
       },
       {

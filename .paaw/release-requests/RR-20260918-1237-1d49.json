@@ -1,0 +1,285 @@
+{
+  "id": "RR-20260918-1237-1d49",
+  "title": "tpaaw-gateway 0.2.1 — 三目錄架構 + Server Log 面板 + ISS-001 port 佔用防護",
+  "createdAt": "2026-09-18T04:37:35.545Z",
+  "createdBy": "human",
+  "status": "draft",
+  "baseline": {
+    "sha": "dc9c1a563fdc5e25e04ab43cd53ef92aa14585d2",
+    "short": "dc9c1a5",
+    "at": "2026-09-07T18:53:41+08:00",
+    "author": "LoveFleming",
+    "subject": "feat: 手動上傳 zip 安裝 — 不需要 paaw-package 也能發版（2026-09-07 Fleming）",
+    "source": "user-selected"
+  },
+  "target": {
+    "sha": "0efcf9bec49ce704b79faa77e34d582d24b513cd",
+    "short": "0efcf9b",
+    "at": "2026-09-18T12:39:22+08:00",
+    "author": "LoveFleming",
+    "subject": "chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）"
+  },
+  "scope": {
+    "computedAt": "2026-09-18T04:39:24.514Z",
+    "commits": {
+      "count": 3,
+      "authors": [
+        "LoveFleming"
+      ],
+      "subjects": [
+        "0efcf9b chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）",
+        "1e6f7aa fix(gateway): ISS-001 port 佔用偵測 + 夭折期複查；docs: DEPLOY.md 維運文檔",
+        "69c2fbe gateway UI 可看 PAAW server log（📜 PAAW Server Log 面板）"
+      ]
+    },
+    "files": [
+      {
+        "file": ".paaw/gates.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T04:39:22.000Z",
+        "commits": [
+          "0efcf9b"
+        ]
+      },
+      {
+        "file": "DEPLOY.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T04:36:16.000Z",
+        "commits": [
+          "1e6f7aa"
+        ]
+      },
+      {
+        "file": "gateway.mjs",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T04:36:16.000Z",
+        "commits": [
+          "1e6f7aa",
+          "69c2fbe"
+        ]
+      },
+      {
+        "file": "ui/index.html",
+        "changeCount": 1,
+        "lastChanged": "2026-09-12T11:52:14.000Z",
+        "commits": [
+          "69c2fbe"
+        ]
+      }
+    ],
+    "features": [
+      {
+        "id": "F20260906-001",
+        "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+        "status": "active",
+        "changedFiles": [
+          "gateway.mjs"
+        ],
+        "apis": [
+          "GET /api/log",
+          "POST /api/restart",
+          "GET /api/settings",
+          "POST /api/settings",
+          "POST /api/start",
+          "GET /api/status",
+          "POST /api/stop",
+          "POST /api/update",
+          "GET /index.html"
+        ],
+        "apiImpact": true,
+        "hasTests": false
+      }
+    ],
+    "apis": [
+      {
+        "method": "GET",
+        "path": "/api/log",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/api/restart",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/api/settings",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/api/settings",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/api/start",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/api/status",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/api/stop",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "POST",
+        "path": "/api/update",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/index.html",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      }
+    ],
+    "taskIds": []
+  },
+  "checklist": [
+    {
+      "id": "tests",
+      "label": "測試全過（unit + e2e）",
+      "auto": {
+        "status": "pass",
+        "detail": "0✓ 0✗ 0⋯；run at 2026-09-18T04:39:36.595Z",
+        "checkedAt": "2026-09-18T04:39:54.336Z",
+        "runId": "RUN-20260918-003"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    },
+    {
+      "id": "gates",
+      "label": "品質門檻（build / type-check / test）",
+      "auto": {
+        "status": "warn",
+        "detail": "warnings：clean-tree",
+        "checkedAt": "2026-09-18T04:39:54.336Z"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    },
+    {
+      "id": "qa-records",
+      "label": "QA 記錄無未解決 fail",
+      "auto": {
+        "status": "pass",
+        "detail": "無未解決 QA fail 記錄",
+        "checkedAt": "2026-09-18T04:39:54.336Z"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    },
+    {
+      "id": "security",
+      "label": "Security scan（semgrep，scope 內）",
+      "auto": {
+        "status": "pass",
+        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-18T04:39:39.263Z",
+        "checkedAt": "2026-09-18T04:39:54.336Z"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    },
+    {
+      "id": "risk",
+      "label": "風險評估（readiness heuristic）",
+      "auto": {
+        "status": "warn",
+        "detail": "MEDIUM：API 變更的 feature 沒有測試",
+        "checkedAt": "2026-09-18T04:39:54.336Z"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    },
+    {
+      "id": "ops",
+      "label": "維運就緒（部署/回滾文檔）— 簽核",
+      "auto": {
+        "status": "pass",
+        "detail": "維運文檔：DEPLOY.md（含回滾）、README.md（含回滾）",
+        "checkedAt": "2026-09-18T04:39:54.336Z"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    },
+    {
+      "id": "handover",
+      "label": "交接（handover state 新鮮）— 簽核",
+      "auto": {
+        "status": "pass",
+        "detail": "handover state 2026-09-18T04:39:32.083Z（changes 10 / open issues 0）；新鮮",
+        "checkedAt": "2026-09-18T04:39:54.336Z"
+      },
+      "verdict": "pending",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "note": null
+    }
+  ],
+  "releaseId": null,
+  "closedAt": null,
+  "history": [
+    {
+      "ts": "2026-09-18T04:37:35.545Z",
+      "by": "human",
+      "event": "created",
+      "note": "baseline=ff850fd（first-commit）→ target=1e6f7aa，21 commits"
+    },
+    {
+      "ts": "2026-09-18T04:38:04.105Z",
+      "by": "human",
+      "event": "baseline-changed",
+      "note": "dc9c1a5（user-selected）"
+    },
+    {
+      "ts": "2026-09-18T04:39:24.514Z",
+      "by": "system",
+      "event": "target-advanced",
+      "note": "target 前進到 0efcf9b，scope 重算"
+    }
+  ]
+}

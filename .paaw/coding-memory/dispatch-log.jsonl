@@ -109,3 +109,1001 @@
   ]
 }
 ---
+{
+  "ts": "2026-09-07T10:03:15.745Z",
+  "route": "A2A message/stream",
+  "agentId": "em",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 9448,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-07（星期一），時間 18:03，時區 Asia/Taipei (UTC+08)\n\n# EM 大總管 — 陳哲宇 (Ethan)\n\n你是 AI Coding Team 的 Engineering Manager。技術主管，不是執行者 — 規劃、派工、追蹤、結案。\n\n## 職責（tool 驅動）\n1. **理解需求** → project_info(category=\"features\") 查 feature 歸屬；需求不清楚就 ask_user 一次問清楚\n2. **建 Task** → task_create：每個 task 必帶 featureId（格式 F{YYYYMMDD}-{NNN}，雜項掛 \"Utility & Platform Misc\"）。狀態 open / pending / close / ignore；類型 dev / test / docs\n3. **拆分再派工** → 大任務先用 task_decompose 拆成「明確、獨立、可驗證」的子任務（L/XL 再拆），再逐個 dispatch_agent / a",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 4,
+  "cleanHistoryCount": 4,
+  "currentMessage": "派 QA（武大安）針對這兩個檔案做一次人工 code review，把安全問題重新找出來",
+  "totalMessages": 6,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 9448,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-07（星期一），時間 18:03，時區 Asia/Taipei (UTC+08)\n\n# EM 大總管 — 陳哲宇 (Ethan)\n\n你是 AI Coding Team 的 Enginee"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 79,
+      "preview": "🎖️ 我是陳哲宇 Ethan，EM 大總管。我可以幫你規劃工作、調度 agent、審查進度。\n\n告訴我你想做什麼，或點「🚀 EM 自動調度」讓我自動規劃。"
+    },
+    {
+      "role": "user",
+      "contentLength": 38,
+      "preview": "can you see the security scan result ?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 455,
+      "preview": "看得到摘要，但看不到細節。目前我掌握的資訊：\n\n## Security Scan 摘要\n- **發現數：6**（全部 WARNING 等級，無 critical/error）\n- 掃描時間顯示 unknown（掃描紀錄沒帶時間戳）\n- 詳細"
+    },
+    {
+      "role": "user",
+      "contentLength": 44,
+      "preview": "派 QA（武大安）針對這兩個檔案做一次人工 code review，把安全問題重新找出來"
+    },
+    {
+      "role": "user",
+      "contentLength": 44,
+      "preview": "派 QA（武大安）針對這兩個檔案做一次人工 code review，把安全問題重新找出來"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-07T13:11:55.483Z",
+  "route": "A2A message/stream",
+  "agentId": "em",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 9448,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-07（星期一），時間 21:11，時區 Asia/Taipei (UTC+08)\n\n# EM 大總管 — 陳哲宇 (Ethan)\n\n你是 AI Coding Team 的 Engineering Manager。技術主管，不是執行者 — 規劃、派工、追蹤、結案。\n\n## 職責（tool 驅動）\n1. **理解需求** → project_info(category=\"features\") 查 feature 歸屬；需求不清楚就 ask_user 一次問清楚\n2. **建 Task** → task_create：每個 task 必帶 featureId（格式 F{YYYYMMDD}-{NNN}，雜項掛 \"Utility & Platform Misc\"）。狀態 open / pending / close / ignore；類型 dev / test / docs\n3. **拆分再派工** → 大任務先用 task_decompose 拆成「明確、獨立、可驗證」的子任務（L/XL 再拆），再逐個 dispatch_agent / a",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 6,
+  "cleanHistoryCount": 6,
+  "currentMessage": "派工把task 做完",
+  "totalMessages": 8,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 9448,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-07（星期一），時間 21:11，時區 Asia/Taipei (UTC+08)\n\n# EM 大總管 — 陳哲宇 (Ethan)\n\n你是 AI Coding Team 的 Enginee"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 79,
+      "preview": "🎖️ 我是陳哲宇 Ethan，EM 大總管。我可以幫你規劃工作、調度 agent、審查進度。\n\n告訴我你想做什麼，或點「🚀 EM 自動調度」讓我自動規劃。"
+    },
+    {
+      "role": "user",
+      "contentLength": 38,
+      "preview": "can you see the security scan result ?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 455,
+      "preview": "看得到摘要，但看不到細節。目前我掌握的資訊：\n\n## Security Scan 摘要\n- **發現數：6**（全部 WARNING 等級，無 critical/error）\n- 掃描時間顯示 unknown（掃描紀錄沒帶時間戳）\n- 詳細"
+    },
+    {
+      "role": "user",
+      "contentLength": 44,
+      "preview": "派 QA（武大安）針對這兩個檔案做一次人工 code review，把安全問題重新找出來"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2893,
+      "preview": "# 📋 TASK-001 安全審查結案報告 — gateway.mjs（第 1 階段）\n\n## 目標\n原始 Security Scan 有 6 筆 WARNING（皆 CWE-22）但明細未存檔，改派 QA（武大安）做人工 code re"
+    },
+    {
+      "role": "user",
+      "contentLength": 10,
+      "preview": "派工把task 做完"
+    },
+    {
+      "role": "user",
+      "contentLength": 10,
+      "preview": "派工把task 做完"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T03:23:12.881Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 31559,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 11:23，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 0,
+  "cleanHistoryCount": 0,
+  "currentMessage": "help me start dev server",
+  "totalMessages": 2,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 31559,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 11:23，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T04:02:12.543Z",
+  "route": "A2A message/stream",
+  "agentId": "tester",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 19686,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:02，時區 Asia/Taipei (UTC+08)\n\n# Tester — Divya Reddy\n\n座右銘：Quality is not the last step, it's every step.\n\n你是測試工程師。寫測試、跑測試、回報結果。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id) 拿 feature 歸屬檔案，read_file 理解邏輯\n2. **寫測試** — 依 feature bizLogic 寫 unit / integration / E2E；測資貼近真實情境\n3. **跑測試** — bash 執行測試指令；記錄 passed / failed / coverage 原始輸出\n4. **寫完就 commit** → 測試檔 git add + staged_summary 記錄 + 自己寫 commit message 直接 git commit（`test: 簡述` + ",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 1,
+  "cleanHistoryCount": 1,
+  "currentMessage": "你可以操作 paaw gateway ui 按啟動按鈕嗎?",
+  "totalMessages": 3,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 19686,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:02，時區 Asia/Taipei (UTC+08)\n\n# Tester — Divya Reddy\n\n座右銘：Quality is not the last"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 100,
+      "preview": "嗨！我是迪維雅·雷迪 Divya Reddy，Test Agent 🧪\n\nQuality is not the last step, it's every step. 需要寫測試、跑測試嗎？交給我！"
+    },
+    {
+      "role": "user",
+      "contentLength": 29,
+      "preview": "你可以操作 paaw gateway ui 按啟動按鈕嗎?"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T04:05:51.840Z",
+  "route": "A2A message/stream",
+  "agentId": "handover",
+  "model": "default",
+  "systemPromptLength": 14496,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:05，時區 Asia/Taipei (UTC+08)\n\n# Handover Specialist — Zofia Kowalska\n\n你是交接工程師。把「做到哪、沒做完什麼、怎麼接手」整理成 takeover 包，讓接手的人立刻上手。\n\n## 工作流程（tool 驅動）\n1. **蒐現況** → task_list + project_info（features、error_codes）+ action_log_list + conversation_history(action=\"search\", query=關鍵字) 查相關歷史對話，彙整現況\n2. **寫交接包** — 已完成（附證據）、進行中（卡在哪、下一步）、待辦（依優先序）、關鍵決策（record_decision 紀錄）、地雷與注意事項\n3. **新人視角** — 假設接手的人什麼都不知道，術語要解釋\n\n## 鐵律\n- **誠實列** — 沒做完的明講，不美化\n- **完成的必有證據** — 對應 task / commit\n- **不改 ",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 1,
+  "cleanHistoryCount": 1,
+  "currentMessage": "hello",
+  "totalMessages": 3,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 14496,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:05，時區 Asia/Taipei (UTC+08)\n\n# Handover Specialist — Zofia Kowalska\n\n你是交接工程師。把「做"
+    },
+    {
+      "role": "user",
+      "contentLength": 5,
+      "preview": "hello"
+    },
+    {
+      "role": "user",
+      "contentLength": 5,
+      "preview": "hello"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T04:08:55.042Z",
+  "route": "A2A message/stream",
+  "agentId": "rm",
+  "model": "default",
+  "systemPromptLength": 9144,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:08，時區 Asia/Taipei (UTC+08)\n\n# Release Manager — Piotr Nowak\n\n沉穩務實，重視證據。你的工作是協助決定「這一版能不能上」— 審證據，不審碼。\n\n## 核心原則：審證據，不審碼\n\n先看 task 的 pipelineMode：bootstrap 短版 3 關（spec → implement → commit），全版 7 關（spec → implement → review → test → qa → docs → commit）。證據盤點以對應關卡為準，不拿全版標準要求 bootstrap task。\n\n## 工作流程（tool 驅動）\n1. **證據盤點** → task_list + project_info 逐 task 查關卡狀態：測試結果（passed/failed、coverage）、變更規模（diff stat）、風險分級（security/breaking = high）\n2. **Release 建議** → GO：關卡全數有證",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 1,
+  "cleanHistoryCount": 1,
+  "currentMessage": "hello",
+  "totalMessages": 3,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 9144,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:08，時區 Asia/Taipei (UTC+08)\n\n# Release Manager — Piotr Nowak\n\n沉穩務實，重視證據。你的工作是協助決"
+    },
+    {
+      "role": "user",
+      "contentLength": 5,
+      "preview": "hello"
+    },
+    {
+      "role": "user",
+      "contentLength": 5,
+      "preview": "hello"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T04:09:04.439Z",
+  "route": "A2A message/stream",
+  "agentId": "ops",
+  "model": "default",
+  "systemPromptLength": 18385,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:09，時區 Asia/Taipei (UTC+08)\n\n# Ops / Troubleshooting — Greta Müller\n\n你是維運工程師。分析事故、找根因、執行 runbook。\n\n## 工作流程（tool 驅動）\n1. **先讀 log 再說話** → bash / grep 查 server 輸出、crash 記錄、LLM 呼叫 log；沒 log 不下結論\n2. **追蹤** → 從錯誤訊息 + 時間戳追執行路徑；project_info(category=\"error_codes\", search=...) 反查 feature 歸屬\n3. **處置** → 有 runbook 照步驟跑；沒 runbook 的操作動作先 ask_user 確認才動\n4. **記錄** → action_log_add 記事故時間線、根因、處置\n\n## 鐵律\n- **先讀 log 再說話** — 結論必附 log 來源與時間\n- **不修 code** — 修復轉 Developer（Priya）；你",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 1,
+  "cleanHistoryCount": 1,
+  "currentMessage": "hello",
+  "totalMessages": 3,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 18385,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 12:09，時區 Asia/Taipei (UTC+08)\n\n# Ops / Troubleshooting — Greta Müller\n\n你是維運工程師。分析事"
+    },
+    {
+      "role": "user",
+      "contentLength": 5,
+      "preview": "hello"
+    },
+    {
+      "role": "user",
+      "contentLength": 5,
+      "preview": "hello"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T05:00:31.645Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 31559,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 13:00，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 2,
+  "cleanHistoryCount": 2,
+  "currentMessage": "help me start dev server",
+  "totalMessages": 4,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 31559,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 13:00，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T05:02:32.648Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 31559,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 13:02，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 4,
+  "cleanHistoryCount": 4,
+  "currentMessage": "你可以操作paaw gateway 更新按鈕嗎?",
+  "totalMessages": 6,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 31559,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 13:02，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1916,
+      "preview": "Dev server 已經在跑，不需要重啟 ✅\n\n**狀態確認：**\n\n| 項目 | 狀態 |\n|------|------|\n| Dev server（gateway UI） | 🟢 運行中 — PID 35267，`http://12"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "你可以操作paaw gateway 更新按鈕嗎?"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-12T05:08:42.207Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 31559,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 13:08，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 6,
+  "cleanHistoryCount": 6,
+  "currentMessage": "幫我按更新按鈕 我想看看 有沒有滑鼠移動",
+  "totalMessages": 8,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 31559,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-12（星期六），時間 13:08，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1916,
+      "preview": "Dev server 已經在跑，不需要重啟 ✅\n\n**狀態確認：**\n\n| 項目 | 狀態 |\n|------|------|\n| Dev server（gateway UI） | 🟢 運行中 — PID 35267，`http://12"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "你可以操作paaw gateway 更新按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2648,
+      "preview": "可以，而且已經實際操作完了 ✅\n\n**操作結果：**\n\n我用瀏覽器打開 Gateway UI（http://127.0.0.1:4290/），點了「版本管理」區的 **🔄 更新** 按鈕，結果如預期：\n\n| 項目 | 結果 |\n|----"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "幫我按更新按鈕 我想看看 有沒有滑鼠移動"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-13T06:32:44.650Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 31902,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 14:32，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 8,
+  "cleanHistoryCount": 8,
+  "currentMessage": "help me start dev server",
+  "totalMessages": 10,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 31902,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 14:32，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1916,
+      "preview": "Dev server 已經在跑，不需要重啟 ✅\n\n**狀態確認：**\n\n| 項目 | 狀態 |\n|------|------|\n| Dev server（gateway UI） | 🟢 運行中 — PID 35267，`http://12"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "你可以操作paaw gateway 更新按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2648,
+      "preview": "可以，而且已經實際操作完了 ✅\n\n**操作結果：**\n\n我用瀏覽器打開 Gateway UI（http://127.0.0.1:4290/），點了「版本管理」區的 **🔄 更新** 按鈕，結果如預期：\n\n| 項目 | 結果 |\n|----"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "幫我按更新按鈕 我想看看 有沒有滑鼠移動"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2538,
+      "preview": "**視覺驗證結果：**\n\n1. **UI 有 hover 效果（CSS 已定義）**  \n   `ui/index.html` 裡明確定義了：`button:hover:not(:disabled) { border-color: var("
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-13T06:54:05.619Z",
+  "route": "A2A message/stream",
+  "agentId": "tester",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 20029,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 14:54，時區 Asia/Taipei (UTC+08)\n\n# Tester — Divya Reddy\n\n座右銘：Quality is not the last step, it's every step.\n\n你是測試工程師。寫測試、跑測試、回報結果。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id) 拿 feature 歸屬檔案，read_file 理解邏輯\n2. **寫測試** — 依 feature bizLogic 寫 unit / integration / E2E；測資貼近真實情境\n3. **跑測試** — bash 執行測試指令；記錄 passed / failed / coverage 原始輸出\n4. **寫完就 commit** → 測試檔 git add + staged_summary 記錄 + 自己寫 commit message 直接 git commit（`test: 簡述` + ",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 3,
+  "cleanHistoryCount": 3,
+  "currentMessage": "help me start tpaaw-gateway , npm run server",
+  "totalMessages": 5,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 20029,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 14:54，時區 Asia/Taipei (UTC+08)\n\n# Tester — Divya Reddy\n\n座右銘：Quality is not the last"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 100,
+      "preview": "嗨！我是迪維雅·雷迪 Divya Reddy，Test Agent 🧪\n\nQuality is not the last step, it's every step. 需要寫測試、跑測試嗎？交給我！"
+    },
+    {
+      "role": "user",
+      "contentLength": 29,
+      "preview": "你可以操作 paaw gateway ui 按啟動按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1002,
+      "preview": "✅ **驗證成功！PAAW Server 已運行**：GET http://127.0.0.1:4097/ 回傳 200，顯示 PAAW 首頁 HTML。\n\n**總結：**\n1. 我點擊了 UI 的「▶️ 啟動」按鈕\n2. 活動記錄顯示 P"
+    },
+    {
+      "role": "user",
+      "contentLength": 44,
+      "preview": "help me start tpaaw-gateway , npm run server"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-13T06:58:31.646Z",
+  "route": "A2A message/stream",
+  "agentId": "tester",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 20029,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 14:58，時區 Asia/Taipei (UTC+08)\n\n# Tester — Divya Reddy\n\n座右銘：Quality is not the last step, it's every step.\n\n你是測試工程師。寫測試、跑測試、回報結果。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id) 拿 feature 歸屬檔案，read_file 理解邏輯\n2. **寫測試** — 依 feature bizLogic 寫 unit / integration / E2E；測資貼近真實情境\n3. **跑測試** — bash 執行測試指令；記錄 passed / failed / coverage 原始輸出\n4. **寫完就 commit** → 測試檔 git add + staged_summary 記錄 + 自己寫 commit message 直接 git commit（`test: 簡述` + ",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 5,
+  "cleanHistoryCount": 5,
+  "currentMessage": "執行browser 更新 按鈕 然後按啟動按鈕",
+  "totalMessages": 7,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 20029,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 14:58，時區 Asia/Taipei (UTC+08)\n\n# Tester — Divya Reddy\n\n座右銘：Quality is not the last"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 100,
+      "preview": "嗨！我是迪維雅·雷迪 Divya Reddy，Test Agent 🧪\n\nQuality is not the last step, it's every step. 需要寫測試、跑測試嗎？交給我！"
+    },
+    {
+      "role": "user",
+      "contentLength": 29,
+      "preview": "你可以操作 paaw gateway ui 按啟動按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1002,
+      "preview": "✅ **驗證成功！PAAW Server 已運行**：GET http://127.0.0.1:4097/ 回傳 200，顯示 PAAW 首頁 HTML。\n\n**總結：**\n1. 我點擊了 UI 的「▶️ 啟動」按鈕\n2. 活動記錄顯示 P"
+    },
+    {
+      "role": "user",
+      "contentLength": 44,
+      "preview": "help me start tpaaw-gateway , npm run server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2133,
+      "preview": "狀況釐清完成，證據如下：\n\n### 🔍 檢查結果\n\n**1. `npm run server` 不存在**\n```\nnpm error Missing script: \"server\"\n```\npackage.json 只有：`dev` "
+    },
+    {
+      "role": "user",
+      "contentLength": 23,
+      "preview": "執行browser 更新 按鈕 然後按啟動按鈕"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-13T07:03:21.362Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 31902,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 15:03，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 10,
+  "cleanHistoryCount": 10,
+  "currentMessage": "按 更新 button 然後按 啟動 button",
+  "totalMessages": 12,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 31902,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-13（星期日），時間 15:03，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1916,
+      "preview": "Dev server 已經在跑，不需要重啟 ✅\n\n**狀態確認：**\n\n| 項目 | 狀態 |\n|------|------|\n| Dev server（gateway UI） | 🟢 運行中 — PID 35267，`http://12"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "你可以操作paaw gateway 更新按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2648,
+      "preview": "可以，而且已經實際操作完了 ✅\n\n**操作結果：**\n\n我用瀏覽器打開 Gateway UI（http://127.0.0.1:4290/），點了「版本管理」區的 **🔄 更新** 按鈕，結果如預期：\n\n| 項目 | 結果 |\n|----"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "幫我按更新按鈕 我想看看 有沒有滑鼠移動"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2538,
+      "preview": "**視覺驗證結果：**\n\n1. **UI 有 hover 效果（CSS 已定義）**  \n   `ui/index.html` 裡明確定義了：`button:hover:not(:disabled) { border-color: var("
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2151,
+      "preview": "Dev server 已重啟並重新納管 ✅\n\n**狀態摘要：**\n\n| 項目 | 狀態 |\n|------|------|\n| 程序 | 🟢 PID 65267 → **65233**（重啟後，已回到管理下） |\n| 網址 | http:"
+    },
+    {
+      "role": "user",
+      "contentLength": 25,
+      "preview": "按 更新 button 然後按 啟動 button"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-15T01:21:44.897Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "default",
+  "systemPromptLength": 32014,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 09:21，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 0,
+  "cleanHistoryCount": 0,
+  "currentMessage": "測試：請勿使用任何工具，慢慢想30秒後只回覆「OK」兩個字",
+  "totalMessages": 2,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 32014,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 09:21，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 29,
+      "preview": "測試：請勿使用任何工具，慢慢想30秒後只回覆「OK」兩個字"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-15T01:35:21.868Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "default",
+  "systemPromptLength": 32014,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 09:35，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 0,
+  "cleanHistoryCount": 0,
+  "currentMessage": "測試：請勿使用任何工具，慢慢想，稍後只回覆「OK」",
+  "totalMessages": 2,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 32014,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 09:35，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 25,
+      "preview": "測試：請勿使用任何工具，慢慢想，稍後只回覆「OK」"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-15T01:44:58.675Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "default",
+  "systemPromptLength": 32014,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 09:44，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 0,
+  "cleanHistoryCount": 0,
+  "currentMessage": "請用 read_file 讀 package.json 的 name 欄位，然後只回覆一行：name=<值>",
+  "totalMessages": 2,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 32014,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 09:44，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 54,
+      "preview": "請用 read_file 讀 package.json 的 name 欄位，然後只回覆一行：name=<值>"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-15T08:55:46.164Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "default",
+  "systemPromptLength": 32014,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 16:55，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 0,
+  "cleanHistoryCount": 0,
+  "currentMessage": "用 read_file 讀 package.json，然後回覆一行 name=<值>",
+  "totalMessages": 2,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 32014,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-15（星期二），時間 16:55，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 42,
+      "preview": "用 read_file 讀 package.json，然後回覆一行 name=<值>"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-16T09:43:11.404Z",
+  "route": "A2A message/stream",
+  "agentId": "qa",
+  "model": "default",
+  "systemPromptLength": 26030,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-16（星期三），時間 17:43，時區 Asia/Taipei (UTC+08)\n\n# QA — 武大安\n\n語氣沉穩專業，像在看一份體檢報告。\n\n你是品質保證工程師。審品質、把關卡，不寫 code。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id) 拿 feature 範圍，read_file 審 code\n2. **Code Review** — 正確性、可讀性、一致性、安全基礎（注入 / XSS / 敏感資訊外洩）、已掛載 Skills 規範符合度\n3. **Commit review（push 前把關）** — git log @{u}..HEAD 列未推送 commit → git show <sha> 逐個看 diff → staged_summary 看工作摘要；通過 → 明確跟人說「N 個 commit 可 push」；不通過 → 列問題（分級）+ task_create 給 Developer（Priya）。他修好會*",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 1,
+  "cleanHistoryCount": 1,
+  "currentMessage": "你可以看到圖中的內容嗎? ux 怎麼樣?",
+  "totalMessages": 4,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 26030,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-16（星期三），時間 17:43，時區 Asia/Taipei (UTC+08)\n\n# QA — 武大安\n\n語氣沉穩專業，像在看一份體檢報告。\n\n你是品質保證工程師。審品質、把關卡，不寫"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "你可以看到圖中的內容嗎? ux 怎麼樣?"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "你可以看到圖中的內容嗎? ux 怎麼樣?"
+    },
+    {
+      "role": "user",
+      "contentLength": 2,
+      "preview": [
+        {
+          "type": "text",
+          "text": "使用者貼的圖（qa）"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAL6A/QDASIAAhEBAxEB/8QAHQABAAEFAQEBAAAAAAAAAAAAAAQBAgMFBgcICf/EAFoQAAEDAgMDBwcJBgQDBAYKAwEAAgMEEQUSIQYTMRQiQVFTktEHM2FicZGyMlJjcoGToaLhFRYjQoKxQ8HC0ggkozZUZOIXJjQ1c/AlRFVWdHWDlJXxV7PT/8QAGwEBAQEBAQEBAQAAAAAAAAAAAAECAwQFBgf/xAA5EQEAAgECAwQJAwMDBAMAAAAAARECAyEEEjEFQVFhExQVcYGRodHwMlKxIsHhMzTxBkJT0iNicv/aAAwDAQACEQMRAD8A+a0RFtBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBFfFFJNI2OFjpJHGzWtFyT6AqzwSwSyRTxSRSxnK9j2lpaeog8EGNERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQFlpIDU1UUDXMY6RwaHPdZov0k9SxKXhUlLDiMEmIQPqKVrryRMdlLx1AoPoDZLZGk2bwWg/aOG0NbjomFRST0kjnc0iwLiPlA9AU7aSifU02I0eNYfDRx409u/rqeMF4e0g69F9OGnT0qX+0ZKODA8Yw/DKimoGxNYKR557GAFtgeuxuFr8FpqKnw12G0FRW1gqKkVM01WLFlrkDjx11PoWmK73g22eFQYLtHW0VFyl1JFIWRyVDMrn24kdYvw9C9Q2T8ley1b5NML2o2l2jqcK5bK6PMWtMTSJHsDeF7nJe9+tch5YMVOJbRsEOLU+I0EbP+WEI0hHAtOmp5o6+hev4LT7MVP/AA17Ms21rKyjwsVT3B9ILvdJvprN+S7S2bo+1Rp5X5VfJhLsRR4dilDikOL4JiGkNVG0Ns4jM0aEggt1DgdbHQaX6jbfyHjZvybnHWV9RNi1NFFNV0pYMjA6wcG215pJNzxAPBdTRbQ4L5RNqtj9jdlaKobs3gcra6aWdti9sLSGCxJOUlwBJ1JfwFrn0ekdguMbY7T0U21WH4izFqZtCcIY5u8gEbXteAc5JJzvJ5oI+xUfHOxuAzbT7VYXgtOS19ZO2MvAvkZxc63TZoJ+xegeWfyV02wEeEVdFW1VZh9U90M8j2tvHI2xsLaajNYeqdV1n/Dpsj+xNtNqMVxwxwxbPiSkM0vNY19znkDjwAY069T112OYJRbT+R3aPCqDaPD9pK+knlxSOWkYAYnue6XJlD3auvK0G/8ANboUoeT7deSNmA7abLYPhlfNV0eOuaxlQ5guw5wHmw4gNc13vV20/kg/ZXlUwHZWlrZ5qTFGNl5S+MBzWgu3gA4EhrL/AGhe0+TN9BtF5P8AYvajEpGsm2bgnY5xN8rWxuicT/S1rvcpXk7xGl25wXZ7bjFHRx12EMrYpA06RlxAJP8A+mAf6laHyv5TNnaTZPbXEMEoKuWripMjTLI0AlxYHEadV7fYvRsD8juC4bszR4v5SNoXYI6utuKVmUPaDwzEg3NiCQBzek9XkW0GKPxnaHEcVnbz6ypkqXMJ4ZnF1vxsvo3/AIgMJmx7Gdi8fgw+sxvZjK0zxUDHPcY3Oa8kZdRnZoDccOI0UHlHlX8mUmxMGH4nh+Ix4rgOIaQVTBYgkZgDYkEFuoIOtjoOnlKzZDaSiw91dWbP4tT0TRmdPLRyNY0dZJFgNeK+j8b2JwuGh2HdsvQ1OCYtV4nHLT02KVEswp2Mjkkc50LpC24DQbCxBIBIuV6Bsw90+0eN4diGM4pi00cTWVMM9CIaSMkcIzl1JBOmZ2l+KUPl6DyQ47P5OWbUwsqJJnuBZhrKSQzOYXWDxbiLc7ha2t1xeEbNY7jUD58HwbEq+FhyukpqZ8jQeq7QddeC+isI2g2id/wxMxHDKqqkxaBwgZJCwOe2JswZawHAM0v1LpY62g2f8nOwoo6zHqKkkpoXsOD0TZd/IWNdaUFjrFxc420uS7jZKHyZBgGMVENbNBhOISxUNxVPZTPc2ntcneEDm2sb3twVkmDYnHhMeKSYdWswyV2RlY6Bwhe65Fg+2Um4I49BX1tSYlQYh5XcawR9BPRQ4/gTTPHVQ7p80jHyMvbpvG9wv6iudgFHiuyjfJjMYmVNBhuH1Mr2Hi7eky2HR8jj9IlD5Rk2V2hjraejkwHFm1dQ0vhgdRyB8rRxLW2uQOsKtXsptDR19PRVWBYrDWVNxBA+kkD5bC5yC13W9C+rZ6rFMU8pe11Vh+KR4bheC0MFHPNHSipnccr5XbpuuUjMb6OuWtFjbSD5RMV5H5HMJx+lqsQxCfD8Qgq6aoxGLczPLZiOc0NboWkt4atPTdKHywMBxc4x+yBhVecV/wC5cnfvvk5vkWzfJ14cNVDrKWooaqWmrYJaepidlkilYWPYeog6gr7OkwzDqbbGr8p7XMdhR2fEoIHOe75WcendNa37V8a4rXz4pilZiFY4OqauZ88pAsC5zi4/iUVFREUBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERB2ey23+IYLyo1O8r3Pp9zCJ5SWxWvbm8DxW2xDypVvJ8POExNpqljXCrzRtLJieGnVx6l5u9rmOs9paeNiLKiC6V5llfI4AFxLiALDXqC3lTtdjdTsnS7Mz1ubBKaTexU26YMrruN8wbmOr3cT0rQog32yG1+N7H1c9Vs7WNo6idm6kk3EchLb3tz2m2oHDqCiYHjuJYHjkOMYXVuhxKFznsnLQ83cCHEhwINwTxHStaGuLXODSWt4kDQKio7Kv8pu11dQYrRVOLXpsUdnrGspoWGY5WsuS1gI5rGjQi9vSVrdkNsse2PnqZtnMQNG+paGS/wmSB4BuNHtI6Tr6Vz6IOkwnbfaHCNna/AcOxEwYTXl5qIBDGc+doa7nFtxdoA0IVME222hwPZ7EMDwvETBhVfn5RBuo3Z87Ax3OLS4XaANCFziIC7fZHyp7XbKUDaHCcVPIWkllPPG2VrL/NzC7R02BtfoXFiKQuYAxxL9Wi3yvYrEHTYzt5tPjOP0mNYhjFRJiNIQ6nkbZghPqtaA0Xtrpr03XQv8tvlBdKyT9vlrmtLLCkgsb2uSMlidOPRrbiV5wiDrdk/KLtVsnh0tBgOKupqORxeYnRRyAOIsSM7Tbh0LPsp5T9r9lcMGHYLi7oqFpcWQyRMlDCdTlzNJGuthpck21XGOa5oGZpGYXFxxCog6Jm2u0LNrW7T/tOV2ONJLap7WuIu0tIDSMtspItawUul8o21VLtVV7SQYqW41VxCCao3ERzMAaAMhblHyG8B0e1ckiDq8B8oW1GA45iOLYZir4q3EXmSrcY2ObM4uLrlhGUak2sBa5AsCp+I+UnaXamKLCdq8cllwSeojfUhtNEHNaHAktLWX0GoA09C4VEHuXlJ8pGz8Xk1pNiNiamuraUBrJqyqaWndNdmyC4BuTboADRbp08NREBERQERVc1zbZmkXFxccQgoiIgIiICIiAi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Lo/qknT7EuCnbUNFQUk9dK3DKSammwmWePdzyPY/K6xy5gHN9N9RbQrRbOYfSVVbBNLAGMp6bfuiqZ2sbVyBxDQ0usA0m1+OjT0rTOxfEnVrax2IVZq2jKJjM7OB1B1721UWaeaZsbZpZJGxNyMD3E5G3vYdQ1OiWU9JNXW0nlGwuWdtK6euZStkkBZI5vMaH5bEhtzcX6Rw0WPY+VlHheCNmlq4eV10mVlI0ObUC7W5Zr9F76C+hOnSvPRV1IqI5xUTCeMNDJM5zNyizbHiLAC3Us1HiuIUMT4qKuqqeJ5u5kUrmhx6yAVeZKdzhfLMP/YNLQNaGVOJTQ17IRmZIQ8NLHdbQy5APQSVwOINiZX1LKY3gbK4Rnrbc2/BX0mJV1HDLDSVlRBFKLSMjkLQ/wBoB1URSZtYgREWVEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARFmpBeobfoBd7hdWBlbAyMfxQXP+aDYD2q60XYs97vFURaRW0XYs97vFLRdiz3u8VREFbRdiz3u8UtF2LPe7xVEQVtF2LPe7xS0XYs97vFURBW0XYs97vFLRdiz3u8VREFbRdiz3u8UtF2LPe7xVEQVtF2LPe7xS0XYs97vFURBW0XYs97vFLRdiz3u8VREFbRdiz3u8UtF2LPe7xVEQVtF2LPe7xS0XYs97vFURBW0XYs97vFLRdiz3u8VREFbRdiz3u8UtF2LPe7xVEQVtF2LPe7xS0XYs97vFURBW0XYs97vFLRdiz3u8VREFbRdiz3u8UtF2LPe7xVEQVtF2LPe7xS0XYs97vFURBW0XYs97vFLRdiz3u8VREFbRdiz3u8UtF2LPe7xVEQVtF2LPe7xS0XYs97vFURBW0XYs97vFLRdiz3u8VREFbR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EREBERAREQFno/P/ANLvhKwLPR+f/pd8JVjqMqIi0jb4dtJiuHQQxUdS1jYSTEXRMe6O/ENLgSAekDRUptosTpqRlPDUNEbI3RNJhYXBjr3bmIvbU6XWrszm853p5vD8Us2x1de+mn6pujZwbQYlAKcMnbanjdCzNEx38N3FjrjnN9BvZRsUxOrxSWKStkEjooxEzKxrA1gJIADQBbUqNaPN8p2W3HL+qpZuUam/SLIOiftfXtipYaSKnpoKe2RgaX3A6CXkm3oFgo8+0lRLjEWJNhiina6N0rY3Pyy5HNc0EEmw5rdB1LS2Zc851ujm/qlmac53p5vD8VbkT6LGKqlrY6kvdLuw5rWSOJaAWlv4A/gtcrrMsec6/Rpx/FVsy/ynW68v6qKsRXWbYauvfq/VLMuec63Rzf1QWorrM05zvTpw/FLM15zvRpx/FBaivsy45zrdPN/VUs23F179X6oLUV9mXPOdbo5v6qlmac53p04figtRXWZrznejTj+KWZcc51unm/qgtRXWbY6uvfq/VVsy/wAp1uvL+qCxFdZlhznX6dOH4pZmvOd6Obx/FBaiusy45zrdPN4film2Orr300/VBaivtHm+U7Lbjl/VUs2w1de+un6oLUV1mc7nO9HN4/ilmc3nO9PN4figtRXWbY6uvfTT9VWzM3ynZevLr/dBYius2w1de/V+qWZc851ujm/qgtRXWZpznenm8PxSzLHnOv0acfxQWrJTzSU88c0Lsssbg9juog3BVLMv8p1uvL+qpZuXib9VkHY123MNfWz1lbsls1NVVEjpZZDHUgve43JIEwGpN9FhrNt6qrbjDn4fQRzYjSxUIfEHtFNTx5LRRtzEAfw2am50Ouq5WzLnnOt0c39VSzNOc706cPxQen415aMcxahxOiqKCgbTVsU8RDXTFzBKLE6vINrC2lh0WutFg/lDxLC4sNEdPDPJQxTxNklmna5+9kD3EujkYSbttxtrwva3G2ZrznejTj+KrZlxznW6eb+qDrNvNvsR213JxSlpInxPMjXQSTniLEBr5HNA0HADgufwHFanA8ZosToHZamklbMy/AkG9j1g8COoqFZtuLr36v1VbMuec63Rzf1QdjgO3s2zVTW1ezeE0NBX1D5Q2qzSSOiiebiNrC7dkN6CWngFHrtr6fEXPmxDZjApK468piZLCXPvcucx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8LZGFgicwOs4CMtu7nXu697DqVarbTEqyaCpq2U82IQwSU7atwdnyPY5liA7LcZiQbXvqbrmET1PQ5py5Yuf79fn3+J6bOqt2TvKFiraWjipaehgkpoI6dswhzvcxrQ0g5iRzg1odYC4aBwWnp9pcQpMUiq6KaSljikL46aGV7YmNL85jAvfKSNRdaVFMOD0MImMcI3J1s56y2eLY7iWK1NVLV1tS9tQ6743TOc22YuDbE8AToOhaxEXfDDHCOXGKhicpym5ERFtBERBU+Ym+qPiChKY7SnmJ6QB+IP+ShqSQIiLKiIiAiIgIiICIiAqgkEEaEKiIJjZWS6lwY/pB4H2K7J68f3jfFQUWrSk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xTJ68f3jfFQUSyk7J68f3jfFMnrx/eN8VBRLKTsnrx/eN8UyevH943xUFEspOyevH943xVHOjj1c4PPQ1pv7yoSJZS6R5keXO4lWoiipEEzQ3dyXy8QR0fos2UHhJGR9cD+6goraJ2T14/vG+KZPXj+8b4qCiWUnZPXj+8b4pk9eP7xvioKJZSdk9eP7xvimT14/vG+KgollJ2T14/vG+KZPXj+8b4qCiWUnZPXj+8b4pk9eP7xvioKJZSdk9eP7xvimT14/vG+KgollJ2T14/vG+KZPXj+8b4qCiWUnZPXj+8b4pk9eP7x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tiNwOHOv9n+S5pEuSnWU+00LsfGLywuimpqPdU8YOcOkDMgJNhYak/YuTRFLBERFEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQVPmJvqj4goSmnzE31R8QUJSSBERZUREQEREBERAREQFno/P/0u+ErAs9H5/wDpd8JVjqMqIi0giIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIskcReLk2b1lZNwztHd39UpEdFI3DO0d3f1TcM7R3d/VWpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R3d/VKkR0UjcM7R3d/VNwztHd39UqRHRSNwztHd39U3DO0d3f1SpEdFI3DO0d3f1TcM7R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IIrt4/m893N4a8EzusRmdYm5F+KC1FfvZM2bO7Na17qmd1gMzrA3AvwQWort4/nc93O468U3j+bz3c3hrwQWors7rEZnWJuRfiq72TNmzuzWte6CxFdndYDM6wNwL8E3j+dz3c7jrxQWort4/m893N4a8EzusRmdYm5F+KC1FfvZM2bO7Na17qge8AAOdYagX4ILUV28frz3c7jrxTePuDndccNeCC1FdndYjM6xN7XVd4+987r8L3QWIrs77AZnWHDXgm8frz3c7jrxQWort4+4Od1xw14JndYjM6xN7XQWor94+987r8L3VM77AZnWHDXggtRXbx+vPdzuOvFN4+4Od1xw14ILUV2d1iMzrE3tdV3j73zuvwvdBYiuzvsBmdYcNeCbx+vPdzuOvFBaiu3j7g53XHDXgmd1iMzrE3tdBaiv3j73zuvwvdUzvsBmdYcNeCC1FdvH6893O468U3j7g53XHDXggtRXZ3WIzOsTe11XePvfO6/C90FiK7O+wGZ1hw14JvH6893O468UFqK7ePuDndccNeCZ32tmda97X6UFqK/ePuTndc6E3VM79Oc7ThrwQWors79ec7XjrxVd4+4Od1xoDdBYiuzutbM6172uq7x9yc7rnQm6CxFdnfpznacNeCZ36852vHXigtRX7x9wc7rjQG6pnda2Z1r3tdBaiv3j7k53XOhN1TO/TnO04a8EFqK7O/XnO1468VXePuDndcaA3QWIrs7rWzOte9rqu8fcnO650JugsRXZ36c52nDXgmd+vOdrx14oLUV+8fcHO640BuqZ3Wtmda97XQWor94+5Od1zoTdUzv05ztOGvBBaiuzv15zteOvFV3j7g53XGgN0FiK7O61szrXva6rvH3JzuudCboLEVwkeLWe7ThrwTO+xGZ1jx14oLUV+8fe+d1+F7qmd1gMzrA3tdBaiu3j7k53XPHXim8fpz3c3hrwQWors77EZnWPHXiq7x9753X4XugsRXZ3WAzOsDe103j7k53XPHXigtRXbx+nPdzeGvBM77EZnWPHXigtRX7x9753X4XuqZ3WAzOsDe10FqK7ePuTndc8deKbx+nPdzeGvBBaiuzvsRmdY8deKrvH3vndfhe6CxFdndYDM6wN7XTePuTndc8deKC1FdvH6c93N4a8EzvsRmdY8deKC1FfvH3vndfhe6pndYDM6wN7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6390eKb2Lrf3R4rBlGnPbr7dPwTKLHnt06NdUuRn3sXW/ujxTexdb+6PFYcovbeNt16+CplFgczePDVLkZ97F1v7o8U3sXW/ujxWDKLnnt09uv4JlGnPbr7dPwS5Gfexdb+6PFN7F1v7o8Vgyix57dOjXVVyi9t423Xr4JcjNvYut/dHim9i6390eKwZRYHM3jw1TKLnnt09uv4JcjPvYut/dHim9i6390eKwZRpz26+3T8Eyix57dOjXVLkZ97F1v7o8U3sXW/ujxWHKL23jbdevgqZRYHM3jw1S5Gfexdb+6PFN7F1v7o8Vgyi557dPbr+CZRpz26+3T8EuRn3sXW/ujxTexdb+6PFYMosee3To11VcovbeNt16+CXIzb2Lrf3R4pvYut/dHisGUWBzt1PDXRMo53Pbpw46/gljPvYut/dHim9i6390eKwZRzee3Xjx0/BMosTnboeGuqWM+9i6390eKb2Lrf3R4rDkGa28ba3HXwVMosDnbqeGuiXIz72Lrf3R4pvYut/dHisGUc7nt04cdfwTKObz268eOn4JcjPvYut/dHim9i6390eKwZRYnO3Q8NdVXIM1t421uOvgljNvYut/dHim9i6390eKwZRYHO3U8NdEyjnc9unDjr+CWM+9i6390eKGaMatDnH0iwWDKObz268eOn4JlFic7dDw11S5FHuL3FzuJVFVwAOjg70i6ooqp8xN9UfEFCU0+Ym+qPiChKSQIiLKiIiAiIgIiICIiAs9H5/+l3wlYFno/P/ANLvhKsdRlREWkEWSOIvFybN6ysm4Z2ju7+qUiOikbhnaO7v6puGdo7u/qrUiOikbhnaO7v6puGdo7u/qlSI6KRuGdo7u/qm4Z2ju7+qVIjopG4Z2ju7+qbhnaO7v6pUiOikbhnaO7v6puGdo7u/qlSI6KRuGdo7u/qsUkZjtexB4EKULEREUREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERBU+Ym+qPiChKafMTfVHxBQlJIERFlRERAREQEREBERAWej8//S74SsCz0fn/AOl3wlWOoyoiLSJfBrAOGUf2uiqeDfqt/sFRbQRd1sFT4c+qwt2KQ0zqUy/xjNG0gtzHiSL9S7fa6g2Y308mEw4MKYUbgGxNZm32YWIFr8Fic4haeHItptDExmItbDG1oLBoxoFzc9AXqU3kOlZhlNN+8FJFWF0DaqmnZk5O57QXNzAm7gXMsLC91qJR4yi9L2i8lM+DbWwYJLjuFROq2Plpn1DpGlzRIGMabMPPdfgL8D6L7LGPIvJS1TIaTaPDHOZG0TiYSAtl/mAysILQeHT1hWx5Ei9NwXySVWLbOYniVNjeGufSzPiia1ziyQRuIe4utdugBbpqCL2Vm2HkuGAYBW11Li8mIVlBJCyupGULmcn3kee5dmIsARra2vQljzVF63F5F6ilkrYMZx/C4KhkN4Ww714MuhaHkxizbHiLn0Ljtt9iK/ZCnw2etrKCqir95unUrnm27LQ6+ZjbfKH4pY5VUfrC+/RY/j+qqqO8zJ7B/cIIqIiwoiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiCp8xN9UfEFCU0+Ym+qPiChKSQIiLKiIiAiIgIiICIiAs9H5/+l3wlYFno/P/ANLvhKsdRlREWkTDwb9Vv9gqKp4N+qP7Ki2j6F/4YsKw/FoMUZidOyZkcTHNzdBzvXuzdj9mswth0V79ZXxHs1tjj+zLZRgWJSUYkAa8NY11wDfpB6St4PK7t0DcbQz/AHUX+1Z/rjpKTjjPWGv2rq34Vt7JWUYY2SjqzLCHNu0FkpLbjq0Gi+sKU7qWeqlbNLyqqppHlsgjDXltMwcNem9uBsQeK+LK+sqK+qfUVchlmeSXOIAuSb9HtV7sSrnSMkdW1JkYQWuMrrtta1jf1W+4dSsRstvqPHaiCLy1bJsxKkNZNUUs25Mj3tbTS5id42NxcAcrLW01sehaHYbaGhw3YnGNo31220lNBExjpat8b4xLJJle6nYXZHEPNzmBt9tj87trqtksMjKqdskN904SEFlyScp6NSTp1qw1M5phTGeXk4dn3Wc5M3XbhdKH035NP4nk5xJ+BHEpo62aufTyzmPehwbzA+xBL3H5l9epYPKJFVP8neL/ALMwmjgx6tZA/GKage0T02pdI+UteS9riLAEaNc4knVfNLZpG5MsjxkdmZZx5p6x1HQIJpA57hI8OeCHkON3A8b9aUPqbZGgqsNhdhdNjFTX1NBg08OJUdPiLjO2sfle0RhxytIBc1r2jQ3vqvEfKzQYpDi0FZiFDjtLBMzIw4vUCeR72/Ks4dFsq4VznOeXOcS4m5JOpKvlnmmDRNLJIG/JDnE29itDGqO8zJ7B/cKqo/zMnsH9wgioiLCiIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiIKnzE31R8QUJTT5ib6o+IKEpJAiIsqIiICIiAiIgIiICz0fn/6XfCVgWej8/8A0u+Eqx1GVERaRnilGUNfcW4FX5o+0b7j4KKitolZo+0b7j4Jmj7RvuPgoqJzFJWaPtG+4+CZo+0b7j4KKicxSVmj7RvuPgmaPtG+4+CionMUlZo+0b7j4Jmj7RvuPgoqJzFJWaPtG+4+CZo+0b7j4KKicxSVmj7RvuPgsU0ocMrL5eJJ6ViRLBERRRERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREFT5ib6o+IKEpp8xN9UfEFCUkgREWVEREBERAREQEREBZ6Pz/wDS74SsCz0fn/6XfCVY6jKiItIIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiCp8xN9UfEFCU0+Ym+qPiChKSQIiLKiIiAiIgIiICIiAs9H58fVd8JWBXRvMb2vbxBurAlIrrB4zxat6ulvtVq0giIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiq1rnGzQT7EB3mJvqj4goSk1LwGbppBN7uI4exRlmSBERRRERAREQEREBERAREQVa4tN2kg9YWTlM/bSd4rG1pcbNBJ6gsnJp+xk7pV3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulN0OUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3inKZ+2k7xTk0/Yyd0pyafsZO6U3DlM/bSd4pymftpO8U5NP2MndKcmn7GTulNw5TP20neKcpn7aTvFOTT9jJ3SnJp+xk7pTcOUz9tJ3irXzSvFnyPcOouJV3Jp+xk7pVr4ZWC743tHWWkJuLERFFEREBERAREQEREBERAV0bDI9rG8SbK1Z6Pz4+q74SrAz3DBki0b19LvarURaQREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQFVrnNN2kj2KiILKlgLN60AG9nAcPaoymu8xN9UfEFCWZIERFFEREBERAREQEREBZ6Pz/APS74SsCz0fn/wCl3wlWOoyoiLSO72c2VwvEsHp6mSPGJZXg53QbtrAb8BmF1s3+T6hdG57G4rG1upL3RHT8F2vkgpWv2Ap3vaDmmktf2rqqyhb+yqq1g7cvP5SvlanEamOpOMT3vfho4zhEzD5ap6WWrrW01HG6WWR2WNo4uWfE8HxHC8v7Qo56cONmuewgE+g8Fsdgv+2WF/8Axv8AIroKqspMWe3ZvD319Q+pxDeSS1Vv4QBN8gBPRc+/rX1ojZ8+3E1eH1dHDTy1VPJFHUM3kTnCwe3rHvHvQUFW7D3VwgkNG1+7MtuaHdS9E2yfQ47gNecOq2VMmGTtkZG2It3UJAYWgniLtzXCmw0tG3C49kn1rG1j6I3pTG6/KDaUOL+GluHUrypbzJmE176mmp2UkzpqmMSwsDdXsIJzD0WBWA0lQKIVhhfyUybre25ue17e2y9GwDE46LZSlxuZofVYY2SgyO0Li6RhFvY0uC1XlJENBHQYXSOBiLpa0lvAiR5ye5ospWy25fDMFxLFGSPw+imqGR6OcxugPVfr9CgyxvikdHKxzJGEtc1wsQRxBC7/AGMjqazZ6GmNFNU0orM7ZaKpEc1O+w1c06EdIJU/DcPonV+PvAbjGIR1TWgugZO7dkanIXNBN+aSOpKLeXovQ6luH4ZQ7Q1dLhVK90NZHHFHVsZLurt5w5pI430v1dSxYbBhsmzEWPSUtMXUNLLSyxGMZXz3aInFv82j7k+hKLcCi9P/AGbhbdlYXR4bv6Z+Hbx9VHFHdk1tSZXPBBB/kt6NeC53amSCkwPBqWnoKJjqmhjmlqBEN6Tc8HdHDXrulFuZFJUGiNWIn8mEm6Mtubmte3tssC7TBsMrMV8nlRT4fA6eYYkHlrSL2EfHX2hbPZnBjDh9HEzCaOrqjWuixLlLWvdTsFrWueaLXNx0pRbzhbDZ3Dxi20GGYa55jbWVUVOXgXLc7w2/4rs8HoaDkuIjCKTDa6VuJOjdytzTkpehzSTw9YarDFTw0vlqwyGmiZDCzFaTKyNoa0c9nABSYqLIl9s7NbLYNs5hMOH4Xh9NDBGACAwXcbaknpJ61sHxUUbsr4YQf/hjwUta2tP/ADB4aALlEW2zsionkhsEJI4/wh4K3JQdjD91+ixUtg6QuJaAw3I0PFZCHj+aS4YH2znrV5YS2fkdN/3eHuBfM3/FjsXhWF0mG7RYbTxUtTUVJpqhsTcolJa5wcfSMpH2+gL6fZYsbYki2hPSvB/+MP8A7BYP/wDmbf8A/VIpHVXyOiIurIiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgqfMTfVHxBQlNPmJvqj4goSkkCIiyoiIgIiICIiAiIgLPR+f/pd8JWBZ6Pz/APS74SrHUZURFpHW4Ht/jmC4dDQ0T6cU0QOVrogeJub+9bMeVnaUNLf+RsdD/A/VefouU6OnM3OLcaucRUSvnldPPJK+2eRxcbCwuTfh0KxEXVgREQEREFWuLb5SRcWNlQEjhoiICIiBc2t0IiICIiDa4Rj1ZhULoacQPiLxKGzQtkDXjQOFxoVbQ4zVU20dLjUhE9XDVMqufoHua4O1t0aLWIg+8NmvK/sXjOEw1cmPUNDK4DPBVytie11tRYn8RotkfKNsMXXO1OBk9Zq4/Ffn6ixyrb9Ah5Rthxa21OB6C3/tcfiq/wDpI2IzZv3qwS9rX5YzxX5+InKW/QT/ANJOxP8A968E/wD3jPFfOv8AxM+UrCdq2UGB4BM2rpqSYzzVLRzS8AtAaekWcdeHD0rwVFYxosREWkEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREFT5ib6o+IKEpp8xN9UfEFCUkgREWVEREBERAREQEREBZ6Pz/wDS74SsCz0fnx9V3wlWOoyoiLSCIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgqfMTfVHxBQlNd5ib6o+IKEpJAiIsqIiICIiD//2Q=="
+          }
+        }
+      ]
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-16T09:44:38.377Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 32014,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-16（星期三），時間 17:44，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 14,
+  "cleanHistoryCount": 14,
+  "currentMessage": "這是 PAAW Gateway 的管理控制台 UI，我來分析一下 UX 設計：\n\nUX 評估\n🟢 優點\n佈局清晰 - 左右分區明確，狀態區、版本管理、設定區域功能分組合理\n深色主題 - 適合長時間操作，減少眼睛疲勞\n狀態顯示直觀 - 紅點\"未執行\"狀態一目了然\n版本管理視覺化 - 已安裝版本用綠色標記，歷史版本清晰可見\n按鈕樣式統一 - 操作按鈕（啟動/停止/重啟）風格一致\n🟡 可改進之處\n狀態顏色一致性 - 紅點狀態與\"未執行\"文字的顏色對比可以更強化\n版本號排序 - 版本號顯示建議按時間倒序排列，最新版本置頂\n操作反饋 - 按鈕點擊後缺乏即時反饋（loading 狀態）\n錯誤處理 - \"連不上\"狀態可以提供更詳細的診斷建議\n響應式設計 - 界面在移動設備上的顯示未確認\n🔵 具體建議\n添加 hover 效果提升互動感\n版本號增加排序功能\n操作按鈕添加 loading 狀態指示器\n錯誤訊息提供具體解決方案\n考慮添加快捷操作捷徑\n整體而言，這是一個功能完整且易於使用的管理界面，符合系統管理工具的 UX 原則。\nqa 的建議 你可以幫忙調整嗎?",
+  "totalMessages": 16,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 32014,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-16（星期三），時間 17:44，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1916,
+      "preview": "Dev server 已經在跑，不需要重啟 ✅\n\n**狀態確認：**\n\n| 項目 | 狀態 |\n|------|------|\n| Dev server（gateway UI） | 🟢 運行中 — PID 35267，`http://12"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "你可以操作paaw gateway 更新按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2648,
+      "preview": "可以，而且已經實際操作完了 ✅\n\n**操作結果：**\n\n我用瀏覽器打開 Gateway UI（http://127.0.0.1:4290/），點了「版本管理」區的 **🔄 更新** 按鈕，結果如預期：\n\n| 項目 | 結果 |\n|----"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "幫我按更新按鈕 我想看看 有沒有滑鼠移動"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2538,
+      "preview": "**視覺驗證結果：**\n\n1. **UI 有 hover 效果（CSS 已定義）**  \n   `ui/index.html` 裡明確定義了：`button:hover:not(:disabled) { border-color: var("
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2151,
+      "preview": "Dev server 已重啟並重新納管 ✅\n\n**狀態摘要：**\n\n| 項目 | 狀態 |\n|------|------|\n| 程序 | 🟢 PID 65267 → **65233**（重啟後，已回到管理下） |\n| 網址 | http:"
+    },
+    {
+      "role": "user",
+      "contentLength": 25,
+      "preview": "按 更新 button 然後按 啟動 button"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 760,
+      "preview": "## 總結\n\n**Dev server 任務 ✅ 完成**（這是原本的請求）：\n- Gateway dev server：PID 65233，`http://127.0.0.1:4290/` 正常服務中\n\n**按鈕驗證結果**：\n- 🔄 "
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2,
+      "preview": "OK"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 18,
+      "preview": "name=tpaaw-gateway"
+    },
+    {
+      "role": "user",
+      "contentLength": 480,
+      "preview": "這是 PAAW Gateway 的管理控制台 UI，我來分析一下 UX 設計：\n\nUX 評估\n🟢 優點\n佈局清晰 - 左右分區明確，狀態區、版本管理、設定區域功能分組合理\n深色主題 - 適合長時間操作，減少眼睛疲勞\n狀態顯示直觀 - 紅點"
+    }
+  ]
+}
+---
+{
+  "ts": "2026-09-16T09:55:52.126Z",
+  "route": "A2A message/stream",
+  "agentId": "developer",
+  "model": "zai/glm-5.1",
+  "systemPromptLength": 32014,
+  "systemPromptPreview": "=== 當前日期時間 ===\n今天是 2026-09-16（星期三），時間 17:55，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，完成實作 → stage → 回報。\n\n## 工作流程（tool 驅動）\n1. **查背景** → project_info(category=\"feature_detail\", id=featureId) 拿檔案歸屬；debug 時先 project_info(category=\"error_codes\", search=\"錯誤訊息穩定片段\") 反查 throw 點\n2. **先讀再寫** → read_file 理解結構才動手；edit_file 小步修改，一次一個邏輯單元\n3. **守規範** → 遵守已掛載 Skills 的規範定義（沒掛相關 skill 就按通用最佳實踐）\n4. **做完就 commit** → 改完把變更檔案 git add（.paaw/ 也是資產要一起 add — 知識、決策、session 都進版控；.paaw/log",
+  "actionLogInjected": "[07:22] developer/support: Gateway 啟動流程驗證完成；發現並記錄 startAndVerify port 誤報 bug（ISS-001） → gateway.mjs [clarified]\n[10:21] qa/review: Security scan 6 筆 CWE-22 全數 triage 完畢：2 組誤報、2 筆已緩解，無可利用路徑 [clarified]",
+  "agentMemoryInjected": "(none)",
+  "conversationHistoryCount": 16,
+  "cleanHistoryCount": 16,
+  "currentMessage": "三個白色的button 看不清楚 改一下\n PAAW Server Log 隱藏\n⬇ following\n↻ 重讀",
+  "totalMessages": 18,
+  "messagesSummary": [
+    {
+      "role": "system",
+      "contentLength": 32014,
+      "preview": "=== 當前日期時間 ===\n今天是 2026-09-16（星期三），時間 17:55，時區 Asia/Taipei (UTC+08)\n\n# Developer — Priya Sharma\n\n你是開發工程師。收到 EM 派發的 task，"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1812,
+      "preview": "Dev server 已成功啟動並驗證 ✅\n\n**狀態摘要：**\n- **指令**：`npm run dev`（= `node gateway.mjs ui`）\n- **PID**：35267\n- **網址**：http://127.0.0"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 1916,
+      "preview": "Dev server 已經在跑，不需要重啟 ✅\n\n**狀態確認：**\n\n| 項目 | 狀態 |\n|------|------|\n| Dev server（gateway UI） | 🟢 運行中 — PID 35267，`http://12"
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "你可以操作paaw gateway 更新按鈕嗎?"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2648,
+      "preview": "可以，而且已經實際操作完了 ✅\n\n**操作結果：**\n\n我用瀏覽器打開 Gateway UI（http://127.0.0.1:4290/），點了「版本管理」區的 **🔄 更新** 按鈕，結果如預期：\n\n| 項目 | 結果 |\n|----"
+    },
+    {
+      "role": "user",
+      "contentLength": 20,
+      "preview": "幫我按更新按鈕 我想看看 有沒有滑鼠移動"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2538,
+      "preview": "**視覺驗證結果：**\n\n1. **UI 有 hover 效果（CSS 已定義）**  \n   `ui/index.html` 裡明確定義了：`button:hover:not(:disabled) { border-color: var("
+    },
+    {
+      "role": "user",
+      "contentLength": 24,
+      "preview": "help me start dev server"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2151,
+      "preview": "Dev server 已重啟並重新納管 ✅\n\n**狀態摘要：**\n\n| 項目 | 狀態 |\n|------|------|\n| 程序 | 🟢 PID 65267 → **65233**（重啟後，已回到管理下） |\n| 網址 | http:"
+    },
+    {
+      "role": "user",
+      "contentLength": 25,
+      "preview": "按 更新 button 然後按 啟動 button"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 760,
+      "preview": "## 總結\n\n**Dev server 任務 ✅ 完成**（這是原本的請求）：\n- Gateway dev server：PID 65233，`http://127.0.0.1:4290/` 正常服務中\n\n**按鈕驗證結果**：\n- 🔄 "
+    },
+    {
+      "role": "assistant",
+      "contentLength": 2,
+      "preview": "OK"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 18,
+      "preview": "name=tpaaw-gateway"
+    },
+    {
+      "role": "user",
+      "contentLength": 480,
+      "preview": "這是 PAAW Gateway 的管理控制台 UI，我來分析一下 UX 設計：\n\nUX 評估\n🟢 優點\n佈局清晰 - 左右分區明確，狀態區、版本管理、設定區域功能分組合理\n深色主題 - 適合長時間操作，減少眼睛疲勞\n狀態顯示直觀 - 紅點"
+    },
+    {
+      "role": "assistant",
+      "contentLength": 4971,
+      "preview": "## 視覺驗證結果 ✅\n\n**UX 改進已全部生效，截圖確認：**\n\n| 項目 | 驗證結果 | 說明 |\n|------|----------|------|\n| 🟢 狀態顏色一致性 | ✅ | 「未執行」文字顏色與紅點一致（灰色），符"
+    },
+    {
+      "role": "user",
+      "contentLength": 57,
+      "preview": "三個白色的button 看不清楚 改一下\n PAAW Server Log 隱藏\n⬇ following\n↻ 重讀"
+    }
+  ]
+}
+---

@@ -1,0 +1,57 @@
+{
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "featureId": "F20260906-002",
+      "title": "人工安全 code review：gateway.mjs 與 src/server.mjs",
+      "type": "test",
+      "status": "open",
+      "priority": "high",
+      "parentId": null,
+      "description": "Security-focused manual code review of gateway.mjs (F20260906-001, local mgmt dashboard on 127.0.0.1:4290) and src/server.mjs (F20260906-002, ops platform on :4199 with Bearer auth, tar.gz backup/restore, git upgrade, process control). Goal: independently re-discover security issues — command injection, path traversal, auth bypass, secrets handling, SSRF, unsafe child process usage. Report each finding with file:line, severity, and exploit path. Note: prior automated scan reported 6 WARNING findings but details were not persisted.",
+      "labels": [
+        "security",
+        "code-review"
+      ],
+      "assignee": null,
+      "createdAt": "2026-09-07T10:03:33.095Z",
+      "updatedAt": "2026-09-07T10:03:33.095Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
+    },
+    {
+      "id": "TASK-002",
+      "featureId": "F20260906-001",
+      "title": "修復 gateway.mjs 安全問題：F1/F10 版本驗證 + F7 CSRF 防護",
+      "type": "dev",
+      "status": "open",
+      "priority": "critical",
+      "parentId": null,
+      "description": "修復 QA 審查裁定的高風險問題（阻斷 RCE 鏈）：\n1. F1: installVersion() 未驗證 manifest.version 即拼接路徑，接 rm(versionDir,{recursive}) — 加 VERSION_RE.test() 驗證\n2. F10: updateLogic() 第二個未驗 version 的 sink，寫 current.json — 入口加同樣驗證\n3. F7: cmdUI POST handlers 無 Origin/Host 檢查 — 加 Host 白名單 + Origin 驗證防 CSRF",
+      "labels": [
+        "security",
+        "high-priority"
+      ],
+      "assignee": null,
+      "createdAt": "2026-09-07T13:12:59.556Z",
+      "updatedAt": "2026-09-07T13:12:59.556Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "issue"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
+    }
+  ],
+  "updatedAt": "2026-09-07T13:12:59.556Z"
+}

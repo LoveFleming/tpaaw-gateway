@@ -1,0 +1,37 @@
+{
+  "id": "RUN-20260918-001",
+  "finishedAt": "2026-09-18T04:34:38.687Z",
+  "headSha": "69c2fbead51f19e56bde4ef9bca6b167c401e45d",
+  "status": "pass",
+  "durationMs": 4599,
+  "includeE2e": true,
+  "summary": {
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "total": 0
+  },
+  "byKind": {
+    "mixed": {
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "files": 0
+    }
+  },
+  "groups": [
+    {
+      "kind": "mixed",
+      "runner": "npm-script",
+      "cmd": "npm test",
+      "status": "pass",
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "files": {},
+      "outputTail": "\n> tpaaw-gateway@0.1.0 test\n> node --test tests/**/*.test.mjs\n\n(node:16330) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n▶ E2E · Gateway Admin — auth & backup API\n  \u001b[32m✔ GET /api/health 是 public，回 200 + gateway 存活資訊 \u001b[90m(2.442166ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ POST /api/auth/login 正確憑證 → 200 { token, user } \u001b[90m(2.954875ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ POST /api/auth/login 錯誤密碼 / 不存在用戶 / 空 body → 401 \u001b[90m(1.852791ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ GET /api/auth/me 帶合法 token → 200 回登入用戶 \u001b[90m(0.444792ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ GET /api/auth/me 無 token / 偽造 token / 亂數 UUID → 401 \u001b[90m(1.278292ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ Authorization 帶 raw token（無 Bearer 前綴）→ 401 \u001b[90m(0.380917ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ GET /api/backups 未授權 → 401 且不洩漏任何備份資料 \u001b[90m(0.336833ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ POST /api/backups/create 未授權 → 401 且不建立任何檔案 \u001b[90m(0.336583ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ POST /api/backups/create（合法 session）→ 200，temp dir 出現真實 gzip tar \u001b[90m(7.771708ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ GET /api/backups（合法 session）→ 列表含剛建立的備份，date 為 YYYY-MM-DD-HH \u001b[90m(1.54225ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ GET /api/dashboard（合法 session）→ backups.total >= 1 且 latest 正確 \u001b[90m(24.304458ms)\u001b[39m\u001b[39m\n\u001b[32m✔ E2E · Gateway Admin — auth & backup API \u001b[90m(165.988292ms)\u001b[39m\u001b[39m\n▶ E2E · session 過期行為\n  \u001b[32m✔ 剛登入的 token 立即可用 \u001b[90m(0.469833ms)\u001b[39m\u001b[39m\n  \u001b[32m✔ 超過 sessionMaxAge(600ms) 後 token 失效 → 401 \u001b[90m(1056.792875ms)\u001b[39m\u001b[39m\n\u001b[32m✔ E2E · session 過期行為 \u001b[90m(1171.0905ms)\u001b[39m\u001b[39m\n(node:16331) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\ntar: no files or directories specified\ntar: Error opening archive: Unrecognized archive format\n\u001b[32m✔ BACKUP_REGEX accepts the legal paaw-backup-YYYY-MM-DD-HH.tar.gz format \u001b[90m(21.665084ms)\u001b[39m\u001b[39m\n\u001b[32m✔ BACKUP_REGEX rejects path traversal, wrong date format, and injection names \u001b[90m(0.797166ms)\u001b[39m\u001b[39m\n\u001b[32m✔ ★ invariant: filename produced by createBackup must pass BACKUP_REGEX \u001b[90m(11.413291ms)\u001b[39m\u001b[39m\n\u001b[32m✔ listBackups returns only whitelisted backups, ignoring .DS_Store and invalid names \u001b[90m(7.408083ms)\u001b[39m\u001b[39m\n\u001b[32m✔ listBackups sorts newest-first by mtime \u001b[90m(1.199083ms)\u001b[39m\u001b[39m\n\u001b[32m✔ listBackups returns [] when backup dir does not exist \u001b[90m(0.596917ms)\u001b[39m\u001b[39m\n\u001b[32m✔ createBackup produces a real, extractable tar.gz in BACKUP_DIR \u001b[90m(12.231584ms)\u001b[39m\u001b[39m\n\u001b[32m✔ createBackup returns { ok:false } when PAAW_ROOT has nothing to back up \u001b[90m(4.86925ms)\u001b[39m\u001b[39m\n\u001b[32m✔ createBackup prunes oldest backups beyond PAAW_MAX_BACKUPS (retention) \u001b[90m(7.465416ms)\u001b[39m\u001b[39m\n\u001b[32m✔ restoreBackup rejects path-traversal and injection filenames without touching disk \u001b[90m(1.189458ms)\u001b[39m\u001b[39m\n\u001b[32m✔ restoreBackup returns { ok:false, 'not found' } for a valid-format but missing file \u001b[90m(0.605958ms)\u001b[39m\u001b[39m\n\u001b[32m✔ restoreBackup restores data/ and .paaw/ and creates a pre-restore safety backup \u001b[90m(20.305ms)\u001b[39m\u001b[39m\n\u001b[32m✔ restoreBackup returns { ok:false } when the archive is corrupt \u001b[90m(11.284458ms)\u001b[39m\u001b[39m\n\u001b[34mℹ tests 26\u001b[39m\n\u001b[34mℹ suites 2\u001b[39m\n\u001b[34mℹ pass 26\u001b[39m\n\u001b[34mℹ fail 0\u001b[39m\n\u001b[34mℹ cancelled 0\u001b[39m\n\u001b[34mℹ skipped 0\u001b[39m\n\u001b[34mℹ todo 0\u001b[39m\n\u001b[34mℹ duration_ms 4426.508375\u001b[39m\n\n(node:16329) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "exitCode": 0,
+      "durationMs": 4576
+    }
+  ]
+}

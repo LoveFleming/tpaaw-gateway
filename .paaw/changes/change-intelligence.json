@@ -1,0 +1,177 @@
+{
+  "generatedAt": "2026-09-18T04:39:24.513Z",
+  "period": "30 days",
+  "commits": [
+    {
+      "hash": "0efcf9b",
+      "author": "LoveFleming",
+      "date": "2026-09-18T04:39:22.000Z",
+      "subject": "chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）",
+      "fileCount": 1,
+      "files": [
+        ".paaw/gates.json"
+      ]
+    },
+    {
+      "hash": "1e6f7aa",
+      "author": "LoveFleming",
+      "date": "2026-09-18T04:36:16.000Z",
+      "subject": "fix(gateway): ISS-001 port 佔用偵測 + 夭折期複查；docs: DEPLOY.md 維運文檔",
+      "fileCount": 2,
+      "files": [
+        "DEPLOY.md",
+        "gateway.mjs"
+      ]
+    },
+    {
+      "hash": "69c2fbe",
+      "author": "LoveFleming",
+      "date": "2026-09-12T11:52:14.000Z",
+      "subject": "gateway UI 可看 PAAW server log（📜 PAAW Server Log 面板）",
+      "fileCount": 2,
+      "files": [
+        "gateway.mjs",
+        "ui/index.html"
+      ]
+    }
+  ],
+  "recentFiles": [
+    {
+      "file": ".paaw/gates.json",
+      "changeCount": 1,
+      "lastChanged": "2026-09-18T04:39:22.000Z",
+      "commits": [
+        "0efcf9b"
+      ]
+    },
+    {
+      "file": "DEPLOY.md",
+      "changeCount": 1,
+      "lastChanged": "2026-09-18T04:36:16.000Z",
+      "commits": [
+        "1e6f7aa"
+      ]
+    },
+    {
+      "file": "gateway.mjs",
+      "changeCount": 2,
+      "lastChanged": "2026-09-18T04:36:16.000Z",
+      "commits": [
+        "1e6f7aa",
+        "69c2fbe"
+      ]
+    },
+    {
+      "file": "ui/index.html",
+      "changeCount": 1,
+      "lastChanged": "2026-09-12T11:52:14.000Z",
+      "commits": [
+        "69c2fbe"
+      ]
+    }
+  ],
+  "recentFeatures": [
+    {
+      "id": "F20260906-001",
+      "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+      "tags": [
+        "bootloader",
+        "staged-install",
+        "auto-update",
+        "version-management",
+        "process-supervisor",
+        "local-dashboard"
+      ],
+      "changeCount": 1,
+      "files": [
+        "gateway.mjs"
+      ]
+    }
+  ],
+  "recentApis": [
+    {
+      "method": "GET",
+      "path": "/index.html",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "GET",
+      "path": "/api/settings",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "POST",
+      "path": "/api/settings",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "GET",
+      "path": "/api/status",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "GET",
+      "path": "/api/log",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "POST",
+      "path": "/api/update",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "POST",
+      "path": "/api/start",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "POST",
+      "path": "/api/stop",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    },
+    {
+      "method": "POST",
+      "path": "/api/restart",
+      "file": "gateway.mjs",
+      "handler": "jsonOut"
+    }
+  ],
+  "decisions": [],
+  "impactAnalysis": [],
+  "diffStat": ".paaw/gates.json | 24 ++++++++++++++++++++++\n DEPLOY.md        | 61 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n gateway.mjs      | 60 +++++++++++++++++++++++++++++++++++++++++++++++++++++--\n ui/index.html    | 44 ++++++++++++++++++++++++++++++++++++++++\n 4 files changed, 187 insertions(+), 2 deletions(-)",
+  "summary": {
+    "period": "30 days",
+    "totalCommits": 3,
+    "totalFilesChanged": 4,
+    "totalFeaturesChanged": 1,
+    "totalApisChanged": 9,
+    "totalDecisions": 0,
+    "highImpactChanges": 0,
+    "topChangedFiles": [
+      {
+        "file": ".paaw/gates.json",
+        "changes": 1
+      },
+      {
+        "file": "DEPLOY.md",
+        "changes": 1
+      },
+      {
+        "file": "gateway.mjs",
+        "changes": 2
+      },
+      {
+        "file": "ui/index.html",
+        "changes": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "root": "/Users/steward/App/tpaaw-gateway",
+  "adapter": "js-ts",
+  "overall": "pass",
+  "ran": [
+    "test"
+  ],
+  "skipped": [
+    {}
+  ],
+  "checks": [
+    {
+      "check": "test",
+      "command": "npm test",
+      "ok": true,
+      "exitCode": 0,
+      "durationMs": 4604,
+      "output": "08ms)\n  ✔ GET /api/auth/me 無 token / 偽造 token / 亂數 UUID → 401 (1.281083ms)\n  ✔ Authorization 帶 raw token（無 Bearer 前綴）→ 401 (0.373917ms)\n  ✔ GET /api/backups 未授權 → 401 且不洩漏任何備份資料 (0.343042ms)\n  ✔ POST /api/backups/create 未授權 → 401 且不建立任何檔案 (0.382334ms)\n  ✔ POST /api/backups/create（合法 session）→ 200，temp dir 出現真實 gzip tar (7.725083ms)\n  ✔ GET /api/backups（合法 session）→ 列表含剛建立的備份，date 為 YYYY-MM-DD-HH (1.3155ms)\n  ✔ GET /api/dashboard（合法 session）→ backups.total >= 1 且 latest 正確 (23.478042ms)\n✔ E2E · Gateway Admin — auth & backup API (164.513542ms)\n▶ E2E · session 過期行為\n  ✔ 剛登入的 token 立即可用 (0.450916ms)\n  ✔ 超過 sessionMaxAge(600ms) 後 token 失效 → 401 (1055.481209ms)\n✔ E2E · session 過期行為 (1170.94ms)\ntar: no files or directories specified\ntar: Error opening archive: Unrecognized archive format\n✔ BACKUP_REGEX accepts the legal paaw-backup-YYYY-MM-DD-HH.tar.gz format (21.733167ms)\n✔ BACKUP_REGEX rejects path traversal, wrong date format, and injection names (0.803042ms)\n✔ ★ invariant: filename produced by createBackup must pass BACKUP_REGEX (9.344166ms)\n✔ listBackups returns only whitelisted backups, ignoring .DS_Store and invalid names (7.177667ms)\n✔ listBackups sorts newest-first by mtime (1.228834ms)\n✔ listBackups returns [] when backup dir does not exist (0.599625ms)\n✔ createBackup produces a real, extractable tar.gz in BACKUP_DIR (10.491708ms)\n✔ createBackup returns { ok:false } when PAAW_ROOT has nothing to back up (4.350125ms)\n✔ createBackup prunes oldest backups beyond PAAW_MAX_BACKUPS (retention) (7.493584ms)\n✔ restoreBackup rejects path-traversal and injection filenames without touching disk (1.106167ms)\n✔ restoreBackup returns { ok:false, 'not found' } for a valid-format but missing file (0.603375ms)\n✔ restoreBackup restores data/ and .paaw/ and creates a pre-restore safety backup (17.46475ms)\n✔ restoreBackup returns { ok:false } when the archive is corrupt (11.345916ms)\nℹ tests 26\nℹ suites 2\nℹ pass 26\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 4424.080167"
+    }
+  ],
+  "totalDurationMs": 4604,
+  "generatedAt": "2026-09-18T04:38:47.553Z"
+}

@@ -1,0 +1,13 @@
+{
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "你好！👋 我是 Zofia Kowalska，交接工程師。\n\n我的工作是幫你把專案的「做到哪、沒做完什麼、怎麼接手」整理清楚，讓接手的人（人類工程師或 AI agent）能立刻上手。\n\n我可以幫你做這些事：\n\n| 服務 | 說明 |\n|------|------|\n| 📦 **交接包產出** | 依九大項盤點專案，產出 `.paaw/HANDOVER.md` 或盤點報告 |\n| 🛗 **交接電梯簡報** | 30 秒 / 3 分鐘 / 10 分鐘三層深度的專案全貌導覽 |\n| 🏺 **決策考古** | 追溯「當初為什麼這樣設計」的完整脈絡與約束條件 |\n| 🧭 **新人上手指引** | 第一天 / 第一週的 checklist + 起手 task 建議 |\n\n目前我手上看到的專案概況：\n- 這是 **tpaaw-gateway** 專案，有 2 個 active features（Gateway 控制台 + 系統維運管理平台）\n- 最近一次跨 agent 紀錄是 security scan 的 CWE-22 triage 完成\n\n請問你今天需要什麼協助？例如：\n- 「給我一份完整交接包」（full 模式）\n- 「做個交接盤點看看缺什麼」（audit 模式）\n- 「考古一下為什麼 gateway 要綁 127.0.0.1」",
+      "ts": "2026-09-12T04:06:01.479Z"
+    }
+  ],
+  "_meta": {
+    "updatedAt": "2026-09-12T04:06:01.480Z",
+    "savedBy": "a2a-stream-recovery"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "您好，我是 Piotr Nowak，Release Manager。\n\n我的工作是協助您決定「這一版能不能上」：\n\n- **證據盤點** — 逐 task 檢視各關卡狀態（spec → implement → review → test → qa → docs → commit），確認測試結果、變更規模、風險分級\n- **Release 建議** — 給出 GO / HOLD 判斷，HOLD 時列清楚擋下項目與補齊方式\n- **Release notes** — 按 feature 整理變更清單、遷移注意事項、已知問題\n- **Release 決策記錄** — 將決策與依據寫入 ADR\n\n目前這個專案（tpaaw-gateway）有 2 個 active feature，先前 security scan 的 6 筆 CWE-22 已全數 triage 完畢。\n\n需要我做什麼？例如：\n1. 盤點目前各 task 的證據狀態，給出 release 建議\n2. 針對特定 feature 出 release notes\n3. 其他 release 相關問題",
+      "ts": "2026-09-12T04:09:03.243Z"
+    }
+  ],
+  "_meta": {
+    "updatedAt": "2026-09-12T04:09:03.243Z",
+    "savedBy": "a2a-stream-recovery"
+  }
+}
