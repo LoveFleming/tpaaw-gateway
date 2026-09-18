@@ -1,30 +1,30 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-13T06:44:57.100Z",
-  "headSha": "69c2fbe",
+  "generatedAt": "2026-09-18T11:44:54.627Z",
+  "headSha": "4a06afb",
   "tableHashes": {
-    "features": "7b64aef9866b9b44",
-    "apis": "45b998c4c192216f",
+    "features": "7c163cc26e2892c4",
+    "apis": "df713529f23ee072",
     "tests": "43aa317381fcd54b",
-    "changes": "199fce6e1e4e96dd",
-    "knowledgeGaps": "922056093843dc5f"
+    "changes": "57cbbf4b6ce30826",
+    "knowledgeGaps": "bb27a5c12132071d"
   },
   "root": null,
   "summary": {
     "features": 2,
-    "apis": 22,
-    "apisWithFeature": 22,
-    "files": 4,
+    "apis": 24,
+    "apisWithFeature": 24,
+    "files": 5,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 21,
+    "commits": 25,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-09-07T13:12:59.559Z"
+    "featuresUpdatedAt": "2026-09-18T11:08:13.244Z"
   },
   "features": [
     {
@@ -38,6 +38,7 @@
       ],
       "apis": [
         "GET /api/log",
+        "GET /api/paaw-log",
         "POST /api/restart",
         "GET /api/settings",
         "POST /api/settings",
@@ -45,18 +46,19 @@
         "GET /api/status",
         "POST /api/stop",
         "POST /api/update",
+        "POST /api/upload",
         "GET /index.html"
       ],
-      "apiCount": 9,
+      "apiCount": 11,
       "tests": [],
       "testCount": 0,
-      "changeCount": 9,
-      "lastChangeAt": "2026-09-12T19:52:14+08:00",
+      "changeCount": 10,
+      "lastChangeAt": "2026-09-18T12:36:16+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "753ac312fc21b62f"
+      "_h": "1e79b8bf1c25c99c"
     },
     {
       "id": "F20260906-002",
@@ -180,6 +182,16 @@
       "_h": "743e54d85d3634dc"
     },
     {
+      "method": "GET",
+      "path": "/api/paaw-log",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "a23e8816cb29c955"
+    },
+    {
       "method": "POST",
       "path": "/api/restart",
       "file": "gateway.mjs",
@@ -290,6 +302,16 @@
       "_h": "855ff408a65643c2"
     },
     {
+      "method": "POST",
+      "path": "/api/upload",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "8687e057f535b9c2"
+    },
+    {
       "method": "GET",
       "path": "/api/users",
       "file": "src/server.mjs",
@@ -333,6 +355,44 @@
     }
   ],
   "changes": [
+    {
+      "hash": "4a06afb",
+      "date": "2026-09-18T12:40:44+08:00",
+      "subject": "feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log",
+      "kind": "feat",
+      "files": 1,
+      "featureIds": [],
+      "_h": "d366a3e6453a9b31"
+    },
+    {
+      "hash": "3bdb4bd",
+      "date": "2026-09-18T12:40:08+08:00",
+      "subject": "chore: .paaw runtime 快照 — release 證據（test run / semgrep 掃描 / handover state / RR-20260918-1237-1d49）",
+      "kind": "chore",
+      "files": 27,
+      "featureIds": [],
+      "_h": "75fa1988a96ca727"
+    },
+    {
+      "hash": "0efcf9b",
+      "date": "2026-09-18T12:39:22+08:00",
+      "subject": "chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "1066a79c040a7923"
+    },
+    {
+      "hash": "1e6f7aa",
+      "date": "2026-09-18T12:36:16+08:00",
+      "subject": "fix(gateway): ISS-001 port 佔用偵測 + 夭折期複查；docs: DEPLOY.md 維運文檔",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20260906-001"
+      ],
+      "_h": "476d7d6c0486fb7d"
+    },
     {
       "hash": "69c2fbe",
       "date": "2026-09-12T19:52:14+08:00",
@@ -560,7 +620,7 @@
       "F20260906-002"
     ],
     "apisWithoutFeature": [],
-    "filesWithoutFeature": 1,
+    "filesWithoutFeature": 2,
     "hotUnmappedFiles": [
       {
         "file": "README.md",
@@ -576,10 +636,14 @@
       },
       {
         "file": "ui/index.html",
-        "commits": 4
+        "commits": 5
       },
       {
         "file": "config.json",
+        "commits": 1
+      },
+      {
+        "file": "DEPLOY.md",
         "commits": 1
       },
       {

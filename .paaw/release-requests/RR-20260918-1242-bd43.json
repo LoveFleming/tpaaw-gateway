@@ -1,9 +1,9 @@
 {
-  "id": "RR-20260918-1237-1d49",
-  "title": "tpaaw-gateway 0.2.1 — 三目錄架構 + Server Log 面板 + ISS-001 port 佔用防護",
-  "createdAt": "2026-09-18T04:37:35.545Z",
+  "id": "RR-20260918-1242-bd43",
+  "title": "tpaaw-gateway 0.2.1 — Server Log 面板 + UI 操作反饋 + ISS-001 port 佔用防護 + DEPLOY.md",
+  "createdAt": "2026-09-18T04:42:15.243Z",
   "createdBy": "human",
-  "status": "cancelled",
+  "status": "reviewing",
   "baseline": {
     "sha": "dc9c1a563fdc5e25e04ab43cd53ef92aa14585d2",
     "short": "dc9c1a5",
@@ -13,20 +13,21 @@
     "source": "user-selected"
   },
   "target": {
-    "sha": "3bdb4bd4eea2d368dfa5565629b0d01772c709d5",
-    "short": "3bdb4bd",
-    "at": "2026-09-18T12:40:08+08:00",
+    "sha": "4a06afb0e3b3368c8d38e2f7ad00c9a4959a4ec0",
+    "short": "4a06afb",
+    "at": "2026-09-18T12:40:44+08:00",
     "author": "LoveFleming",
-    "subject": "chore: .paaw runtime 快照 — release 證據（test run / semgrep 掃描 / handover state / RR-20260918-1237-1d49）"
+    "subject": "feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log"
   },
   "scope": {
-    "computedAt": "2026-09-18T04:40:17.451Z",
+    "computedAt": "2026-09-18T04:42:15.197Z",
     "commits": {
-      "count": 4,
+      "count": 5,
       "authors": [
         "LoveFleming"
       ],
       "subjects": [
+        "4a06afb feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log",
         "3bdb4bd chore: .paaw runtime 快照 — release 證據（test run / semgrep 掃描 / handover state / RR-20260918-1237-1d49）",
         "0efcf9b chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）",
         "1e6f7aa fix(gateway): ISS-001 port 佔用偵測 + 夭折期複查；docs: DEPLOY.md 維運文檔",
@@ -34,6 +35,15 @@
       ]
     },
     "files": [
+      {
+        "file": "ui/index.html",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T04:40:44.000Z",
+        "commits": [
+          "4a06afb",
+          "69c2fbe"
+        ]
+      },
       {
         "file": ".paaw/HANDOVER.md",
         "changeCount": 1,
@@ -274,14 +284,6 @@
           "1e6f7aa",
           "69c2fbe"
         ]
-      },
-      {
-        "file": "ui/index.html",
-        "changeCount": 1,
-        "lastChanged": "2026-09-12T11:52:14.000Z",
-        "commits": [
-          "69c2fbe"
-        ]
       }
     ],
     "features": [
@@ -388,10 +390,10 @@
       "id": "tests",
       "label": "測試全過（unit + e2e）",
       "auto": {
-        "status": "warn",
-        "detail": "0✓ 0✗ 0⋯；⚠ 結果落後 1 commits；run at 2026-09-18T04:39:36.595Z",
-        "checkedAt": "2026-09-18T04:40:17.451Z",
-        "runId": "RUN-20260918-003"
+        "status": "pass",
+        "detail": "0✓ 0✗ 0⋯；run at 2026-09-18T04:40:51.188Z",
+        "checkedAt": "2026-09-18T04:42:15.197Z",
+        "runId": "RUN-20260918-004"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -404,7 +406,7 @@
       "auto": {
         "status": "warn",
         "detail": "warnings：clean-tree",
-        "checkedAt": "2026-09-18T04:40:17.451Z"
+        "checkedAt": "2026-09-18T04:42:15.197Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -417,7 +419,7 @@
       "auto": {
         "status": "pass",
         "detail": "無未解決 QA fail 記錄",
-        "checkedAt": "2026-09-18T04:40:17.451Z"
+        "checkedAt": "2026-09-18T04:42:15.197Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -428,9 +430,9 @@
       "id": "security",
       "label": "Security scan（semgrep，scope 內）",
       "auto": {
-        "status": "warn",
-        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-18T04:39:39.263Z；⚠ 掃描後又有 1 commits",
-        "checkedAt": "2026-09-18T04:40:17.451Z"
+        "status": "pass",
+        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-18T04:40:53.809Z",
+        "checkedAt": "2026-09-18T04:42:15.197Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -443,7 +445,7 @@
       "auto": {
         "status": "fail",
         "detail": "HIGH：API 變更的 feature 沒有測試；31 個檔案變更",
-        "checkedAt": "2026-09-18T04:40:17.451Z"
+        "checkedAt": "2026-09-18T04:42:15.197Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -456,7 +458,7 @@
       "auto": {
         "status": "pass",
         "detail": "維運文檔：DEPLOY.md（含回滾）、README.md（含回滾）",
-        "checkedAt": "2026-09-18T04:40:17.451Z"
+        "checkedAt": "2026-09-18T04:42:15.197Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -467,9 +469,9 @@
       "id": "handover",
       "label": "交接（handover state 新鮮）— 簽核",
       "auto": {
-        "status": "warn",
-        "detail": "handover state 2026-09-18T04:39:32.083Z（changes 10 / open issues 0）；⚠ 落後 1 commits — 交接包過期，建議 refresh",
-        "checkedAt": "2026-09-18T04:40:17.451Z"
+        "status": "pass",
+        "detail": "handover state 2026-09-18T04:40:46.676Z（changes 10 / open issues 0）；新鮮",
+        "checkedAt": "2026-09-18T04:42:15.197Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -481,40 +483,16 @@
   "closedAt": null,
   "history": [
     {
-      "ts": "2026-09-18T04:37:35.545Z",
+      "ts": "2026-09-18T04:42:15.243Z",
       "by": "human",
       "event": "created",
-      "note": "baseline=ff850fd（first-commit）→ target=1e6f7aa，21 commits"
+      "note": "baseline=dc9c1a5（user-selected）→ target=4a06afb，5 commits"
     },
     {
-      "ts": "2026-09-18T04:38:04.105Z",
-      "by": "human",
-      "event": "baseline-changed",
-      "note": "dc9c1a5（user-selected）"
-    },
-    {
-      "ts": "2026-09-18T04:39:24.514Z",
-      "by": "system",
-      "event": "target-advanced",
-      "note": "target 前進到 0efcf9b，scope 重算"
-    },
-    {
-      "ts": "2026-09-18T04:40:17.451Z",
-      "by": "system",
-      "event": "target-advanced",
-      "note": "target 前進到 3bdb4bd，scope 重算"
-    },
-    {
-      "ts": "2026-09-18T04:41:19.160Z",
+      "ts": "2026-09-18T04:42:15.258Z",
       "by": "human",
       "event": "opened",
       "note": "baseline 鎖定，開始證據審查"
-    },
-    {
-      "ts": "2026-09-18T04:42:10.209Z",
-      "by": "human",
-      "event": "cancelled",
-      "note": "作廢重建：開審未納入 draft 期間新 commit（lib 已修），內容不變"
     }
   ]
 }

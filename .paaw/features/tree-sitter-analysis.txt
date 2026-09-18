@@ -1,6 +1,6 @@
 # Project Source Analysis (Tree-sitter)
-Parsed 4 of 4 source files
-Languages: javascript(4)
+Parsed 5 of 5 source files
+Languages: javascript(5)
 
 ## gateway.mjs [javascript]
   Imports:
@@ -31,8 +31,12 @@ Languages: javascript(4)
     function startPaaw(versionDir)
     async function waitForHealthy(timeoutMs = 90000)
     function killChild(child)
+    async function isPortOccupied()
     async function startAndVerify(versionDir, version)
+    async function stageInstall(zipPath, v)
     async function installVersion(manifest, server)
+    function readZipManifest(buf)
+    async function installUploadedZip(zipBuf, label)
     async function cmdStatus()
     async function updateLogic()
     async function cmdUpdate()
@@ -50,6 +54,9 @@ Languages: javascript(4)
     async function uiStatus()
     async function cmdUI()
     arrow jsonOut(code, obj)
+    arrow hostOf(h)
+    arrow isTrustedHost(hostHeader)
+    arrow isTrustedOrigin(originHeader)
     async arrow bye()
   Routes:
     GET /index.html
@@ -57,7 +64,9 @@ Languages: javascript(4)
     POST /api/settings
     GET /api/status
     GET /api/log
+    GET /api/paaw-log
     POST /api/update
+    POST /api/upload
     POST /api/start
     POST /api/stop
     POST /api/restart
@@ -93,6 +102,25 @@ Languages: javascript(4)
     async function jsonReq(base, path, { method = "GET", token, body } = {})
     async function startGateway(configOverrides = {})
     async function stopGateway(g)
+
+## tests/e2e/gateway-ui-csrf.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← node:http
+    * ← node:fs
+    * ← node:net
+    * ← node:os
+    * ← node:path
+    * ← node:child_process
+    * ← node:url
+  Functions:
+    function getFreePort()
+    arrow sleep(ms)
+    function rawReq(base, path, { method = "GET", headers = {}, body } = {})
+    async function startGatewayUi({ packageUrl = DEAD_PACKAGE_URL } = {})
+    async function stopGatewayUi(g)
+    function startFakePackageServer(manifest)
 
 ## src/server.mjs [javascript]
   Imports:

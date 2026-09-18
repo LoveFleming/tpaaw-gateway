@@ -131,8 +131,60 @@
       ]
     },
     {
+      "method": "GET",
+      "path": "/api/paaw-log",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
       "method": "POST",
       "path": "/api/update",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/upload",
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "callChain": [
@@ -574,8 +626,8 @@
     }
   ],
   "stats": {
-    "totalRoutes": 22,
-    "withHandler": 22,
+    "totalRoutes": 24,
+    "withHandler": 24,
     "withoutHandler": 0
   }
 }

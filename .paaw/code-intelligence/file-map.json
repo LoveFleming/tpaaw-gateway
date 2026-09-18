@@ -180,6 +180,14 @@
           "calls": []
         },
         {
+          "name": "isPortOccupied",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
           "name": "startAndVerify",
           "kind": "function",
           "async": true,
@@ -188,10 +196,34 @@
           "calls": []
         },
         {
+          "name": "stageInstall",
+          "kind": "function",
+          "async": true,
+          "params": "(zipPath, v)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
           "name": "installVersion",
           "kind": "function",
           "async": true,
           "params": "(manifest, server)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "readZipManifest",
+          "kind": "function",
+          "async": false,
+          "params": "(buf)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "installUploadedZip",
+          "kind": "function",
+          "async": true,
+          "params": "(zipBuf, label)",
           "callCount": 0,
           "calls": []
         },
@@ -339,6 +371,42 @@
           ]
         },
         {
+          "name": "hostOf",
+          "kind": "arrow",
+          "async": false,
+          "params": "(h)",
+          "callCount": 4,
+          "calls": [
+            "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+            "new URL(`http://${h}`).hostname.replace",
+            "String(h).toLowerCase",
+            "String"
+          ]
+        },
+        {
+          "name": "isTrustedHost",
+          "kind": "arrow",
+          "async": false,
+          "params": "(hostHeader)",
+          "callCount": 2,
+          "calls": [
+            "HOST_WHITELIST.has",
+            "hostOf"
+          ]
+        },
+        {
+          "name": "isTrustedOrigin",
+          "kind": "arrow",
+          "async": false,
+          "params": "(originHeader)",
+          "callCount": 3,
+          "calls": [
+            "HOST_WHITELIST.has",
+            "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+            "new URL(originHeader).hostname.replace"
+          ]
+        },
+        {
           "name": "bye",
           "kind": "arrow",
           "async": true,
@@ -379,8 +447,18 @@
           "handler": ""
         },
         {
+          "method": "GET",
+          "path": "/api/paaw-log",
+          "handler": ""
+        },
+        {
           "method": "POST",
           "path": "/api/update",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/upload",
           "handler": ""
         },
         {
@@ -551,6 +629,104 @@
           "kind": "function",
           "async": true,
           "params": "(g)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:http",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:net",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getFreePort",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "sleep",
+          "kind": "arrow",
+          "async": false,
+          "params": "(ms)",
+          "callCount": 1,
+          "calls": [
+            "setTimeout"
+          ]
+        },
+        {
+          "name": "rawReq",
+          "kind": "function",
+          "async": false,
+          "params": "(base, path, { method = \"GET\", headers = {}, body } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startGatewayUi",
+          "kind": "function",
+          "async": true,
+          "params": "({ packageUrl = DEAD_PACKAGE_URL } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stopGatewayUi",
+          "kind": "function",
+          "async": true,
+          "params": "(g)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startFakePackageServer",
+          "kind": "function",
+          "async": false,
+          "params": "(manifest)",
           "callCount": 0,
           "calls": []
         }
@@ -855,11 +1031,11 @@
     }
   ],
   "stats": {
-    "totalFiles": 4,
-    "parsedFiles": 4,
+    "totalFiles": 5,
+    "parsedFiles": 5,
     "errors": 0,
     "languages": {
-      "javascript": 4
+      "javascript": 5
     }
   }
 }

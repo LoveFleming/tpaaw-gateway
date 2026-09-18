@@ -155,6 +155,15 @@
     },
     {
       "type": "function",
+      "name": "isPortOccupied",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "startAndVerify",
       "file": "gateway.mjs",
       "kind": "function",
@@ -164,11 +173,38 @@
     },
     {
       "type": "function",
+      "name": "stageInstall",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(zipPath, v)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "installVersion",
       "file": "gateway.mjs",
       "kind": "function",
       "async": true,
       "params": "(manifest, server)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "readZipManifest",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(buf)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "installUploadedZip",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(zipBuf, label)",
       "callCount": 0
     },
     {
@@ -326,6 +362,33 @@
     },
     {
       "type": "function",
+      "name": "hostOf",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(h)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "isTrustedHost",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(hostHeader)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "isTrustedOrigin",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(originHeader)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
       "name": "bye",
       "file": "gateway.mjs",
       "kind": "arrow",
@@ -370,10 +433,24 @@
     },
     {
       "type": "route",
+      "name": "GET /api/paaw-log",
+      "file": "gateway.mjs",
+      "method": "GET",
+      "path": "/api/paaw-log"
+    },
+    {
+      "type": "route",
       "name": "POST /api/update",
       "file": "gateway.mjs",
       "method": "POST",
       "path": "/api/update"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/upload",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/upload"
     },
     {
       "type": "route",
@@ -475,6 +552,60 @@
       "kind": "function",
       "async": true,
       "params": "(g)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getFreePort",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "sleep",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(ms)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "rawReq",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(base, path, { method = \"GET\", headers = {}, body } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startGatewayUi",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "({ packageUrl = DEAD_PACKAGE_URL } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stopGatewayUi",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(g)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startFakePackageServer",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(manifest)",
       "callCount": 0
     },
     {
@@ -972,6 +1103,17 @@
         "callCount": 0
       }
     ],
+    "isPortOccupied": [
+      {
+        "type": "function",
+        "name": "isPortOccupied",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
     "startAndVerify": [
       {
         "type": "function",
@@ -983,6 +1125,17 @@
         "callCount": 0
       }
     ],
+    "stageInstall": [
+      {
+        "type": "function",
+        "name": "stageInstall",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(zipPath, v)",
+        "callCount": 0
+      }
+    ],
     "installVersion": [
       {
         "type": "function",
@@ -991,6 +1144,28 @@
         "kind": "function",
         "async": true,
         "params": "(manifest, server)",
+        "callCount": 0
+      }
+    ],
+    "readZipManifest": [
+      {
+        "type": "function",
+        "name": "readZipManifest",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(buf)",
+        "callCount": 0
+      }
+    ],
+    "installUploadedZip": [
+      {
+        "type": "function",
+        "name": "installUploadedZip",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(zipBuf, label)",
         "callCount": 0
       }
     ],
@@ -1190,6 +1365,39 @@
         "callCount": 3
       }
     ],
+    "hostOf": [
+      {
+        "type": "function",
+        "name": "hostOf",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(h)",
+        "callCount": 4
+      }
+    ],
+    "isTrustedHost": [
+      {
+        "type": "function",
+        "name": "isTrustedHost",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(hostHeader)",
+        "callCount": 2
+      }
+    ],
+    "isTrustedOrigin": [
+      {
+        "type": "function",
+        "name": "isTrustedOrigin",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(originHeader)",
+        "callCount": 3
+      }
+    ],
     "GET /index.html": [
       {
         "type": "route",
@@ -1235,6 +1443,15 @@
         "path": "/api/log"
       }
     ],
+    "GET /api/paaw-log": [
+      {
+        "type": "route",
+        "name": "GET /api/paaw-log",
+        "file": "gateway.mjs",
+        "method": "GET",
+        "path": "/api/paaw-log"
+      }
+    ],
     "POST /api/update": [
       {
         "type": "route",
@@ -1242,6 +1459,15 @@
         "file": "gateway.mjs",
         "method": "POST",
         "path": "/api/update"
+      }
+    ],
+    "POST /api/upload": [
+      {
+        "type": "route",
+        "name": "POST /api/upload",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/upload"
       }
     ],
     "POST /api/start": [
@@ -1324,6 +1550,15 @@
         "async": false,
         "params": "()",
         "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "getFreePort",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
       }
     ],
     "sleep": [
@@ -1331,6 +1566,15 @@
         "type": "function",
         "name": "sleep",
         "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(ms)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "sleep",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
         "kind": "arrow",
         "async": false,
         "params": "(ms)",
@@ -1367,6 +1611,50 @@
         "kind": "function",
         "async": true,
         "params": "(g)",
+        "callCount": 0
+      }
+    ],
+    "rawReq": [
+      {
+        "type": "function",
+        "name": "rawReq",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(base, path, { method = \"GET\", headers = {}, body } = {})",
+        "callCount": 0
+      }
+    ],
+    "startGatewayUi": [
+      {
+        "type": "function",
+        "name": "startGatewayUi",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "({ packageUrl = DEAD_PACKAGE_URL } = {})",
+        "callCount": 0
+      }
+    ],
+    "stopGatewayUi": [
+      {
+        "type": "function",
+        "name": "stopGatewayUi",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(g)",
+        "callCount": 0
+      }
+    ],
+    "startFakePackageServer": [
+      {
+        "type": "function",
+        "name": "startFakePackageServer",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(manifest)",
         "callCount": 0
       }
     ],
@@ -1726,11 +2014,11 @@
     ]
   },
   "stats": {
-    "total": 92,
-    "functions": 65,
+    "total": 107,
+    "functions": 78,
     "classes": 0,
     "exports": 5,
-    "routes": 22,
+    "routes": 24,
     "components": 0
   }
 }

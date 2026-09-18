@@ -1,64 +1,104 @@
-I have not been given the actual file contents — only the file tree, package name, dependency list, and git log. Per spec-miner constraints ("ground all observations in actual code evidence"), the analysis below is limited to what can be evidenced from structure and commit history. Items marked as inferred should be validated by reading `src/server.mjs` and `gateway.mjs` before further Knowledge Base generation.
-
 ```json
 {
   "projectName": "tpaaw-gateway",
-  "projectType": "web-app",
+  "projectType": "api-server",
   "language": "JavaScript (ESM, .mjs)",
-  "framework": "None detected (dependency list contains only `fflate`; likely a zero-dependency Node HTTP server with a custom dashboard UI)",
+  "framework": "None — vanilla Node.js HTTP server with embedded HTML dashboard UI",
   "runtime": "Node.js",
-  "summary": "A standalone DevOps gateway/bootloader for the PAAW coding application — handles install, update, run (spawn with PAAW_DATA_HOME), auto-open browser dashboard, and secured backup/restore — for end users self-hosting PAAW.",
+  "summary": "A zero-dependency Node.js gateway/bootloader that manages the lifecycle (install, spawn, update, backup/restore, port detection, auto-open browser) of a PAAW server, exposing REST APIs and an embedded dashboard UI for the operator.",
   "entryPoints": [
-    "gateway.mjs",
-    "src/server.mjs"
+    "gateway.mjs"
   ],
   "keyDirectories": {
-    "source": "src/",
-    "tests": "tests/",
-    "config": ". (root — gateway.json is runtime-generated per git log; no committed config dir observed)",
+    "source": ".",
+    "tests": "tests",
+    "config": ".",
     "docs": null
   },
   "modules": [
     {
-      "name": "server",
-      "path": "src/server.mjs",
-      "responsibility": "Main gateway HTTP server: dashboard UI (info cards, settings for package server URL / PAAW home, update/launch controls), backup list/auth, backup restore via validated paths, testability hooks. Largest module — likely needs decomposition.",
-      "dependsOn": ["config-state", "backup-manager", "paaw-process-manager", "fflate"],
-      "exports": ["UNVERIFIED — requires reading src/server.mjs"]
-    },
-    {
-      "name": "cli-bootloader",
+      "name": "gateway-bootloader",
       "path": "gateway.mjs",
-      "responsibility": "CLI entry / `npm start` — boots the dashboard server; historically the install/update/run bootloader (MVP commit).",
-      "dependsOn": ["server"],
-      "exports": ["UNVERIFIED — requires reading gateway.mjs"]
+      "responsibility": "Main entry point: starts the gateway HTTP server, likely wires config/state and delegates to src/server.mjs",
+      "dependsOn": ["http-server"],
+      "exports": []
     },
     {
-      "name": "backup-manager",
-      "path": "likely within src/server.mjs (no separate file exists)",
-      "responsibility": "Backup listing, auth (e2e-tested), filename validation (YYYY-MM-DD-HH regex), restore with command-injection-safe spawn. Security-sensitive after two fix commits.",
-      "dependsOn": [],
-      "exports": ["UNVERIFIED — inline in server.mjs"]
+      "name": "http-server",
+      "path": "src/server.mjs",
+      "responsibility": "Core gateway server: REST endpoints (PAAW spawn/stop, package server URL config, PAAW home config, version update, manual zip upload install, backup restore with validated paths, backup list/auth), CSRF-protected UI, embedded dashboard (action log, PAAW server log panel, settings cards)",
+      "dependsOn": ["fflate (zip handling for uploaded packages)"],
+      "exports": ["server startup / request handler (inferred)"]
     },
     {
-      "name": "paaw-process-manager",
-      "path": "likely within src/server.mjs",
-      "responsibility": "Spawns PAAW with PAAW_DATA_HOME=HOME/data; opens browser tab on successful start; supports configurable install path.",
-      "dependsOn": [],
-      "exports": ["UNVERIFIED — inline in server.mjs"]
+      "name": "backup",
+      "path": "src/server.mjs (backup/restore logic, filename regex YYYY-MM-DD-HH)",
+      "responsibility": "Backup creation and restore; uses validated path handling and hardened command execution (command-injection fix in a8eb20b)",
+      "dependsOn": ["http-server"],
+      "exports": []
     },
     {
-      "name": "config-state",
-      "path": "runtime files: gateway.json / current.json / versions/ / data/ (gitignored)",
-      "responsibility": "Persistent gateway configuration (auto-update default off, install path, package server URL) and runtime state.",
-      "dependsOn": [],
+      "name": "paaw-lifecycle",
+      "path": "src/server.mjs (spawn/update logic)",
+      "responsibility": "Spawns PAAW child process with PAAW_DATA_HOME=HOME/data, port-occupancy detection with retry (ISS-001), auto-open browser tab on successful start, version update from package server",
+      "dependsOn": ["http-server"],
+      "exports": []
+    },
+    {
+      "name": "tests",
+      "path": "tests/unit/backup.test.mjs",
+      "responsibility": "Unit tests for backup logic (filename validation)",
+      "dependsOn": ["backup"],
+      "exports": []
+    },
+    {
+      "name": "e2e-tests",
+      "path": "tests/e2e/",
+      "responsibility": "End-to-end tests: backup auth flows and UI CSRF protection / testability hooks",
+      "dependsOn": ["http-server", "backup"],
       "exports": []
     }
   ],
   "apis": [
     {
       "method": "GET",
-      "path": "UNKNOWN",
+      "path": "/ (dashboard UI)",
+      "file": "src/server.mjs",
+      "hasRequestSchema": false,
+      "hasResponseSchema": false,
+      "hasErrorMapping": false,
+      "hasTestPayload": false
+    },
+    {
+      "method": "GET",
+      "path": "/ (PAAW server log stream/panel)",
+      "file": "src/server.mjs",
+      "hasRequestSchema": false,
+      "hasResponseSchema": false,
+      "hasErrorMapping": false,
+      "hasTestPayload": false
+    },
+    {
+      "method": "POST",
+      "path": "backup restore (inferred)",
+      "file": "src/server.mjs",
+      "hasRequestSchema": true,
+      "hasResponseSchema": false,
+      "hasErrorMapping": true,
+      "hasTestPayload": true
+    },
+    {
+      "method": "POST",
+      "path": "manual zip upload install (inferred)",
+      "file": "src/server.mjs",
+      "hasRequestSchema": false,
+      "hasResponseSchema": false,
+      "hasErrorMapping": false,
+      "hasTestPayload": false
+    },
+    {
+      "method": "POST",
+      "path": "settings update (package server URL / PAAW home, inferred)",
       "file": "src/server.mjs",
       "hasRequestSchema": false,
       "hasResponseSchema": false,
@@ -68,57 +108,57 @@ I have not been given the actual file contents — only the file tree, package n
   ],
   "errorCodes": [
     {
-      "code": "UNKNOWN — no error code registry observed in file tree",
-      "type": "unknown",
-      "file": "src/server.mjs (probable)",
-      "hasRunbook": false
+      "code": "ISS-001 (port-in-use)",
+      "type": "startup/port-occupancy",
+      "file": "src/server.mjs",
+      "hasRunbook": true
     }
   ],
   "dataModels": [
     {
-      "name": "gateway-config (gateway.json)",
-      "file": "runtime-generated, schema likely defined in src/server.mjs",
-      "fields": ["installPath (inferred)", "packageServerUrl (inferred)", "autoUpdate (inferred, default off)"],
+      "name": "gateway-state",
+      "file": "src/server.mjs (runtime state: current.json / gateway.json, gitignored)",
+      "fields": ["currentVersion", "packageServerUrl", "paawHome", "port"],
       "persistence": "file"
     },
     {
       "name": "backup-archive",
-      "file": "src/server.mjs (filename validation regex YYYY-MM-DD-HH)",
-      "fields": ["filename matching YYYY-MM-DD-HH format"],
+      "file": "src/server.mjs (filename format YYYY-MM-DD-HH)",
+      "fields": ["timestamp-filename"],
       "persistence": "file"
     }
   ],
   "techDebt": [
     {
-      "area": "Monolithic src/server.mjs — dashboard UI, HTTP routing, backup auth/restore, PAAW process management, and config state all appear to live in one file",
+      "area": "Monolithic src/server.mjs",
       "severity": "high",
-      "suggestion": "Split into modules (router, backup, process-manager, config, ui) before adding features; e2e tests exist to guard the refactor."
+      "suggestion": "Split lifecycle, backup, settings, UI-serving, and CSRF/auth middleware into separate modules under src/ for testability and maintainability"
     },
     {
-      "area": "Security-sensitive backup restore (two recent fixes: command injection, path validation, semgrep suppression)",
-      "severity": "high",
-      "suggestion": "Consolidate path validation into one allowlist util; add security regression tests beyond the two existing test files; document why semgrep finding was suppressed."
-    },
-    {
-      "area": "No API spec, error-code registry, or architecture docs",
+      "area": "No API specification",
       "severity": "medium",
-      "suggestion": "Generate KB artifacts (API spec from server routes, error map, architecture doc) — see healthGaps."
+      "suggestion": "Document REST endpoints (paths, schemas, auth) in an OpenAPI or markdown spec; several entries above are inferred from git history because routes live in one large file"
     },
     {
-      "area": "Only 2 test files for a security-critical surface (backup auth e2e + backup unit)",
+      "area": "Embedded HTML UI in server code",
       "severity": "medium",
-      "suggestion": "Add tests for update flow, spawn/PAAW_DATA_HOME env, config persistence, and restore edge cases."
+      "suggestion": "Extract dashboard HTML/JS into static assets or template files to decouple UI changes from server logic"
     },
     {
-      "area": "Mixed-language commit messages (Chinese/English) and no docs directory",
+      "area": "Security hardening scattered across fixes",
+      "severity": "medium",
+      "suggestion": "Centralize a single path-validation/whitelist utility and error-mapping layer; command-injection and path-traversal fixes (a8eb20b, e8c453d) suggest ad-hoc patching"
+    },
+    {
+      "area": "Sparse error-code map",
       "severity": "low",
-      "suggestion": "Adopt a commit-message and docs convention; add README/architecture notes."
+      "suggestion": "Define an explicit error code enum + runbook document (only ISS-001 is traceable)"
     }
   ],
   "healthGaps": {
     "missingApiSpec": true,
     "missingErrorMap": true,
-    "missingTests": true,
+    "missingTests": false,
     "missingStandards": true,
     "missingArchitecture": true,
     "missingDecisions": true
@@ -126,4 +166,4 @@ I have not been given the actual file contents — only the file tree, package n
 }
 ```
 
-**Critical caveat for next steps:** this scan is a structural inference only. The `apis`, `errorCodes`, and `exports` fields contain placeholders because `src/server.mjs` and `gateway.mjs` contents were not provided. Before generating any downstream KB artifact, read those two files (plus both test files for observable-behavior evidence) and re-run this scan with real code evidence.
+**Analyst note:** I could not read the actual source files (`gateway.mjs`, `src/server.mjs`) — only the file tree, package.json metadata, and git log were available. Route paths marked "(inferred)" and module exports are derived from commit messages (e.g., a8eb20b, e72385d, dc9c1a5, 3f0fbcb) rather than direct code evidence, per spec-miner constraints on distinguishing observed facts from inference. Re-running the scan with file read access will tighten `apis`, `modules.dependsOn`, and `errorCodes`.

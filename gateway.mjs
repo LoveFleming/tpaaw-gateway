@@ -315,7 +315,13 @@ async function stageInstall(zipPath, v) {
 }
 
 async function installVersion(manifest, server) {
+  // MAJ-001（2026-09-18）：manifest.version 來自遠端 stable.json，是不可信輸入 —
+  // 在任何路徑拼接（zipPath、stageInstall 的 versions/<v>）與 dlUrl 組合之前，
+  // 先用 VERSION_RE 做 fail-closed 驗證（擋 "../"、query、fragment 等注入）。
   const v = manifest.version;
+  if (typeof v !== "string" || !VERSION_RE.test(v)) {
+    throw new Error(`invalid version from manifest: ${JSON.stringify(v)}`);
+  }
   const zipPath = join(HOME, "logs", `paaw-${v}.zip`);
 
   // 下載 URL：優先用「剛 fetch stable.json 成功的同一台 server」組（同源保證，
@@ -410,6 +416,13 @@ async function updateLogic() {
       return { versionDir: join(VERSIONS_DIR, current.version), version: current.version, updated: false, note: `package server 連不上，照跑 ${current.version}` };
     }
     throw new Error(`package server 連不上且本機無任何版本 — 無法安裝（${e.message}）`);
+  }
+
+  // MAJ-001（2026-09-18）：manifest.version 是遠端不可信輸入 — 必須在 semverGt /
+  // writeCurrentAtomic / installVersion 之前 fail-closed 驗證（semverGt 在首個差異段
+  // 即 return，"999.0.0/../../x" 首段 999>N 會通過 newer 判斷，故不能依賴它擋）
+  if (typeof manifest.version !== "string" || !VERSION_RE.test(manifest.version)) {
+    throw new Error(`invalid version from manifest: ${JSON.stringify(manifest.version)}`);
   }
 
   const haveVersion = current && current.version === manifest.version;
@@ -649,6 +662,42 @@ async function cmdUI() {
       res.writeHead(code, { "Content-Type": "application/json; charset=utf-8" });
       res.end(JSON.stringify(obj, null, 2));
     };
+
+    // ── F7 CSRF 防護（2026-09-18；MED-001 同日補強）：Host 白名單（全部請求）+ Origin 驗證（POST）──
+    // UI 預設只綁 127.0.0.1，POST handler（/api/settings、/api/update、/api/upload、
+    // /api/start、/api/stop、/api/restart）是狀態改變操作 —— 需防 DNS rebinding /
+    // 惡意網頁對 localhost 發動 CSRF。MED-001：Host 白名單擴及 GET —— 防 DNS
+    // rebinding 後的偽 Host 讀取 /api/paaw-log、/api/status 等本機資訊（瀏覽器
+    // 直連 127.0.0.1 時 Host 必在白名單，不誤擋）。GET 不做 Origin 檢查。
+    const HOST_WHITELIST = new Set(["127.0.0.1", "localhost", "::1"]);
+    // PAAW_GW_HOST 若被設成 0.0.0.0 / 網卡 IP，把 UI_HOST 的 hostname 也列入白名單，
+    // 避免防護誤擋合法使用（比對對象是 req.headers.host 拆出的 hostname，與實際監聽位址無關）
+    const uiHostName = String(UI_HOST).replace(/^\[|\]$/g, "").toLowerCase();
+    if (uiHostName) HOST_WHITELIST.add(uiHostName);
+    // host header 可能帶 port（127.0.0.1:4290）或 IPv6 括號 → 一律拆成 hostname 再比
+    const hostOf = (h) => {
+      try { return new URL(`http://${h}`).hostname.replace(/^\[|\]$/g, "").toLowerCase(); }
+      catch { return String(h).toLowerCase(); }
+    };
+    const isTrustedHost = (hostHeader) =>
+      typeof hostHeader === "string" && hostHeader !== "" && HOST_WHITELIST.has(hostOf(hostHeader));
+    const isTrustedOrigin = (originHeader) => {
+      if (typeof originHeader !== "string" || originHeader === "") return false;
+      try { return HOST_WHITELIST.has(new URL(originHeader).hostname.replace(/^\[|\]$/g, "").toLowerCase()); }
+      catch { return false; } // 非法 Origin（如 sandbox 的 "null"）一律拒絕
+    };
+    // MED-001（2026-09-18）：Host 白名單檢查所有請求（GET+POST）— DNS rebinding 的
+    // 偽 Host 連讀取也攔；Origin 驗證維持只有 POST（狀態改變操作）需要 — GET 不帶
+    // 有意義的 Origin，同源 GET 帶 Origin 也放行以免誤擋。
+    if (!isTrustedHost(req.headers.host)) {
+      return jsonOut(403, { ok: false, message: "Forbidden: untrusted Host" });
+    }
+    if (method === "POST") {
+      const origin = req.headers.origin;
+      if (origin !== undefined && origin !== "" && !isTrustedOrigin(origin)) {
+        return jsonOut(403, { ok: false, message: "Forbidden: untrusted Origin" });
+      }
+    }
     try {
       if (method === "GET" && (url === "/" || url === "/index.html")) {
         const html = await readFile(join(UI_DIR, "index.html"), "utf-8");
@@ -673,9 +722,18 @@ async function cmdUI() {
       }
       if (method === "POST" && url === "/api/settings") {
         if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        // MIN-001（2026-09-18）：config json 遠用不到 1MB — 超限即 413 並斷線，
+        // 避免無上限累積（與 /api/upload 的 600MB cap 對稱）
+        const MAX_SETTINGS_BODY = 1024 * 1024;
         let body = "";
-        req.on("data", (c) => (body += c));
-        await new Promise((r) => req.on("end", r));
+        let tooBig = false;
+        req.on("data", (c) => {
+          if (tooBig) return;
+          body += c;
+          if (body.length > MAX_SETTINGS_BODY) { tooBig = true; req.destroy(); }
+        });
+        await new Promise((r) => { req.on("end", r); req.on("close", r); req.on("error", r); });
+        if (tooBig) return jsonOut(413, { ok: false, message: "body 超過 1MB 上限" });
         let parsed = {};
         try { parsed = body ? JSON.parse(body) : {}; } catch { return jsonOut(400, { ok: false, message: "body 不是合法 JSON" }); }
         const changed = [];

@@ -1,0 +1,147 @@
+# TASK-004：補 gateway.mjs 自動化測試（解 RR-20260918-1242 risk gate fail「HIGH：API 變更的 feature 沒有測試」）。
+
+背景：gateway.mjs 是單檔雙角色（CLI + 本地管理 HTTP server，綁 127.0.0.1:4290），cmdUI POST handlers 剛加入 F7 CSRF 防護（gateway.m
+
+**日期**: 2026-09-18
+**耗時**: 406s
+**結果**: ✅ 成功
+**分支**: `main`
+
+## 任務
+
+TASK-004：補 gateway.mjs 自動化測試（解 RR-20260918-1242 risk gate fail「HIGH：API 變更的 feature 沒有測試」）。
+
+背景：gateway.mjs 是單檔雙角色（CLI + 本地管理 HTTP server，綁 127.0.0.1:4290），cmdUI POST handlers 剛加入 F7 CSRF 防護（gateway.mjs:653-681：Host 白名單 HOST_WHITELIST + isTrustedOrigin；POST 要求 Host 在白名單、非空 Origin 主機也須在白名單，違者 403）。先 read_file gateway.mjs 相關段落確認實際行為再寫測試。
+
+【必測案例（最小集）】
+1. POST 帶白名單外 Origin（如 http://evil.example）→ 403
+2. POST 帶非法 Origin（"null"、非 URL 字串）→ 403
+3. POST 帶合法 Origin（http://127.0.0.1:<port> 或 http://localhost:<port>）→ 放行（非 403；後續行為依 handler 而定）
+4. POST 無 Origin header → 放行（curl/同源 form 情境）
+5. POST 帶惡意 Host（如 evil.example）→ 403
+6. GET /api/status、GET /api/settings 煙霧測試 → 200 + 合法 JSON（GET 不做 Origin 檢查，順便驗證讀取路徑沒被誤傷）
+
+【實作約束】
+- gateway.mjs 的 server 啟動方式先看程式碼（cmdUI / PAAW_GW_* 環境變數），用 child process 或環境變數注入 port 啟動實例；port 用動態/高位 port 避免撞 4290 正在跑的服務
+- 測試檔放 tests/e2e/，命名參考 tests/e2e/gateway-backup-auth.test.mjs 慣例（node:test + fetch）
+- 沿用剛修好的 TAP test script（npm test 應抓到新檔；glob 是 tests/**/*.test.mjs）
+- 完成後跑 npm test 全套（舊 26 + 新測試）全綠
+- 暫存/探測檔寫 $PAAW_TMP，不留 scratch 在 tests/
+
+完成後回報：新測試檔路徑、案例清單與結果、全套總數。不要 commit（EM 統一收）。
+
+## AI 操作步驟
+
+1× project_info
+5× bash
+7× read_file
+1× write_file
+2× project_edit
+1× action_log_add
+
+### 變更檔案
+- `tests/e2e/gateway-ui-csrf.test.mjs`
+
+## Git 變更分析
+
+### Status
+```
+M .paaw/HANDOVER.md
+ M .paaw/agents/coding.rm.json
+ M .paaw/changelog/CHANGELOG.md
+ M .paaw/changes/change-intelligence.json
+ M .paaw/coding-memory/actions.jsonl
+ M .paaw/coding-memory/conversations/coding.developer/active.json
+ M .paaw/coding-memory/conversations/coding.em/active.json
+ M .paaw/coding-memory/conversations/coding.tester/active.json
+ M .paaw/coding-memory/dispatch-log.jsonl
+ M .paaw/features/FEATURES.json
+ M .paaw/handover-state.json
+ M .paaw/release-requests/RR-20260918-1237-1d49.json
+ M .paaw/release-unit-model.json
+ M .paaw/security/scan-results.json
+ M .paaw/tasks/TASKS.json
+ M .paaw/test-runs/last.json
+ M .paaw/verify-last.json
+M  gateway.mjs
+ M package.json
+?? .paaw/coding-memory/conversations/coding.em/s-2026-09-18T08-36-10.json
+?? .paaw/coding-memory/dispatch-outputs/
+?? .paaw/features/backups/FEATURES-1789728003670.json
+?? .paaw/features/backups/FEATURES-1789728003675.json
+?? .paaw/features/backups/FEATURES-1789728644590.json
+?? .paaw/release-requests/RR-20260918-1242-bd43.json
+?? .paaw/sessions/2026-09-18-gatewaymjs-f7-csrf-task-002-task-002-f1f10-f7-csrf-em-f1f10-.md
+?? .paaw/sessions/2026-09-18-task-003release-rr-20260918-1242-1f7-csrf-gatewaymjs-cmdui-p.md
+?? .paaw/staged-changes.json
+?? .paaw/test-runs/runs/RUN-20260918-004.json
+?? .paaw/tmp/
+?? tests/e2e/gateway-ui-csrf.test.mjs
+```
+
+### Diff Stat
+```
+.paaw/HANDOVER.md                                  |  39 ++-
+ .paaw/agents/coding.rm.json                        |   7 +-
+ .paaw/changelog/CHANGELOG.md                       |  20 ++
+ .paaw/changes/change-intelligence.json             | 284 +++++++++++++++++++--
+ .paaw/coding-memory/actions.jsonl                  |   3 +
+ .../conversations/coding.developer/active.json     |   2 +-
+ .../conversations/coding.em/active.json            |  70 +----
+ .../conversations/coding.tester/active.json        |   2 +-
+ .paaw/coding-memory/dispatch-log.jsonl             |  84 ++++++
+ .paaw/features/FEATURES.json                       |   8 +-
+ .paaw/handover-state.json                          |  72 ++----
+ .paaw/release-requests/RR-20260918-1237-1d49.json  | 279 ++++++++++++++++++--
+ .paaw/release-unit-model.json                      |  62 ++++-
+ .paaw/security/scan-results.json                   |   2 +-
+ .paaw/tasks/TASKS.json                             |  70 ++++-
+ .paaw/test-runs/last.json                          |  12 +-
+ .paaw/verify-last.json                             |   8 +-
+ package.json                                       |   2 +-
+ 18 files changed, 826 insertions(+), 200 deletions(-)
+ gateway.mjs | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+```
+
+## AI 回覆
+
+## TASK-004 測試報告
+
+### 📄 新測試檔
+`tests/e2e/gateway-ui-csrf.test.mjs`（node:test + spawn 真子進程，比照既有 `gateway-backup-auth.test.mjs` 慣例）
+
+### ✅ 結果：12/12 通過（單檔 3.2s）
+
+| # | 案例（必測項對應） | 預期 | 結果 |
+|---|---|---|---|
+| 1 | POST Origin=`http://evil.example` → 403 untrusted Origin（案例 1）| 403 | ✅ |
+| 2 | POST Origin=`http://localhost.evil.example`（後綴偽裝繞過）| 403 | ✅ |
+| 3 | POST Origin=`"null"` 與非 URL 字串 → 403（案例 2，`new URL` 解析失敗一律拒絕）| 403 | ✅ |
+| 4 | POST 合法 Origin（`127.0.0.1` / `localhost` / `[::1]` 帶 port）→ **200 + ok:true**（案例 3；用空 body `/api/settings` 零副作用，比「非 403」更強的斷言）| 200 | ✅ |
+| 5 | POST 無 Origin header → 200（案例 4，curl/同源 form）| 200 | ✅ |
+| 6 | POST 無 Origin 打不存在 endpoint → 404（證明通過 gate 到達 router，非 403）| 404 | ✅ |
+| 7 | POST Host=`evil.example` → 403 untrusted Host（案例 5，DNS rebinding）| 403 | ✅ |
+| 8 | POST Host=`evil.example:4290` / `127.0.0.1.evil.example` → 403（驗 `hostOf` 拆 hostname）| 403 | ✅ |
+| 9 | POST Host=`localhost:<port>` → 200（拆 port 正常路徑）| 200 | ✅ |
+| 10 | GET `/api/status` → 200 + JSON 結構斷言（案例 6：current null / stable null / running false，同時驗證隔離）| 200 | ✅ |
+| 11 | GET `/api/settings` → 200 + env 鎖定斷言（source=env / envLocked=true）| 200 | ✅ |
+| 12 | GET 帶惡意 Origin/Host → 仍 200（GET 不檢查，讀取路徑未誤傷）| 200 | ✅ |
+
+### 🟢 全套總數：**38 tests / 38 pass / 0 fail**（舊 26 + 新 12，4.4s）
+
+```
+# tests 38   # pass 38   # fail 0   # duration_ms 4449.5
+```
+
+### 隔離設計重點（不碰本機正在跑的 :4290）
+- `PAAW_GW_PORT` 注入隨機可用 port；cwd = mkdtemp temp dir（避免讀到專案的 `gateway.json`）；`PAAW_HOME` 指 temp（versions/data/logs 不落地）
+- `PAAW_PACKAGE_URL=http://127.0.0.1:1`：`uiStatus()` 會 fetch package server 的 `stable.json`，指到死 port 讓它瞬間 ECONNREFUSED 而非拖 3 秒 timeout
+- `PAAW_OPEN_BROWSER=0`、`PAAW_PORT`=另一隨機 port 雙保險（測試不觸發 `/api/start`，即使觸發也不撞 4097）
+- Host/Origin 用 `node:http.request` 精準控制（fetch/undici 對 Host 這類 forbidden header 的覆寫不可靠，「無 Origin」也才確定）
+- cleanup：SIGTERM → 等退出 → rm temp dir + process exit kill-switch 防孤兒進程；已驗證 /tmp 無殘留、tests/ 無 scratch
+
+### 📌 備註
+- 依指示**未 commit**——`tests/e2e/gateway-ui-csrf.test.mjs` 留在 worki
+
+... (truncated)

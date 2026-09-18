@@ -1,0 +1,15 @@
+{
+  "createdAt": "2026-09-18T09:24:30.567Z",
+  "agent": "developer",
+  "task": "修復 gateway.mjs F7 CSRF 防護（TASK-002 剩餘部分）：cmdUI() POST handler 加 Host 白名單 + Origin 驗證",
+  "taskId": "",
+  "summary": "TASK-002 原含 F1/F10（版本驗證）+ F7（CSRF 防護）三項。EM 盤點確認 F1/F10 已於 gateway.mjs:44 (VERSION_RE) 與 :355 實作完成，本次只補 F7。\n\n實作內容（gateway.mjs cmdUI()，jsonOut 定義後、路由分發前，約 line 660-687 新增 28 行）：\n1. HOST_WHITELIST = {127.0.0.1, localhost, ::1}（含 port 鬆綁：拆 hostname 比對）\n2. 自動把 PAAW_GW_HOST 的 hostname 加入白名單（0.0.0.0/網卡 IP 情境不誤擋）\n3. hostOf()：用 new URL('http://'+h) 拆 hostname 並剝 IPv6 括號 + lowercase；parse 失敗時原值 lowercase 兜底\n4. isTrustedHost() / isTrustedOrigin()：白名單成員檢查；Origin 非法（含 sandbox \"null\"）一律拒絕\n5. 只在 method === \"POST\" 時檢查：Host 必須在白名單、Origin（若非空）主機也必須在白名單，否則 403 { ok:false, message }\n6. GET 完全不受影響（讀取操作不檢查 Origin，連 Host 也不擋）\n\n比對邏輯摘要：header 不是憑感覺字串比對，而是正規化（URL parse → hostname → 剝 [] → lowercase）後做 Set membership。針對 DNS rebinding 攻擊：只要 Host header 主機不在白名單即 403；針對惡意網頁 CSRF：瀏覽器強制帶 Origin，若其主機不在白名單即 403。\n\n驗證：\n- node --check gateway.mjs → syntax OK\n- dev_server restart 載入新 code（127.0.0.1:4290），raw TCP socket 自組 HTTP header 測試 10 案例（api_test 工具會覆寫 Host header 測不出，故用 socket）：\n  PASS × 9：Host=evil.example.com→403｜Host 白名單+Origin=evil→403｜Origin=null(sandbox)→403｜Host=127.0.0.1:4290 無 Origin→200｜Origin=http://127.0.0.1:4290→200｜Host=localhost:4290→200｜Origin=http://localhost:4290→200｜Host 缺 header→403｜Host=[::1]:4290→200\n  GET /api/settings 與 GET /（Host=evil.example.com）→ 200（GET 不擋，符合需求）\n- npm test → 26 pass / 0 fail（E2E auth+backup、unit backup 全過；測試檔皆針對 src/server.mjs，不觸及 gateway.mjs cmdUI）\n\n依指示只 git add（不 commit/push），由人類決定 commit。",
+  "files": [
+    {
+      "path": "gateway.mjs",
+      "reason": "cmdUI() POST handler 加 F7 CSRF 防護（Host 白名單 + Origin 驗證），阻斷 DNS rebinding / 惡意網頁對 localhost 的 CSRF"
+    }
+  ],
+  "howToTest": "1. 確認 UI server 起來：dev server console 顯示「PAAW Gateway UI → http://127.0.0.1:4290/」\n2. 瀏覽器開 http://127.0.0.1:4290/ → 網頁正常（GET 不擋）\n3. 用 curl 模擬 DNS rebinding：curl -X POST http://127.0.0.1:4290/api/settings -H \"Host: evil.example.com\" → 預期 403 {\"ok\":false,\"message\":\"Forbidden: untrusted Host\"}\n4. 模擬惡意網頁 CSRF：curl -X POST http://127.0.0.1:4290/api/settings -H \"Origin: http://evil.example.com\" → 預期 403\n5. 合法 request：curl -X POST http://127.0.0.1:4290/api/settings → 預期 200\n6. npm test → 26 pass / 0 fail",
+  "risk": "1. 若 PAAW_GW_HOST 設為非白名單 hostname（如 myhost.local），該 hostname 已自動加入白名單所以不會誤擋；預設 127.0.0.1 情境完全不變\n2. 若有人用任意 Host header 直連（如 curl -H \"Host: anything\"）會被 403 — 這是預期行為（防 DNS rebinding），瀏覽器正常使用不受影響\n3. Origin 檢查僅對「非空」Origin 生效；無 Origin 的 POST（curl/非瀏覽器）仍依 Host 白名單把關\n4. 未 commit/push，working tree 含 gateway.mjs 變更供人類 review"
+}

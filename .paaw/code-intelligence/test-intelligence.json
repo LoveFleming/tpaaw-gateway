@@ -22,6 +22,19 @@
         "startGateway",
         "stopGateway"
       ]
+    },
+    {
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "type": "e2e",
+      "functionCount": 6,
+      "functionNames": [
+        "getFreePort",
+        "sleep",
+        "rawReq",
+        "startGatewayUi",
+        "stopGatewayUi",
+        "startFakePackageServer"
+      ]
     }
   ],
   "testToCode": [
@@ -43,6 +56,12 @@
           "confidence": "high"
         }
       ]
+    },
+    {
+      "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "testType": "e2e",
+      "functionCount": 6,
+      "matches": []
     }
   ],
   "codeToTest": {
@@ -66,11 +85,18 @@
   "coverageGaps": [
     {
       "file": "gateway.mjs",
-      "functionCount": 37,
+      "functionCount": 44,
       "exportCount": 0
     }
   ],
   "featureToTests": [
+    {
+      "featureId": "F20260906-001",
+      "featureName": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+      "tests": [
+        "tests/e2e/gateway-ui-csrf.test.mjs"
+      ]
+    },
     {
       "featureId": "F20260906-002",
       "featureName": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
@@ -80,15 +106,15 @@
     }
   ],
   "stats": {
-    "totalTestFiles": 2,
+    "totalTestFiles": 3,
     "byType": {
       "unit": 1,
       "integration": 0,
-      "e2e": 1
+      "e2e": 2
     },
     "totalMappings": 1,
     "coverageGapFiles": 1,
     "coverageRate": "50.0%",
-    "featureTestCoverage": 1
+    "featureTestCoverage": 2
   }
 }

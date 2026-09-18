@@ -154,6 +154,10 @@
 const $ = (id) => document.getElementById(id);
 let busy = false;
 
+// HTML escape（MAJ-001b 2026-09-18：定義前移 — refresh() 頂層同步呼叫即會用到，
+// 原定義在檔尾 paaw-log 區會 TDZ ReferenceError；escape 邏輯同 paawLog 渲染那套）
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 async function api(path, method) {
   const res = await fetch(path, method ? { method } : undefined);
   return res.json().catch(() => ({}));
@@ -187,8 +191,10 @@ async function refresh() {
   $("paawLink").href = s.paawUrl;
 
   $("curVersion").textContent = s.current ? `v${s.current}` : "未安裝";
+  // MAJ-001b（2026-09-18）：s.stable 來自 stable.json 的 version（manifest 可控字串），
+  // 進 innerHTML 前必過 esc()；「有新版」提示走 textContent，無需處理
   const st = s.stable
-    ? `v${s.stable}${s.stableSize ? `（${(s.stableSize/1048576).toFixed(1)} MB）` : ""}`
+    ? `v${esc(String(s.stable))}${s.stableSize ? `（${(s.stableSize/1048576).toFixed(1)} MB）` : ""}`
     : `<span title="無法連上 package server。請確認 ${String(s.packageServer).replace(/</g, "&lt;")} 的服務是否啟動；沒有它仍可用下方「⬆️ 手動上傳 zip 安裝」">（連不上）ℹ️</span>`;
   $("stableVersion").innerHTML = st;
   $("dataState").textContent = s.dataSeeded ? "已播種（更新不覆蓋）" : "未播種";
@@ -320,7 +326,7 @@ setInterval(refresh, 2000);
 
 // ── 📜 PAAW Server Log（2026-09-12）：offset 輪詢，只在 panel 開著時拉 ──
 let plOffset = 0, plText = "", plFollow = true, plTimer = null, plOpen = false;
-const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+// esc() 已前移至檔案頂部 helper 區（MAJ-001b 2026-09-18 — refresh() 頂層同步呼叫要用）
 function plRender() {
   const box = $("paawLogBox");
   box.innerHTML = plText ? `<pre style="margin:0;white-space:pre-wrap;word-break:break-all">${esc(plText)}</pre>` : '<span class="empty">（PAAW 尚未產生 log — 按 ▶️ 啟動 PAAW 後道裡會顯示 server console）</span>';

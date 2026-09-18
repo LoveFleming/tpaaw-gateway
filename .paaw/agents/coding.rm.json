@@ -24,10 +24,11 @@
     "decisions",
     "project",
     "docs",
-    "release-requests"
+    "release-requests",
+    "release-prep"
   ],
   "_promptRev": "2026-09-18-2",
   "_source": "global",
-  "_templateHash": "95b54f5de4de6b3c",
-  "_syncedAt": "2026-09-18T04:31:53.328Z"
+  "_templateHash": "7b8b19c5e0d76f8e",
+  "_syncedAt": "2026-09-18T08:35:32.392Z"
 }

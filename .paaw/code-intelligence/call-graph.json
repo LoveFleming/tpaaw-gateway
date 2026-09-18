@@ -137,6 +137,14 @@
       "async": false
     },
     {
+      "id": "gateway.mjs:isPortOccupied",
+      "name": "isPortOccupied",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
       "id": "gateway.mjs:startAndVerify",
       "name": "startAndVerify",
       "file": "gateway.mjs",
@@ -145,8 +153,32 @@
       "async": true
     },
     {
+      "id": "gateway.mjs:stageInstall",
+      "name": "stageInstall",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
       "id": "gateway.mjs:installVersion",
       "name": "installVersion",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "gateway.mjs:readZipManifest",
+      "name": "readZipManifest",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:installUploadedZip",
+      "name": "installUploadedZip",
       "file": "gateway.mjs",
       "line": 0,
       "kind": "function",
@@ -289,6 +321,30 @@
       "async": false
     },
     {
+      "id": "gateway.mjs:hostOf",
+      "name": "hostOf",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:isTrustedHost",
+      "name": "isTrustedHost",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:isTrustedOrigin",
+      "name": "isTrustedOrigin",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
       "id": "tests/unit/backup.test.mjs:loadServer",
       "name": "loadServer",
       "file": "tests/unit/backup.test.mjs",
@@ -359,6 +415,54 @@
       "line": 0,
       "kind": "function",
       "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:getFreePort",
+      "name": "getFreePort",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:sleep",
+      "name": "sleep",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:rawReq",
+      "name": "rawReq",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:startGatewayUi",
+      "name": "startGatewayUi",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:stopGatewayUi",
+      "name": "stopGatewayUi",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:startFakePackageServer",
+      "name": "startFakePackageServer",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
     },
     {
       "id": "src/server.mjs:loadConfig",
@@ -545,6 +649,59 @@
       "resolved": false
     },
     {
+      "caller": "gateway.mjs:hostOf",
+      "callee": "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:hostOf",
+      "callee": "new URL(`http://${h}`).hostname.replace",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:hostOf",
+      "callee": "String(h).toLowerCase",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:hostOf",
+      "callee": "String",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:isTrustedHost",
+      "callee": "HOST_WHITELIST.has",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:isTrustedHost",
+      "callee": "gateway.mjs:hostOf",
+      "type": "direct"
+    },
+    {
+      "caller": "gateway.mjs:isTrustedOrigin",
+      "callee": "HOST_WHITELIST.has",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:isTrustedOrigin",
+      "callee": "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:isTrustedOrigin",
+      "callee": "new URL(originHeader).hostname.replace",
+      "type": "chained",
+      "resolved": false
+    },
+    {
       "caller": "gateway.mjs:bye",
       "callee": "gateway.mjs:paawRunning",
       "type": "direct"
@@ -562,6 +719,12 @@
     },
     {
       "caller": "tests/e2e/gateway-backup-auth.test.mjs:sleep",
+      "callee": "setTimeout",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-csrf.test.mjs:sleep",
       "callee": "setTimeout",
       "type": "direct",
       "resolved": false
@@ -635,6 +798,31 @@
       "gateway.mjs:jsonOut",
       "src/server.mjs:sendJSON"
     ],
+    "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
+      "gateway.mjs:hostOf"
+    ],
+    "new URL(`http://${h}`).hostname.replace": [
+      "gateway.mjs:hostOf"
+    ],
+    "String(h).toLowerCase": [
+      "gateway.mjs:hostOf"
+    ],
+    "String": [
+      "gateway.mjs:hostOf"
+    ],
+    "HOST_WHITELIST.has": [
+      "gateway.mjs:isTrustedHost",
+      "gateway.mjs:isTrustedOrigin"
+    ],
+    "gateway.mjs:hostOf": [
+      "gateway.mjs:isTrustedHost"
+    ],
+    "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
+      "gateway.mjs:isTrustedOrigin"
+    ],
+    "new URL(originHeader).hostname.replace": [
+      "gateway.mjs:isTrustedOrigin"
+    ],
     "gateway.mjs:paawRunning": [
       "gateway.mjs:bye"
     ],
@@ -642,7 +830,8 @@
       "gateway.mjs:bye"
     ],
     "setTimeout": [
-      "tests/e2e/gateway-backup-auth.test.mjs:sleep"
+      "tests/e2e/gateway-backup-auth.test.mjs:sleep",
+      "tests/e2e/gateway-ui-csrf.test.mjs:sleep"
     ],
     "req.on": [
       "src/server.mjs:readBody",
@@ -669,7 +858,25 @@
       "res.end",
       "JSON.stringify"
     ],
+    "gateway.mjs:hostOf": [
+      "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "new URL(`http://${h}`).hostname.replace",
+      "String(h).toLowerCase",
+      "String"
+    ],
+    "gateway.mjs:isTrustedHost": [
+      "HOST_WHITELIST.has",
+      "gateway.mjs:hostOf"
+    ],
+    "gateway.mjs:isTrustedOrigin": [
+      "HOST_WHITELIST.has",
+      "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "new URL(originHeader).hostname.replace"
+    ],
     "tests/e2e/gateway-backup-auth.test.mjs:sleep": [
+      "setTimeout"
+    ],
+    "tests/e2e/gateway-ui-csrf.test.mjs:sleep": [
       "setTimeout"
     ],
     "src/server.mjs:sendJSON": [
@@ -686,9 +893,9 @@
     ]
   },
   "stats": {
-    "totalFunctions": 64,
-    "totalCalls": 17,
-    "resolvedCalls": 2,
-    "unresolvedCalls": 15
+    "totalFunctions": 77,
+    "totalCalls": 27,
+    "resolvedCalls": 3,
+    "unresolvedCalls": 24
   }
 }

@@ -1,4 +1,42 @@
 # Changelog
 
+## 2026-09-18
+### fixed
+- 修復 gateway.mjs F7 CSRF 防護（TASK-002 剩餘部分）：
+
+背景：TASK-002 原本含 F1/F10 版本驗證 + F7 CSRF (1 modified)
+
+
+
 > 由 PAAW AI-Native IDE 自動維護。每次 AI 完成任務後自動追加變更記錄。
 
+
+### changed
+- +696 −198 lines across 15 files
+
+### fixed
+- TASK-003：Release 前驗證（RR-20260918-1242），兩個目標：
+
+【目標 1：F7 CSRF 修復無回歸】
+gateway.mjs 工 (1 modified)
+
+### changed
+- +813 −199 lines across 18 files
+
+### changed
+- TASK-004：補 gateway.mjs 自動化測試（解 RR-20260918-1242 risk gate fail「HIGH：API 變更的 feat (1 new file)
+
+### changed
+- +826 −200 lines across 18 files
+
+### fixed
+- TASK-005：修 gateway.mjs 三個安全點（QA 人工審查 findings，release RR-20260918-1242 前）。先 read (1 new file) (5 modified)
+
+### changed
+- +902 −600 lines across 22 files
+
+### fixed
+- TASK-005 驗證輪：developer 已完成 4 個安全修復（gateway.mjs + ui/index.html working tree 未提交） (1 new file) (1 modified)
+
+### changed
+- +909 −600 lines across 22 files

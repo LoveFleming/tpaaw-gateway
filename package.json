@@ -1,6 +1,6 @@
 {
   "name": "tpaaw-gateway",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "PAAW Gateway \u2014 install / update / run PAAW (bootloader)",
   "type": "module",
   "bin": {
@@ -13,7 +13,7 @@
     "update": "node gateway.mjs update",
     "upload": "node gateway.mjs upload",
     "status": "node gateway.mjs status",
-    "test": "node --test tests/**/*.test.mjs"
+    "test": "node --test --test-reporter=tap --test-reporter-destination=stdout \"tests/**/*.test.mjs\""
   },
   "dependencies": {
     "fflate": "^0.8.2"

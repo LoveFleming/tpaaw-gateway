@@ -1,23 +1,24 @@
 {
   "method": "deterministic-v2",
-  "scannedAt": "2026-09-06T08:09:15.600Z",
+  "scannedAt": "2026-09-18T11:47:34.130Z",
   "stats": {
-    "files": 4,
+    "files": 5,
     "edges": 1,
-    "entries": 22,
+    "entries": 24,
     "clusters": 2,
     "shared": 0,
     "orphans": 0,
     "tests": {
-      "total": 2,
+      "total": 3,
       "mapped": 1,
-      "unmapped": 1
+      "unmapped": 2
     },
     "edgeCoverage": 100
   },
   "shared": [],
   "orphans": [],
   "unmappedTests": [
+    "tests/e2e/gateway-ui-csrf.test.mjs",
     "tests/unit/backup.test.mjs"
   ],
   "enrichment": {
@@ -26,7 +27,7 @@
     "degraded": 0,
     "resumed": 0,
     "totalTurns": 4,
-    "totalMs": 91682,
+    "totalMs": 122277,
     "usage": {
       "promptTokens": 0,
       "completionTokens": 0
