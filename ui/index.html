@@ -19,7 +19,9 @@
   .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
   .card h2{font-size:13px;color:var(--dim);margin:0 0 12px;font-weight:600;letter-spacing:.5px}
   .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .big{font-size:26px;font-weight:700}
+  .big{font-size:26px;font-weight:700;transition:color .3s ease}
+  .big.on{color:var(--green)}
+  .big.off{color:var(--dim)}
   .kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:13px}
   .kv:last-child{border-bottom:none}
   .kv .k{color:var(--dim)}
@@ -38,9 +40,12 @@
   .lock{display:block;color:var(--amber);font-size:12px;margin-top:4px}
   .chip{font-size:12px;padding:3px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);color:var(--text)}
   .chip.cur{border-color:var(--green);color:var(--green);font-weight:600}
-  button{cursor:pointer;border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:600;background:var(--panel2);color:var(--text);border:1px solid var(--line)}
-  button:hover:not(:disabled){border-color:var(--blue)}
+  button{cursor:pointer;border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:600;background:var(--panel2);color:var(--text);border:1px solid var(--line);transition:background .15s ease,border-color .15s ease,transform .08s ease,opacity .15s ease}
+  button:hover:not(:disabled){border-color:var(--blue);background:#252b40}
+  button:active:not(:disabled){transform:translateY(1px)}
   button:disabled{opacity:.4;cursor:not-allowed}
+  .mini-btn{font-size:12px;font-weight:600;padding:3px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);color:var(--text)}
+  .mini-btn:hover{border-color:var(--blue)}
   button.primary{background:#2563eb;border-color:#2563eb;color:#fff}
   button.primary:disabled{background:#2563eb}
   button.danger{color:var(--red)}
@@ -124,11 +129,11 @@
 
   <!-- PAAW server log（2026-09-12 Fleming：gateway 啟動 PAAW 後 UI 也要看得到 PAAW log） -->
   <div class="card" style="margin-top:14px">
-    <h2>📜 PAAW Server Log <button id="btnPaawLogToggle" style="font-size:12px;padding:2px 10px;border:1px solid #d6d3d1;border-radius:6px;background:#fff;cursor:pointer">顯示</button></h2>
+    <h2>📜 PAAW Server Log <button id="btnPaawLogToggle" class="mini-btn">顯示</button></h2>
     <div id="paawLogWrap" style="display:none">
       <div class="row" style="margin-bottom:8px">
-        <button id="btnPlFollow" style="font-size:12px;padding:2px 10px;border:1px solid #d6d3d1;border-radius:6px;background:#fff;cursor:pointer">⬇ following</button>
-        <button id="btnPlRefresh" style="font-size:12px;padding:2px 10px;border:1px solid #d6d3d1;border-radius:6px;background:#fff;cursor:pointer">↻ 重讀</button>
+        <button id="btnPlFollow" class="mini-btn">⬇ following</button>
+        <button id="btnPlRefresh" class="mini-btn">↻ 重讀</button>
         <span class="note" id="plMeta"></span>
       </div>
       <div class="log" id="paawLogBox" style="height:320px"><span class="empty">（載入中…）</span></div>
@@ -176,18 +181,30 @@ async function refresh() {
   // PAAW 狀態
   $("runDot").className = "dot " + (s.running ? "on" : "off");
   $("runState").textContent = s.running ? "執行中" : "未執行";
+  $("runState").className = "big " + (s.running ? "on" : "off");
   $("runVer").textContent = s.runningVersion ? `v${s.runningVersion}` : "";
   $("paawLink").style.display = s.running ? "" : "none";
   $("paawLink").href = s.paawUrl;
 
   $("curVersion").textContent = s.current ? `v${s.current}` : "未安裝";
-  const st = s.stable ? `v${s.stable}${s.stableSize ? `（${(s.stableSize/1048576).toFixed(1)} MB）` : ""}` : "（連不上）";
-  $("stableVersion").textContent = st;
+  const st = s.stable
+    ? `v${s.stable}${s.stableSize ? `（${(s.stableSize/1048576).toFixed(1)} MB）` : ""}`
+    : `<span title="無法連上 package server。請確認 ${String(s.packageServer).replace(/</g, "&lt;")} 的服務是否啟動；沒有它仍可用下方「⬆️ 手動上傳 zip 安裝」">（連不上）ℹ️</span>`;
+  $("stableVersion").innerHTML = st;
   $("dataState").textContent = s.dataSeeded ? "已播種（更新不覆蓋）" : "未播種";
 
   // 版本 chips
-  $("installedCount").textContent = s.installed.length;
-  $("chips").innerHTML = s.installed.map((v) =>
+  const bySemverDesc = (a, b) => {
+    const pa = a.split(".").map(Number), pb = b.split(".").map(Number);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      const d = (pb[i] || 0) - (pa[i] || 0);
+      if (d) return d;
+    }
+    return 0;
+  };
+  const installed = [...s.installed].sort(bySemverDesc);
+  $("installedCount").textContent = installed.length;
+  $("chips").innerHTML = installed.map((v) =>
     `<span class="chip${v === s.current ? " cur" : ""}">${v === s.current ? "● " : ""}${v}</span>`
   ).join("") || '<span class="chip">none</span>';
 
@@ -221,19 +238,28 @@ async function refresh() {
   renderLog(log.lines);
 }
 
-async function act(path, btnLabel) {
-  const r = await api(path, "POST");
-  if (r.message) {
+async function act(path, btnLabel, btn) {
+  const orig = btn ? btn.textContent : null;
+  if (btn) { btn.disabled = true; btn.textContent = `⏳ ${btnLabel.replace(/^[^ ]+ /, "")}中…`; }
+  try {
+    const r = await api(path, "POST");
+    if (r.message) {
+      const el = $("log");
+      el.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${btnLabel}…</div>` + el.innerHTML;
+    }
+  } catch (e) {
     const el = $("log");
-    el.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${btnLabel}…</div>` + el.innerHTML;
+    el.innerHTML = `<div class="err">[${new Date().toLocaleTimeString()}] ✗ ${btnLabel} 請求失敗：${e}</div>` + el.innerHTML;
+  } finally {
+    if (btn) btn.textContent = orig;
+    refresh();
   }
-  refresh();
 }
 
-$("btnStart").onclick = () => act("/api/start", "▶️ 啟動");
-$("btnStop").onclick = () => act("/api/stop", "⏹ 停止");
-$("btnRestart").onclick = () => act("/api/restart", "🔁 重啟");
-$("btnUpdate").onclick = () => act("/api/update", "🔄 更新");
+$("btnStart").onclick = (e) => act("/api/start", "▶️ 啟動", e.currentTarget);
+$("btnStop").onclick = (e) => act("/api/stop", "⏹ 停止", e.currentTarget);
+$("btnRestart").onclick = (e) => act("/api/restart", "🔁 重啟", e.currentTarget);
+$("btnUpdate").onclick = (e) => act("/api/update", "🔄 更新", e.currentTarget);
 
 $("btnUpload").onclick = () => $("fileZip").click();
 $("fileZip").onchange = async () => {
