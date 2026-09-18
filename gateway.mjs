@@ -256,7 +256,23 @@ function killChild(child) {
   });
 }
 
+// port 佔用偵測（ISS-001）：port 上有任何 HTTP 回應（不論狀態碼）都代表有人佔著
+async function isPortOccupied() {
+  try {
+    await fetch(`http://127.0.0.1:${PORT}/`, { signal: AbortSignal.timeout(1500) });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function startAndVerify(versionDir, version) {
+  // pre-check（ISS-001）：先確認 port 沒被外部實體佔用，避免 spawn 的 child
+  // 因 EADDRINUSE 退出、健康檢查卻被「別人」的 200 回應騙過而誤報上線
+  if (await isPortOccupied()) {
+    L.err(`port ${PORT} 已被其他程序佔用（不是 gateway 管理的 PAAW）— 請先停掉佔用者，或確認 PAAW 是否已在別處執行`);
+    return null;
+  }
   L.info(`啟動 PAAW ${version}（port ${PORT}）…`);
   const child = startPaaw(versionDir);
   // child 提前炸掉就不用傻等 90 秒
@@ -265,6 +281,13 @@ async function startAndVerify(versionDir, version) {
   if (healthy !== "up") {
     L.err(`PAAW ${version} 啟動失敗（process 已退出或 90 秒無 HTTP 回應）`);
     await killChild(child);
+    return null;
+  }
+  // 穩定窗口（ISS-001）：健康回應與 child 存活可能是時間差交錯 — 等 2.5 秒過
+  // 夭折期再確認 child 還活著，才算真的上線（防 child 通過檢查後晚死的 race）
+  await new Promise((r) => setTimeout(r, 2500));
+  if (child.exitCode !== null) {
+    L.err(`PAAW ${version} 通過健康檢查後隨即退出（exitCode=${child.exitCode}）— 不視為已上線`);
     return null;
   }
   L.ok(`PAAW ${version} 已上線 → http://127.0.0.1:${PORT}/`);
