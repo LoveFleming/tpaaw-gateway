@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-09-19
+### fixed
+- TASK-008（critical，F20260918-002）：修復 src/server.mjs 兩個 QA review findings（2026-09 (1 new file) (3 modified)
+
+
+
+### changed
+- +2845 −661 lines across 12 files
+
+### fixed
+- TASK-009（critical，F20260918-002）：驗證 TASK-008 的 src/server.mjs 修復（F-01 restart ra (1 new file) (2 modified)
+
+### changed
+- +2886 −856 lines across 14 files
+
+### fixed
+- 品質補強：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
+
 ## 2026-09-18
 ### fixed
 - 修復 gateway.mjs F7 CSRF 防護（TASK-002 剩餘部分）：

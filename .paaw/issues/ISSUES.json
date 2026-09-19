@@ -20,7 +20,18 @@
         }
       ],
       "updatedAt": "2026-09-18T12:00:55.199Z"
+    },
+    {
+      "id": "ISS-002",
+      "title": "Gateway 認證硬化：明文密碼比對 + 無 rate limit",
+      "priority": "medium",
+      "status": "open",
+      "labels": [],
+      "description": "QA review TASK-007 F-03（major，非 release 阻斷，排隊處理）：src/server.mjs 登入認證為明文密碼比對且無 rate limit。\n\n緩解措施（短期小項，可與其他改動順手做）：\n1. config.json 加入 .gitignore（若已含密碼則先輪換）\n2. 密碼支援環境變數覆寫（PAAW_GATEWAY_PASSWORD 等）\n\n根本修法（排期）：密碼改 hash 比對（scrypt/bcrypt）、登入端點加 rate limit / 失敗鎖定。\n\n定位脈絡：localhost 管理工具（:4199），攻擊面限本機，故降級為排隊處理。",
+      "featureId": "F20260918-002",
+      "createdAt": "2026-09-19T02:17:46.133Z",
+      "notes": []
     }
   ],
-  "nextId": 2
+  "nextId": 3
 }

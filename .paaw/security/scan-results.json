@@ -1,6 +1,86 @@
 {
   "findings": [
     {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
+      "severity": "INFO",
+      "rawSeverity": "INFO",
+      "confidence": "UNKNOWN",
+      "category": "correctness",
+      "cwe": [],
+      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
+      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
+      "line": 29,
+      "column": 43,
+      "endLine": 37,
+      "snippet": "requires login",
+      "fix": null,
+      "references": []
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
+      "severity": "INFO",
+      "rawSeverity": "INFO",
+      "confidence": "UNKNOWN",
+      "category": "correctness",
+      "cwe": [],
+      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
+      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
+      "line": 29,
+      "column": 44,
+      "endLine": 35,
+      "snippet": "requires login",
+      "fix": null,
+      "references": []
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
+      "severity": "INFO",
+      "rawSeverity": "INFO",
+      "confidence": "UNKNOWN",
+      "category": "correctness",
+      "cwe": [],
+      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
+      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
+      "line": 20,
+      "column": 14,
+      "endLine": 33,
+      "snippet": "requires login",
+      "fix": null,
+      "references": []
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
+      "severity": "INFO",
+      "rawSeverity": "INFO",
+      "confidence": "UNKNOWN",
+      "category": "correctness",
+      "cwe": [],
+      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
+      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
+      "line": 20,
+      "column": 15,
+      "endLine": 22,
+      "snippet": "requires login",
+      "fix": null,
+      "references": []
+    },
+    {
+      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
+      "severity": "INFO",
+      "rawSeverity": "INFO",
+      "confidence": "UNKNOWN",
+      "category": "correctness",
+      "cwe": [],
+      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
+      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
+      "line": 23,
+      "column": 62,
+      "endLine": 33,
+      "snippet": "requires login",
+      "fix": null,
+      "references": []
+    },
+    {
       "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.detect-non-literal-fs-filename",
       "severity": "WARNING",
       "rawSeverity": "WARNING",
@@ -11,9 +91,9 @@
       ],
       "message": "Detected that function argument `f` has entered the fs module. An attacker could potentially control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are validated.",
       "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
-      "line": 274,
+      "line": 338,
       "column": 29,
-      "endLine": 274,
+      "endLine": 338,
       "snippet": "requires login",
       "fix": null,
       "references": [
@@ -31,9 +111,9 @@
       ],
       "message": "Detected possible user input going into a `path.join` or `path.resolve` function. This could possibly lead to a path traversal vulnerability,  where the attacker can access arbitrary files stored in the file system. Instead, be sure to sanitize or validate user input first.",
       "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
-      "line": 274,
+      "line": 338,
       "column": 46,
-      "endLine": 274,
+      "endLine": 338,
       "snippet": "requires login",
       "fix": null,
       "references": [
@@ -51,9 +131,9 @@
       ],
       "message": "Detected that function argument `d` has entered the fs module. An attacker could potentially control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are validated.",
       "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
-      "line": 301,
+      "line": 365,
       "column": 59,
-      "endLine": 301,
+      "endLine": 365,
       "snippet": "requires login",
       "fix": null,
       "references": [
@@ -71,9 +151,9 @@
       ],
       "message": "Detected possible user input going into a `path.join` or `path.resolve` function. This could possibly lead to a path traversal vulnerability,  where the attacker can access arbitrary files stored in the file system. Instead, be sure to sanitize or validate user input first.",
       "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
-      "line": 301,
+      "line": 365,
       "column": 75,
-      "endLine": 301,
+      "endLine": 365,
       "snippet": "requires login",
       "fix": null,
       "references": [
@@ -91,9 +171,9 @@
       ],
       "message": "Detected possible user input going into a `path.join` or `path.resolve` function. This could possibly lead to a path traversal vulnerability,  where the attacker can access arbitrary files stored in the file system. Instead, be sure to sanitize or validate user input first.",
       "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
-      "line": 325,
+      "line": 389,
       "column": 37,
-      "endLine": 325,
+      "endLine": 389,
       "snippet": "requires login",
       "fix": null,
       "references": [
@@ -111,9 +191,9 @@
       ],
       "message": "Detected that function argument `filename` has entered the fs module. An attacker could potentially control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are validated.",
       "file": "/Users/steward/App/tpaaw-gateway/src/server.mjs",
-      "line": 326,
+      "line": 390,
       "column": 19,
-      "endLine": 326,
+      "endLine": 390,
       "snippet": "requires login",
       "fix": null,
       "references": [
@@ -122,18 +202,22 @@
     }
   ],
   "stats": {
-    "total": 6,
+    "total": 11,
     "bySeverity": {
+      "INFO": 5,
       "WARNING": 6
     },
     "byCategory": {
+      "correctness": 5,
       "security": 6
     },
     "filesScanned": [
+      "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
+      "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
       "/Users/steward/App/tpaaw-gateway/gateway.mjs",
       "/Users/steward/App/tpaaw-gateway/src/server.mjs"
     ],
-    "filesAffected": 1,
+    "filesAffected": 3,
     "rulesRun": 3,
     "rulePacks": [
       "/Users/steward/App/tPAAW/data/semgrep-rules/javascript",
@@ -145,10 +229,12 @@
     "version": "1.169.0",
     "paths": {
       "scanned": [
+        "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
+        "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
         "/Users/steward/App/tpaaw-gateway/gateway.mjs",
         "/Users/steward/App/tpaaw-gateway/src/server.mjs"
       ]
     }
   },
-  "scannedAt": "2026-09-19T01:02:05.046Z"
+  "scannedAt": "2026-09-19T04:18:15.232Z"
 }

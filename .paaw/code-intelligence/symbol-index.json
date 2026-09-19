@@ -557,6 +557,37 @@
     {
       "type": "function",
       "name": "getFreePort",
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "pidAlive",
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "",
+      "callCount": 1
+    },
+    {
+      "type": "class",
+      "name": "TestEnv",
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "methods": [
+        "constructor",
+        "setup",
+        "api",
+        "waitStubReady",
+        "setStubMode",
+        "teardown"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getFreePort",
       "file": "tests/e2e/gateway-ui-csrf.test.mjs",
       "kind": "function",
       "async": false,
@@ -655,10 +686,19 @@
     },
     {
       "type": "function",
+      "name": "finish",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(ok, error)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
       "name": "restartPaaw",
       "file": "src/server.mjs",
       "kind": "function",
-      "async": false,
+      "async": true,
       "params": "()",
       "callCount": 0
     },
@@ -1554,6 +1594,15 @@
       {
         "type": "function",
         "name": "getFreePort",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "getFreePort",
         "file": "tests/e2e/gateway-ui-csrf.test.mjs",
         "kind": "function",
         "async": false,
@@ -1612,6 +1661,32 @@
         "async": true,
         "params": "(g)",
         "callCount": 0
+      }
+    ],
+    "pidAlive": [
+      {
+        "type": "function",
+        "name": "pidAlive",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "",
+        "callCount": 1
+      }
+    ],
+    "TestEnv": [
+      {
+        "type": "class",
+        "name": "TestEnv",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "methods": [
+          "constructor",
+          "setup",
+          "api",
+          "waitStubReady",
+          "setStubMode",
+          "teardown"
+        ]
       }
     ],
     "rawReq": [
@@ -1702,13 +1777,24 @@
         "callCount": 0
       }
     ],
+    "finish": [
+      {
+        "type": "function",
+        "name": "finish",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(ok, error)",
+        "callCount": 4
+      }
+    ],
     "restartPaaw": [
       {
         "type": "function",
         "name": "restartPaaw",
         "file": "src/server.mjs",
         "kind": "function",
-        "async": false,
+        "async": true,
         "params": "()",
         "callCount": 0
       }
@@ -2014,9 +2100,9 @@
     ]
   },
   "stats": {
-    "total": 107,
-    "functions": 78,
-    "classes": 0,
+    "total": 111,
+    "functions": 81,
+    "classes": 1,
     "exports": 5,
     "routes": 24,
     "components": 0

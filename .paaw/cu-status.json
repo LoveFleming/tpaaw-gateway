@@ -2,9 +2,9 @@
   "steps": {
     "scan": {
       "status": "done",
-      "size": 6361,
-      "codeMtime": 1789731421633.2014,
-      "updatedAt": "2026-09-18T11:45:31.586Z"
+      "size": 5022,
+      "codeMtime": 1789785870318.0193,
+      "updatedAt": "2026-09-19T03:44:06.302Z"
     },
     "feature-map": {
       "status": "done",
@@ -25,16 +25,17 @@
       "updatedAt": "2026-09-18T11:44:54.494Z"
     },
     "error-codes": {
-      "status": "done",
+      "status": "error",
       "summary": "15 codes / conventions=none",
       "codeMtime": 1789731421633.2014,
-      "updatedAt": "2026-09-18T11:48:07.232Z"
+      "updatedAt": "2026-09-19T03:44:22.271Z",
+      "error": "Unexpected token 'r', ...\"\"message\":rethrow,\"k\"... is not valid JSON"
     },
     "c4-model": {
       "status": "done",
-      "summary": "0 external / 3 containers",
-      "codeMtime": 1789731421633.2014,
-      "updatedAt": "2026-09-18T11:48:25.253Z"
+      "summary": "0 external / 4 containers",
+      "codeMtime": 1789785870318.0193,
+      "updatedAt": "2026-09-19T03:44:32.618Z"
     },
     "change-intelligence": {
       "status": "done",

@@ -638,6 +638,84 @@
       "components": []
     },
     {
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:net",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "node:timers/promises",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getFreePort",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "pidAlive",
+          "kind": "arrow",
+          "async": false,
+          "params": "",
+          "callCount": 1,
+          "calls": [
+            "process.kill"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "TestEnv",
+          "methods": [
+            "constructor",
+            "setup",
+            "api",
+            "waitStubReady",
+            "setStubMode",
+            "teardown"
+          ]
+        }
+      ],
+      "routes": [],
+      "components": []
+    },
+    {
       "file": "tests/e2e/gateway-ui-csrf.test.mjs",
       "language": "javascript",
       "exports": [],
@@ -837,9 +915,22 @@
           "calls": []
         },
         {
+          "name": "finish",
+          "kind": "arrow",
+          "async": false,
+          "params": "(ok, error)",
+          "callCount": 4,
+          "calls": [
+            "clearTimeout",
+            "clearTimeout",
+            "logEvent",
+            "resolve"
+          ]
+        },
+        {
           "name": "restartPaaw",
           "kind": "function",
-          "async": false,
+          "async": true,
           "params": "()",
           "callCount": 0,
           "calls": []
@@ -1031,11 +1122,11 @@
     }
   ],
   "stats": {
-    "totalFiles": 5,
-    "parsedFiles": 5,
+    "totalFiles": 6,
+    "parsedFiles": 6,
     "errors": 0,
     "languages": {
-      "javascript": 5
+      "javascript": 6
     }
   }
 }

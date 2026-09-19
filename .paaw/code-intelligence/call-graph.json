@@ -417,6 +417,22 @@
       "async": true
     },
     {
+      "id": "tests/e2e/gateway-restart-rbac.test.mjs:getFreePort",
+      "name": "getFreePort",
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive",
+      "name": "pidAlive",
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
       "id": "tests/e2e/gateway-ui-csrf.test.mjs:getFreePort",
       "name": "getFreePort",
       "file": "tests/e2e/gateway-ui-csrf.test.mjs",
@@ -505,12 +521,20 @@
       "async": false
     },
     {
+      "id": "src/server.mjs:finish",
+      "name": "finish",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
       "id": "src/server.mjs:restartPaaw",
       "name": "restartPaaw",
       "file": "src/server.mjs",
       "line": 0,
       "kind": "function",
-      "async": false
+      "async": true
     },
     {
       "id": "src/server.mjs:getCurrentVersion",
@@ -724,8 +748,37 @@
       "resolved": false
     },
     {
+      "caller": "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive",
+      "callee": "process.kill",
+      "type": "method",
+      "resolved": false
+    },
+    {
       "caller": "tests/e2e/gateway-ui-csrf.test.mjs:sleep",
       "callee": "setTimeout",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:finish",
+      "callee": "clearTimeout",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:finish",
+      "callee": "clearTimeout",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:finish",
+      "callee": "src/server.mjs:logEvent",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:finish",
+      "callee": "resolve",
       "type": "direct",
       "resolved": false
     },
@@ -833,11 +886,22 @@
       "tests/e2e/gateway-backup-auth.test.mjs:sleep",
       "tests/e2e/gateway-ui-csrf.test.mjs:sleep"
     ],
-    "req.on": [
+    "process.kill": [
+      "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive"
+    ],
+    "clearTimeout": [
+      "src/server.mjs:finish",
+      "src/server.mjs:finish"
+    ],
+    "src/server.mjs:logEvent": [
+      "src/server.mjs:finish"
+    ],
+    "resolve": [
+      "src/server.mjs:finish",
       "src/server.mjs:readBody",
       "src/server.mjs:readBody"
     ],
-    "resolve": [
+    "req.on": [
       "src/server.mjs:readBody",
       "src/server.mjs:readBody"
     ],
@@ -876,8 +940,17 @@
     "tests/e2e/gateway-backup-auth.test.mjs:sleep": [
       "setTimeout"
     ],
+    "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive": [
+      "process.kill"
+    ],
     "tests/e2e/gateway-ui-csrf.test.mjs:sleep": [
       "setTimeout"
+    ],
+    "src/server.mjs:finish": [
+      "clearTimeout",
+      "clearTimeout",
+      "src/server.mjs:logEvent",
+      "resolve"
     ],
     "src/server.mjs:sendJSON": [
       "res.writeHead",
@@ -893,9 +966,9 @@
     ]
   },
   "stats": {
-    "totalFunctions": 77,
-    "totalCalls": 27,
-    "resolvedCalls": 3,
-    "unresolvedCalls": 24
+    "totalFunctions": 80,
+    "totalCalls": 32,
+    "resolvedCalls": 4,
+    "unresolvedCalls": 28
   }
 }

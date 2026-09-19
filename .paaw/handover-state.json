@@ -1,34 +1,45 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T01:03:46.588Z",
+  "generatedAt": "2026-09-19T04:14:40.501Z",
   "initialized": true,
   "currentState": {
     "branch": "main",
-    "headSha": "12ae4b8",
-    "dirtyCount": 17,
+    "headSha": "db2671c",
+    "dirtyCount": 47,
     "dirtyFiles": [
-      "M .paaw/changelog/CHANGELOG.md",
+      "M .paaw/c4-model.json",
+      " M .paaw/changelog/CHANGELOG.md",
       " M .paaw/changes/change-intelligence.json",
+      " M .paaw/code-intelligence/call-graph.json",
+      " M .paaw/code-intelligence/dependency-graph.json",
+      " M .paaw/code-intelligence/file-map.json",
+      " M .paaw/code-intelligence/summary.json",
+      " M .paaw/code-intelligence/symbol-index.json",
+      " M .paaw/code-intelligence/test-code-map.json",
+      " M .paaw/code-intelligence/test-intelligence.json",
       " M .paaw/coding-memory/actions.jsonl",
       " M .paaw/coding-memory/conversations/coding.em/active.json",
       " M .paaw/coding-memory/dispatch-log.jsonl",
+      " M .paaw/cu-status.json",
+      " M .paaw/features/FEATURES.json",
+      " D .paaw/features/backups/FEATURES-1789728003670.json",
+      " D .paaw/features/backups/FEATURES-1789728003675.json",
+      " D .paaw/features/backups/FEATURES-1789728644590.json",
+      " D .paaw/features/backups/FEATURES-1789729078050.json",
+      " D .paaw/features/backups/FEATURES-1789729693243.json",
       " M .paaw/issues/ISSUES.json",
       " M .paaw/release-requests/RR-20260918-1242-bd43.json",
       " M .paaw/release-unit-model.json",
-      " M .paaw/security/scan-results.json",
-      " M .paaw/staged-changes.json",
+      " M .paaw/scan.json",
       " M .paaw/tasks/TASKS.json",
       " M .paaw/test-runs/last.json",
-      "?? .paaw/coding-memory/dispatch-outputs/2026-09-18-11-54--developer.md",
-      "?? .paaw/coding-memory/dispatch-outputs/2026-09-18-11-58--tester.md",
-      "?? .paaw/sessions/2026-09-18-release-021-task-002-root-usersstewardapptpaaw-gateway-1-pac.md",
-      "?? .paaw/sessions/2026-09-18-release-rr-20260918-1242-021-root-usersstewardapptpaaw-gatew.md",
-      "?? .paaw/test-runs/runs/RUN-20260919-001.json"
+      " M public/index.html",
+      " M src/server.mjs",
+      "?? .paaw/coding-memory/dispatch-outputs/2026-09-19-02-17--qa.md",
+      "?? .paaw/coding-memory/dispatch-outputs/2026-09-19-03-15--tester.md"
     ],
-    "unpushedCount": 1,
-    "unpushedCommits": [
-      "12ae4b8 test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass"
-    ]
+    "unpushedCount": 0,
+    "unpushedCommits": []
   },
   "workingPlan": {
     "activeTasks": [],
@@ -36,6 +47,16 @@
   },
   "changes": {
     "recentCommits": [
+      {
+        "hash": "db2671c",
+        "date": "2026-09-19T09:08:53+08:00",
+        "subject": "release unit paaw save"
+      },
+      {
+        "hash": "3d31aef",
+        "date": "2026-09-19T09:08:16+08:00",
+        "subject": "release unit paaw save"
+      },
       {
         "hash": "12ae4b8",
         "date": "2026-09-18T19:58:25+08:00",
@@ -75,16 +96,6 @@
         "hash": "b0a4049",
         "date": "2026-09-06T20:29:41+08:00",
         "subject": "chore: 同步三目錄架構 — .paaw 零例外（runtime log 全在 PAAW log/）+ developer prompt rev 2026-09-06-g（$PAAW_APP_CONSOLE_DIR）"
-      },
-      {
-        "hash": "92eebe5",
-        "date": "2026-09-06T19:12:00+08:00",
-        "subject": "docs: developer prompt 對齊 app-console 日期檔名（_promptRev 2026-09-06-f）"
-      },
-      {
-        "hash": "4a9ee9d",
-        "date": "2026-09-06T18:50:47+08:00",
-        "subject": "docs: agent prompt 對齊 .paaw 進版控紀律（_promptRev 2026-09-06-e）"
       }
     ]
   },
@@ -95,13 +106,13 @@
   },
   "nextAction": {
     "step": "commit",
-    "reason": "17 個未提交檔案",
+    "reason": "47 個未提交檔案",
     "detail": [
-      "M .paaw/changelog/CHANGELOG.md",
+      "M .paaw/c4-model.json",
+      " M .paaw/changelog/CHANGELOG.md",
       " M .paaw/changes/change-intelligence.json",
-      " M .paaw/coding-memory/actions.jsonl",
-      " M .paaw/coding-memory/conversations/coding.em/active.json",
-      " M .paaw/coding-memory/dispatch-log.jsonl"
+      " M .paaw/code-intelligence/call-graph.json",
+      " M .paaw/code-intelligence/dependency-graph.json"
     ]
   }
 }

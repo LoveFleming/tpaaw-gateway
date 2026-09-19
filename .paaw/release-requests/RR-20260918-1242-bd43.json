@@ -13,20 +13,22 @@
     "source": "user-selected"
   },
   "target": {
-    "sha": "12ae4b8b3eb665f3403a99c06505fdcc6b1a8575",
-    "short": "12ae4b8",
-    "at": "2026-09-18T19:58:25+08:00",
+    "sha": "db2671cea347ecbe3b28526ba2896576f6ff60a2",
+    "short": "db2671c",
+    "at": "2026-09-19T09:08:53+08:00",
     "author": "LoveFleming",
-    "subject": "test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass"
+    "subject": "release unit paaw save"
   },
   "scope": {
-    "computedAt": "2026-09-19T00:57:18.332Z",
+    "computedAt": "2026-09-19T01:20:03.382Z",
     "commits": {
-      "count": 6,
+      "count": 8,
       "authors": [
         "LoveFleming"
       ],
       "subjects": [
+        "db2671c release unit paaw save",
+        "3d31aef release unit paaw save",
         "12ae4b8 test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass",
         "4a06afb feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log",
         "3bdb4bd chore: .paaw runtime 快照 — release 證據（test run / semgrep 掃描 / handover state / RR-20260918-1237-1d49）",
@@ -37,12 +39,197 @@
     },
     "files": [
       {
-        "file": ".paaw/HANDOVER.md",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "file": ".paaw/staged-changes.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:53.000Z",
         "commits": [
+          "db2671c",
+          "3d31aef",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/HANDOVER.md",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
           "12ae4b8",
           "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/changelog/CHANGELOG.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/changes/change-intelligence.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/actions.jsonl",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/conversations/coding.em/active.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/conversations/coding.rm/active.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-log.jsonl",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-11-54--developer.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-11-58--tester.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/decisions/DECISIONS.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/handover-state.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/issues/ISSUES.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/release-requests/RR-20260918-1242-bd43.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/release-unit-model.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/security/scan-results.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-release-021-task-002-root-usersstewardapptpaaw-gateway-1-pac.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-release-rr-20260918-1242-021-root-usersstewardapptpaaw-gatew.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/tasks/TASKS.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/last.json",
+        "changeCount": 3,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260919-001.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T01:08:16.000Z",
+        "commits": [
+          "3d31aef"
         ]
       },
       {
@@ -60,23 +247,6 @@
         "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
           "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/changelog/CHANGELOG.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/changes/change-intelligence.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
         ]
       },
       {
@@ -144,25 +314,7 @@
         ]
       },
       {
-        "file": ".paaw/coding-memory/actions.jsonl",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/coding-memory/conversations/coding.developer/active.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/coding-memory/conversations/coding.em/active.json",
         "changeCount": 2,
         "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
@@ -180,15 +332,6 @@
       },
       {
         "file": ".paaw/coding-memory/conversations/coding.tester/active.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/coding-memory/dispatch-log.jsonl",
         "changeCount": 2,
         "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
@@ -326,33 +469,7 @@
         ]
       },
       {
-        "file": ".paaw/handover-state.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/release-requests/RR-20260918-1237-1d49.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/release-requests/RR-20260918-1242-bd43.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/release-unit-model.json",
         "changeCount": 2,
         "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
@@ -366,15 +483,6 @@
         "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
           "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/security/scan-results.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
         ]
       },
       {
@@ -439,32 +547,6 @@
         "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
           "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/staged-changes.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/tasks/TASKS.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/last.json",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8",
-          "3bdb4bd"
         ]
       },
       {
@@ -553,14 +635,6 @@
         ]
       },
       {
-        "file": ".paaw/coding-memory/conversations/coding.rm/active.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/features/backups/FEATURES-1788775413096.json",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:40:08.000Z",
@@ -570,14 +644,6 @@
       },
       {
         "file": ".paaw/features/backups/FEATURES-1788786779558.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/issues/ISSUES.json",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:40:08.000Z",
         "commits": [
@@ -635,8 +701,8 @@
     ],
     "features": [
       {
-        "id": "F20260906-001",
-        "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+        "id": "F20260918-001",
+        "name": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
         "status": "active",
         "changedFiles": [
           "gateway.mjs"
@@ -664,7 +730,7 @@
         "path": "/api/log",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -672,7 +738,7 @@
         "path": "/api/paaw-log",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -680,7 +746,7 @@
         "path": "/api/restart",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -688,7 +754,7 @@
         "path": "/api/settings",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -696,7 +762,7 @@
         "path": "/api/settings",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -704,7 +770,7 @@
         "path": "/api/start",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -712,7 +778,7 @@
         "path": "/api/status",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -720,7 +786,7 @@
         "path": "/api/stop",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -728,7 +794,7 @@
         "path": "/api/update",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -736,7 +802,7 @@
         "path": "/api/upload",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       },
       {
@@ -744,7 +810,7 @@
         "path": "/index.html",
         "file": "gateway.mjs",
         "featureIds": [
-          "F20260906-001"
+          "F20260918-001"
         ]
       }
     ],
@@ -756,9 +822,9 @@
       "label": "測試全過（unit + e2e）",
       "auto": {
         "status": "pass",
-        "detail": "17✓ 0✗ 0⋯；run at 2026-09-19T01:01:55.523Z",
-        "checkedAt": "2026-09-19T01:04:57.832Z",
-        "runId": "RUN-20260919-001"
+        "detail": "52✓ 0✗ 0⋯；run at 2026-09-19T03:14:23.000Z",
+        "checkedAt": "2026-09-19T04:13:12.232Z",
+        "runId": "RUN-20260919-002"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -771,7 +837,7 @@
       "auto": {
         "status": "warn",
         "detail": "warnings：clean-tree",
-        "checkedAt": "2026-09-19T01:04:57.832Z"
+        "checkedAt": "2026-09-19T04:13:12.232Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -784,7 +850,7 @@
       "auto": {
         "status": "pass",
         "detail": "無未解決 QA fail 記錄",
-        "checkedAt": "2026-09-19T01:04:57.832Z"
+        "checkedAt": "2026-09-19T04:13:12.232Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -795,9 +861,9 @@
       "id": "security",
       "label": "Security scan（semgrep，scope 內）",
       "auto": {
-        "status": "pass",
-        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-19T01:02:05.046Z",
-        "checkedAt": "2026-09-19T01:04:57.832Z"
+        "status": "warn",
+        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-19T01:02:05.046Z；⚠ 掃描後又有 2 commits",
+        "checkedAt": "2026-09-19T04:13:12.232Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -809,8 +875,8 @@
       "label": "風險評估（readiness heuristic）",
       "auto": {
         "status": "fail",
-        "detail": "HIGH：API 變更的 feature 沒有測試；72 個檔案變更；11 個 API 變更",
-        "checkedAt": "2026-09-19T01:04:57.832Z"
+        "detail": "HIGH：API 變更的 feature 沒有測試；78 個檔案變更；11 個 API 變更",
+        "checkedAt": "2026-09-19T04:13:12.232Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -823,7 +889,7 @@
       "auto": {
         "status": "pass",
         "detail": "維運文檔：DEPLOY.md（含回滾）、README.md（含回滾）；⚠ 本次含依賴變更 — 注意鎖檔與安裝步驟",
-        "checkedAt": "2026-09-19T01:04:57.832Z"
+        "checkedAt": "2026-09-19T04:13:12.232Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -834,9 +900,9 @@
       "id": "handover",
       "label": "交接（handover state 新鮮）— 簽核",
       "auto": {
-        "status": "pass",
-        "detail": "handover state 2026-09-19T01:03:46.588Z（changes 10 / open issues 0）；新鮮",
-        "checkedAt": "2026-09-19T01:04:57.832Z"
+        "status": "warn",
+        "detail": "handover state 2026-09-19T01:03:46.588Z（changes 10 / open issues 0）；⚠ 落後 2 commits — 交接包過期，建議 refresh",
+        "checkedAt": "2026-09-19T04:13:12.232Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -870,32 +936,44 @@
       "by": "rm",
       "event": "ai-suggested",
       "note": "tests:pass, gates:waived, qa-records:pass, risk:waived"
+    },
+    {
+      "ts": "2026-09-19T01:20:03.382Z",
+      "by": "system",
+      "event": "target-advanced",
+      "note": "target 前進到 db2671c，scope 重算"
+    },
+    {
+      "ts": "2026-09-19T04:16:57.248Z",
+      "by": "rm",
+      "event": "ai-suggested",
+      "note": "tests:pass, gates:fail, qa-records:pass, risk:waived"
     }
   ],
   "suggested": {
     "tests": {
       "verdict": "pass",
-      "reason": "auto=warn 根因「結果落後 1 commits」已消除：我於 2026-09-19 01:01 直接在 target commit 12ae4b8 重跑全套（RUN-20260919-001），TAP 官方總計 tests 42 / pass 42 / fail 0 / skipped 0、exit code 0，與 RUN-20260918-005 的 42/42（unit 13 + e2e 13+16）完全一致。註：工具面板 summary 顯示 17 係頂層 TAP 條目解析瑕疵，outputTail 原始輸出為準。",
+      "reason": "52✓/0✗/0⋯（RUN-20260919-002，2026-09-19T03:14:23Z）為真實全綠且 auto 無 stale 警告；該 run 的實際測試對象是含 F-01/F-02 修復的 working tree（gateway-restart-rbac e2e 即驗證此修復，QA 03:17 複審確認 resolved）。揭露一項錯位：此修復未 commit、target db2671c 不含它 — 補齊 commit 後樹內容不變，52/52 無需重跑；但若不補齊而直接 tag，此 pass 證據對應的 artifact 並非發佈物。",
       "by": "rm",
-      "at": "2026-09-19T01:04:32.683Z"
+      "at": "2026-09-19T04:16:57.248Z"
     },
     "gates": {
-      "verdict": "waived",
-      "reason": "唯一 warning 為 clean-tree：13 個未 commit 檔案全數為 .paaw 的證據/runtime 快照（test-run JSON、change-intelligence、CHANGELOG 等），無任何 src/ 程式碼變更，不影響建置與行為；test hard gate 已 pass。Safe to ship 條件：tag 0.2.1 前由人工將這些證據檔 commit 並 push（含既有 1 個未推 commit）。",
+      "verdict": "fail",
+      "reason": "clean-tree warning 經 diff 查證非純 .paaw 快照：working tree vs HEAD 顯示 src/server.mjs 有未 commit 的 F-01/F-02 安全修復（stopPaaw exit-confirmed、restore/upgrade fail-closed、backups admin RBAC，~180 行），且驗證此修復的 tests/e2e/gateway-restart-rbac.test.mjs 未納入版控（HEAD 無此檔案）。我先前 waived 所依據的「未 commit 全為 .paaw 證據」前提已被推翻。若 tag 現在的 db2671c，發佈的 0.2.1 不含 TASK-007 複審通過的修復，等於帶著其 02:16 判定的 1 blocker + 2 major 問題上線。補齊方式：人工 commit src/server.mjs + gateway-restart-rbac.test.mjs + .paaw 證據檔 → RR target 前進至新 commit → gates 重驗（樹內容與被測/被掃對象一致後轉 pass）。",
       "by": "rm",
-      "at": "2026-09-19T01:04:32.683Z"
+      "at": "2026-09-19T04:16:57.248Z"
     },
     "qa-records": {
       "verdict": "pass",
-      "reason": "auto=pass：無未解決 QA fail 記錄。人工安全 review（TASK-001，2026-09-18 11:08）verdict GO with notes，3 項 findings（MAJ-001/MED-001/MIN-001）均已在本版修復且各有 e2e 案例覆蓋（gateway-ui-csrf 第二 describe 3 案）。",
+      "reason": "記錄面 auto=pass 成立：無未解決 QA fail — TASK-001 安全 review 為 GO with notes 且 MAJ-001/MED-001/MIN-001 均已修復並有 e2e 覆蓋（gateway-ui-csrf 第二 describe 3 案）；TASK-007 02:16 對 src/server.mjs 判 NO-GO 後，03:17 QA 複審確認 F-01/F-02 resolved、NO-GO 解除；TASK-006~009 於 03:23 全數結案（RUN-20260919-002 52/52）；scope pending tasks = 0。條件：F-01/F-02 修復目前未 commit（diff vs HEAD 可證），須完成 gates 項的 commit 補齊，「已解決」才算真的隨版交付。",
       "by": "rm",
-      "at": "2026-09-19T01:04:32.683Z"
+      "at": "2026-09-19T04:16:57.248Z"
     },
     "risk": {
       "verdict": "waived",
-      "reason": "auto=fail 根因「F20260906-001（gateway.mjs）沒有測試」為靜態分析誤判：tests/e2e/gateway-ui-csrf.test.mjs（16 案例）以 spawn 真實 gateway.mjs 子進程方式覆蓋 cmdUI API 面（Host/CSRF gate、settings 1MB 上限、update fail-closed、GET 煙霧），feature map 已將該測試檔 mapping 至此 feature，test-intelligence 看不到 spawn 邊緣屬工具盲區；RUN-20260919-001 在 target commit 上該 16 案全綠（42/42）。最壞情況（UI 層回歍）可由 git revert 6 commits 或 current.json 回指 versions/0.2.0 回滚，程序見 DEPLOY.md。72 檔案變更中大宗為 .paaw 證據快照，實際程式碼變更集中在 gateway.mjs + ui/index.html + docs。",
+      "reason": "auto=fail 三訊號逐一查證後均不成立或可控：①「F20260918-001 gateway.mjs NO TESTS」為靜態分析盲區 — tests/e2e/gateway-ui-csrf.test.mjs 以 spawn 真實 gateway.mjs 子進程覆蓋 16 案（Host/CSRF gate、settings 1MB 上限、update fail-closed），feature map 已 mapping，52/52 中含此 16 案全綠；②78 檔案變更大宗為 .paaw 證據/runtime 快照（12ae4b8 時點 HANDOVER 記錄 17 個未 commit 檔全屬 .paaw 可佐證），程式碼變更集中 gateway.mjs + ui/index.html + src/server.mjs；③11 個 API 變更集中於上述兩檔的 UI/API 面，同批 e2e 覆蓋。新增證據：我於 2026-09-19 對含 F-01/F-02 修復的 working tree 補跑 semgrep — ERROR 0 / WARNING 6 / INFO 5，修復代碼無 error 級 finding。最壞情況（UI/進程管理回歸）可回滾：DEPLOY.md 記載 git revert 至 baseline dc9c1a5 或 current.json 回指 versions/0.2.0。waive 前提：gates 項的 commit 補齊完成後方可放行。",
       "by": "rm",
-      "at": "2026-09-19T01:04:32.683Z"
+      "at": "2026-09-19T04:16:57.248Z"
     }
   }
 }

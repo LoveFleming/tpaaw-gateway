@@ -1,46 +1,67 @@
 {
-  "scannedAt": "2026-09-18T11:48:25.249Z",
+  "scannedAt": "2026-09-19T03:44:32.614Z",
   "method": "llm-v1",
   "system": {
     "name": "tpaaw-gateway",
-    "description": "一個 gateway 類型的 release unit，從版本目錄結構（versions/0.2.0）與環境變數（PAAW_PORT、PAAW_WS_PORT、BRIDGE_PORT、VITE_PORT）推測，是同時承載 HTTP API、WebSocket 服務、bridge 元件與 Vite 前端的入口閘道。證據極少，僅能從命名推斷。"
+    "description": "以 versions/0.2.0 版本化管理的 gateway 專案。從環境變數命名推測包含 PAAW 主服務（HTTP + WebSocket）、bridge 橋接服務與 Vite 前端開發伺服器，但本 RU 缺乏 manifest、compose 與連線 URI 證據，無法確認對外連線。"
   },
   "containers": [
     {
-      "name": "tpaaw-gateway (main)",
-      "type": "gateway",
-      "technology": "未知（無 manifest / framework 證據）",
-      "description": "主服務，監聽 PAAW_PORT（HTTP）與 PAAW_WS_PORT（WebSocket），確切 port 號與 runtime 未知（.env.example 只有 KEY 名）。",
+      "name": "paaw-main",
+      "type": "app",
+      "technology": "未知（無 deps 證據）",
+      "description": "PAAW 主服務，監聽 port 由 PAAW_PORT 指定（預設值未知）。",
       "evidence": [
-        "env: PAAW_PORT (versions/0.2.0/.env.example)",
+        "env: PAAW_PORT (versions/0.2.0/.env.example)"
+      ]
+    },
+    {
+      "name": "paaw-ws",
+      "type": "app",
+      "technology": "未知（無 deps 證據）",
+      "description": "PAAW WebSocket 服務，port 由 PAAW_WS_PORT 指定。可能與主服務同進程，無法確認。",
+      "evidence": [
         "env: PAAW_WS_PORT (versions/0.2.0/.env.example)"
       ]
     },
     {
       "name": "bridge",
-      "type": "app",
-      "technology": "未知",
-      "description": "名為 bridge 的元件，監聽 BRIDGE_PORT，推測負責轉接／橋接流量；無進一步證據。",
+      "type": "gateway",
+      "technology": "未知（無 deps 證據）",
+      "description": "橋接服務，port 由 BRIDGE_PORT 指定，角色待確認（可能作為協定轉送層）。",
       "evidence": [
         "env: BRIDGE_PORT (versions/0.2.0/.env.example)"
       ]
     },
     {
-      "name": "frontend",
+      "name": "web-frontend",
       "type": "frontend",
-      "technology": "Vite（版本未知）",
-      "description": "Vite 開發伺服器，監聽 VITE_PORT。",
+      "technology": "Vite",
+      "description": "前端開發伺服器，port 由 VITE_PORT 指定。",
       "evidence": [
         "env: VITE_PORT (versions/0.2.0/.env.example)"
       ]
     }
   ],
   "externalSystems": [],
-  "relationships": [],
-  "notes": "外部連線證據嚴重不足：deps 為空、無 compose、無 EXPOSE、無 connection URI、無外部服務相關 env KEY（無 DB/cache/queue/LLM/smtp 類蹤跡）。無法確認任何對外系統，故 externalSystems 與 relationships 留空。containers 的切分（main/bridge/frontend）僅依 4 個 port 命名推測，實際程序拓撲需補充 manifest（package.json/Dockerfile）或程式碼 scan 才能確認。repo 以 versions/0.2.0 版本化目錄管理部署，屬多版本並存結構，值得注意。",
+  "relationships": [
+    {
+      "from": "bridge",
+      "to": "paaw-ws",
+      "protocol": "unknown",
+      "description": "依命名推測 bridge 與 PAAW 服務有連線，僅為假設，無直接證據。"
+    },
+    {
+      "from": "web-frontend",
+      "to": "paaw-main",
+      "protocol": "http",
+      "description": "推測前端呼叫主服務 API，無直接證據。"
+    }
+  ],
+  "notes": "證據極度稀薄：deps 為空（無 package.json / requirements 等被解析到？）、無 compose、無 EXPOSE、無 URI。僅有 4 個 port 型 env KEY，container 拆分與 relationships 都是基於命名的推測，可信度低。paaw-main 與 paaw-ws 可能是同一進程的兩個 listener，bridge 的實際角色（進程內模組 vs 獨立服務）無法判定。未發現任何 DB / cache / queue / LLM provider / 雲服務證據，故不列出任何 external system；若此 gateway 真的對外連線（LLM API 等），需補掃 manifest 或 config 才能建模。",
   "stats": {
-    "containers": 3,
+    "containers": 4,
     "external": 0,
-    "relationships": 0
+    "relationships": 2
   }
 }

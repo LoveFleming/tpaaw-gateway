@@ -15,7 +15,7 @@
       ],
       "assignee": null,
       "createdAt": "2026-09-07T10:03:33.095Z",
-      "updatedAt": "2026-09-18T12:00:55.187Z",
+      "updatedAt": "2026-09-19T03:54:27.178Z",
       "createdBy": "agent",
       "source": {
         "type": "manual"
@@ -27,7 +27,7 @@
           "content": "Release 決策（EM，2026-09-18）：限縮範圍納入 RR-20260918-1242 — 本次只人工審 gateway.mjs（release scope 內唯一變更 code file，且含新上線 CSRF 防護）；src/server.mjs 全份人工審查排下個 release 週期。"
         }
       ],
-      "result": "QA 人工安全 review 完成（11:08）：verdict GO with notes — 3 findings（MAJ-001/MED-001/MIN-001）全部於 TASK-005 修復並經 RUN-20260918-005 回歸綠。",
+      "result": "2026-09-18 完成：人工安全 code review（限縮 gateway.mjs）verdict GO with notes，4 findings（MAJ-001/MAJ-001b/MED-001/MIN-001）後續已全修（TASK-005）。src/server.mjs 部分由 TASK-007 QA review 涵蓋。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T12:00:55.187Z"
@@ -47,7 +47,7 @@
       ],
       "assignee": "developer",
       "createdAt": "2026-09-07T13:12:59.556Z",
-      "updatedAt": "2026-09-18T12:00:55.190Z",
+      "updatedAt": "2026-09-19T03:54:27.180Z",
       "createdBy": "agent",
       "source": {
         "type": "issue"
@@ -64,7 +64,7 @@
           "content": "Release 0.2.1 收尾（developer）：package.json version 0.2.1、npm test 42/42 全綠（TAP）、58 檔已 git add stage（gateway.mjs F7 修復 + ui/index.html + CSRF e2e + .paaw/ 資產），待人工 review 後 commit/push。"
         }
       ],
-      "result": "F7 CSRF（Host 白名單 + POST Origin 驗證）已落地，RUN-20260918-005 全套 42/42 含 16 案 CSRF e2e 全綠。",
+      "result": "F1/F10 版本驗證 + F7 CSRF（Host 白名單 + Origin）已修，commit 12ae4b8；驗證由 TASK-003（26/26 無回歸）與 TASK-004（CSRF e2e 16 案）完成。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T12:00:55.190Z"
@@ -81,13 +81,13 @@
       "labels": [],
       "assignee": null,
       "createdAt": "2026-09-18T10:40:03.667Z",
-      "updatedAt": "2026-09-18T12:00:55.191Z",
+      "updatedAt": "2026-09-19T03:54:27.183Z",
       "createdBy": "agent",
       "source": {
         "type": "manual"
       },
       "notes": [],
-      "result": "26/26 無回歸；0✓ 根因＝Node v25 spec reporter 無 TAP 行，test script 已釘 TAP reporter。",
+      "result": "26/26 pass；0✓ 根因 = Node v25 spec reporter 不輸出 TAP 行，test script 已釘 TAP reporter；F7 無回歸確認。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T10:50:44.589Z"
@@ -104,13 +104,13 @@
       "labels": [],
       "assignee": null,
       "createdAt": "2026-09-18T10:40:03.674Z",
-      "updatedAt": "2026-09-18T12:00:55.194Z",
+      "updatedAt": "2026-09-19T03:54:27.185Z",
       "createdBy": "agent",
       "source": {
         "type": "issue"
       },
       "notes": [],
-      "result": "tests/e2e/gateway-ui-csrf.test.mjs 16 案（含 TASK-005 擴充 3 案），RUN-20260918-005 42/42 全綠 — risk gate HIGH 已解除。",
+      "result": "新增 tests/e2e/gateway-ui-csrf.test.mjs（spawn 真 gateway，16 案例：原 12 案例行為變更拆 2 + 新增 settings 1MB 上限、update 惡意 version fail-closed），RUN-20260918-005 全套 42/42，release risk gate 解除。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T10:57:58.049Z"
@@ -131,17 +131,291 @@
       ],
       "assignee": null,
       "createdAt": "2026-09-18T11:08:13.241Z",
-      "updatedAt": "2026-09-18T12:00:55.196Z",
+      "updatedAt": "2026-09-19T03:54:27.186Z",
       "createdBy": "agent",
       "source": {
         "type": "security"
       },
       "notes": [],
-      "result": "MAJ-001（manifest.version fail-closed ×2 處）/ MAJ-001b（UI esc）/ MED-001（GET Host gate）/ MIN-001（settings 1MB cap）全數修復，RUN-20260918-005 回歸綠。",
+      "result": "MAJ-001（installVersion/updateLogic VERSION_RE fail-closed）+ MAJ-001b（UI esc()）+ MED-001（Host gate 擴及全部請求）+ MIN-001（1MB cap + 413）全部在 commit 12ae4b8，RUN-20260918-005 42/42 驗證。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T12:00:55.196Z"
+    },
+    {
+      "id": "TASK-006",
+      "title": "【品質補強】F20260918-001 PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
+      "type": "test",
+      "status": "close",
+      "priority": "high",
+      "parentId": null,
+      "description": "Release retrofit — 上線前品質補強（從 feature map 建立）。\nFeature：F20260918-001 PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理 — 使用者機器上的單檔 bootloader（gateway.mjs），同時提供 CLI（start/update/upload/status/ui）與本機網頁控制台（GET /index.html + 10 個 /api/* endpoint），負責 PAAW 套包的安裝、更新、手動上傳，以及 PAAW 進程的啟動/停止/重啟與狀態/日誌監看。目錄佈局以 versions/<x.y.z>/ 做版本隔離、data/ 存使用者資料、current.json 指向最後驗證過的版本。\n代碼檔案：\n- gateway.mjs\n需補階段：review → qa → docs → commit（已有測試，不重補 test 階段）\n驗收：review 看現況代碼問題、關鍵路徑補測試、qa 驗收、docs 補文件。不重做實作。",
+      "labels": [
+        "release-retrofit",
+        "bootloader",
+        "staged-install",
+        "version-management",
+        "auto-rollback",
+        "process-supervisor",
+        "update"
+      ],
+      "assignee": null,
+      "createdAt": "2026-09-19T02:08:43.379Z",
+      "updatedAt": "2026-09-19T03:54:27.187Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "feature-retrofit",
+        "retrofitFor": "F20260918-001"
+      },
+      "spec": {
+        "description": "補 review/qa/docs/commit for feature F20260918-001",
+        "acceptanceCriteria": [
+          "review 完成（問題清單或 approve 紀錄）",
+          "關鍵路徑測試補齊且通過",
+          "qa 驗證 feature 功能正常",
+          "docs 更新（README/API/changelog）"
+        ],
+        "fileScope": [
+          "gateway.mjs"
+        ],
+        "outOfScope": [
+          "重新實作功能",
+          "大幅重構"
+        ]
+      },
+      "pipeline": {
+        "spec": {
+          "status": "done",
+          "by": "agent",
+          "at": "2026-09-19T02:08:43.379Z",
+          "note": "feature F20260918-001 已存在，不重做規格"
+        },
+        "implement": {
+          "status": "done",
+          "by": "agent",
+          "at": "2026-09-19T02:08:43.379Z",
+          "note": "既有實作（feature map 現況）"
+        },
+        "review": {
+          "status": "pending"
+        },
+        "test": {
+          "status": "done",
+          "by": "agent",
+          "at": "2026-09-19T02:08:43.379Z",
+          "note": "已有測試：tests/e2e/gateway-ui-csrf.test.mjs"
+        },
+        "qa": {
+          "status": "pending"
+        },
+        "docs": {
+          "status": "pending"
+        },
+        "commit": {
+          "status": "pending"
+        }
+      },
+      "pipelinePhases": [
+        "spec",
+        "implement",
+        "review",
+        "test",
+        "qa",
+        "docs",
+        "commit"
+      ],
+      "pipelineMode": "full",
+      "changes": {
+        "filesAdded": [],
+        "filesModified": [],
+        "filesDeleted": []
+      },
+      "git": {
+        "baseCommit": null,
+        "branch": null,
+        "staged": false,
+        "committedSha": null
+      },
+      "notes": [
+        {
+          "text": "由 task_retrofit 自動生成，來源 feature F20260918-001",
+          "at": "2026-09-19T02:08:43.379Z",
+          "by": "agent"
+        }
+      ],
+      "discussion": [],
+      "resolvedAt": "2026-09-19T03:23:37.243Z",
+      "result": "gateway.mjs review 抵用 TASK-001（GO with notes + findings 全修 + 16 案直測），重複 review 無增量價值；feature mapping 由 doc-writer 補齊（gateway-ui-csrf.test.mjs → F20260918-001）。"
+    },
+    {
+      "id": "TASK-007",
+      "title": "【品質補強】F20260918-002 PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+      "type": "test",
+      "status": "close",
+      "priority": "high",
+      "parentId": null,
+      "description": "Release retrofit — 上線前品質補強（從 feature map 建立）。\nFeature：F20260918-002 PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級） — 獨立於 PAAW Server（:4097）運行的管理平台（:4199），由單一檔案 src/server.mjs 構成：以 node:http 原生路由提供 13 個 /api/* 端點，涵蓋登入認證、PAAW Server 進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log 與用戶列表，並在 / 提供管理 UI（public/index.html）。Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方生命週期。\n代碼檔案：\n- src/server.mjs\n需補階段：review → qa → docs → commit（已有測試，不重補 test 階段）\n驗收：review 看現況代碼問題、關鍵路徑補測試、qa 驗收、docs 補文件。不重做實作。",
+      "labels": [
+        "release-retrofit",
+        "gateway",
+        "auth",
+        "session",
+        "bearer-token",
+        "rbac",
+        "process-management"
+      ],
+      "assignee": null,
+      "createdAt": "2026-09-19T02:08:43.379Z",
+      "updatedAt": "2026-09-19T03:54:27.188Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "feature-retrofit",
+        "retrofitFor": "F20260918-002"
+      },
+      "spec": {
+        "description": "補 review/qa/docs/commit for feature F20260918-002",
+        "acceptanceCriteria": [
+          "review 完成（問題清單或 approve 紀錄）",
+          "關鍵路徑測試補齊且通過",
+          "qa 驗證 feature 功能正常",
+          "docs 更新（README/API/changelog）"
+        ],
+        "fileScope": [
+          "src/server.mjs"
+        ],
+        "outOfScope": [
+          "重新實作功能",
+          "大幅重構"
+        ]
+      },
+      "pipeline": {
+        "spec": {
+          "status": "done",
+          "by": "agent",
+          "at": "2026-09-19T02:08:43.379Z",
+          "note": "feature F20260918-002 已存在，不重做規格"
+        },
+        "implement": {
+          "status": "done",
+          "by": "agent",
+          "at": "2026-09-19T02:08:43.379Z",
+          "note": "既有實作（feature map 現況）"
+        },
+        "review": {
+          "status": "pending"
+        },
+        "test": {
+          "status": "done",
+          "by": "agent",
+          "at": "2026-09-19T02:08:43.379Z",
+          "note": "已有測試：tests/e2e/gateway-backup-auth.test.mjs"
+        },
+        "qa": {
+          "status": "pending"
+        },
+        "docs": {
+          "status": "pending"
+        },
+        "commit": {
+          "status": "pending"
+        }
+      },
+      "pipelinePhases": [
+        "spec",
+        "implement",
+        "review",
+        "test",
+        "qa",
+        "docs",
+        "commit"
+      ],
+      "pipelineMode": "full",
+      "changes": {
+        "filesAdded": [],
+        "filesModified": [],
+        "filesDeleted": []
+      },
+      "git": {
+        "baseCommit": null,
+        "branch": null,
+        "staged": false,
+        "committedSha": null
+      },
+      "notes": [
+        {
+          "text": "由 task_retrofit 自動生成，來源 feature F20260918-002",
+          "at": "2026-09-19T02:08:43.379Z",
+          "by": "agent"
+        }
+      ],
+      "discussion": [],
+      "result": "QA review 完成：初判 NO-GO（F-01 blocker + F-02/F-03 major）→ TASK-008 修復 → 2026-09-19 複審 F-01/F-02 RESOLVED、NO-GO 解除；F-03 開 ISS-002 排隊。feature docs+mapping 已補（含 14 端點修正）。",
+      "resolvedAt": "2026-09-19T03:23:37.245Z"
+    },
+    {
+      "id": "TASK-008",
+      "featureId": "F20260918-002",
+      "title": "修 src/server.mjs：F-01 restart race（blocker）+ F-02 備份端點 admin check（QA NO-GO findings）",
+      "type": "dev",
+      "status": "close",
+      "priority": "critical",
+      "parentId": null,
+      "description": "QA review TASK-007（2026-09-19 02:16）判 NO-GO，修復 release 阻斷點。檔案：src/server.mjs（改前先 read_file）。\n\nF-01（blocker）restart race：POST /api/server/restart 三種時序必壞且回應謊報 ok:true — stop 尚未完成就 start，或 stop 失敗仍回 ok。修法需保證：restart = 確實等 stop 完成（process exit / 埠釋放）才 start；stop 失敗要如實回報 fail（fail-closed，不謊報 ok）。\n\nF-02（major）備份端點缺 admin check：非 admin（viewer 角色）可呼叫備份相關端點（含覆寫 PAAW_ROOT 並重啟進程的路徑）。修法：備份/還原/升級/進程管理端點補 admin 角色檢查，viewer 僅可讀（GET）。\n\n範圍限制：只修這兩項，不動 F-03（另開 issue）、不大重構。修完不 commit（人類觸發）。",
+      "labels": [
+        "security",
+        "bugfix",
+        "release-blocker"
+      ],
+      "assignee": null,
+      "createdAt": "2026-09-19T02:17:46.126Z",
+      "updatedAt": "2026-09-19T03:54:27.190Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-09-19T02:28:23.037Z",
+          "content": "Developer 完成修復但未回報（dispatch 回傳空、action log 無紀錄），EM 依 working tree diff 代為確認：F-01 stopPaaw 改 exit-confirmed Promise（SIGTERM→5s SIGKILL→10s failsafe）、restartPaaw/upgradePaaw/restoreBackup 全部 await 確認 stop 成功才續行、失敗如實回報；F-02 POST /api/backups/create 與 /api/backups/restore/* 補 admin check。待 tester 驗證輪確認。"
+        },
+        {
+          "by": "agent",
+          "at": "2026-09-19T03:17:37.305Z",
+          "content": "QA 複審 verdict（2026-09-19 11:15）：F-01 RESOLVED、F-02 RESOLVED → NO-GO 解除。逐項證據：F-01 stopPaaw（src/server.mjs:146-194）exit-confirmed Promise 真實在位（SIGTERM→5s SIGKILL→10s failsafe、settled flag、in-flight dedupe）；四個呼叫端全數正確 await（:581 upgrade / :595 stop / :601 restart / :627 restore），stop 失敗 fail-closed 不再謊報。F-02 兩個 admin check 在 handler 開頭、副作用發生前；BACKUP_REGEX traversal 防護仍在（:386）。測試 gateway-restart-rbac.test.mjs 10 案非空殼（delayed 案 800≤elapsed<4600 證明等 exit 事件；stubborn 案 elapsed≥4500+pid 存活斷言能抓到舊 bug；F-02 403 驗證無副作用：備份目錄無新檔+PAAW_ROOT 未動）。RUN-20260919-002：52/52 pass、exit 0、跑兩次一致。未發現修復引入的新 blocker/major。殘餘 minor 觀察（不擋）：併發 restart 第二個請求會收 ok:false \"Already running\"（startPaaw guard 防 double-spawn，屬可接受誠實行為）。其餘 02:16 findings 維持原判定不變。"
+        }
+      ],
+      "result": "F-01 stopPaaw() 改 exit-confirmed Promise（SIGTERM→5s SIGKILL→10s failsafe），restart/upgrade/restore 全 await；F-02 備份建立/還原端點補 admin check。修復在 working tree，經 QA 複審逐行確認在位。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-09-19T03:18:34.890Z"
+    },
+    {
+      "id": "TASK-009",
+      "featureId": "F20260918-002",
+      "title": "驗證 TASK-008 修復：restart race 快/慢退出兩案 + 備份端點 403，全套無回歸",
+      "type": "test",
+      "status": "close",
+      "priority": "critical",
+      "parentId": null,
+      "description": "驗證 TASK-008（src/server.mjs F-01/F-02 修復）。改動在 working tree 未 commit。\n\n工作項：\n1. read_file src/server.mjs 修復段落 + tests/e2e/gateway-backup-auth.test.mjs 現況\n2. 補測試（QA 建議的 restart 快/慢退出兩案 + F-02 案例）：\n   - restart：process 快速退出 → restart 成功回 ok:true\n   - restart：process 拒絕退出（模擬忽視 SIGTERM 的 child）→ stop 失敗 → restart 回 ok:false 不謊報\n   - viewer 呼叫 POST /api/backups/create → 403；POST /api/backups/restore/* → 403；admin → 正常\n   - stop 路由：回應只在 exit 確認後送達\n3. 全套 npm test 跑綠（原 42 案 + 新案例，無回歸）\n\n禁令：絕對禁止 git commit/push/add（上輪已記點一次）；暫存檔只寫 $PAAW_TMP/。",
+      "labels": [
+        "test",
+        "release-blocker"
+      ],
+      "assignee": null,
+      "createdAt": "2026-09-19T02:28:23.038Z",
+      "updatedAt": "2026-09-19T03:54:27.195Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [],
+      "result": "新增 tests/e2e/gateway-restart-rbac.test.mjs（F-01 4 案例 + F-02 6 案例），RUN-20260919-002 全套 52/52 pass、exit 0、重跑無 flaky、零 git 寫入。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-09-19T03:18:34.894Z"
     }
   ],
-  "updatedAt": "2026-09-18T11:08:13.241Z"
+  "updatedAt": "2026-09-19T02:28:23.038Z"
 }

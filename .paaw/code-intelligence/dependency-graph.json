@@ -229,6 +229,68 @@
         "restoreBackup"
       ]
     },
+    "tests/e2e/gateway-restart-rbac.test.mjs": {
+      "path": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:net",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:timers/promises",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
     "tests/e2e/gateway-ui-csrf.test.mjs": {
       "path": "tests/e2e/gateway-ui-csrf.test.mjs",
       "language": "javascript",
@@ -300,9 +362,9 @@
     }
   ],
   "stats": {
-    "totalFiles": 5,
+    "totalFiles": 6,
     "totalEdges": 1,
     "resolvedImports": 1,
-    "unresolvedImports": 39
+    "unresolvedImports": 48
   }
 }
