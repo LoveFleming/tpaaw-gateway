@@ -132,34 +132,90 @@ function startPaaw() {
   return { ok: true, pid: paawPid };
 }
 
+// In-flight stop dedupe: concurrent callers (restart / upgrade / restore) share one stop sequence
+let stoppingPromise = null;
+
+/**
+ * Stop PAAW Server. Resolves ONLY when the process has actually exited
+ * (exit event fired = PID reaped), not when SIGTERM was merely sent — F-01 fix.
+ *
+ * Sequence: SIGTERM → (still alive after 5s) SIGKILL → (still no exit event
+ * after 10s) resolve { ok:false } honestly. Fail-closed: callers must NOT
+ * start a new process on top of a live one; a reported failure means failure.
+ */
 function stopPaaw() {
-  if (!paawProcess) return { ok: false, error: "Not running" };
+  if (!paawProcess) return Promise.resolve({ ok: false, error: "Not running" });
+  if (stoppingPromise) return stoppingPromise;
 
+  const proc = paawProcess;
   logEvent("server_stopping", "PAAW Server stopping...");
-  paawProcess.kill("SIGTERM");
-  paawStatus = "stopped";
 
-  // Give it 5 seconds, then force kill
-  setTimeout(() => {
-    if (paawProcess) {
-      paawProcess.kill("SIGKILL");
-      paawProcess = null;
-      paawPid = null;
+  stoppingPromise = new Promise((resolve) => {
+    let settled = false;
+    const finish = (ok, error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(sigkillTimer);
+      clearTimeout(failsafeTimer);
+      stoppingPromise = null;
+      if (ok) {
+        paawStatus = "stopped"; // intentional stop overrides the "crashed-by-signal" mark from the generic exit handler
+      } else {
+        paawStatus = "crashed"; // process refused to die — surface it, don't paper over it
+      }
+      logEvent(ok ? "server_stopped" : "server_stop_failed", ok
+        ? "PAAW Server stopped (exit confirmed)"
+        : `PAAW Server stop failed: ${error}`);
+      resolve(ok ? { ok: true } : { ok: false, error });
+    };
+
+    // Definitive signal: the child process really exited (Node reaps the PID)
+    proc.once("exit", () => finish(true));
+
+    // Escalation: still alive after 5s grace period → SIGKILL
+    const sigkillTimer = setTimeout(() => {
+      try {
+        if (proc.exitCode === null && proc.signalCode === null) proc.kill("SIGKILL");
+      } catch (err) {
+        finish(false, `SIGKILL failed: ${err.message}`);
+      }
+    }, 5000);
+
+    // Failsafe: even SIGKILL produced no exit event → report failure honestly (F-01)
+    const failsafeTimer = setTimeout(() => {
+      finish(false, "process did not exit after SIGKILL");
+    }, 10000);
+
+    // Initiate graceful shutdown
+    try {
+      proc.kill("SIGTERM");
+    } catch (err) {
+      finish(false, `SIGTERM failed: ${err.message}`);
     }
-  }, 5000);
+  });
 
-  return { ok: true };
+  return stoppingPromise;
 }
 
-function restartPaaw() {
-  stopPaaw();
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const result = startPaaw();
-      logEvent("server_restarted", "PAAW Server restarted");
-      resolve(result);
-    }, 2000);
-  });
+/**
+ * Restart = stop (fully awaited, exit-confirmed) THEN start — F-01 fix.
+ * If the stop fails we abort and report it; never start a second process
+ * while the old one may still hold the port.
+ */
+async function restartPaaw() {
+  if (paawProcess) {
+    const stopResult = await stopPaaw();
+    if (!stopResult.ok) {
+      logEvent("server_restart_failed", `Restart aborted: stop failed (${stopResult.error})`);
+      return { ok: false, error: `Restart aborted: stop failed — ${stopResult.error}` };
+    }
+  }
+  const result = startPaaw();
+  logEvent(
+    result.ok ? "server_restarted" : "server_restart_failed",
+    result.ok ? `PAAW Server restarted (PID: ${result.pid})` : `Restart failed at start phase: ${result.error}`,
+  );
+  return result;
 }
 
 // ── Version Manager ──
@@ -205,10 +261,14 @@ function getLatestVersion() {
 }
 
 async function upgradePaaw(userId = "system") {
-  if (paawStatus === "running") {
-    // Stop first
-    stopPaaw();
-    await new Promise(r => setTimeout(r, 3000));
+  if (paawProcess) {
+    // Stop first — exit-confirmed, no fixed sleep. Fail-closed (F-01):
+    // never git-pull / npm-install under a live server process.
+    const stopResult = await stopPaaw();
+    if (!stopResult.ok) {
+      logEvent("upgrade_failed", `Upgrade aborted: stop failed (${stopResult.error})`, userId);
+      return { ok: false, error: `Upgrade aborted: stop failed — ${stopResult.error}` };
+    }
   }
 
   logEvent("upgrade_start", "Starting upgrade...", userId);
@@ -245,9 +305,13 @@ async function upgradePaaw(userId = "system") {
       steps.push({ step: "npm install", ok: false, error: npmErr.message.slice(0, 200) });
     }
 
-    // Step 5: Restart PAAW Server
+    // Step 5: Restart PAAW Server — report failure honestly (F-01 principle)
     const startResult = startPaaw();
-    steps.push({ step: "restart", ok: startResult.ok });
+    steps.push({ step: "restart", ok: startResult.ok, detail: startResult.error || `PID ${startResult.pid}` });
+    if (!startResult.ok) {
+      logEvent("upgrade_failed", `Upgrade completed but restart failed: ${startResult.error}`, userId);
+      return { ok: false, steps, error: `Upgrade steps completed but PAAW Server failed to start — ${startResult.error}` };
+    }
 
     // Step 6: Verify
     await new Promise(r => setTimeout(r, 3000));
@@ -328,8 +392,13 @@ export function restoreBackup(filename, userId = "system") {
   logEvent("restore_start", `Restoring from ${filename}...`, userId);
 
   try {
-    // Stop PAAW Server first
-    if (paawStatus === "running") stopPaaw();
+    // Fail-closed (F-01): never extract over a live server. The HTTP route
+    // awaits a confirmed exit (stopPaaw) BEFORE calling this function — if a
+    // process handle is still present here, something raced us; refuse.
+    if (paawProcess) {
+      logEvent("restore_failed", "Restore refused: PAAW Server still running", userId);
+      return { ok: false, error: "PAAW Server is still running — stop it before restoring" };
+    }
 
     // Create a pre-restore backup just in case
     createBackup("system-restore-safety");
@@ -337,11 +406,15 @@ export function restoreBackup(filename, userId = "system") {
     // Extract
     execFileSync("tar", ["xzf", filepath], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
 
-    // Restart
-    startPaaw();
+    // Restart — report the outcome honestly (F-01 principle)
+    const startResult = startPaaw();
+    if (!startResult.ok) {
+      logEvent("restore_done", `Restored from ${filename}, but restart failed: ${startResult.error}`, userId);
+      return { ok: false, error: `Data restored from ${filename}, but PAAW Server failed to start — ${startResult.error}` };
+    }
 
-    logEvent("restore_done", `Restored from ${filename}`, userId);
-    return { ok: true };
+    logEvent("restore_done", `Restored from ${filename} (PID: ${startResult.pid})`, userId);
+    return { ok: true, pid: startResult.pid };
   } catch (err) {
     logEvent("restore_failed", `Restore failed: ${err.message}`, userId);
     return { ok: false, error: err.message };
@@ -519,7 +592,7 @@ const server = createServer(async (req, res) => {
 
   if (url.pathname === "/api/server/stop" && method === "POST") {
     if (currentUser.role !== "admin") { sendJSON(403, { error: "Admin only" }); return; }
-    sendJSON(200, stopPaaw());
+    sendJSON(200, await stopPaaw()); // F-01: resolve only after confirmed exit
     return;
   }
 
@@ -537,12 +610,26 @@ const server = createServer(async (req, res) => {
   }
 
   if (url.pathname === "/api/backups/create" && method === "POST") {
+    // F-02: backups are admin-only writes; viewers keep GET read access
+    if (currentUser.role !== "admin") { sendJSON(403, { error: "Admin only" }); return; }
     sendJSON(200, createBackup(currentUser.id));
     return;
   }
 
   if (url.pathname.startsWith("/api/backups/restore/") && method === "POST") {
+    // F-02: restore overwrites PAAW_ROOT data — admin only
+    if (currentUser.role !== "admin") { sendJSON(403, { error: "Admin only" }); return; }
     const filename = url.pathname.split("/api/backups/restore/")[1];
+
+    // F-01: exit-confirmed stop BEFORE restore; fail-closed — if the stop
+    // fails we refuse to extract over a possibly-live server.
+    if (paawProcess) {
+      const stopResult = await stopPaaw();
+      if (!stopResult.ok) {
+        sendJSON(200, { ok: false, stage: "stop", error: `Stop failed before restore — ${stopResult.error}` });
+        return;
+      }
+    }
     sendJSON(200, restoreBackup(filename, currentUser.id));
     return;
   }

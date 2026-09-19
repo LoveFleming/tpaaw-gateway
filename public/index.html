@@ -69,6 +69,10 @@ async function api(path, method = "GET", body) {
     render();
     return null;
   }
+  if (res.status === 403) {
+    alert("⛔ 403 Admin only — this action requires the admin role.");
+    return null;
+  }
   return res.json();
 }
 
@@ -293,7 +297,9 @@ function renderBackup() {
     });
   }
 
-  var createBtn = '<div class="btn-row" style="margin-bottom:12px"><button class="btn success" onclick="doBackup()">🔄 Create Backup Now</button></div>';
+  var createBtn = currentUser.role === "admin"
+    ? '<div class="btn-row" style="margin-bottom:12px"><button class="btn success" onclick="doBackup()">🔄 Create Backup Now</button></div>'
+    : "";
 
   return cardHTML("💾 Backups", createBtn + rows.join(""));
 }
