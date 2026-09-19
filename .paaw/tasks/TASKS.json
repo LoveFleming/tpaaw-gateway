@@ -415,7 +415,106 @@
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-19T03:18:34.894Z"
+    },
+    {
+      "id": "TASK-010",
+      "featureId": "F20260918-002",
+      "title": "修復 backup 路徑 6 筆 CWE-22：safe-path helper 重構 + containment check",
+      "type": "dev",
+      "status": "pending",
+      "priority": "medium",
+      "parentId": null,
+      "description": "## 背景\nSecurity scan（2026-09-19T06:54）6 筆 WARNING/CWE-22 全在 src/server.mjs backup 相關程式，confidence LOW，皆在 login 之後（restore 為 admin-only）。經評估實質均為誤報（資料來源非攻擊者可控或已被錨定 regex 阻擋），但既有 `// nosemgrep:` 註解未被掃描器採用，且唯一真輸入點（restoreBackup 的 filename）值得加縱深防禦。目標：讓重掃後 CWE-22 findings 歸零，同時提升實質防護。\n\n## 6 筆位置與成因（已查證）\n1. **src/server.mjs:338 ×2**（`detect-non-literal-fs-filename` + `path-join-resolve-traversal`）— `listBackups()` 內 `statSync(join(BACKUP_DIR, f))`，`f` 來自 `readdirSync(BACKUP_DIR)` 且經 `BACKUP_REGEX` 過濾。readdir 回傳單層 entry name，不含路徑分隔符，純誤報。\n2. **src/server.mjs:365 ×2**（同兩條 rule）— `createBackup()` 內 `[\"data\", \".paaw\"].filter(d => existsSync(join(PAAW_ROOT, d)))`，`d` 來自硬編碼陣列，純誤報。\n3. **src/server.mjs:389-390 ×2**（`path-join-resolve-traversal` + `detect-non-literal-fs-filename`）— `restoreBackup()` 內 `join(BACKUP_DIR, filename)` 與 `existsSync(filepath)`，`filename` 來自 `POST /api/backups/restore/{filename}`（:620-634，admin-only）。已有 `BACKUP_REGEX`（:59，錨定 `^paaw-backup-\\d{4}-\\d{2}-\\d{2}-\\d{2}\\.tar\\.gz$`）阻擋 `../`，但這是唯一攻擊者可控輸入點。\n\n## 修復策略（架構端已定案，照此實作）\n1. **新增集中式 safe-path helper**（建議放 BACKUP_REGEX 定義附近，export 供測試）：\n   ```js\n   export function backupPath(name) {\n     if (typeof name !== \"string\" || !BACKUP_REGEX.test(name)) return null;\n     const root = resolve(BACKUP_DIR) + sep;\n     const p = resolve(BACKUP_DIR, name);\n     return p.startsWith(root) ? p : null;   // directory containment check\n   }\n   ```\n   （自 `node:path` 補 import `resolve`、`sep`；BACKUP_DIR 在 :58 已是 resolve 過的絕對路徑）\n2. **restoreBackup()**：以 `backupPath(filename)` 取代現行 regex 檢查 + `join` 兩步（:385-390），null 時回 `{ ok: false, error: \"Invalid backup filename\" }`，行為與錯誤訊息不變。\n3. **listBackups()**：`statSync(join(BACKUP_DIR, f))` 改為 `statSync(backupPath(f))`（filter 後的 f 必然通過；helper 回 null 時 skip 該 entry 以防禦性處理）。\n4. **createBackup()**：將來源目錄常數化到模組頂層（如 `const BACKUP_SOURCE_DIRS = [join(PAAW_ROOT, \"data\"), join(PAAW_ROOT, \".paaw\")]`），filter 改為 `BACKUP_SOURCE_DIRS.filter(existsSync)`，讓 join 離開 filter 回呼、taint flow 斷掉。tar 打包路徑改傳 `relative(PAAW_ROOT, d)`。\n5. **不得改變對外 API 行為**：`GET /api/backups`、`POST /api/backups/create`、`POST /api/backups/restore/{filename}` 回應結構與錯誤訊息維持原樣，既有測試（tests/unit/backup.test.mjs、tests/e2e/gateway-backup-auth.test.mjs 等，全套 52 案）必須全綠。\n6. 完成後重跑 security scan：目標 src/server.mjs CWE-22 = 0。若重構後仍有殘留 findings，先檢查掃描流程是否支援 nosemgrep annotation（.paaw/security/），將結果記在 task note 回報，勿手改 scan-results.json。\n\n## 驗收條件\n- [ ] 重掃 src/server.mjs：CWE-22 findings 0 筆\n- [ ] 全套測試 pass（含既有 52 案）\n- [ ] `backupPath` 已 export 且被 listBackups/restoreBackup 統一使用\n- [ ] 對外 API 回應結構不變（diff 證明路由層無行為變更）\n- [ ] 完成後 git add（stage），不 push",
+      "labels": [
+        "security",
+        "cwe-22",
+        "hardening"
+      ],
+      "assignee": "developer",
+      "createdAt": "2026-09-19T08:24:33.370Z",
+      "updatedAt": "2026-09-19T08:24:46.474Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-09-19T08:24:46.474Z",
+          "content": "Assigned to developer"
+        }
+      ],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
+    },
+    {
+      "id": "TASK-011",
+      "featureId": "F20260918-002",
+      "title": "backup path traversal 防護測試：backupPath 攻擊案例 + restore e2e",
+      "type": "test",
+      "status": "pending",
+      "priority": "medium",
+      "parentId": null,
+      "description": "## 背景\n搭配 security 修復 task（backup 路徑 safe-path helper 重構）：src/server.mjs 將新增 export `backupPath(name)`（BACKUP_REGEX 驗證 + resolve 後 directory containment check），listBackups/restoreBackup 統一走此 helper。需要攻擊案例測試證明 traversal 防護在 regex 之外仍有第二層（containment）兜底。\n\n## 測試範圍（寫進 tests/unit/backup.test.mjs 或新檔，遵循既有 TAP 慣例）\n1. `backupPath()` 單元測試：\n   - 合法名稱 `paaw-backup-2026-09-19-06.tar.gz` → 回傳 BACKUP_DIR 內絕對路徑\n   - `../paaw-backup-2026-09-19-06.tar.gz`、`../../etc/passwd`、`paaw-backup-..%2f..%2f.tar.gz` → null\n   - 絕對路徑輸入 `/etc/passwd`、`/Users/x/backups/x.tar.gz` → null\n   - 目錄跳脫偽裝 `paaw-backup-2026-09-19-06.tar.gz/../evil` → null（regex 應先擋）\n   - 非字串（null/undefined/數字）→ null，不 throw\n2. `restoreBackup()` 攻擊案例（可走既有 e2e 慣例 tests/e2e/）：\n   - `POST /api/backups/restore/..%2F..%2Fetc%2Fpasswd` → 400/失敗回應，且不觸發 tar 解壓（可用 logEvent 或回應內容斷言）\n   - 非 admin 帶 traversal filename → 403（既有 RBAC 行為不因本修復退化）\n3. 既有回歸：全套測試綠（含修復前 52 案），確認無行為變更。\n\n## 驗收條件\n- [ ] 上述案例全數覆蓋且 pass，Test Run 落檔（RUN-YYYYMMDD-NNN）\n- [ ] 測試只依賴 export 的 API（backupPath、BACKUP_REGEX），不觸內部私有變數\n- [ ] 完成後 git add（stage），不 push",
+      "labels": [
+        "security",
+        "cwe-22",
+        "test"
+      ],
+      "assignee": "tester",
+      "createdAt": "2026-09-19T08:24:33.375Z",
+      "updatedAt": "2026-09-19T08:24:46.476Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-09-19T08:24:46.476Z",
+          "content": "Assigned to tester"
+        }
+      ],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
+    },
+    {
+      "id": "TASK-012",
+      "featureId": "F20260918-002",
+      "title": "更新 F20260918-002 文件：backupPath 防護重構後的 feature docs + mapping + runbook",
+      "type": "docs",
+      "status": "pending",
+      "priority": "low",
+      "parentId": null,
+      "description": "前置：TASK-010（safe-path helper 重構）與 TASK-011（攻擊案例測試）完成後執行。\n\n更新 F20260918-002 文件以反映 CWE-22 修復：\n\n1. **feature docs**（project_edit action=feature_update_docs）：\n   - `backupPath(name)` 成為新 export：語義 = regex 驗證（BACKUP_REGEX）+ directory containment check（resolve 後必須落在 BACKUP_DIR 內），listBackups / restoreBackup 統一走它\n   - 記錄修復動機：6 筆 CWE-22（confidence LOW、登入後、多為誤報）→ 以縱深防禦重構取代 nosemgrep 降噪\n   - 修復後需記錄重掃結果：CWE-22 歸零日期與 scan id\n\n2. **feature mapping**（project_edit action=feature_update_mapping）：\n   - TASK-011 若新增測試檔（如 tests/unit/backup-path.test.mjs），把新檔掛進 F20260918-002 的 tests\n   - src/server.mjs 新增 export backupPath 的 symbol 對應\n\n3. **runbook / HANDOVER**（.paaw/runbook/ 如有 backup 相關條目）：\n   - backup 路徑防護行為：restore 收到非法 filename（含 ../、絕對路徑、encoded traversal）時的回應行為與錯誤碼\n\n驗收：文件與程式碼現況一致（backupPath 語義、測試清單、掃描歸零記錄），feature map 三方（docs / mapping / tests）同步。",
+      "labels": [
+        "security",
+        "cwe-22",
+        "docs"
+      ],
+      "assignee": "doc-writer",
+      "createdAt": "2026-09-19T08:39:41.871Z",
+      "updatedAt": "2026-09-19T08:39:46.376Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-09-19T08:39:46.376Z",
+          "content": "Assigned to doc-writer"
+        }
+      ],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
     }
   ],
-  "updatedAt": "2026-09-19T02:28:23.038Z"
+  "updatedAt": "2026-09-19T08:39:41.871Z"
 }

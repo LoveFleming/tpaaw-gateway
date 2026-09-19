@@ -16,7 +16,7 @@
 
 import { createServer } from "http";
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from "fs";
-import { join, resolve, basename, dirname } from "path";
+import { join, resolve, sep, relative, basename, dirname } from "path";
 import { execSync, execFileSync, spawn } from "child_process";
 import { randomUUID } from "crypto";
 import { fileURLToPath, pathToFileURL } from "url";
@@ -58,6 +58,31 @@ const PAAW_ROOT = resolve(__dirname, process.env.PAAW_ROOT || config.paawRoot ||
 const BACKUP_DIR = resolve(__dirname, process.env.PAAW_BACKUP_DIR || config.backupDir || "../../../backups");
 export const BACKUP_REGEX = /^paaw-backup-\d{4}-\d{2}-\d{2}-\d{2}\.tar\.gz$/; // YYYY-MM-DD-HH
 export const BACKUP_DATE_REGEX = /paaw-backup-(\d{4}-\d{2}-\d{2}-\d{2})/;
+
+// Source directories archived by createBackup — computed ONCE at module load
+// so no path assembly happens inside request/backup flows (CWE-22 hardening).
+const BACKUP_SOURCE_DIRS = [join(PAAW_ROOT, "data"), join(PAAW_ROOT, ".paaw")];
+
+/**
+ * Centralized safe-path resolver for backup archive names (CWE-22).
+ *
+ * Validates `name` against the BACKUP_REGEX whitelist, then resolves it
+ * under BACKUP_DIR and verifies directory containment. Returns the absolute
+ * path, or null when the name is illegal / escapes BACKUP_DIR.
+ *
+ * Exported for attack-case unit tests (TASK-011): every backup filename
+ * flowing into fs calls MUST come through here.
+ *
+ * @param {unknown} name - candidate backup filename (e.g. from readdir or API)
+ * @returns {string | null} absolute path inside BACKUP_DIR, or null
+ */
+export function backupPath(name) {
+  if (typeof name !== "string" || !BACKUP_REGEX.test(name)) return null;
+  const root = resolve(BACKUP_DIR) + sep;
+  const p = resolve(BACKUP_DIR, name);
+  return p.startsWith(root) ? p : null;
+}
+
 // Test-only knob: PAAW_MAX_BACKUPS overrides config.maxBackups when set
 const MAX_BACKUPS = Number(process.env.PAAW_MAX_BACKUPS ?? config.maxBackups ?? 7);
 
@@ -333,9 +358,11 @@ async function upgradePaaw(userId = "system") {
 export function listBackups() {
   if (!existsSync(BACKUP_DIR)) return [];
   return readdirSync(BACKUP_DIR)
-    .filter(f => BACKUP_REGEX.test(f))
-    .map(f => {
-      const stat = statSync(join(BACKUP_DIR, f)); // nosemgrep: f already whitelist-validated by regex on line above
+    .map(f => backupPath(f))
+    .filter(p => p !== null)
+    .map(p => {
+      const f = basename(p);
+      const stat = statSync(p);
       const dateMatch = f.match(BACKUP_DATE_REGEX);
       return {
         filename: f,
@@ -353,24 +380,27 @@ export function createBackup(userId = "system") {
 
   const dateStr = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19).replace("T", "-");
   const filename = `paaw-backup-${dateStr.slice(0, 13)}.tar.gz`;
-  if (!BACKUP_REGEX.test(filename)) {
+  const filepath = backupPath(filename);
+  if (!filepath) {
     throw new Error("Invalid backup filename: " + filename);
   }
-  const filepath = join(BACKUP_DIR, filename);
 
   logEvent("backup_start", "Creating backup...", userId);
 
   try {
     // Backup data/ and .paaw/ directories
-    const dirs = ["data", ".paaw"].filter(d => existsSync(join(PAAW_ROOT, d))); // nosemgrep: d is from hardcoded ["data", ".paaw"] list, not user input
-    execFileSync("tar", ["czf", filepath, ...dirs], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
+    const dirs = BACKUP_SOURCE_DIRS.filter(d => existsSync(d));
+    const relDirs = dirs.map(d => relative(PAAW_ROOT, d));
+    execFileSync("tar", ["czf", filepath, ...relDirs], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
 
     // Clean up old backups
     const backups = listBackups();
     if (backups.length > MAX_BACKUPS) {
       const toDelete = backups.slice(MAX_BACKUPS);
       for (const old of toDelete) {
-        try { unlinkSync(join(BACKUP_DIR, old.filename)); } catch {}
+        const oldPath = backupPath(old.filename);
+        if (!oldPath) continue; // skip illegal names (defense in depth — list is already filtered)
+        try { unlinkSync(oldPath); } catch {}
       }
     }
 
@@ -383,11 +413,11 @@ export function createBackup(userId = "system") {
 }
 
 export function restoreBackup(filename, userId = "system") {
-  if (!BACKUP_REGEX.test(filename)) {
+  const filepath = backupPath(filename);
+  if (!filepath) {
     return { ok: false, error: "Invalid backup filename" };
   }
-  const filepath = join(BACKUP_DIR, filename); // nosemgrep: filename regex-validated on line above
-  if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" }; // nosemgrep: filepath from validated filename
+  if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" };
 
   logEvent("restore_start", `Restoring from ${filename}...`, userId);
 

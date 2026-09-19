@@ -3,7 +3,7 @@
   "title": "tpaaw-gateway 0.2.2 — 品質補強（F-01/F-02 安全修復）+ 證據收編",
   "createdAt": "2026-09-19T07:00:26.243Z",
   "createdBy": "agent:em",
-  "status": "draft",
+  "status": "reviewing",
   "baseline": {
     "sha": "ff850fdc01ad4311b5ca498b359cccb881d58df4",
     "short": "ff850fd",
@@ -13,20 +13,24 @@
     "source": "first-commit"
   },
   "target": {
-    "sha": "7d2ff81c35f0cc4014b4b436d1ef453d81ef45e6",
-    "short": "7d2ff81",
-    "at": "2026-09-19T15:00:03+08:00",
+    "sha": "40f2164d0f0c157f6cd3d73ba38206e2b2463b97",
+    "short": "40f2164",
+    "at": "2026-09-19T15:45:43+08:00",
     "author": "LoveFleming",
-    "subject": "chore(release): staged-changes snapshot for evidence commit 12c9315"
+    "subject": "chore: EM 資產同步 rev 2026-09-19-5（版控分層）"
   },
   "scope": {
-    "computedAt": "2026-09-19T07:00:26.195Z",
+    "computedAt": "2026-09-19T07:59:40.848Z",
     "commits": {
-      "count": 38,
+      "count": 42,
       "authors": [
         "LoveFleming"
       ],
       "subjects": [
+        "40f2164 chore: EM 資產同步 rev 2026-09-19-5（版控分層）",
+        "06b6de2 chore: EM 新開的 RR 草稿入版控（資產層）",
+        "0f9cbca chore: gitignore runtime 區塊 + coding-memory 收編",
+        "6b517dc chore(ru): PAAW runtime 層退出版控 — 平台自動管理（sessions/test-runs/changes/security+四狀態檔；資產層全留）",
         "7d2ff81 chore(release): staged-changes snapshot for evidence commit 12c9315",
         "12c9315 chore(release): evidence for pre-flight — RUN-20260919-004, semgrep, QA qr-20260919-065817-cxsl",
         "e3cf819 chore(release): commit .paaw platform state before evidence run",
@@ -52,14 +56,464 @@
         "4a9ee9d docs: agent prompt 對齊 .paaw 進版控紀律（_promptRev 2026-09-06-e）",
         "88d2db8 feat: .paaw 進版控 — release unit 資產（2026-09-06 Fleming 定調）",
         "e72385d test(server): add e2e tests for backup auth and testability hooks",
-        "d940eb9 chore: .gitignore 補 runtime state — current.json/gateway.json/data/.paaw 不進版控",
-        "9e57db2 fix(backup): correct filename regex to match YYYY-MM-DD-HH format",
-        "e8c453d fix(backup): suppress semgrep false-positive on validated backup paths",
-        "a8eb20b fix(server): eliminate command injection in backup restore",
-        "fac5510 chore: .gitignore 補強 — versions/ runtime 目錄與 state 不進版控（公開 repo 防洩漏）"
+        "d940eb9 chore: .gitignore 補 runtime state — current.json/gateway.json/data/.paaw 不進版控"
       ]
     },
     "files": [
+      {
+        "file": ".paaw/agents/coding.em.json",
+        "changeCount": 7,
+        "lastChanged": "2026-09-19T07:45:43.000Z",
+        "commits": [
+          "40f2164",
+          "bc8ac9c",
+          "770e52e",
+          "692e48a",
+          "88d2db8",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/release-requests/RR-20260919-1500-c23f.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T07:45:27.000Z",
+        "commits": [
+          "06b6de2"
+        ]
+      },
+      {
+        "file": ".gitignore",
+        "changeCount": 8,
+        "lastChanged": "2026-09-19T07:44:47.000Z",
+        "commits": [
+          "0f9cbca",
+          "20a85b8",
+          "b0a4049",
+          "88d2db8",
+          "d940eb9",
+          "fac5510",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/actions.jsonl",
+        "changeCount": 9,
+        "lastChanged": "2026-09-19T07:44:47.000Z",
+        "commits": [
+          "0f9cbca",
+          "12c9315",
+          "368fb8f",
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd",
+          "88d2db8",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/conversations/coding.em/active.json",
+        "changeCount": 11,
+        "lastChanged": "2026-09-19T07:44:47.000Z",
+        "commits": [
+          "0f9cbca",
+          "e3cf819",
+          "e8aaa83",
+          "d325089",
+          "368fb8f",
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd",
+          "88d2db8",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-log.jsonl",
+        "changeCount": 9,
+        "lastChanged": "2026-09-19T07:44:47.000Z",
+        "commits": [
+          "0f9cbca",
+          "e3cf819",
+          "368fb8f",
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd",
+          "88d2db8",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-19-07-00--developer.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-19T07:44:47.000Z",
+        "commits": [
+          "0f9cbca"
+        ]
+      },
+      {
+        "file": ".paaw/changes/change-intelligence.json",
+        "changeCount": 6,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "d325089",
+          "368fb8f",
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/cu-status.json",
+        "changeCount": 6,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f",
+          "12ae4b8",
+          "88d2db8",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/gates.json",
+        "changeCount": 4,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "0efcf9b",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/scan.json",
+        "changeCount": 6,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f",
+          "12ae4b8",
+          "88d2db8",
+          "d4ffe77",
+          "b50cec6"
+        ]
+      },
+      {
+        "file": ".paaw/security/scan-results.json",
+        "changeCount": 7,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12c9315",
+          "368fb8f",
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd",
+          "88d2db8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-06-feature-feature-skeleton-machine-kind-deterministic-apis-get.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "88d2db8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-06-feature-feature-skeleton-machine-kind-deterministic-apis-pos.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "88d2db8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-15-task.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-feature-feature-skeleton-machine-kind-deterministic-apis-get.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-feature-feature-skeleton-machine-kind-deterministic-apis-pos.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-gatewaymjs-f7-csrf-task-002-task-002-f1f10-f7-csrf-em-f1f10-.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-release-021-task-002-root-usersstewardapptpaaw-gateway-1-pac.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-release-rr-20260918-1242-021-root-usersstewardapptpaaw-gatew.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-001rr-20260918-1242-release-code-review-gatewaymjsrelea.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-003release-rr-20260918-1242-1f7-csrf-gatewaymjs-cmdui-p.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-004-gatewaymjs-rr-20260918-1242-risk-gate-failhighapi-f.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-005-developer-4-gatewaymjs-uiindexhtml-working-tree-rea.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-005-gatewaymjs-qa-findingsrelease-rr-20260918-1242-read.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-release-commit-push-working-tree-3-commit-paaw-paaw-100-paaw.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12c9315"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-release-qa-reviewtpaaw-gatewaytarget-head-e3cf819-021-scope-.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12c9315"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-task-006007-docs-feature-usersstewardapptpaaw-gateway-featur.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-task-007f20260918-002review-code-review-srcservermjsgateway-.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-task-008-task-007-review-no-go-srcservermjs-f-01f-02-2026-09.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-task-008criticalf20260918-002-srcservermjs-qa-review-finding.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-task-009-52-testse2egateway-restart-rbactestmjs10-f-01-resta.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-19-task-009criticalf20260918-002-task-008-srcservermjs-f-01-res.md",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/last.json",
+        "changeCount": 7,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12c9315",
+          "d325089",
+          "368fb8f",
+          "3d31aef",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-001.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-002.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-003.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-004.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-005.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260919-001.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "3d31aef"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260919-002.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "368fb8f"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260919-003.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "d325089"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260919-004.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12c9315"
+        ]
+      },
+      {
+        "file": ".paaw/verify-last.json",
+        "changeCount": 4,
+        "lastChanged": "2026-09-19T07:44:33.000Z",
+        "commits": [
+          "6b517dc",
+          "12c9315",
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
       {
         "file": ".paaw/staged-changes.json",
         "changeCount": 5,
@@ -82,21 +536,6 @@
           "3d31aef",
           "12ae4b8",
           "3bdb4bd",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
-        "file": ".paaw/coding-memory/actions.jsonl",
-        "changeCount": 8,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315",
-          "368fb8f",
-          "3d31aef",
-          "12ae4b8",
-          "3bdb4bd",
-          "88d2db8",
           "d4ffe77",
           "b50cec6"
         ]
@@ -157,116 +596,11 @@
         ]
       },
       {
-        "file": ".paaw/security/scan-results.json",
-        "changeCount": 6,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315",
-          "368fb8f",
-          "3d31aef",
-          "12ae4b8",
-          "3bdb4bd",
-          "88d2db8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-release-commit-push-working-tree-3-commit-paaw-paaw-100-paaw.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-release-qa-reviewtpaaw-gatewaytarget-head-e3cf819-021-scope-.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/last.json",
-        "changeCount": 6,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315",
-          "d325089",
-          "368fb8f",
-          "3d31aef",
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260919-004.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315"
-        ]
-      },
-      {
-        "file": ".paaw/verify-last.json",
-        "changeCount": 3,
-        "lastChanged": "2026-09-19T06:59:18.000Z",
-        "commits": [
-          "12c9315",
-          "12ae4b8",
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/coding-memory/conversations/coding.em/active.json",
-        "changeCount": 10,
-        "lastChanged": "2026-09-19T06:53:01.000Z",
-        "commits": [
-          "e3cf819",
-          "e8aaa83",
-          "d325089",
-          "368fb8f",
-          "3d31aef",
-          "12ae4b8",
-          "3bdb4bd",
-          "88d2db8",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
-        "file": ".paaw/coding-memory/dispatch-log.jsonl",
-        "changeCount": 8,
-        "lastChanged": "2026-09-19T06:53:01.000Z",
-        "commits": [
-          "e3cf819",
-          "368fb8f",
-          "3d31aef",
-          "12ae4b8",
-          "3bdb4bd",
-          "88d2db8",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
         "file": ".paaw/coding-memory/conversations/coding.em/s-2026-09-19T06-37-46.json",
         "changeCount": 1,
         "lastChanged": "2026-09-19T06:41:42.000Z",
         "commits": [
           "e8aaa83"
-        ]
-      },
-      {
-        "file": ".paaw/agents/coding.em.json",
-        "changeCount": 6,
-        "lastChanged": "2026-09-19T06:41:26.000Z",
-        "commits": [
-          "bc8ac9c",
-          "770e52e",
-          "692e48a",
-          "88d2db8",
-          "d4ffe77",
-          "b50cec6"
         ]
       },
       {
@@ -281,18 +615,6 @@
           "88d2db8",
           "d4ffe77",
           "b50cec6"
-        ]
-      },
-      {
-        "file": ".paaw/changes/change-intelligence.json",
-        "changeCount": 5,
-        "lastChanged": "2026-09-19T06:36:42.000Z",
-        "commits": [
-          "d325089",
-          "368fb8f",
-          "3d31aef",
-          "12ae4b8",
-          "3bdb4bd"
         ]
       },
       {
@@ -325,14 +647,6 @@
           "368fb8f",
           "3d31aef",
           "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260919-003.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T06:36:42.000Z",
-        "commits": [
-          "d325089"
         ]
       },
       {
@@ -577,18 +891,6 @@
         ]
       },
       {
-        "file": ".paaw/cu-status.json",
-        "changeCount": 5,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f",
-          "12ae4b8",
-          "88d2db8",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
         "file": ".paaw/decisions/DECISIONS.md",
         "changeCount": 5,
         "lastChanged": "2026-09-19T04:24:05.000Z",
@@ -682,66 +984,6 @@
         ]
       },
       {
-        "file": ".paaw/scan.json",
-        "changeCount": 5,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f",
-          "12ae4b8",
-          "88d2db8",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-task-006007-docs-feature-usersstewardapptpaaw-gateway-featur.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-task-007f20260918-002review-code-review-srcservermjsgateway-.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-task-008-task-007-review-no-go-srcservermjs-f-01f-02-2026-09.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-task-008criticalf20260918-002-srcservermjs-qa-review-finding.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-task-009-52-testse2egateway-restart-rbactestmjs10-f-01-resta.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-19-task-009criticalf20260918-002-task-008-srcservermjs-f-01-res.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
-        ]
-      },
-      {
         "file": ".paaw/tasks/TASKS.json",
         "changeCount": 4,
         "lastChanged": "2026-09-19T04:24:05.000Z",
@@ -750,14 +992,6 @@
           "3d31aef",
           "12ae4b8",
           "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260919-002.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T04:24:05.000Z",
-        "commits": [
-          "368fb8f"
         ]
       },
       {
@@ -789,20 +1023,6 @@
         ]
       },
       {
-        "file": ".gitignore",
-        "changeCount": 7,
-        "lastChanged": "2026-09-19T04:20:42.000Z",
-        "commits": [
-          "20a85b8",
-          "b0a4049",
-          "88d2db8",
-          "d940eb9",
-          "fac5510",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
         "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-11-54--developer.md",
         "changeCount": 1,
         "lastChanged": "2026-09-19T01:08:16.000Z",
@@ -812,30 +1032,6 @@
       },
       {
         "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-11-58--tester.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T01:08:16.000Z",
-        "commits": [
-          "3d31aef"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-release-021-task-002-root-usersstewardapptpaaw-gateway-1-pac.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T01:08:16.000Z",
-        "commits": [
-          "3d31aef"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-release-rr-20260918-1242-021-root-usersstewardapptpaaw-gatew.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-19T01:08:16.000Z",
-        "commits": [
-          "3d31aef"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260919-001.json",
         "changeCount": 1,
         "lastChanged": "2026-09-19T01:08:16.000Z",
         "commits": [
@@ -975,86 +1171,6 @@
         ]
       },
       {
-        "file": ".paaw/sessions/2026-09-18-feature-feature-skeleton-machine-kind-deterministic-apis-get.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-feature-feature-skeleton-machine-kind-deterministic-apis-pos.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-gatewaymjs-f7-csrf-task-002-task-002-f1f10-f7-csrf-em-f1f10-.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-task-001rr-20260918-1242-release-code-review-gatewaymjsrelea.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-task-003release-rr-20260918-1242-1f7-csrf-gatewaymjs-cmdui-p.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-task-004-gatewaymjs-rr-20260918-1242-risk-gate-failhighapi-f.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-task-005-developer-4-gatewaymjs-uiindexhtml-working-tree-rea.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-18-task-005-gatewaymjs-qa-findingsrelease-rr-20260918-1242-read.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260918-004.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260918-005.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T11:58:25.000Z",
-        "commits": [
-          "12ae4b8"
-        ]
-      },
-      {
         "file": "gateway.mjs",
         "changeCount": 11,
         "lastChanged": "2026-09-18T11:58:25.000Z",
@@ -1147,48 +1263,6 @@
         ]
       },
       {
-        "file": ".paaw/sessions/2026-09-15-task.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260918-001.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260918-002.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/runs/RUN-20260918-003.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/gates.json",
-        "changeCount": 3,
-        "lastChanged": "2026-09-18T04:39:22.000Z",
-        "commits": [
-          "0efcf9b",
-          "d4ffe77",
-          "b50cec6"
-        ]
-      },
-      {
         "file": "DEPLOY.md",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:36:16.000Z",
@@ -1256,22 +1330,6 @@
           "88d2db8",
           "d4ffe77",
           "b50cec6"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-06-feature-feature-skeleton-machine-kind-deterministic-apis-get.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-06T10:50:24.000Z",
-        "commits": [
-          "88d2db8"
-        ]
-      },
-      {
-        "file": ".paaw/sessions/2026-09-06-feature-feature-skeleton-machine-kind-deterministic-apis-pos.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-06T10:50:24.000Z",
-        "commits": [
-          "88d2db8"
         ]
       },
       {
@@ -2652,14 +2710,14 @@
       "label": "測試全過（unit + e2e）",
       "auto": {
         "status": "warn",
-        "detail": "19✓ 0✗ 0⋯；⚠ 結果落後 2 commits；run at 2026-09-19T06:54:06.473Z",
-        "checkedAt": "2026-09-19T07:20:32.858Z",
+        "detail": "19✓ 0✗ 0⋯；⚠ 結果落後 6 commits；run at 2026-09-19T06:54:06.473Z",
+        "checkedAt": "2026-09-19T08:14:30.307Z",
         "runId": "RUN-20260919-004"
       },
-      "verdict": "pending",
-      "reviewedBy": null,
-      "reviewedAt": null,
-      "note": null
+      "verdict": "pass",
+      "reviewedBy": "human",
+      "reviewedAt": "2026-09-19T08:02:54.549Z",
+      "note": "🤖 套用 AI 建議 — RUN-20260919-004 @ 06:54:06 — 19✓/0✗/0⋯（TAP 頂層計數口徑，同口徑全展開為 52/52）。auto=warn 的「落後 2 commits」經查證：那 2 個 commit（12c9315、7d2ff81）正是測試證據本身的落檔 commit，內容 100% 為 .paaw 檔案（14 檔全在 .paaw/），零 src/ 程式碼變更 — 與 ADR-001 已確認的同型假訊號。被測樹內容與跑測時一致。"
     },
     {
       "id": "gates",
@@ -2667,12 +2725,12 @@
       "auto": {
         "status": "warn",
         "detail": "warnings：clean-tree",
-        "checkedAt": "2026-09-19T07:20:32.858Z"
+        "checkedAt": "2026-09-19T08:14:30.307Z"
       },
-      "verdict": "pending",
-      "reviewedBy": null,
-      "reviewedAt": null,
-      "note": null
+      "verdict": "pass",
+      "reviewedBy": "human",
+      "reviewedAt": "2026-09-19T08:02:54.556Z",
+      "note": "🤖 套用 AI 建議 — ru_verify PASS（test gate 12.6s）@ 06:54。auto=warn 的「clean-tree」是因評估當下證據檔尚未 commit；證據已由 developer commit（12c9315 + 7d2ff81），目前 git status 乾淨。build/type-check/test 門檻全過。"
     },
     {
       "id": "qa-records",
@@ -2680,20 +2738,20 @@
       "auto": {
         "status": "pass",
         "detail": "無未解決 QA fail 記錄",
-        "checkedAt": "2026-09-19T07:20:32.858Z"
+        "checkedAt": "2026-09-19T08:14:30.307Z"
       },
-      "verdict": "pending",
-      "reviewedBy": null,
-      "reviewedAt": null,
-      "note": null
+      "verdict": "pass",
+      "reviewedBy": "human",
+      "reviewedAt": "2026-09-19T08:02:54.563Z",
+      "note": "🤖 套用 AI 建議 — Pre-flight QA PASS（qr-20260919-065817-cxsl @ 06:58）：①以 reflog + 三向 diff 正面驗證 ADR-002 指控已解除 — F-01（restart race，exit-confirmed + dedupe）與 F-02 修復已 commit（7092757）且在 HEAD 內；②semgrep ERROR 0；③無未解決 QA fail 記錄。"
     },
     {
       "id": "security",
       "label": "Security scan（semgrep，scope 內）",
       "auto": {
         "status": "warn",
-        "detail": "scope 內 findings：ERROR 0 / WARNING 6 / INFO 0（全庫 6）；scanned 2026-09-19T06:54:16.695Z；⚠ 掃描後又有 2 commits",
-        "checkedAt": "2026-09-19T07:20:32.858Z"
+        "detail": "scope 內 findings：ERROR 0 / WARNING 6 / INFO 0（全庫 6）；scanned 2026-09-19T06:54:16.695Z；⚠ 掃描後又有 6 commits",
+        "checkedAt": "2026-09-19T08:14:30.307Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -2705,12 +2763,12 @@
       "label": "風險評估（readiness heuristic）",
       "auto": {
         "status": "fail",
-        "detail": "HIGH：API 變更的 feature 沒有測試；263 個檔案變更；24 個 API 變更",
-        "checkedAt": "2026-09-19T07:20:32.858Z"
+        "detail": "HIGH：API 變更的 feature 沒有測試；265 個檔案變更；24 個 API 變更",
+        "checkedAt": "2026-09-19T08:14:30.307Z"
       },
-      "verdict": "pending",
-      "reviewedBy": null,
-      "reviewedAt": null,
+      "verdict": "pass",
+      "reviewedBy": "human",
+      "reviewedAt": "2026-09-19T08:07:41.575Z",
       "note": null
     },
     {
@@ -2719,11 +2777,11 @@
       "auto": {
         "status": "pass",
         "detail": "維運文檔：DEPLOY.md（含回滾）、README.md（含回滾）；⚠ 本次含依賴變更 — 注意鎖檔與安裝步驟",
-        "checkedAt": "2026-09-19T07:20:32.858Z"
+        "checkedAt": "2026-09-19T08:14:30.307Z"
       },
-      "verdict": "pending",
-      "reviewedBy": null,
-      "reviewedAt": null,
+      "verdict": "pass",
+      "reviewedBy": "human",
+      "reviewedAt": "2026-09-19T08:07:47.972Z",
       "note": null
     },
     {
@@ -2731,12 +2789,12 @@
       "label": "交接（handover state 新鮮）— 簽核",
       "auto": {
         "status": "warn",
-        "detail": "handover state 2026-09-19T06:54:29.363Z（changes 10 / open issues 0）；⚠ 落後 2 commits — 交接包過期，建議 refresh",
-        "checkedAt": "2026-09-19T07:20:32.858Z"
+        "detail": "handover state 2026-09-19T06:54:29.363Z（changes 10 / open issues 0）；⚠ 落後 6 commits — 交接包過期，建議 refresh",
+        "checkedAt": "2026-09-19T08:14:30.307Z"
       },
-      "verdict": "pending",
-      "reviewedBy": null,
-      "reviewedAt": null,
+      "verdict": "pass",
+      "reviewedBy": "human",
+      "reviewedAt": "2026-09-19T08:07:53.722Z",
       "note": null
     }
   ],
@@ -2754,6 +2812,60 @@
       "by": "em",
       "event": "ai-suggested",
       "note": "tests:pass, gates:pass, qa-records:pass, risk:waived"
+    },
+    {
+      "ts": "2026-09-19T07:59:40.848Z",
+      "by": "system",
+      "event": "target-advanced",
+      "note": "target 前進到 40f2164，scope 重算"
+    },
+    {
+      "ts": "2026-09-19T08:02:45.157Z",
+      "by": "human",
+      "event": "opened",
+      "note": "baseline 鎖定，開始證據審查"
+    },
+    {
+      "ts": "2026-09-19T08:02:54.549Z",
+      "by": "human",
+      "event": "reviewed:tests:pass",
+      "note": "🤖 套用 AI 建議 — RUN-20260919-004 @ 06:54:06 — 19✓/0✗/0⋯（TAP 頂層計數口徑，同口徑全展開為 52/52）。auto=warn 的「落後 2 commits」經查證：那 2 個 commit（12c9315、7d2ff81）正是測試證據本身的落檔 commit，內容 100% 為 .paaw 檔案（14 檔全在 .paaw/），零 src/ 程式碼變更 — 與 ADR-001 已確認的同型假訊號。被測樹內容與跑測時一致。"
+    },
+    {
+      "ts": "2026-09-19T08:02:54.556Z",
+      "by": "human",
+      "event": "reviewed:gates:pass",
+      "note": "🤖 套用 AI 建議 — ru_verify PASS（test gate 12.6s）@ 06:54。auto=warn 的「clean-tree」是因評估當下證據檔尚未 commit；證據已由 developer commit（12c9315 + 7d2ff81），目前 git status 乾淨。build/type-check/test 門檻全過。"
+    },
+    {
+      "ts": "2026-09-19T08:02:54.563Z",
+      "by": "human",
+      "event": "reviewed:qa-records:pass",
+      "note": "🤖 套用 AI 建議 — Pre-flight QA PASS（qr-20260919-065817-cxsl @ 06:58）：①以 reflog + 三向 diff 正面驗證 ADR-002 指控已解除 — F-01（restart race，exit-confirmed + dedupe）與 F-02 修復已 commit（7092757）且在 HEAD 內；②semgrep ERROR 0；③無未解決 QA fail 記錄。"
+    },
+    {
+      "ts": "2026-09-19T08:02:54.576Z",
+      "by": "human",
+      "event": "reviewed:risk:waived",
+      "note": "🤖 套用 AI 建議 — auto=HIGH 三訊號經交叉查證均為假訊號或基線假象：(1)「API 變更 feature 沒測試」— F20260918-001 標 NO TESTS 是靜態分析盲區，tests/e2e/gateway-ui-csrf.test.mjs 以 spawn 真 gateway 覆蓋 16 案（ADR-001 已證實的同型盲區），且本版實際 delta（vs 0.2.1 tag db2671c）F20260918-001 零程式碼變更；(2)「263 檔案 / 24 API 變更」— baseline 誤解析到 first-commit（ff850fd），把全歷史都算進 scope；真實 delta 自 0.2.1 tag 起僅 1 個程式碼 commit（7092757，src/server.mjs 單檔修復）+ chores；(3) DEPLOY.md 含完整回滾程序。實際風險 LOW，safe to ship。"
+    },
+    {
+      "ts": "2026-09-19T08:07:41.576Z",
+      "by": "human",
+      "event": "reviewed:risk:pass",
+      "note": null
+    },
+    {
+      "ts": "2026-09-19T08:07:47.972Z",
+      "by": "human",
+      "event": "reviewed:ops:pass",
+      "note": null
+    },
+    {
+      "ts": "2026-09-19T08:07:53.722Z",
+      "by": "human",
+      "event": "reviewed:handover:pass",
+      "note": null
     }
   ],
   "suggested": {

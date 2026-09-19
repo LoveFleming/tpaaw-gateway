@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T06:53:39.726Z",
-  "headSha": "e3cf819",
+  "generatedAt": "2026-09-19T08:14:05.413Z",
+  "headSha": "40f2164",
   "tableHashes": {
     "features": "972009aa875f8b77",
     "apis": "0e51cf6184baa66b",
     "tests": "4db757bf4a749c80",
-    "changes": "59b671e780dbd632",
-    "knowledgeGaps": "cbca54a393a5c84a"
+    "changes": "51318ffe96b0ff65",
+    "knowledgeGaps": "e95417a2429a829e"
   },
   "root": null,
   "summary": {
@@ -17,7 +17,7 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 37,
+    "commits": 43,
     "commitLimit": 200
   },
   "sources": {
@@ -356,6 +356,60 @@
     }
   ],
   "changes": [
+    {
+      "hash": "40f2164",
+      "date": "2026-09-19T15:45:43+08:00",
+      "subject": "chore: EM 資產同步 rev 2026-09-19-5（版控分層）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "2727333c0a3de787"
+    },
+    {
+      "hash": "06b6de2",
+      "date": "2026-09-19T15:45:27+08:00",
+      "subject": "chore: EM 新開的 RR 草稿入版控（資產層）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "9a6b0f0d1a2b34f5"
+    },
+    {
+      "hash": "0f9cbca",
+      "date": "2026-09-19T15:44:47+08:00",
+      "subject": "chore: gitignore runtime 區塊 + coding-memory 收編",
+      "kind": "chore",
+      "files": 5,
+      "featureIds": [],
+      "_h": "10c98395490315c0"
+    },
+    {
+      "hash": "6b517dc",
+      "date": "2026-09-19T15:44:33+08:00",
+      "subject": "chore(ru): PAAW runtime 層退出版控 — 平台自動管理（sessions/test-runs/changes/security+四狀態檔；資產層全留）",
+      "kind": "chore",
+      "files": 37,
+      "featureIds": [],
+      "_h": "24a2ed4158ac968c"
+    },
+    {
+      "hash": "7d2ff81",
+      "date": "2026-09-19T15:00:03+08:00",
+      "subject": "chore(release): staged-changes snapshot for evidence commit 12c9315",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "cef255089dab9938"
+    },
+    {
+      "hash": "12c9315",
+      "date": "2026-09-19T14:59:18+08:00",
+      "subject": "chore(release): evidence for pre-flight — RUN-20260919-004, semgrep, QA qr-20260919-065817-cxsl",
+      "kind": "chore",
+      "files": 14,
+      "featureIds": [],
+      "_h": "392728283239d706"
+    },
     {
       "hash": "e3cf819",
       "date": "2026-09-19T14:53:01+08:00",
@@ -739,7 +793,7 @@
     "hotUnmappedFiles": [
       {
         "file": ".gitignore",
-        "commits": 8
+        "commits": 9
       },
       {
         "file": "README.md",

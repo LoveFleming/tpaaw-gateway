@@ -18,6 +18,12 @@
 ### fixed
 - 品質補強：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
 
+### fixed
+- TASK-010 重做（前次回報不實：當時修復只寫進暫存 fixture log/tmp/tpaaw-gateway/cwe22-fixtures/，src/server.mjs 本體未動）：本次將 safe-path helper 實際套用到 src/server.mjs — 新增並 export `backupPath(name)`（BACKUP_REGEX 白名單 + resolve 目錄 containment，null 表非法，供 TASK-011 攻擊案例測試）；listBackups/createBackup/restoreBackup 之 statSync/join/unlinkSync 全數改走 backupPath，非法名稱 skip 或原錯誤訊息拒絕；BACKUP_SOURCE_DIRS 模組頂層常數化 + tar 改傳 relative(PAAW_ROOT, d)。API 回應結構與錯誤訊息不變，全套 52/52 pass。
+
+### changed
+- +951 −1492 lines across 11 files
+
 ## 2026-09-18
 ### fixed
 - 修復 gateway.mjs F7 CSRF 防護（TASK-002 剩餘部分）：
