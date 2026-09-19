@@ -23,4 +23,5 @@ data/
 .paaw/features/backups/
 .paaw/coding-memory/dispatch-outputs/
 .paaw/auto-dispatch/
+.paaw/staged-changes.json
 # ── PAAW runtime 層結束 ──
