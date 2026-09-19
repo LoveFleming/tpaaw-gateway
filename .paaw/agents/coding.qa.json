@@ -26,7 +26,8 @@
     "memory",
     "project",
     "project-edit",
-    "tasks"
+    "tasks",
+    "qa-records"
   ],
   "_promptRev": "2026-09-06-d"
 }

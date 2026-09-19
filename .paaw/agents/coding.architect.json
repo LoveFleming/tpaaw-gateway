@@ -29,10 +29,9 @@
     "project",
     "project-edit",
     "project-board",
-    "tasks"
+    "tasks",
+    "qa-records",
+    "release-requests"
   ],
-  "_promptRev": "2026-09-06-b",
-  "_source": "global",
-  "_clonedAt": "2026-09-06T08:06:29.464Z",
-  "_templateHash": "b7957b15890620bb"
+  "_promptRev": "2026-09-06-b"
 }

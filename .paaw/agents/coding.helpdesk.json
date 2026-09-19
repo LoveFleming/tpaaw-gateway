@@ -24,10 +24,8 @@
     "core-read",
     "memory",
     "decisions",
-    "project"
+    "project",
+    "qa-records"
   ],
-  "_promptRev": "2026-09-06-b",
-  "_source": "global",
-  "_clonedAt": "2026-09-06T08:06:29.466Z",
-  "_templateHash": "a49cc9f39a8d7c26"
+  "_promptRev": "2026-09-06-b"
 }

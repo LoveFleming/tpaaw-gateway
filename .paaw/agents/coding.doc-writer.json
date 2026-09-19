@@ -25,7 +25,8 @@
     "decisions",
     "project",
     "project-edit",
-    "docs"
+    "docs",
+    "qa-records"
   ],
   "_promptRev": "2026-09-06-e"
 }
