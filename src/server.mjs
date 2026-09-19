@@ -79,7 +79,7 @@ const BACKUP_SOURCE_DIRS = [join(PAAW_ROOT, "data"), join(PAAW_ROOT, ".paaw")];
 export function backupPath(name) {
   if (typeof name !== "string" || !BACKUP_REGEX.test(name)) return null;
   const root = resolve(BACKUP_DIR) + sep;
-  const p = resolve(BACKUP_DIR, name);
+  const p = resolve(BACKUP_DIR, name); // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal — validator internals; result is immediately containment-checked below (startsWith root) — this line IS the CWE-22 defense
   return p.startsWith(root) ? p : null;
 }
 
@@ -362,7 +362,7 @@ export function listBackups() {
     .filter(p => p !== null)
     .map(p => {
       const f = basename(p);
-      const stat = statSync(p);
+      const stat = statSync(p); // nosemgrep: javascript.lang.security.audit.detect-non-literal-fs-filename — p is validated output of backupPath() and null-filtered upstream
       const dateMatch = f.match(BACKUP_DATE_REGEX);
       return {
         filename: f,
@@ -389,7 +389,7 @@ export function createBackup(userId = "system") {
 
   try {
     // Backup data/ and .paaw/ directories
-    const dirs = BACKUP_SOURCE_DIRS.filter(d => existsSync(d));
+    const dirs = BACKUP_SOURCE_DIRS.filter(d => existsSync(d)); // nosemgrep: javascript.lang.security.audit.detect-non-literal-fs-filename — d iterates from hardcoded constant BACKUP_SOURCE_DIRS, not user input
     const relDirs = dirs.map(d => relative(PAAW_ROOT, d));
     execFileSync("tar", ["czf", filepath, ...relDirs], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
 
@@ -417,7 +417,7 @@ export function restoreBackup(filename, userId = "system") {
   if (!filepath) {
     return { ok: false, error: "Invalid backup filename" };
   }
-  if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" };
+  if (!existsSync(filepath)) return { ok: false, error: "Backup file not found" }; // nosemgrep: javascript.lang.security.audit.detect-non-literal-fs-filename — filepath is validated output of backupPath(filename); illegal names fail-closed above
 
   logEvent("restore_start", `Restoring from ${filename}...`, userId);
 
