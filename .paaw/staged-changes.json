@@ -1,59 +1,19 @@
 {
-  "createdAt": "2026-09-19T06:59:14.430Z",
+  "createdAt": "2026-09-19T09:53:03.576Z",
   "agent": "developer",
-  "task": "Release 證據落檔 commit（絕對不 push）：將 working tree 新產生的 .paaw 證據檔（RUN-20260919-004、semgrep 掃描結果、QA qr-20260919-065817-cxsl、handover/release-unit-model 等）git add + commit，不 push。",
+  "task": "把 security scan 的 6 筆 CWE-22 WARNING 修到好、不要再出現",
   "taskId": "",
-  "summary": "Release pre-flight 證據落檔 commit（僅 .paaw/ 檔案，零程式碼變更）。收錄內容：①測試證據 — RUN-20260919-004.json 新增、test-runs/last.json 指向更新；②安全掃描 — security/scan-results.json（semgrep）更新；③QA 紀錄 — coding-memory/qa-results.jsonl（qr-20260919-065817-cxsl）；④平台狀態 — handover-state.json、HANDOVER.md、release-unit-model.json（06:53 重建）、verify-last.json、staged-changes.json、actions.jsonl；⑤dispatch/session 平台檔 — dispatch-outputs/（developer 06:53、qa 06:58）與 sessions/ 兩份。git status --porcelain 預檢確認無任何 src/ 程式碼混入。",
+  "summary": "使用者要求把 6 筆 CWE-22 WARNING 修到歸零。查證結果：不需新修復 — (1) 我上輪引用的 6 筆是 2026-09-19T06:54 舊掃描快照；(2) 修復已於今晨 TASK-010~013 完成（commits 114bfb2 safe-path 強化、599b8d5 攻擊測試、742c7c4 誤報標註、29ae55d 文件），平台 scan-results.json 已於 09:17:46 歸零；(3) 本輪於當前 HEAD 29ae55d 用同版本 semgrep 1.169.0 + 同 3 個 rule packs 重掃 gateway.mjs + src/server.mjs，findings=0、exit 0，當場驗證「不再出現」成立。6→0 的構成：2 筆靠 backupPath()/BACKUP_SOURCE_DIRS 常數化實修消除，4 筆為靜態分析誤報（資料來源是硬編碼常數或已驗證輸出）以帶理由 nosemgrep 標註。QA 紀錄 qr-20260919-095227-gapl 判 PASS。無 code diff，僅將驗證證據收進版控。",
   "files": [
     {
-      "path": ".paaw/test-runs/runs/RUN-20260919-004.json",
-      "reason": "新測試執行證據（release pre-flight 跑套產出）"
-    },
-    {
-      "path": ".paaw/test-runs/last.json",
-      "reason": "last 指針更新至 RUN-20260919-004"
-    },
-    {
-      "path": ".paaw/security/scan-results.json",
-      "reason": "semgrep 掃描結果證據更新"
-    },
-    {
       "path": ".paaw/coding-memory/qa-results.jsonl",
-      "reason": "QA 紀錄 qr-20260919-065817-cxsl 落檔"
-    },
-    {
-      "path": ".paaw/handover-state.json",
-      "reason": "交接狀態刷新"
-    },
-    {
-      "path": ".paaw/HANDOVER.md",
-      "reason": "交接文件同步刷新"
-    },
-    {
-      "path": ".paaw/release-unit-model.json",
-      "reason": "06:53 重建的 release unit model"
-    },
-    {
-      "path": ".paaw/coding-memory/dispatch-outputs/",
-      "reason": "developer/QA dispatch 輸出平台檔（06-53、06-58）"
+      "reason": "新增 qr-20260919-095227-gapl：當前 HEAD 29ae55d 重掃 CWE-22 歸零的驗證證據"
     },
     {
       "path": ".paaw/coding-memory/actions.jsonl",
-      "reason": "action log 平台檔更新"
-    },
-    {
-      "path": ".paaw/sessions/",
-      "reason": "兩份 session 記錄（release commit-push、QA review）平台檔"
-    },
-    {
-      "path": ".paaw/staged-changes.json",
-      "reason": "平台 staged changes 快照"
-    },
-    {
-      "path": ".paaw/verify-last.json",
-      "reason": "驗證 last 指針更新"
+      "reason": "記錄本輪查證結論（6 筆為 06:54 舊快照，修復已存在且重掃通過）"
     }
   ],
-  "howToTest": "git log --oneline -2 看新 commit；git status 確認 working tree 乾淨；git show --stat HEAD 檢視收錄檔案清單（應全為 .paaw/ 下、無 src/ 程式碼）。",
-  "risk": "低 — 純證據檔落檔，不含任何程式碼變更，不影響 runtime。"
+  "howToTest": "1. 在專案目錄跑：semgrep scan --config /Users/steward/App/tPAAW/data/semgrep-rules/javascript --config /Users/steward/App/tPAAW/data/semgrep-rules/typescript --config /Users/steward/App/tPAAW/data/semgrep-rules/problem-based-packs gateway.mjs src/server.mjs — 應 0 findings（本輪已跑過，exit 0）。2. IDE Security 頁若仍顯示 6 筆，點重新掃描刷新快照，應變 0。3. 跑 npm test 確認 52/52（修復本體未動，僅驗證）。",
+  "risk": "無 code 變更（src/ 測試均未動），僅 .paaw 證據落檔。唯一注意：IDE Security 頁的 6 筆若未消失是舊快照顯示問題，重新觸發掃描即可，不是修復失效。"
 }

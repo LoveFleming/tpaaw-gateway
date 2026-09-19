@@ -13,6 +13,12 @@
 ### fixed
 - TASK-013（F20260918-002，commit 742c7c4）：semgrep 殘留 4 筆 CWE-22 誤報以 nosemgrep 標註歸零（backupPath 內部 resolve 為 validator 本體、下游 fs 呼叫收的是驗證後輸出）。歸零記錄：2026-09-19T09:17:46Z 重掃 ERROR 0 / WARNING 0 / INFO 0（filesScanned 含 src/server.mjs，證據 .paaw/security/scan-results.json）。
 
+### added
+- TASK-012 重派（前次派工回報成功但零產出 — 這次交付清單逐項可驗）。專案 root：/Users/steward/App/tpaaw-gateway。 (1 new file)
+
+### changed
+- +112 −1132 lines across 10 files
+
 ## 2026-09-18
 ### fixed
 - 修復 gateway.mjs F7 CSRF 防護（TASK-002 剩餘部分）：
