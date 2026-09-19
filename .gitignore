@@ -10,3 +10,14 @@ data/
 # versions/ = 更新備份 legacy 位置（寫入者未定案前先留著 ignore）
 # .paaw/tmp/ = agent 暫存腳本（runtime 垃圾，不進版控；正式暫存用 $PAAW_TMP）
 .paaw/tmp/
+
+# ── PAAW runtime 層不進版控（2026-09-19 平台管理：資產進版控，runtime 機器自己消化；證據摘要內嵌 RR）──
+.paaw/sessions/
+.paaw/test-runs/
+.paaw/changes/
+.paaw/security/
+.paaw/cu-status.json
+.paaw/scan.json
+.paaw/gates.json
+.paaw/verify-last.json
+# ── PAAW runtime 層結束 ──
