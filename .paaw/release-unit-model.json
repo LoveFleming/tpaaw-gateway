@@ -1,30 +1,30 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T01:34:45.066Z",
-  "headSha": "db2671c",
+  "generatedAt": "2026-09-19T05:30:29.274Z",
+  "headSha": "368fb8f",
   "tableHashes": {
-    "features": "ead142ec7d76ae0a",
+    "features": "972009aa875f8b77",
     "apis": "0e51cf6184baa66b",
     "tests": "4db757bf4a749c80",
-    "changes": "cac15944bf89b590",
-    "knowledgeGaps": "a7e46d68120982a2"
+    "changes": "91b6847dbf30dcb7",
+    "knowledgeGaps": "cbca54a393a5c84a"
   },
   "root": null,
   "summary": {
     "features": 2,
     "apis": 24,
     "apisWithFeature": 24,
-    "files": 5,
+    "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 28,
+    "commits": 31,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-09-18T11:47:34.130Z"
+    "featuresUpdatedAt": "2026-09-19T03:54:27.196Z"
   },
   "features": [
     {
@@ -32,9 +32,10 @@
       "name": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
       "status": "active",
       "description": "使用者機器上的單檔 bootloader（gateway.mjs），同時提供 CLI（start/update/upload/status/ui）與本機網頁控制台（GET /index.html + 10 個 /api/* endpoint），負責 PAAW 套包的安裝、更新、手動上傳，以及 PAAW 進程的啟動/停止/重啟與狀態/日誌監看。目錄佈局以 versions/<x.y.z>/ 做版本隔離、data/ 存使用者資料、current.json 指向最後驗證過的版本。",
-      "fileCount": 1,
+      "fileCount": 2,
       "files": [
-        "gateway.mjs"
+        "gateway.mjs",
+        "ui/index.html"
       ],
       "apis": [
         "GET /api/log",
@@ -52,13 +53,13 @@
       "apiCount": 11,
       "tests": [],
       "testCount": 0,
-      "changeCount": 11,
+      "changeCount": 12,
       "lastChangeAt": "2026-09-18T19:58:25+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "345fdfb1b6bda87a"
+      "_h": "9447e6952b63e3bf"
     },
     {
       "id": "F20260918-002",
@@ -92,12 +93,12 @@
         }
       ],
       "testCount": 5,
-      "changeCount": 5,
-      "lastChangeAt": "2026-09-03T20:49:39+08:00",
+      "changeCount": 6,
+      "lastChangeAt": "2026-09-19T12:23:35+08:00",
       "knowledgeGaps": [
         "no-runbook"
       ],
-      "_h": "fe3919872dc36e37"
+      "_h": "a17894560fa2b4c2"
     }
   ],
   "apis": [
@@ -356,6 +357,35 @@
   ],
   "changes": [
     {
+      "hash": "368fb8f",
+      "date": "2026-09-19T12:24:05+08:00",
+      "subject": "release unit info",
+      "kind": "other",
+      "files": 45,
+      "featureIds": [],
+      "_h": "2290376271d832a3"
+    },
+    {
+      "hash": "7092757",
+      "date": "2026-09-19T12:23:35+08:00",
+      "subject": "fix(server): await confirmed process exit before restart/upgrade/restore",
+      "kind": "fix",
+      "files": 3,
+      "featureIds": [
+        "F20260918-002"
+      ],
+      "_h": "b5d253d90ea4c562"
+    },
+    {
+      "hash": "20a85b8",
+      "date": "2026-09-19T12:20:42+08:00",
+      "subject": "chore(gitignore): ignore .paaw/tmp/ runtime scratch files",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "117b9780b28835c7"
+    },
+    {
       "hash": "db2671c",
       "date": "2026-09-19T09:08:53+08:00",
       "subject": "release unit paaw save",
@@ -390,8 +420,10 @@
       "subject": "feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log",
       "kind": "feat",
       "files": 1,
-      "featureIds": [],
-      "_h": "d366a3e6453a9b31"
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "5eee1a52a8b824ca"
     },
     {
       "hash": "3bdb4bd",
@@ -649,23 +681,23 @@
       "F20260918-002"
     ],
     "apisWithoutFeature": [],
-    "filesWithoutFeature": 2,
+    "filesWithoutFeature": 3,
     "hotUnmappedFiles": [
       {
-        "file": "README.md",
+        "file": ".gitignore",
         "commits": 8
       },
       {
-        "file": ".gitignore",
-        "commits": 7
+        "file": "README.md",
+        "commits": 8
       },
       {
         "file": "package.json",
         "commits": 6
       },
       {
-        "file": "ui/index.html",
-        "commits": 6
+        "file": "public/index.html",
+        "commits": 2
       },
       {
         "file": "config.json",
@@ -684,7 +716,7 @@
         "commits": 1
       },
       {
-        "file": "public/index.html",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
         "commits": 1
       },
       {
