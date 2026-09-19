@@ -5,7 +5,7 @@
       "featureId": "F20260906-002",
       "title": "人工安全 code review：gateway.mjs 與 src/server.mjs",
       "type": "test",
-      "status": "open",
+      "status": "close",
       "priority": "high",
       "parentId": null,
       "description": "Security-focused manual code review of gateway.mjs (F20260906-001, local mgmt dashboard on 127.0.0.1:4290) and src/server.mjs (F20260906-002, ops platform on :4199 with Bearer auth, tar.gz backup/restore, git upgrade, process control). Goal: independently re-discover security issues — command injection, path traversal, auth bypass, secrets handling, SSRF, unsafe child process usage. Report each finding with file:line, severity, and exploit path. Note: prior automated scan reported 6 WARNING findings but details were not persisted.",
@@ -15,7 +15,7 @@
       ],
       "assignee": null,
       "createdAt": "2026-09-07T10:03:33.095Z",
-      "updatedAt": "2026-09-18T10:40:03.677Z",
+      "updatedAt": "2026-09-18T12:00:55.187Z",
       "createdBy": "agent",
       "source": {
         "type": "manual"
@@ -27,17 +27,17 @@
           "content": "Release 決策（EM，2026-09-18）：限縮範圍納入 RR-20260918-1242 — 本次只人工審 gateway.mjs（release scope 內唯一變更 code file，且含新上線 CSRF 防護）；src/server.mjs 全份人工審查排下個 release 週期。"
         }
       ],
-      "result": null,
+      "result": "QA 人工安全 review 完成（11:08）：verdict GO with notes — 3 findings（MAJ-001/MED-001/MIN-001）全部於 TASK-005 修復並經 RUN-20260918-005 回歸綠。",
       "git": null,
       "timeoutSeconds": 0,
-      "resolvedAt": null
+      "resolvedAt": "2026-09-18T12:00:55.187Z"
     },
     {
       "id": "TASK-002",
       "featureId": "F20260906-001",
       "title": "修復 gateway.mjs 安全問題：F1/F10 版本驗證 + F7 CSRF 防護",
       "type": "dev",
-      "status": "pending",
+      "status": "close",
       "priority": "critical",
       "parentId": null,
       "description": "修復 QA 審查裁定的高風險問題（阻斷 RCE 鏈）：\n1. F1: installVersion() 未驗證 manifest.version 即拼接路徑，接 rm(versionDir,{recursive}) — 加 VERSION_RE.test() 驗證\n2. F10: updateLogic() 第二個未驗 version 的 sink，寫 current.json — 入口加同樣驗證\n3. F7: cmdUI POST handlers 無 Origin/Host 檢查 — 加 Host 白名單 + Origin 驗證防 CSRF",
@@ -47,7 +47,7 @@
       ],
       "assignee": "developer",
       "createdAt": "2026-09-07T13:12:59.556Z",
-      "updatedAt": "2026-09-18T09:13:50.359Z",
+      "updatedAt": "2026-09-18T12:00:55.190Z",
       "createdBy": "agent",
       "source": {
         "type": "issue"
@@ -57,12 +57,17 @@
           "by": "agent",
           "at": "2026-09-18T09:13:50.359Z",
           "content": "Assigned to developer"
+        },
+        {
+          "by": "agent",
+          "at": "2026-09-18T11:53:54.319Z",
+          "content": "Release 0.2.1 收尾（developer）：package.json version 0.2.1、npm test 42/42 全綠（TAP）、58 檔已 git add stage（gateway.mjs F7 修復 + ui/index.html + CSRF e2e + .paaw/ 資產），待人工 review 後 commit/push。"
         }
       ],
-      "result": "EM 盤點確認：F1/F10 已修（VERSION_RE 於 gateway.mjs:44/355 已套用），F7 CSRF Host/Origin 防護未實作 — 派工中",
+      "result": "F7 CSRF（Host 白名單 + POST Origin 驗證）已落地，RUN-20260918-005 全套 42/42 含 16 案 CSRF e2e 全綠。",
       "git": null,
       "timeoutSeconds": 0,
-      "resolvedAt": null
+      "resolvedAt": "2026-09-18T12:00:55.190Z"
     },
     {
       "id": "TASK-003",
@@ -76,13 +81,13 @@
       "labels": [],
       "assignee": null,
       "createdAt": "2026-09-18T10:40:03.667Z",
-      "updatedAt": "2026-09-18T10:50:44.589Z",
+      "updatedAt": "2026-09-18T12:00:55.191Z",
       "createdBy": "agent",
       "source": {
         "type": "manual"
       },
       "notes": [],
-      "result": "F7 CSRF 修復無回歸（26/26 pass，exit 0）。0✓ 根因：Node v25 node --test 預設 spec reporter 無 TAP 行，IDE 計數 parser 讀不到 → 已修 package.json test script 釘 TAP reporter（--test-reporter=tap），實測輸出 # tests 26 / # pass 26 可解析。遺留：26 測試全打 src/server.mjs，gateway.mjs 0 覆蓋 → TASK-004 接手。",
+      "result": "26/26 無回歸；0✓ 根因＝Node v25 spec reporter 無 TAP 行，test script 已釘 TAP reporter。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T10:50:44.589Z"
@@ -99,13 +104,13 @@
       "labels": [],
       "assignee": null,
       "createdAt": "2026-09-18T10:40:03.674Z",
-      "updatedAt": "2026-09-18T10:57:58.049Z",
+      "updatedAt": "2026-09-18T12:00:55.194Z",
       "createdBy": "agent",
       "source": {
         "type": "issue"
       },
       "notes": [],
-      "result": "新增 tests/e2e/gateway-ui-csrf.test.mjs：12 案例涵蓋 F7 CSRF 防護（惡意/偽裝/非法 Origin 403、惡意 Host 403、合法放行、GET 不誤傷）+ /api/status /api/settings 煙霧。全套 38/38 pass（TAP 4.4s）。隔離設計完善（隨機 port + temp cwd/home + 死 port 防拖時）。risk gate「API 變更 feature 無測試」已解除。未 commit，交 EM 收。",
+      "result": "tests/e2e/gateway-ui-csrf.test.mjs 16 案（含 TASK-005 擴充 3 案），RUN-20260918-005 42/42 全綠 — risk gate HIGH 已解除。",
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-18T10:57:58.049Z"
@@ -115,7 +120,7 @@
       "featureId": "F20260906-001",
       "title": "gateway.mjs：update 路徑補 manifest.version 驗證 + UI stable escape（MAJ-001）與 GET Host gate（MED-001）",
       "type": "dev",
-      "status": "open",
+      "status": "close",
       "priority": "high",
       "parentId": null,
       "description": "Source: TASK-001 人工安全 code review（RR-20260918-1242 release 前，2026-09-18 武大安）\n\n【MAJ-001｜major】manifest.version 未驗證 → path traversal + current.json 污染 + UI 注入\n- gateway.mjs:44 VERSION_RE 已定義，但只用於 L123（listInstalledVersions）與 L355（installUploadedZip）\n- installVersion（gateway.mjs:316-335）直接用 manifest.version 組三條路徑：\n  1. L318-319 zipPath = join(HOME,\"logs\",`paaw-${v}.zip`)\n  2. L321-326 dlUrl = `${server}/packages/${v}/paaw.zip`（v 可注入 ../、?、#）\n  3. stageInstall → join(VERSIONS_DIR, v)（gateway.mjs:294）→ \"999.0.0/../../..\" 寫出 HOME 白名單\n- updateLogic（gateway.mjs:414-432）：semverGt（L90）在首個差異段即 return，\"999.0.0/../../x\" 對 \"1.2.3\" 首段 999>1 直接 newer=true — 任何 update（不限首裝）皆可觸發；L431 writeCurrentAtomic(manifest.version) 污染 current.json\n- Exploit 前提：package server 被攻陷或 http:// packageServer 遭 MITM（POST /api/settings 允許 http://）。該前提下攻擊者已有 RCE 等價能力，故屬縱深缺失+spec 不符，非新增外部可達面\n- 【spec 不符】release note 宣稱「F1/F10 版本驗證已上」實際未涵蓋 update 路徑 — 措辭需修正\n修復（皆小改）：\n1. updateLogic/installVersion 入口加 VERSION_RE.test(manifest.version) 不符即 throw（fail-closed）\n2. ui/index.html refresh() 的 stableVersion.innerHTML：s.stable 未 escape（version 來自 manifest，可為任意字串）→ 過 esc()\n\n【MED-001｜medium】GET 端點無 Host gate → DNS rebinding 讀取\n- gateway.mjs:663-681 gate 僅 method===\"POST\"；GET /api/paaw-log（L778-804）可被 rebinding 後的惡意頁 same-origin 讀取完整 PAAW console log；/api/status、/api/settings 亦同\n- 修法：Host gate 套用到所有請求（瀏覽器直連 127.0.0.1 時 Host 必合法，不會誤擋；rebinding 的偽 Host 必被擋）\n\n【MIN-001｜minor】POST /api/settings body 累積無上限（gateway.mjs:712-714），遠端已被 CSRF gate 擋、本機威脅模型外，但與 /api/upload 的 600MB cap 不對稱 — 補個上限即可\n\n驗證：tests/e2e/gateway-ui-csrf.test.mjs 加惡意 manifest.version update 案例 + GET Host gate 案例。",
@@ -126,16 +131,16 @@
       ],
       "assignee": null,
       "createdAt": "2026-09-18T11:08:13.241Z",
-      "updatedAt": "2026-09-18T11:08:13.241Z",
+      "updatedAt": "2026-09-18T12:00:55.196Z",
       "createdBy": "agent",
       "source": {
         "type": "security"
       },
       "notes": [],
-      "result": null,
+      "result": "MAJ-001（manifest.version fail-closed ×2 處）/ MAJ-001b（UI esc）/ MED-001（GET Host gate）/ MIN-001（settings 1MB cap）全數修復，RUN-20260918-005 回歸綠。",
       "git": null,
       "timeoutSeconds": 0,
-      "resolvedAt": null
+      "resolvedAt": "2026-09-18T12:00:55.196Z"
     }
   ],
   "updatedAt": "2026-09-18T11:08:13.241Z"

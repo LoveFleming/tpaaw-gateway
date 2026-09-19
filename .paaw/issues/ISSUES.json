@@ -4,7 +4,7 @@
       "id": "ISS-001",
       "title": "startAndVerify 誤報「已上線」：健康檢查對象是 port 而非自己 spawn 的 child",
       "priority": "medium",
-      "status": "open",
+      "status": "resolved",
       "labels": [
         "bug",
         "process-management",
@@ -13,7 +13,13 @@
       "description": "## 現象\n在 port 4097 已被其他 PAAW 實體（例：從 tPAAW workspace 直接 npm run dev 的 dev server）佔用時，點「▶️ 啟動」：\n- Gateway spawn 自己的 child → child 偵測 port 衝突後自行退出（log: ❌ [PAAW] Port 4097 已被佔用 — 本實體退出）\n- 但 gateway.mjs:259 的 startAndVerify() 中 waitForHealthy() 對 4097 的健康檢查由「佔用者的 server」回應 → Promise.race 由 \"up\" 獲勝\n- Gateway 誤報「✓ PAAW 0.6.1 已上線」\n- 隨後 child exit handler 清掉 paawChild → /api/status 回 running: false → UI 顯示「未執行」\n- 最終 UI 同時出現「已上線」活動記錄 + 「未執行」狀態，且 4097 實際由非 gateway 管理的外部實體服務\n\n## Root Cause\ngateway.mjs startAndVerify()（line 259-270）：\n- waitForHealthy() 檢查的是「port 有沒有 HTTP 回應」，不是「自己 spawn 的 child 是否存活」\n- port 被既有實體佔用時，健康檢查會誤判成功（race 在 child 退出前就結束）\n\n## 建議修法\n1. spawn 前先 pre-check port（listen 測試）：已被佔用 → 直接回明確錯誤「4097 已被其他實體佔用，請先停止該實體」，不 spawn\n2. 保留現有 dead-race 為 backstop，並在 healthy 獲勝後加短穩定窗口（例 3 秒）確認 child 未退出才宣布上線\n\n## 重現步驟\n1. 在 tPAAW workspace 跑 npm run dev（佔住 4097）\n2. 開 gateway UI (127.0.0.1:4290) 點「▶️ 啟動」\n3. 觀察活動記錄出現「✓ 已上線」但 PAAW 狀態顯示「未執行」；console log 出現 port 已被佔用\n\n## 環境證據（2026-09-13 15:04 實測）\n- 4097 服務者: PID 65817 node src/paaw-server.mjs（cwd=/Users/steward/App/tPAAW/packages/server，14:52:45 起）\n- gateway dev server: PID 65233（14:33:22 起），其 child 已因 port 衝突退出",
       "featureId": "F20260906-001",
       "createdAt": "2026-09-13T07:21:45.696Z",
-      "notes": []
+      "notes": [
+        {
+          "text": "startAndVerify port 誤報 bug 已於 1e6f7aa 修復（port 佔用偵測 + 夭折期複查），RUN-20260918-005 42/42 無回歸。",
+          "at": "2026-09-18T12:00:55.199Z"
+        }
+      ],
+      "updatedAt": "2026-09-18T12:00:55.199Z"
     }
   ],
   "nextId": 2

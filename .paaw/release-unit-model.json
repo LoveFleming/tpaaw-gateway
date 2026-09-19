@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-18T11:44:54.627Z",
-  "headSha": "4a06afb",
+  "generatedAt": "2026-09-19T01:01:56.982Z",
+  "headSha": "12ae4b8",
   "tableHashes": {
-    "features": "7c163cc26e2892c4",
-    "apis": "df713529f23ee072",
-    "tests": "43aa317381fcd54b",
-    "changes": "57cbbf4b6ce30826",
-    "knowledgeGaps": "bb27a5c12132071d"
+    "features": "ead142ec7d76ae0a",
+    "apis": "0e51cf6184baa66b",
+    "tests": "4db757bf4a749c80",
+    "changes": "2b407125c1136e1e",
+    "knowledgeGaps": "a7e46d68120982a2"
   },
   "root": null,
   "summary": {
@@ -17,21 +17,21 @@
     "files": 5,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 25,
+    "commits": 26,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-09-18T11:08:13.244Z"
+    "featuresUpdatedAt": "2026-09-18T11:47:34.130Z"
   },
   "features": [
     {
-      "id": "F20260906-001",
-      "name": "PAAW Gateway 控制台：安裝更新與 PAAW 生命週期管理",
+      "id": "F20260918-001",
+      "name": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
       "status": "active",
-      "description": "單檔 gateway.mjs 同時承擔兩種角色：CLI（start / update / status）與本地管理儀表板（ui，HTTP server 綁 127.0.0.1:4290，即 skeleton 中的 9 個 API）。管 PAAW 在使用者機器上的完整生命週期 — 套包下載安裝、版本切換、data 播種、PAAW 子程序的啟動/停止/重啟，以及 gateway 自身設定（package server、paawHome）的讀寫。UI 模式下 PAAW 以 child process 受 gateway 監管，gateway 退出會一併帶走 PAAW。",
+      "description": "使用者機器上的單檔 bootloader（gateway.mjs），同時提供 CLI（start/update/upload/status/ui）與本機網頁控制台（GET /index.html + 10 個 /api/* endpoint），負責 PAAW 套包的安裝、更新、手動上傳，以及 PAAW 進程的啟動/停止/重啟與狀態/日誌監看。目錄佈局以 versions/<x.y.z>/ 做版本隔離、data/ 存使用者資料、current.json 指向最後驗證過的版本。",
       "fileCount": 1,
       "files": [
         "gateway.mjs"
@@ -52,19 +52,19 @@
       "apiCount": 11,
       "tests": [],
       "testCount": 0,
-      "changeCount": 10,
-      "lastChangeAt": "2026-09-18T12:36:16+08:00",
+      "changeCount": 11,
+      "lastChangeAt": "2026-09-18T19:58:25+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "1e79b8bf1c25c99c"
+      "_h": "345fdfb1b6bda87a"
     },
     {
-      "id": "F20260906-002",
-      "name": "PAAW Gateway 系統維運管理平台（認證・備份・升級・進程守護）",
+      "id": "F20260918-002",
+      "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "status": "active",
-      "description": "單檔 HTTP 伺服器（src/server.mjs，port 4199）構成的獨立管理平台，獨立於 PAAW Server（:4097）運行、扮演守護者角色。涵蓋 Bearer token 認證、PAAW Server 進程 start/stop/restart、tar.gz 備份與還原、git 升級流程、健康監控 dashboard、用戶列表與事件稽核日誌，並附帶管理 UI（public/index.html）。",
+      "description": "獨立於 PAAW Server（:4097）運行的管理平台（:4199），由單一檔案 src/server.mjs 構成：以 node:http 原生路由提供 13 個 /api/* 端點，涵蓋登入認證、PAAW Server 進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log 與用戶列表，並在 / 提供管理 UI（public/index.html）。Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方生命週期。",
       "fileCount": 1,
       "files": [
         "src/server.mjs"
@@ -97,7 +97,7 @@
       "knowledgeGaps": [
         "no-runbook"
       ],
-      "_h": "cd174d233e87a1c9"
+      "_h": "fe3919872dc36e37"
     }
   ],
   "apis": [
@@ -107,9 +107,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "ce6735570539a2f1"
+      "_h": "b5fa9b9113dc6877"
     },
     {
       "method": "GET",
@@ -117,9 +117,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "ba14b7522e7efb2a"
+      "_h": "e48fc9c37a0280fe"
     },
     {
       "method": "GET",
@@ -127,9 +127,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "8df3436076911c3d"
+      "_h": "1bc7822269efb6ee"
     },
     {
       "method": "POST",
@@ -137,9 +137,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "53279cbb52c1ed91"
+      "_h": "698d03014062a84a"
     },
     {
       "method": "GET",
@@ -147,9 +147,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "10f34f3fbca7a915"
+      "_h": "cb5169829459b385"
     },
     {
       "method": "GET",
@@ -157,9 +157,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "b0d1f3155381bc72"
+      "_h": "2e3960388d85bd46"
     },
     {
       "method": "GET",
@@ -167,9 +167,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "00cd07f9626b37cf"
+      "_h": "3b39e47de1b78e5f"
     },
     {
       "method": "GET",
@@ -177,9 +177,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "743e54d85d3634dc"
+      "_h": "6b91c88aee3e6282"
     },
     {
       "method": "GET",
@@ -187,9 +187,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "a23e8816cb29c955"
+      "_h": "0650dbcce835d790"
     },
     {
       "method": "POST",
@@ -197,9 +197,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "bf6ce7beb43b94a4"
+      "_h": "2c1d04df9f9dd48e"
     },
     {
       "method": "POST",
@@ -207,9 +207,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "a97f768897b6e6c1"
+      "_h": "222e01e1b162d513"
     },
     {
       "method": "POST",
@@ -217,9 +217,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "1ce059ef475b041d"
+      "_h": "be32bb031205db27"
     },
     {
       "method": "POST",
@@ -227,9 +227,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "5b17a8715ded1868"
+      "_h": "bb8a6c9a082c7874"
     },
     {
       "method": "GET",
@@ -237,9 +237,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "0f00d3a30814fabc"
+      "_h": "1f73df369dd1f88d"
     },
     {
       "method": "POST",
@@ -247,9 +247,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "5a45563ae0a4dc65"
+      "_h": "7a02261d48204eff"
     },
     {
       "method": "POST",
@@ -257,9 +257,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "00dc64806def8973"
+      "_h": "b095a51d253fda8f"
     },
     {
       "method": "GET",
@@ -267,9 +267,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "d5ec206d78285df4"
+      "_h": "771ac3544feec2ef"
     },
     {
       "method": "POST",
@@ -277,9 +277,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "c7de927f7fa68e78"
+      "_h": "2d14086921e3cc50"
     },
     {
       "method": "POST",
@@ -287,9 +287,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "762f67a1c6d17b0c"
+      "_h": "57825c23218c7be3"
     },
     {
       "method": "POST",
@@ -297,9 +297,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "855ff408a65643c2"
+      "_h": "e8208f0b09f45672"
     },
     {
       "method": "POST",
@@ -307,9 +307,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "8687e057f535b9c2"
+      "_h": "248183a7e72d763e"
     },
     {
       "method": "GET",
@@ -317,9 +317,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "4f37530330b70117"
+      "_h": "dd93c280597bf1f9"
     },
     {
       "method": "GET",
@@ -327,9 +327,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "44d27306f9c55f6e"
+      "_h": "e325a892c7ce59fb"
     },
     {
       "method": "GET",
@@ -337,9 +337,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "0f188ba33560aeef"
+      "_h": "7bdb9013ea740194"
     }
   ],
   "tests": [
@@ -349,12 +349,23 @@
       "testCount": 5,
       "kind": "e2e",
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "bb69d4709655c435"
+      "_h": "24c3360caf42232a"
     }
   ],
   "changes": [
+    {
+      "hash": "12ae4b8",
+      "date": "2026-09-18T19:58:25+08:00",
+      "subject": "test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass",
+      "kind": "chore",
+      "files": 59,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "bc0dcb55b1b9e2e7"
+    },
     {
       "hash": "4a06afb",
       "date": "2026-09-18T12:40:44+08:00",
@@ -389,9 +400,9 @@
       "kind": "fix",
       "files": 2,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "476d7d6c0486fb7d"
+      "_h": "20fc996905bd6353"
     },
     {
       "hash": "69c2fbe",
@@ -400,9 +411,9 @@
       "kind": "other",
       "files": 2,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "affbbf26de207b4b"
+      "_h": "af7c2ff232a2b903"
     },
     {
       "hash": "dc9c1a5",
@@ -411,9 +422,9 @@
       "kind": "feat",
       "files": 4,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "ce828a7442eda370"
+      "_h": "52963572b48182b0"
     },
     {
       "hash": "b0a4049",
@@ -458,9 +469,9 @@
       "kind": "chore",
       "files": 4,
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "662df57494851b4a"
+      "_h": "98dab4f47b453941"
     },
     {
       "hash": "d940eb9",
@@ -478,9 +489,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "3143fbd01be1c7d8"
+      "_h": "809af0b4aa44f165"
     },
     {
       "hash": "e8c453d",
@@ -489,9 +500,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "8e8274272d362f7b"
+      "_h": "b7766076033ae2ad"
     },
     {
       "hash": "a8eb20b",
@@ -500,9 +511,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "68fa2db57162f1c6"
+      "_h": "a04ac195fe96720f"
     },
     {
       "hash": "fac5510",
@@ -520,9 +531,9 @@
       "kind": "feat",
       "files": 1,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "8e28d0697ca7c4af"
+      "_h": "540b78f05bb2c849"
     },
     {
       "hash": "a4e1d30",
@@ -531,9 +542,9 @@
       "kind": "feat",
       "files": 2,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "730f0074ccfbf539"
+      "_h": "7d2bb32f40dbdc69"
     },
     {
       "hash": "dabedb2",
@@ -542,9 +553,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "58b43559d9205b80"
+      "_h": "c57b4b76195636f0"
     },
     {
       "hash": "3f0fbcb",
@@ -553,9 +564,9 @@
       "kind": "feat",
       "files": 3,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "44e3a449c5c552cf"
+      "_h": "5082ffcca4c07d83"
     },
     {
       "hash": "e6c70c6",
@@ -564,9 +575,9 @@
       "kind": "feat",
       "files": 4,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "e4a25fd6be2c95c0"
+      "_h": "1c35a954cbd6ee59"
     },
     {
       "hash": "eada6f5",
@@ -575,9 +586,9 @@
       "kind": "feat",
       "files": 2,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "3794811a4f6f9a2e"
+      "_h": "4df639da5c3022e3"
     },
     {
       "hash": "d4ffe77",
@@ -595,9 +606,9 @@
       "kind": "other",
       "files": 45,
       "featureIds": [
-        "F20260906-001"
+        "F20260918-001"
       ],
-      "_h": "839d8fff22c0679f"
+      "_h": "5da06c5676c80196"
     },
     {
       "hash": "ff850fd",
@@ -606,18 +617,18 @@
       "kind": "other",
       "files": 6,
       "featureIds": [
-        "F20260906-002"
+        "F20260918-002"
       ],
-      "_h": "d973b3ae4a8e482d"
+      "_h": "7c2e8100de216c23"
     }
   ],
   "knowledgeGaps": {
     "featuresWithoutTests": [
-      "F20260906-001"
+      "F20260918-001"
     ],
     "featuresWithoutRunbooks": [
-      "F20260906-001",
-      "F20260906-002"
+      "F20260918-001",
+      "F20260918-002"
     ],
     "apisWithoutFeature": [],
     "filesWithoutFeature": 2,
@@ -632,11 +643,11 @@
       },
       {
         "file": "package.json",
-        "commits": 5
+        "commits": 6
       },
       {
         "file": "ui/index.html",
-        "commits": 5
+        "commits": 6
       },
       {
         "file": "config.json",
@@ -656,6 +667,10 @@
       },
       {
         "file": "public/index.html",
+        "commits": 1
+      },
+      {
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
         "commits": 1
       },
       {

@@ -40,3 +40,20 @@ gateway.mjs 工 (1 modified)
 
 ### changed
 - +909 −600 lines across 22 files
+
+### added
+- Release 0.2.1 收尾（TASK-002 相關，專案 root /Users/steward/App/tpaaw-gateway）：
+1. packa (1 modified)
+
+### changed
+- +29 −7 lines across 3 files
+
+### changed
+- Release RR-20260918-1242 最終驗證輪（0.2.1，專案 root /Users/steward/App/tpaaw-gateway）：
+ (1 new file)
+
+### changed
+- +26 −9 lines across 4 files
+
+### added
+- Release 0.2.1（RR-20260918-1242）：security hardening（MAJ-001 manifest.version fail-closed、F7 CSRF Host/Origin gate、MED-001 GET Host gate、MIN-001 settings 1MB cap、UI esc 前移）、CSRF e2e 16 案新增、test script 釘 TAP reporter、版本 0.2.1。簽核證據 RUN-20260918-005：42/42。

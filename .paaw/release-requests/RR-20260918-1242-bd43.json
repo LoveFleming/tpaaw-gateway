@@ -13,20 +13,21 @@
     "source": "user-selected"
   },
   "target": {
-    "sha": "4a06afb0e3b3368c8d38e2f7ad00c9a4959a4ec0",
-    "short": "4a06afb",
-    "at": "2026-09-18T12:40:44+08:00",
+    "sha": "12ae4b8b3eb665f3403a99c06505fdcc6b1a8575",
+    "short": "12ae4b8",
+    "at": "2026-09-18T19:58:25+08:00",
     "author": "LoveFleming",
-    "subject": "feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log"
+    "subject": "test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass"
   },
   "scope": {
-    "computedAt": "2026-09-18T04:42:15.197Z",
+    "computedAt": "2026-09-19T00:57:18.332Z",
     "commits": {
-      "count": 5,
+      "count": 6,
       "authors": [
         "LoveFleming"
       ],
       "subjects": [
+        "12ae4b8 test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass",
         "4a06afb feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log",
         "3bdb4bd chore: .paaw runtime 快照 — release 證據（test run / semgrep 掃描 / handover state / RR-20260918-1237-1d49）",
         "0efcf9b chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）",
@@ -36,60 +37,495 @@
     },
     "files": [
       {
-        "file": "ui/index.html",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T04:40:44.000Z",
-        "commits": [
-          "4a06afb",
-          "69c2fbe"
-        ]
-      },
-      {
         "file": ".paaw/HANDOVER.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
+          "12ae4b8",
           "3bdb4bd"
         ]
       },
       {
         "file": ".paaw/agents/coding.rm.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
+          "12ae4b8",
           "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/c4-model.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/changelog/CHANGELOG.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
         ]
       },
       {
         "file": ".paaw/changes/change-intelligence.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
+          "12ae4b8",
           "3bdb4bd"
         ]
       },
       {
-        "file": ".paaw/coding-memory/actions.jsonl",
+        "file": ".paaw/code-intelligence/api-function-map.json",
         "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
+        "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/call-graph.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/dependency-graph.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/file-map.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/summary.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/symbol-index.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/test-code-map.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/code-intelligence/test-intelligence.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/actions.jsonl",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
           "3bdb4bd"
         ]
       },
       {
         "file": ".paaw/coding-memory/conversations/coding.developer/active.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
+          "12ae4b8",
           "3bdb4bd"
         ]
       },
       {
         "file": ".paaw/coding-memory/conversations/coding.em/active.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
         "commits": [
+          "12ae4b8",
           "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/conversations/coding.em/s-2026-09-18T08-36-10.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/conversations/coding.tester/active.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-log.jsonl",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-09-24--developer.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-10-50--tester.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-10-57--tester.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-11-09--qa.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/coding-memory/dispatch-outputs/2026-09-18-11-38--tester.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/cu-status.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/error-codes.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/FEATURE-MAP-META.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/FEATURES.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/features/FILE-FEATURES.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/backups/FEATURES-1789728003670.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/backups/FEATURES-1789728003675.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/backups/FEATURES-1789728644590.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/backups/FEATURES-1789729078050.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/backups/FEATURES-1789729693243.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/features/tree-sitter-analysis.txt",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/handover-state.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/release-requests/RR-20260918-1237-1d49.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/release-requests/RR-20260918-1242-bd43.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/release-unit-model.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/scan.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/security/scan-results.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-feature-feature-skeleton-machine-kind-deterministic-apis-get.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-feature-feature-skeleton-machine-kind-deterministic-apis-pos.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-gatewaymjs-f7-csrf-task-002-task-002-f1f10-f7-csrf-em-f1f10-.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-001rr-20260918-1242-release-code-review-gatewaymjsrelea.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-003release-rr-20260918-1242-1f7-csrf-gatewaymjs-cmdui-p.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-004-gatewaymjs-rr-20260918-1242-risk-gate-failhighapi-f.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-005-developer-4-gatewaymjs-uiindexhtml-working-tree-rea.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/sessions/2026-09-18-task-005-gatewaymjs-qa-findingsrelease-rr-20260918-1242-read.md",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/staged-changes.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/tasks/TASKS.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/last.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-004.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/test-runs/runs/RUN-20260918-005.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": ".paaw/verify-last.json",
+        "changeCount": 2,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "3bdb4bd"
+        ]
+      },
+      {
+        "file": "gateway.mjs",
+        "changeCount": 3,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "1e6f7aa",
+          "69c2fbe"
+        ]
+      },
+      {
+        "file": "package.json",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "changeCount": 1,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8"
+        ]
+      },
+      {
+        "file": "ui/index.html",
+        "changeCount": 3,
+        "lastChanged": "2026-09-18T11:58:25.000Z",
+        "commits": [
+          "12ae4b8",
+          "4a06afb",
+          "69c2fbe"
         ]
       },
       {
@@ -125,30 +561,6 @@
         ]
       },
       {
-        "file": ".paaw/coding-memory/conversations/coding.tester/active.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/coding-memory/dispatch-log.jsonl",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/features/FEATURES.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/features/backups/FEATURES-1788775413096.json",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:40:08.000Z",
@@ -165,14 +577,6 @@
         ]
       },
       {
-        "file": ".paaw/handover-state.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/issues/ISSUES.json",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:40:08.000Z",
@@ -181,47 +585,7 @@
         ]
       },
       {
-        "file": ".paaw/release-requests/RR-20260918-1237-1d49.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/release-unit-model.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/security/scan-results.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/sessions/2026-09-15-task.md",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/tasks/TASKS.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
-        "file": ".paaw/test-runs/last.json",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:40:08.000Z",
         "commits": [
@@ -253,14 +617,6 @@
         ]
       },
       {
-        "file": ".paaw/verify-last.json",
-        "changeCount": 1,
-        "lastChanged": "2026-09-18T04:40:08.000Z",
-        "commits": [
-          "3bdb4bd"
-        ]
-      },
-      {
         "file": ".paaw/gates.json",
         "changeCount": 1,
         "lastChanged": "2026-09-18T04:39:22.000Z",
@@ -275,15 +631,6 @@
         "commits": [
           "1e6f7aa"
         ]
-      },
-      {
-        "file": "gateway.mjs",
-        "changeCount": 2,
-        "lastChanged": "2026-09-18T04:36:16.000Z",
-        "commits": [
-          "1e6f7aa",
-          "69c2fbe"
-        ]
       }
     ],
     "features": [
@@ -296,6 +643,7 @@
         ],
         "apis": [
           "GET /api/log",
+          "GET /api/paaw-log",
           "POST /api/restart",
           "GET /api/settings",
           "POST /api/settings",
@@ -303,6 +651,7 @@
           "GET /api/status",
           "POST /api/stop",
           "POST /api/update",
+          "POST /api/upload",
           "GET /index.html"
         ],
         "apiImpact": true,
@@ -313,6 +662,14 @@
       {
         "method": "GET",
         "path": "/api/log",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
+        "method": "GET",
+        "path": "/api/paaw-log",
         "file": "gateway.mjs",
         "featureIds": [
           "F20260906-001"
@@ -375,6 +732,14 @@
         ]
       },
       {
+        "method": "POST",
+        "path": "/api/upload",
+        "file": "gateway.mjs",
+        "featureIds": [
+          "F20260906-001"
+        ]
+      },
+      {
         "method": "GET",
         "path": "/index.html",
         "file": "gateway.mjs",
@@ -391,9 +756,9 @@
       "label": "測試全過（unit + e2e）",
       "auto": {
         "status": "pass",
-        "detail": "0✓ 0✗ 0⋯；run at 2026-09-18T04:40:51.188Z",
-        "checkedAt": "2026-09-18T04:42:15.197Z",
-        "runId": "RUN-20260918-004"
+        "detail": "17✓ 0✗ 0⋯；run at 2026-09-19T01:01:55.523Z",
+        "checkedAt": "2026-09-19T01:04:57.832Z",
+        "runId": "RUN-20260919-001"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -406,7 +771,7 @@
       "auto": {
         "status": "warn",
         "detail": "warnings：clean-tree",
-        "checkedAt": "2026-09-18T04:42:15.197Z"
+        "checkedAt": "2026-09-19T01:04:57.832Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -419,7 +784,7 @@
       "auto": {
         "status": "pass",
         "detail": "無未解決 QA fail 記錄",
-        "checkedAt": "2026-09-18T04:42:15.197Z"
+        "checkedAt": "2026-09-19T01:04:57.832Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -431,8 +796,8 @@
       "label": "Security scan（semgrep，scope 內）",
       "auto": {
         "status": "pass",
-        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-18T04:40:53.809Z",
-        "checkedAt": "2026-09-18T04:42:15.197Z"
+        "detail": "scope 內 findings：ERROR 0 / WARNING 0 / INFO 0（全庫 6）；scanned 2026-09-19T01:02:05.046Z",
+        "checkedAt": "2026-09-19T01:04:57.832Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -444,8 +809,8 @@
       "label": "風險評估（readiness heuristic）",
       "auto": {
         "status": "fail",
-        "detail": "HIGH：API 變更的 feature 沒有測試；31 個檔案變更",
-        "checkedAt": "2026-09-18T04:42:15.197Z"
+        "detail": "HIGH：API 變更的 feature 沒有測試；72 個檔案變更；11 個 API 變更",
+        "checkedAt": "2026-09-19T01:04:57.832Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -457,8 +822,8 @@
       "label": "維運就緒（部署/回滾文檔）— 簽核",
       "auto": {
         "status": "pass",
-        "detail": "維運文檔：DEPLOY.md（含回滾）、README.md（含回滾）",
-        "checkedAt": "2026-09-18T04:42:15.197Z"
+        "detail": "維運文檔：DEPLOY.md（含回滾）、README.md（含回滾）；⚠ 本次含依賴變更 — 注意鎖檔與安裝步驟",
+        "checkedAt": "2026-09-19T01:04:57.832Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -470,8 +835,8 @@
       "label": "交接（handover state 新鮮）— 簽核",
       "auto": {
         "status": "pass",
-        "detail": "handover state 2026-09-18T04:40:46.676Z（changes 10 / open issues 0）；新鮮",
-        "checkedAt": "2026-09-18T04:42:15.197Z"
+        "detail": "handover state 2026-09-19T01:03:46.588Z（changes 10 / open issues 0）；新鮮",
+        "checkedAt": "2026-09-19T01:04:57.832Z"
       },
       "verdict": "pending",
       "reviewedBy": null,
@@ -493,6 +858,44 @@
       "by": "human",
       "event": "opened",
       "note": "baseline 鎖定，開始證據審查"
+    },
+    {
+      "ts": "2026-09-19T00:57:18.332Z",
+      "by": "system",
+      "event": "target-advanced",
+      "note": "target 前進到 12ae4b8，scope 重算"
+    },
+    {
+      "ts": "2026-09-19T01:04:32.683Z",
+      "by": "rm",
+      "event": "ai-suggested",
+      "note": "tests:pass, gates:waived, qa-records:pass, risk:waived"
     }
-  ]
+  ],
+  "suggested": {
+    "tests": {
+      "verdict": "pass",
+      "reason": "auto=warn 根因「結果落後 1 commits」已消除：我於 2026-09-19 01:01 直接在 target commit 12ae4b8 重跑全套（RUN-20260919-001），TAP 官方總計 tests 42 / pass 42 / fail 0 / skipped 0、exit code 0，與 RUN-20260918-005 的 42/42（unit 13 + e2e 13+16）完全一致。註：工具面板 summary 顯示 17 係頂層 TAP 條目解析瑕疵，outputTail 原始輸出為準。",
+      "by": "rm",
+      "at": "2026-09-19T01:04:32.683Z"
+    },
+    "gates": {
+      "verdict": "waived",
+      "reason": "唯一 warning 為 clean-tree：13 個未 commit 檔案全數為 .paaw 的證據/runtime 快照（test-run JSON、change-intelligence、CHANGELOG 等），無任何 src/ 程式碼變更，不影響建置與行為；test hard gate 已 pass。Safe to ship 條件：tag 0.2.1 前由人工將這些證據檔 commit 並 push（含既有 1 個未推 commit）。",
+      "by": "rm",
+      "at": "2026-09-19T01:04:32.683Z"
+    },
+    "qa-records": {
+      "verdict": "pass",
+      "reason": "auto=pass：無未解決 QA fail 記錄。人工安全 review（TASK-001，2026-09-18 11:08）verdict GO with notes，3 項 findings（MAJ-001/MED-001/MIN-001）均已在本版修復且各有 e2e 案例覆蓋（gateway-ui-csrf 第二 describe 3 案）。",
+      "by": "rm",
+      "at": "2026-09-19T01:04:32.683Z"
+    },
+    "risk": {
+      "verdict": "waived",
+      "reason": "auto=fail 根因「F20260906-001（gateway.mjs）沒有測試」為靜態分析誤判：tests/e2e/gateway-ui-csrf.test.mjs（16 案例）以 spawn 真實 gateway.mjs 子進程方式覆蓋 cmdUI API 面（Host/CSRF gate、settings 1MB 上限、update fail-closed、GET 煙霧），feature map 已將該測試檔 mapping 至此 feature，test-intelligence 看不到 spawn 邊緣屬工具盲區；RUN-20260919-001 在 target commit 上該 16 案全綠（42/42）。最壞情況（UI 層回歍）可由 git revert 6 commits 或 current.json 回指 versions/0.2.0 回滚，程序見 DEPLOY.md。72 檔案變更中大宗為 .paaw 證據快照，實際程式碼變更集中在 gateway.mjs + ui/index.html + docs。",
+      "by": "rm",
+      "at": "2026-09-19T01:04:32.683Z"
+    }
+  }
 }

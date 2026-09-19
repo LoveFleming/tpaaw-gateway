@@ -1,50 +1,46 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-18T07:25:59.946Z",
+  "generatedAt": "2026-09-19T01:03:46.588Z",
   "initialized": true,
   "currentState": {
     "branch": "main",
-    "headSha": "4a06afb",
-    "dirtyCount": 9,
+    "headSha": "12ae4b8",
+    "dirtyCount": 17,
     "dirtyFiles": [
-      "M .paaw/HANDOVER.md",
+      "M .paaw/changelog/CHANGELOG.md",
       " M .paaw/changes/change-intelligence.json",
-      " M .paaw/handover-state.json",
-      " M .paaw/release-requests/RR-20260918-1237-1d49.json",
+      " M .paaw/coding-memory/actions.jsonl",
+      " M .paaw/coding-memory/conversations/coding.em/active.json",
+      " M .paaw/coding-memory/dispatch-log.jsonl",
+      " M .paaw/issues/ISSUES.json",
+      " M .paaw/release-requests/RR-20260918-1242-bd43.json",
+      " M .paaw/release-unit-model.json",
       " M .paaw/security/scan-results.json",
+      " M .paaw/staged-changes.json",
+      " M .paaw/tasks/TASKS.json",
       " M .paaw/test-runs/last.json",
-      " M .paaw/verify-last.json",
-      "?? .paaw/release-requests/RR-20260918-1242-bd43.json",
-      "?? .paaw/test-runs/runs/RUN-20260918-004.json"
+      "?? .paaw/coding-memory/dispatch-outputs/2026-09-18-11-54--developer.md",
+      "?? .paaw/coding-memory/dispatch-outputs/2026-09-18-11-58--tester.md",
+      "?? .paaw/sessions/2026-09-18-release-021-task-002-root-usersstewardapptpaaw-gateway-1-pac.md",
+      "?? .paaw/sessions/2026-09-18-release-rr-20260918-1242-021-root-usersstewardapptpaaw-gatew.md",
+      "?? .paaw/test-runs/runs/RUN-20260919-001.json"
     ],
-    "unpushedCount": 0,
-    "unpushedCommits": []
+    "unpushedCount": 1,
+    "unpushedCommits": [
+      "12ae4b8 test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass"
+    ]
   },
   "workingPlan": {
-    "activeTasks": [
-      {
-        "id": "TASK-001",
-        "title": "人工安全 code review：gateway.mjs 與 src/server.mjs",
-        "status": "open",
-        "priority": "high",
-        "phase": "spec",
-        "phaseStatus": "pending",
-        "next": "run spec"
-      },
-      {
-        "id": "TASK-002",
-        "title": "修復 gateway.mjs 安全問題：F1/F10 版本驗證 + F7 CSRF 防護",
-        "status": "open",
-        "priority": "critical",
-        "phase": "spec",
-        "phaseStatus": "pending",
-        "next": "run spec"
-      }
-    ],
-    "activeCount": 2
+    "activeTasks": [],
+    "activeCount": 0
   },
   "changes": {
     "recentCommits": [
+      {
+        "hash": "12ae4b8",
+        "date": "2026-09-18T19:58:25+08:00",
+        "subject": "test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass"
+      },
       {
         "hash": "4a06afb",
         "date": "2026-09-18T12:40:44+08:00",
@@ -89,11 +85,6 @@
         "hash": "4a9ee9d",
         "date": "2026-09-06T18:50:47+08:00",
         "subject": "docs: agent prompt 對齊 .paaw 進版控紀律（_promptRev 2026-09-06-e）"
-      },
-      {
-        "hash": "88d2db8",
-        "date": "2026-09-06T18:50:24+08:00",
-        "subject": "feat: .paaw 進版控 — release unit 資產（2026-09-06 Fleming 定調）"
       }
     ]
   },
@@ -104,13 +95,13 @@
   },
   "nextAction": {
     "step": "commit",
-    "reason": "9 個未提交檔案",
+    "reason": "17 個未提交檔案",
     "detail": [
-      "M .paaw/HANDOVER.md",
+      "M .paaw/changelog/CHANGELOG.md",
       " M .paaw/changes/change-intelligence.json",
-      " M .paaw/handover-state.json",
-      " M .paaw/release-requests/RR-20260918-1237-1d49.json",
-      " M .paaw/security/scan-results.json"
+      " M .paaw/coding-memory/actions.jsonl",
+      " M .paaw/coding-memory/conversations/coding.em/active.json",
+      " M .paaw/coding-memory/dispatch-log.jsonl"
     ]
   }
 }
