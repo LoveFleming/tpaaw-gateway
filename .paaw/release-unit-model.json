@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T06:50:47.706Z",
-  "headSha": "e8aaa83",
+  "generatedAt": "2026-09-19T06:53:39.726Z",
+  "headSha": "e3cf819",
   "tableHashes": {
     "features": "972009aa875f8b77",
     "apis": "0e51cf6184baa66b",
     "tests": "4db757bf4a749c80",
-    "changes": "59d6c5758c56baeb",
+    "changes": "59b671e780dbd632",
     "knowledgeGaps": "cbca54a393a5c84a"
   },
   "root": null,
@@ -17,7 +17,7 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 36,
+    "commits": 37,
     "commitLimit": 200
   },
   "sources": {
@@ -356,6 +356,15 @@
     }
   ],
   "changes": [
+    {
+      "hash": "e3cf819",
+      "date": "2026-09-19T14:53:01+08:00",
+      "subject": "chore(release): commit .paaw platform state before evidence run",
+      "kind": "chore",
+      "files": 3,
+      "featureIds": [],
+      "_h": "658bc1a482cb6c17"
+    },
     {
       "hash": "e8aaa83",
       "date": "2026-09-19T14:41:42+08:00",

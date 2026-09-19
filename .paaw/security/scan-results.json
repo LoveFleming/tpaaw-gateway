@@ -1,86 +1,6 @@
 {
   "findings": [
     {
-      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
-      "severity": "INFO",
-      "rawSeverity": "INFO",
-      "confidence": "UNKNOWN",
-      "category": "correctness",
-      "cwe": [],
-      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
-      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
-      "line": 29,
-      "column": 43,
-      "endLine": 37,
-      "snippet": "requires login",
-      "fix": null,
-      "references": []
-    },
-    {
-      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
-      "severity": "INFO",
-      "rawSeverity": "INFO",
-      "confidence": "UNKNOWN",
-      "category": "correctness",
-      "cwe": [],
-      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
-      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
-      "line": 29,
-      "column": 44,
-      "endLine": 35,
-      "snippet": "requires login",
-      "fix": null,
-      "references": []
-    },
-    {
-      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
-      "severity": "INFO",
-      "rawSeverity": "INFO",
-      "confidence": "UNKNOWN",
-      "category": "correctness",
-      "cwe": [],
-      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
-      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
-      "line": 20,
-      "column": 14,
-      "endLine": 33,
-      "snippet": "requires login",
-      "fix": null,
-      "references": []
-    },
-    {
-      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
-      "severity": "INFO",
-      "rawSeverity": "INFO",
-      "confidence": "UNKNOWN",
-      "category": "correctness",
-      "cwe": [],
-      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
-      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
-      "line": 20,
-      "column": 15,
-      "endLine": 22,
-      "snippet": "requires login",
-      "fix": null,
-      "references": []
-    },
-    {
-      "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.correctness.missing-template-string-indicator",
-      "severity": "INFO",
-      "rawSeverity": "INFO",
-      "confidence": "UNKNOWN",
-      "category": "correctness",
-      "cwe": [],
-      "message": "This looks like a JavaScript template string. Are you missing a '$' in front of '{...}'?",
-      "file": "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
-      "line": 23,
-      "column": 62,
-      "endLine": 33,
-      "snippet": "requires login",
-      "fix": null,
-      "references": []
-    },
-    {
       "id": "Users.steward.App.tPAAW.data.semgrep-rules.javascript.lang.security.audit.detect-non-literal-fs-filename",
       "severity": "WARNING",
       "rawSeverity": "WARNING",
@@ -202,22 +122,18 @@
     }
   ],
   "stats": {
-    "total": 11,
+    "total": 6,
     "bySeverity": {
-      "INFO": 5,
       "WARNING": 6
     },
     "byCategory": {
-      "correctness": 5,
       "security": 6
     },
     "filesScanned": [
-      "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
-      "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
       "/Users/steward/App/tpaaw-gateway/gateway.mjs",
       "/Users/steward/App/tpaaw-gateway/src/server.mjs"
     ],
-    "filesAffected": 3,
+    "filesAffected": 1,
     "rulesRun": 3,
     "rulePacks": [
       "/Users/steward/App/tPAAW/data/semgrep-rules/javascript",
@@ -229,12 +145,10 @@
     "version": "1.169.0",
     "paths": {
       "scanned": [
-        "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task008-verify.mjs",
-        "/Users/steward/App/tpaaw-gateway/.paaw/tmp/task009-probe.mjs",
         "/Users/steward/App/tpaaw-gateway/gateway.mjs",
         "/Users/steward/App/tpaaw-gateway/src/server.mjs"
       ]
     }
   },
-  "scannedAt": "2026-09-19T04:18:15.232Z"
+  "scannedAt": "2026-09-19T06:54:16.695Z"
 }

@@ -1,45 +1,26 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T04:14:40.501Z",
+  "generatedAt": "2026-09-19T06:54:29.363Z",
   "initialized": true,
   "currentState": {
     "branch": "main",
-    "headSha": "db2671c",
-    "dirtyCount": 47,
+    "headSha": "e3cf819",
+    "dirtyCount": 9,
     "dirtyFiles": [
-      "M .paaw/c4-model.json",
-      " M .paaw/changelog/CHANGELOG.md",
-      " M .paaw/changes/change-intelligence.json",
-      " M .paaw/code-intelligence/call-graph.json",
-      " M .paaw/code-intelligence/dependency-graph.json",
-      " M .paaw/code-intelligence/file-map.json",
-      " M .paaw/code-intelligence/summary.json",
-      " M .paaw/code-intelligence/symbol-index.json",
-      " M .paaw/code-intelligence/test-code-map.json",
-      " M .paaw/code-intelligence/test-intelligence.json",
-      " M .paaw/coding-memory/actions.jsonl",
-      " M .paaw/coding-memory/conversations/coding.em/active.json",
-      " M .paaw/coding-memory/dispatch-log.jsonl",
-      " M .paaw/cu-status.json",
-      " M .paaw/features/FEATURES.json",
-      " D .paaw/features/backups/FEATURES-1789728003670.json",
-      " D .paaw/features/backups/FEATURES-1789728003675.json",
-      " D .paaw/features/backups/FEATURES-1789728644590.json",
-      " D .paaw/features/backups/FEATURES-1789729078050.json",
-      " D .paaw/features/backups/FEATURES-1789729693243.json",
-      " M .paaw/issues/ISSUES.json",
-      " M .paaw/release-requests/RR-20260918-1242-bd43.json",
+      "M .paaw/coding-memory/actions.jsonl",
       " M .paaw/release-unit-model.json",
-      " M .paaw/scan.json",
-      " M .paaw/tasks/TASKS.json",
+      " M .paaw/security/scan-results.json",
       " M .paaw/test-runs/last.json",
-      " M public/index.html",
-      " M src/server.mjs",
-      "?? .paaw/coding-memory/dispatch-outputs/2026-09-19-02-17--qa.md",
-      "?? .paaw/coding-memory/dispatch-outputs/2026-09-19-03-15--tester.md"
+      " M .paaw/verify-last.json",
+      "?? .paaw/coding-memory/dispatch-outputs/2026-09-19-06-53--developer.md",
+      "?? .paaw/sessions/2026-09-19-release-commit-push-working-tree-3-commit-paaw-paaw-100-paaw.md",
+      "?? .paaw/staged-changes.json",
+      "?? .paaw/test-runs/runs/RUN-20260919-004.json"
     ],
-    "unpushedCount": 0,
-    "unpushedCommits": []
+    "unpushedCount": 1,
+    "unpushedCommits": [
+      "e3cf819 chore(release): commit .paaw platform state before evidence run"
+    ]
   },
   "workingPlan": {
     "activeTasks": [],
@@ -48,54 +29,54 @@
   "changes": {
     "recentCommits": [
       {
+        "hash": "e3cf819",
+        "date": "2026-09-19T14:53:01+08:00",
+        "subject": "chore(release): commit .paaw platform state before evidence run"
+      },
+      {
+        "hash": "e8aaa83",
+        "date": "2026-09-19T14:41:42+08:00",
+        "subject": "chore: EM 對話記憶落檔收編（.paaw 100% 版控）"
+      },
+      {
+        "hash": "bc8ac9c",
+        "date": "2026-09-19T14:41:26+08:00",
+        "subject": "chore: EM/RM 資產同步 — Release 流程一頁版（em-4/rm-2）"
+      },
+      {
+        "hash": "770e52e",
+        "date": "2026-09-19T14:36:51+08:00",
+        "subject": "chore: EM 資產同步 rev 2026-09-19-3（證據落檔即 commit）"
+      },
+      {
+        "hash": "d325089",
+        "date": "2026-09-19T14:36:42+08:00",
+        "subject": "chore: RR 清除落地 + 證據檔入版控（RUN-20260919-003）— .paaw 100% 版控常態化"
+      },
+      {
+        "hash": "692e48a",
+        "date": "2026-09-19T14:33:08+08:00",
+        "subject": "chore: agent 資產刷新 — .paaw/agents 10 檔同步至最新 global 內容（EM rev 2026-09-19-2）"
+      },
+      {
+        "hash": "368fb8f",
+        "date": "2026-09-19T12:24:05+08:00",
+        "subject": "release unit info"
+      },
+      {
+        "hash": "7092757",
+        "date": "2026-09-19T12:23:35+08:00",
+        "subject": "fix(server): await confirmed process exit before restart/upgrade/restore"
+      },
+      {
+        "hash": "20a85b8",
+        "date": "2026-09-19T12:20:42+08:00",
+        "subject": "chore(gitignore): ignore .paaw/tmp/ runtime scratch files"
+      },
+      {
         "hash": "db2671c",
         "date": "2026-09-19T09:08:53+08:00",
         "subject": "release unit paaw save"
-      },
-      {
-        "hash": "3d31aef",
-        "date": "2026-09-19T09:08:16+08:00",
-        "subject": "release unit paaw save"
-      },
-      {
-        "hash": "12ae4b8",
-        "date": "2026-09-18T19:58:25+08:00",
-        "subject": "test: RUN-20260918-005 — RR-20260918-1242 最終驗證 42/42 pass"
-      },
-      {
-        "hash": "4a06afb",
-        "date": "2026-09-18T12:40:44+08:00",
-        "subject": "feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log"
-      },
-      {
-        "hash": "3bdb4bd",
-        "date": "2026-09-18T12:40:08+08:00",
-        "subject": "chore: .paaw runtime 快照 — release 證據（test run / semgrep 掃描 / handover state / RR-20260918-1237-1d49）"
-      },
-      {
-        "hash": "0efcf9b",
-        "date": "2026-09-18T12:39:22+08:00",
-        "subject": "chore: gates 調整 — build/type-check 降 warn（純 Node bootloader 無此步驟），test 為唯一 hard gate（release 流程首次套用）"
-      },
-      {
-        "hash": "1e6f7aa",
-        "date": "2026-09-18T12:36:16+08:00",
-        "subject": "fix(gateway): ISS-001 port 佔用偵測 + 夭折期複查；docs: DEPLOY.md 維運文檔"
-      },
-      {
-        "hash": "69c2fbe",
-        "date": "2026-09-12T19:52:14+08:00",
-        "subject": "gateway UI 可看 PAAW server log（📜 PAAW Server Log 面板）"
-      },
-      {
-        "hash": "dc9c1a5",
-        "date": "2026-09-07T18:53:41+08:00",
-        "subject": "feat: 手動上傳 zip 安裝 — 不需要 paaw-package 也能發版（2026-09-07 Fleming）"
-      },
-      {
-        "hash": "b0a4049",
-        "date": "2026-09-06T20:29:41+08:00",
-        "subject": "chore: 同步三目錄架構 — .paaw 零例外（runtime log 全在 PAAW log/）+ developer prompt rev 2026-09-06-g（$PAAW_APP_CONSOLE_DIR）"
       }
     ]
   },
@@ -106,13 +87,13 @@
   },
   "nextAction": {
     "step": "commit",
-    "reason": "47 個未提交檔案",
+    "reason": "9 個未提交檔案",
     "detail": [
-      "M .paaw/c4-model.json",
-      " M .paaw/changelog/CHANGELOG.md",
-      " M .paaw/changes/change-intelligence.json",
-      " M .paaw/code-intelligence/call-graph.json",
-      " M .paaw/code-intelligence/dependency-graph.json"
+      "M .paaw/coding-memory/actions.jsonl",
+      " M .paaw/release-unit-model.json",
+      " M .paaw/security/scan-results.json",
+      " M .paaw/test-runs/last.json",
+      " M .paaw/verify-last.json"
     ]
   }
 }

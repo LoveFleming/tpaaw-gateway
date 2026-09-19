@@ -1,0 +1,23 @@
+{
+  "createdAt": "2026-09-19T06:53:15.925Z",
+  "agent": "developer",
+  "task": "Release 準備收尾 commit：將 working tree 的 3 個 .paaw 檔案（coding.em/active.json、dispatch-log.jsonl、release-unit-model.json）git add + commit（Conventional Commits 格式），確認樹乾淨，絕對禁止 push。",
+  "taskId": "",
+  "summary": "Release 準備收尾：commit 3 個 .paaw 平台狀態檔（EM 對話記憶 active.json、dispatch-log.jsonl、release-unit-model.json），共 93 insertions / 6 deletions。事先以 git status --porcelain 確認 working tree 僅含這 3 個檔案、無 src/ 程式碼異動，直接 add 指定檔案後 commit（無需 git add -A）。commit 後樹乾淨。絕未執行 git push。",
+  "files": [
+    {
+      "path": ".paaw/coding-memory/conversations/coding.em/active.json",
+      "reason": "EM session 記憶更新，.paaw 100% 版控鐵律收檔"
+    },
+    {
+      "path": ".paaw/coding-memory/dispatch-log.jsonl",
+      "reason": "dispatch 紀錄落檔，平台狀態資產"
+    },
+    {
+      "path": ".paaw/release-unit-model.json",
+      "reason": "Release Unit model 狀態同步，Release 前收尾"
+    }
+  ],
+  "howToTest": "git status 確認樹乾淨（無任何 modified/untracked）；git log --oneline -3 第一行為 e3cf819；git show --stat e3cf819 確認只含 3 個 .paaw 檔案、93 insertions(+)/6 deletions(-)；確認無 push 動作。",
+  "risk": "無。純 .paaw 平台狀態檔案 commit，不影響任何程式碼與執行行為；RR target 前進至 e3cf819，gates 重驗時樹內容與證據一致。"
+}
