@@ -1,23 +1,59 @@
 {
-  "createdAt": "2026-09-19T06:53:15.925Z",
+  "createdAt": "2026-09-19T06:59:14.430Z",
   "agent": "developer",
-  "task": "Release 準備收尾 commit：將 working tree 的 3 個 .paaw 檔案（coding.em/active.json、dispatch-log.jsonl、release-unit-model.json）git add + commit（Conventional Commits 格式），確認樹乾淨，絕對禁止 push。",
+  "task": "Release 證據落檔 commit（絕對不 push）：將 working tree 新產生的 .paaw 證據檔（RUN-20260919-004、semgrep 掃描結果、QA qr-20260919-065817-cxsl、handover/release-unit-model 等）git add + commit，不 push。",
   "taskId": "",
-  "summary": "Release 準備收尾：commit 3 個 .paaw 平台狀態檔（EM 對話記憶 active.json、dispatch-log.jsonl、release-unit-model.json），共 93 insertions / 6 deletions。事先以 git status --porcelain 確認 working tree 僅含這 3 個檔案、無 src/ 程式碼異動，直接 add 指定檔案後 commit（無需 git add -A）。commit 後樹乾淨。絕未執行 git push。",
+  "summary": "Release pre-flight 證據落檔 commit（僅 .paaw/ 檔案，零程式碼變更）。收錄內容：①測試證據 — RUN-20260919-004.json 新增、test-runs/last.json 指向更新；②安全掃描 — security/scan-results.json（semgrep）更新；③QA 紀錄 — coding-memory/qa-results.jsonl（qr-20260919-065817-cxsl）；④平台狀態 — handover-state.json、HANDOVER.md、release-unit-model.json（06:53 重建）、verify-last.json、staged-changes.json、actions.jsonl；⑤dispatch/session 平台檔 — dispatch-outputs/（developer 06:53、qa 06:58）與 sessions/ 兩份。git status --porcelain 預檢確認無任何 src/ 程式碼混入。",
   "files": [
     {
-      "path": ".paaw/coding-memory/conversations/coding.em/active.json",
-      "reason": "EM session 記憶更新，.paaw 100% 版控鐵律收檔"
+      "path": ".paaw/test-runs/runs/RUN-20260919-004.json",
+      "reason": "新測試執行證據（release pre-flight 跑套產出）"
     },
     {
-      "path": ".paaw/coding-memory/dispatch-log.jsonl",
-      "reason": "dispatch 紀錄落檔，平台狀態資產"
+      "path": ".paaw/test-runs/last.json",
+      "reason": "last 指針更新至 RUN-20260919-004"
+    },
+    {
+      "path": ".paaw/security/scan-results.json",
+      "reason": "semgrep 掃描結果證據更新"
+    },
+    {
+      "path": ".paaw/coding-memory/qa-results.jsonl",
+      "reason": "QA 紀錄 qr-20260919-065817-cxsl 落檔"
+    },
+    {
+      "path": ".paaw/handover-state.json",
+      "reason": "交接狀態刷新"
+    },
+    {
+      "path": ".paaw/HANDOVER.md",
+      "reason": "交接文件同步刷新"
     },
     {
       "path": ".paaw/release-unit-model.json",
-      "reason": "Release Unit model 狀態同步，Release 前收尾"
+      "reason": "06:53 重建的 release unit model"
+    },
+    {
+      "path": ".paaw/coding-memory/dispatch-outputs/",
+      "reason": "developer/QA dispatch 輸出平台檔（06-53、06-58）"
+    },
+    {
+      "path": ".paaw/coding-memory/actions.jsonl",
+      "reason": "action log 平台檔更新"
+    },
+    {
+      "path": ".paaw/sessions/",
+      "reason": "兩份 session 記錄（release commit-push、QA review）平台檔"
+    },
+    {
+      "path": ".paaw/staged-changes.json",
+      "reason": "平台 staged changes 快照"
+    },
+    {
+      "path": ".paaw/verify-last.json",
+      "reason": "驗證 last 指針更新"
     }
   ],
-  "howToTest": "git status 確認樹乾淨（無任何 modified/untracked）；git log --oneline -3 第一行為 e3cf819；git show --stat e3cf819 確認只含 3 個 .paaw 檔案、93 insertions(+)/6 deletions(-)；確認無 push 動作。",
-  "risk": "無。純 .paaw 平台狀態檔案 commit，不影響任何程式碼與執行行為；RR target 前進至 e3cf819，gates 重驗時樹內容與證據一致。"
+  "howToTest": "git log --oneline -2 看新 commit；git status 確認 working tree 乾淨；git show --stat HEAD 檢視收錄檔案清單（應全為 .paaw/ 下、無 src/ 程式碼）。",
+  "risk": "低 — 純證據檔落檔，不含任何程式碼變更，不影響 runtime。"
 }
