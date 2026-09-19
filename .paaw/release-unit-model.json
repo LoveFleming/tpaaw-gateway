@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T05:30:29.274Z",
-  "headSha": "368fb8f",
+  "generatedAt": "2026-09-19T06:50:47.706Z",
+  "headSha": "e8aaa83",
   "tableHashes": {
     "features": "972009aa875f8b77",
     "apis": "0e51cf6184baa66b",
     "tests": "4db757bf4a749c80",
-    "changes": "91b6847dbf30dcb7",
+    "changes": "59d6c5758c56baeb",
     "knowledgeGaps": "cbca54a393a5c84a"
   },
   "root": null,
@@ -17,7 +17,7 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 31,
+    "commits": 36,
     "commitLimit": 200
   },
   "sources": {
@@ -356,6 +356,51 @@
     }
   ],
   "changes": [
+    {
+      "hash": "e8aaa83",
+      "date": "2026-09-19T14:41:42+08:00",
+      "subject": "chore: EM 對話記憶落檔收編（.paaw 100% 版控）",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "a5f713df35328b06"
+    },
+    {
+      "hash": "bc8ac9c",
+      "date": "2026-09-19T14:41:26+08:00",
+      "subject": "chore: EM/RM 資產同步 — Release 流程一頁版（em-4/rm-2）",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "9fafb156ca50ae86"
+    },
+    {
+      "hash": "770e52e",
+      "date": "2026-09-19T14:36:51+08:00",
+      "subject": "chore: EM 資產同步 rev 2026-09-19-3（證據落檔即 commit）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "2ea06da19a62b450"
+    },
+    {
+      "hash": "d325089",
+      "date": "2026-09-19T14:36:42+08:00",
+      "subject": "chore: RR 清除落地 + 證據檔入版控（RUN-20260919-003）— .paaw 100% 版控常態化",
+      "kind": "chore",
+      "files": 8,
+      "featureIds": [],
+      "_h": "9be15061be305089"
+    },
+    {
+      "hash": "692e48a",
+      "date": "2026-09-19T14:33:08+08:00",
+      "subject": "chore: agent 資產刷新 — .paaw/agents 10 檔同步至最新 global 內容（EM rev 2026-09-19-2）",
+      "kind": "chore",
+      "files": 10,
+      "featureIds": [],
+      "_h": "d6aed620307917c1"
+    },
     {
       "hash": "368fb8f",
       "date": "2026-09-19T12:24:05+08:00",
