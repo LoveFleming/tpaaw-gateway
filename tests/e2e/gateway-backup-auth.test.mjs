@@ -13,7 +13,7 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
 import {
-  mkdtempSync, rmSync, mkdirSync, writeFileSync, readdirSync, existsSync, readFileSync,
+  mkdtempSync, rmSync, mkdirSync, writeFileSync, readdirSync, existsSync, readFileSync, cpSync,
 } from "node:fs";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
@@ -325,5 +325,142 @@ describe("E2E · session 過期行為", () => {
     await sleep(SESSION_MAX_AGE_MS + 450);
     assert.equal((await jsonReq(base, "/api/auth/me", { token })).status, 401);
     assert.equal((await jsonReq(base, "/api/backups", { token })).status, 401, "過期 token 打 backup API 也要 401");
+  });
+});
+
+// ─────────────────────────────────────────────────────────────
+// TASK-011：restore 路由攻擊檔名防護（backupPath CWE-22 hardening e2e）
+//
+// 兩層防禦的實際行為（WHATWG URL 語意已 probe 驗證）：
+//   Layer 1 — URL 正規化：literal `../`、`..\` 在 new URL()（server.mjs:517）
+//             就被正規化掉，pathname 變成 /api/etc/... → 路由 startsWith
+//             不符 → 404，根本進不了 restore 邏輯
+//   Layer 2 — backupPath 白名單（server.mjs:79）：percent-encoded 逃逸
+//             （路由不做 decodeURIComponent）與絕對路徑注入原樣抵達
+//             restoreBackup → { ok:false } 拒絕
+//   注意：本 server 的業務拒絕信封是 HTTP 200 { ok:false, error }，
+//   不是 400 —— 測試如實斷言實際契約
+// （非 admin 403 與 admin restore happy path 已由
+//   gateway-restart-rbac.test.mjs:322/:356 覆蓋，此處不重複）
+// ─────────────────────────────────────────────────────────────
+describe("E2E · restore 攻擊檔名防護（TASK-011 backupPath）", () => {
+  let g;
+  let base, token;
+  let backupDirRef, paawRootRef, eventLogPath;
+  const SEED_DB = '{"e2e":"seed-v1"}'; // startGateway 種入 db.json 的內容
+
+  before(async () => {
+    g = await startGateway();
+    base = g.base;
+    backupDirRef = g.backupDir;
+    paawRootRef = g.paawRoot;
+    eventLogPath = join(g.tmp, "events.jsonl");
+    const { status, data } = await jsonReq(base, "/api/auth/login", {
+      method: "POST",
+      body: { userId: TEST_USER.id, password: TEST_USER.passwordHash },
+    });
+    assert.equal(status, 200, `admin 登入失敗: ${JSON.stringify(data)}`);
+    token = data.token;
+  });
+
+  after(() => stopGateway(g));
+
+  /** 攻擊不應產生任何副作用 —— 統一的快照比對基礎 */
+  const backupFilesOnDisk = () =>
+    (existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort();
+  const restoreEventsInLog = () =>
+    (existsSync(eventLogPath) ? readFileSync(eventLogPath, "utf-8") : "")
+      .split("\n")
+      .filter((l) => l.includes("restore_"));
+
+  it("percent-encoded 逃逸 / 絕對路徑注入 / 格式非法 / 空檔名 → 200 {ok:false} 拒絕（admin 身分下仍拒絕）", async () => {
+    // 這些 payload 全部「存活過 URL 解析」原樣抵達 restoreBackup —— 被 backupPath 攔下
+    const vectors = [
+      { label: "percent-encoded ../../etc/passwd", path: "/api/backups/restore/..%2f..%2fetc%2fpasswd" },
+      { label: "percent-encoded dots config.json", path: "/api/backups/restore/%2e%2e%2fconfig.json" },
+      { label: "絕對路徑注入（格式合法的 /etc 檔名）", path: "/api/backups/restore//etc/paaw-backup-2026-09-19-10.tar.gz" },
+      { label: "缺 -HH 的格式非法檔名", path: "/api/backups/restore/paaw-backup-2026-09-19.tar.gz" },
+      { label: "緊湊日期格式", path: "/api/backups/restore/paaw-backup-20260919-10.tar.gz" },
+      { label: "雙副檔名", path: "/api/backups/restore/paaw-backup-2026-09-19-10.tar.gz.exe" },
+      { label: "空檔名（尾斜線後無內容）", path: "/api/backups/restore/" },
+    ];
+    for (const v of vectors) {
+      const { status, data } = await jsonReq(base, v.path, { method: "POST", token });
+      assert.equal(status, 200, `[${v.label}] HTTP 狀態`);
+      assert.equal(data.ok, false, `[${v.label}] 必須 ok:false（admin 打攻擊檔名照樣拒絕）: ${JSON.stringify(data)}`);
+      assert.match(data.error, /invalid/i, `[${v.label}] 錯誤訊息標明 invalid: ${data.error}`);
+    }
+  });
+
+  it("literal ../ 與 ..\\ 被 URL 正規化吃掉 → 404，不進 restore 邏輯", async () => {
+    // fetch/undici 用與 server 相同的 WHATWG URL 解析 → pathname 在 client
+    // 端就正規化成 /api/etc/... 等非 restore 路由 → server 回 404
+    const vectors = [
+      "/api/backups/restore/../../etc/passwd",
+      "/api/backups/restore/..\\..\\windows\\win.ini",
+    ];
+    for (const path of vectors) {
+      const { status, data } = await jsonReq(base, path, { method: "POST", token });
+      assert.equal(status, 404, `[${path}] 正規化後不應命中任何路由`);
+      assert.equal(data.ok, undefined, `[${path}] 404 回應不得有 restore 結果信封`);
+    }
+  });
+
+  it("攻擊階段零副作用：PAAW_ROOT 未動、備份集未動、audit log 零 restore 事件", async () => {
+    // 前兩個攻擊測試跑完後的總體檢：restore 的 logEvent/createBackup 都在
+    // backupPath 驗證之後 —— 任何被拒絕的請求不得留下痕跡
+    assert.equal(
+      readFileSync(join(paawRootRef, "data", "db.json"), "utf-8"),
+      SEED_DB,
+      "攻擊不得覆寫 PAAW_ROOT 資料",
+    );
+    assert.deepEqual(backupFilesOnDisk(), [], "攻擊不得建立 BACKUP_DIR 內任何檔案（含 safety backup）");
+    const evts = restoreEventsInLog();
+    assert.equal(evts.length, 0, `audit log 不得有 restore 事件，實得: ${evts.join(" | ")}`);
+  });
+
+  it("合法 admin restore 不回歸：ok:true、資料真還原、safety backup 出現、事件落 log", async () => {
+    // backupPath 收緊後，合法流程必須照常 —— 證明 containment 沒有誤傷
+    const created = await jsonReq(base, "/api/backups/create", { method: "POST", token });
+    assert.equal(created.status, 200, JSON.stringify(created.data));
+    assert.equal(created.data.ok, true);
+    const filename = created.data.filename;
+
+    // 備份後「加料」：新增一個備份後才存在的檔案。
+    // 注意①：createBackup 檔名時間戳只到「小時」粒度（src/server.mjs:376），
+    // 且 restoreBackup 是「先建 safety backup、後解包目標」—— 若同小時內直接
+    // restore 剛才 create 的備份，safety backup 會以「同名」覆蓋該檔，解包
+    // 出的其實是現況（self-restore）。因此把封存複製成「另一個合法檔名」
+    // （小時 +5 mod 24，構造上必不等於 created.hour，也不等於跨小時邊界時
+    // safety 可能落在的 created.hour+1），restore 那個名字。
+    const m = filename.match(/^paaw-backup-(\d{4})-(\d{2})-(\d{2})-(\d{2})\.tar\.gz$/);
+    assert.ok(m, `created filename 應符合 BACKUP_REGEX: ${filename}`);
+    const renamedHour = (Number(m[4]) + 5) % 24;
+    const restoreName = `paaw-backup-${m[1]}-${m[2]}-${m[3]}-${String(renamedHour).padStart(2, "0")}.tar.gz`;
+    assert.notEqual(restoreName, filename, "改名後不得與原備份同名");
+    cpSync(join(backupDirRef, filename), join(backupDirRef, restoreName));
+    // 注意②：tar 解包是 overwrite-in-place（封存內條目覆寫），不會刪除
+    // 封存裡沒有的額外檔案 —— 所以用「改動既有檔案內容、還原後應回復」斷言。
+    writeFileSync(join(paawRootRef, "data", "db.json"), "tampered-after-backup");
+    const res = await jsonReq(base, `/api/backups/restore/${restoreName}`, { method: "POST", token });
+    assert.equal(res.status, 200, JSON.stringify(res.data));
+    assert.equal(res.data.ok, true, `合法 restore 必須成功: ${JSON.stringify(res.data)}`);
+
+    assert.equal(
+      readFileSync(join(paawRootRef, "data", "db.json"), "utf-8"),
+      SEED_DB,
+      "被改壞的 db.json 必須被覆寫回備份時內容（資料真的被還原）",
+    );
+
+    // safety backup 落地；同小時內同名覆蓋時清單至少仍有 1 檔且全在白名單內
+    const list = await jsonReq(base, "/api/backups", { token });
+    assert.equal(list.status, 200);
+    assert.ok(list.data.backups.length >= 1, "restore 後備份清單不得為空（safety backup）");
+    for (const b of list.data.backups) assert.equal(BACKUP_REGEX.test(b.filename), true);
+
+    // 對照攻擊階段：合法流程才會有 restore 事件
+    const evts = restoreEventsInLog();
+    assert.ok(evts.length >= 2, "合法 restore 應留下 restore_start/restore_done 事件");
+    assert.ok(evts.some((l) => l.includes(restoreName)), "事件要記錄被還原的檔名");
   });
 });

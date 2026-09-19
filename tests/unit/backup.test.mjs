@@ -15,7 +15,7 @@ import {
   readdirSync, existsSync, readFileSync, utimesSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve, sep } from "node:path";
 import { execFileSync } from "node:child_process";
 
 let server;      // module under test（每個 test 重新 import）
@@ -289,4 +289,140 @@ test("restoreBackup returns { ok:false } when the archive is corrupt", async () 
 
   assert.equal(r.ok, false, "解不開的檔案應回報失敗而非 throw");
   assert.ok(typeof r.error === "string" && r.error.length > 0);
+});
+
+// ─────────────────────────────────────────────────────────────
+// 6. backupPath — CWE-22 safe-path hardening（TASK-010 commit 114bfb2）
+//    契約（src/server.mjs:79-85）：
+//      typeof 非字串            → null
+//      BACKUP_REGEX 白名單不過  → null
+//      resolve 後逃離 BACKUP_DIR → null（containment：startsWith(resolve(BACKUP_DIR)+sep)）
+//      其餘                     → BACKUP_DIR 內的絕對路徑
+//    listBackups / createBackup / restoreBackup（:361/:383/:401/:416）全面走此函式。
+// ─────────────────────────────────────────────────────────────
+
+test("backupPath returns an absolute path contained in BACKUP_DIR for legal names", async () => {
+  const { backupPath } = await loadServer();
+  const legal = [
+    "paaw-backup-2026-09-19-10.tar.gz",  // TASK-011 指定案例
+    "paaw-backup-0000-01-01-00.tar.gz",  // 邊界全零
+    "paaw-backup-2099-12-31-23.tar.gz",  // 邊界日期
+  ];
+  for (const name of legal) {
+    const p = backupPath(name);
+    assert.ok(typeof p === "string", `合法名稱要回路徑字串，實得: ${p}`);
+    assert.equal(p, join(backupDir, name), "必須是 BACKUP_DIR 內的確切絕對路徑");
+    assert.ok(p.startsWith(backupDir + sep), `containment：${p} 必須在 ${backupDir}${sep} 之下`);
+    assert.ok(!p.includes(".."), "結果路徑不得殘留 .. 片段");
+  }
+});
+
+test("backupPath returns null for path-traversal payloads (regex + containment 雙層)", async () => {
+  const { backupPath } = await loadServer();
+  const attacks = [
+    "../../etc/passwd",                                  // 純 ../ 逃逸
+    "paaw-backup-../evil.tar.gz",                        // TASK-011 指定案例：前綴混入 ../
+    "../paaw-backup-2026-09-19-10.tar.gz",               // TASK-011 指定案例：前導 ../
+    "paaw-backup-2026-09-19-10/../../evil.tar.gz",       // 中段逃逸
+    "..\\..\\windows\\win.ini",                          // Windows 反斜線
+    "paaw-backup-2026-09-19-10.tar.gz\\..\\..\\x",       // 尾部反斜線逃逸
+    "..%2f..%2fetc%2fpasswd",                            // percent-encoded（HTTP 路由不 decode，原樣抵達）
+    "%2e%2e%2fconfig.json",                              // percent-encoded 點
+    "paaw-backup-2026-09-19-10.tar.gz%00",               // NUL 後綴
+    "paaw-backup-2026-09-19-10.tar.gz\n",                // 換行 smuggling
+    "paaw-backup-2026-09-19-10.tar.gz;rm -rf /",         // shell 注入
+  ];
+  for (const name of attacks) {
+    assert.equal(backupPath(name), null, `逃逸 payload 必須回 null: ${JSON.stringify(name)}`);
+  }
+});
+
+test("backupPath returns null for absolute-path injection", async () => {
+  const { backupPath } = await loadServer();
+  const attacks = [
+    "/etc/paaw-backup-x.tar.gz",                 // TASK-011 指定案例：絕對路徑（格式也不符）
+    "/etc/paaw-backup-2026-09-19-10.tar.gz",     // 格式合法的絕對路徑 —— 仍必須拒絕
+    "/etc/passwd",                               // 經典目標
+    "//etc/passwd",                              // protocol-relative 風格雙斜線
+    "C:\\Windows\\paaw-backup-2026-09-19-10.tar.gz", // Windows 絕對路徑
+  ];
+  for (const name of attacks) {
+    assert.equal(backupPath(name), null, `絕對路徑注入必須回 null: ${JSON.stringify(name)}`);
+  }
+});
+
+test("backupPath returns null (not a throw) for non-string inputs", async () => {
+  const { backupPath } = await loadServer();
+  // restore 路由只會給字串，但 backupPath 是匯出函式 —— 任何呼叫者的型別錯誤
+  // 都必須 fail-closed（null），絕不可以 throw 炸掉 handler
+  const nonStrings = [undefined, null, 0, 42, NaN, true, {}, [], ["paaw-backup-2026-09-19-10.tar.gz"], () => {}, Symbol("paaw-backup-2026-09-19-10.tar.gz"), 123n];
+  for (const v of nonStrings) {
+    assert.equal(backupPath(v), null, `非字串必須回 null: ${String(v)} (${typeof v})`);
+  }
+});
+
+test("backupPath returns null for format violations of BACKUP_REGEX", async () => {
+  const { backupPath } = await loadServer();
+  const invalid = [
+    "",                                          // 空字串（TASK-011 指定案例）
+    "paaw-backup-.tar.gz",                       // 日期整段缺失
+    "paaw-backup-2026-09-19.tar.gz",             // 缺 -HH（TASK-011 指定案例）
+    "paaw-backup-20260919-10.tar.gz",            // 緊湊日期 YYYYMMDD（QA 抓過的舊格式）
+    "paaw-backup-2026-09-19-10.tgz",             // 錯副檔名（TASK-011 指定案例）
+    "paaw-backup-2026-09-19-10.tar.bz2",         // 錯副檔名
+    "paaw-backup-2026-09-19-10.tar.gz.exe",      // 雙副檔名
+    "paaw-backup-2026-09-19-10.tar.gz ",         // 尾端空白
+    " paaw-backup-2026-09-19-10.tar.gz",         // 前導空白
+    "PAAW-BACKUP-2026-09-19-10.tar.gz",          // 大小寫變體（白名單是 case-sensitive）
+    "paaw-backup-2026-09-19-10.tar.gz\x00",      // NUL byte
+  ];
+  for (const name of invalid) {
+    assert.equal(backupPath(name), null, `格式非法必須回 null: ${JSON.stringify(name)}`);
+  }
+});
+
+test("backupPath stays consistent when BACKUP_DIR is configured with a trailing separator", async () => {
+  // 尾斜線不得造成雙分隔或 containment 誤判（resolve 會正規化）
+  const { backupPath } = await loadServer({ PAAW_BACKUP_DIR: backupDir + "/" });
+  const name = "paaw-backup-2026-09-19-10.tar.gz";
+  const p = backupPath(name);
+  assert.equal(p, join(backupDir, name), "尾斜線 config 的結果必須與正規 config 完全一致");
+  assert.ok(p.startsWith(resolve(backupDir) + sep), "containment 前綴判斷不受尾斜線影響");
+});
+
+test("backupPath is purely lexical — mixed-case BACKUP_DIR behaves identically on any filesystem", async () => {
+  // macOS 預設是 case-insensitive FS：若 containment 檢查與路徑使用之間有任何磁碟查證，
+  // 大小寫差異就可能造成 check/use divergence。backupPath 不碰磁碟 → 結果與 FS 無關。
+  const mixedDir = join(tmp, "BackUps"); // 刻意不 mkdir —— 證明從未觸碰磁碟
+  const { backupPath } = await loadServer({ PAAW_BACKUP_DIR: mixedDir });
+  const name = "paaw-backup-2026-09-19-10.tar.gz";
+  const p = backupPath(name);
+
+  assert.equal(p, join(mixedDir, name), "回傳路徑必須逐字元等於 resolve(config, name)（check 與 use 同一字串）");
+  assert.ok(p.startsWith(resolve(mixedDir) + sep), "containment 用同一 configured 字串判斷，無 FS 查證");
+  // 對照組：攻擊名稱在 mixed-case config 下同樣 null
+  assert.equal(backupPath("../paaw-backup-2026-09-19-10.tar.gz"), null);
+  assert.equal(backupPath("/etc/paaw-backup-2026-09-19-10.tar.gz"), null);
+});
+
+test("defense in depth: restoreBackup handles non-string filenames via backupPath (fail-closed)", async () => {
+  makePaawData();
+  const { restoreBackup } = await loadServer();
+  for (const v of [undefined, null, 42, {}]) {
+    const r = restoreBackup(v);
+    assert.equal(r.ok, false, `非字串 filename 必須 ok:false: ${String(v)}`);
+    assert.match(r.error, /invalid/i, `錯誤訊息標明 invalid: ${r.error}`);
+  }
+  assert.equal(existsSync(backupDir), false, "被拒絕時不得建立 BACKUP_DIR 或任何檔案");
+});
+
+test("listBackups whitelisting is case-sensitive even on case-insensitive filesystems", async () => {
+  // macOS 上 "PAAW-BACKUP-...tar.gz" 這個檔案實體存在且讀得到，
+  // 但白名單（regex → backupPath）以「逐字元」判斷 —— 大小寫變體不得列入清單
+  seedNamedBackup("paaw-backup-2026-01-10-08.tar.gz");   // 合法（正確 case）
+  seedNamedBackup("PAAW-BACKUP-2026-01-11-09.tar.gz");   // 大小寫變體（實體檔案存在）
+  const { listBackups } = await loadServer();
+
+  const names = listBackups().map((b) => b.filename);
+  assert.deepEqual(names, ["paaw-backup-2026-01-10-08.tar.gz"], "大小寫變體必須被過濾");
 });
