@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T08:14:05.413Z",
-  "headSha": "40f2164",
+  "generatedAt": "2026-09-19T11:25:28.379Z",
+  "headSha": "f8c2deb",
   "tableHashes": {
-    "features": "972009aa875f8b77",
+    "features": "4d8169dcba7280f6",
     "apis": "0e51cf6184baa66b",
-    "tests": "4db757bf4a749c80",
-    "changes": "51318ffe96b0ff65",
-    "knowledgeGaps": "e95417a2429a829e"
+    "tests": "2f805533400e3e19",
+    "changes": "233c8a52e3806d9d",
+    "knowledgeGaps": "28200e51b1959831"
   },
   "root": null,
   "summary": {
@@ -17,14 +17,14 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 43,
+    "commits": 49,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-09-19T03:54:27.196Z"
+    "featuresUpdatedAt": "2026-09-19T09:18:12.683Z"
   },
   "features": [
     {
@@ -92,13 +92,11 @@
           "kind": "e2e"
         }
       ],
-      "testCount": 5,
-      "changeCount": 6,
-      "lastChangeAt": "2026-09-19T12:23:35+08:00",
-      "knowledgeGaps": [
-        "no-runbook"
-      ],
-      "_h": "a17894560fa2b4c2"
+      "testCount": 7,
+      "changeCount": 9,
+      "lastChangeAt": "2026-09-19T17:16:45+08:00",
+      "knowledgeGaps": [],
+      "_h": "dc2700e5b2589f24"
     }
   ],
   "apis": [
@@ -347,15 +345,75 @@
     {
       "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
       "productionFile": "src/server.mjs",
-      "testCount": 5,
+      "testCount": 7,
       "kind": "e2e",
       "featureIds": [
         "F20260918-002"
       ],
-      "_h": "24c3360caf42232a"
+      "_h": "0b3424ccbe3720c1"
     }
   ],
   "changes": [
+    {
+      "hash": "f8c2deb",
+      "date": "2026-09-19T19:16:13+08:00",
+      "subject": "chore: runtime ignore 擴充（features/backups + dispatch-outputs）+ RU 資產收編（HANDOVER/changelog/coding-memory/RR 證據）",
+      "kind": "chore",
+      "files": 30,
+      "featureIds": [],
+      "_h": "59245eae7e6fd0a4"
+    },
+    {
+      "hash": "2ebada3",
+      "date": "2026-09-19T17:53:12+08:00",
+      "subject": "chore(security): record CWE-22 zero-findings verification evidence",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "f47d6d2e240b5ee6"
+    },
+    {
+      "hash": "29ae55d",
+      "date": "2026-09-19T17:32:42+08:00",
+      "subject": "docs(security): record CWE-22 defense docs and clean changelog pollution",
+      "kind": "chore",
+      "files": 10,
+      "featureIds": [],
+      "_h": "4c1b0cc3dd2ab9dc"
+    },
+    {
+      "hash": "742c7c4",
+      "date": "2026-09-19T17:16:45+08:00",
+      "subject": "fix(security): annotate 4 false-positive CWE-22 findings with nosemgrep",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260918-002"
+      ],
+      "_h": "9da81b358426f8ca"
+    },
+    {
+      "hash": "599b8d5",
+      "date": "2026-09-19T17:11:43+08:00",
+      "subject": "test(backup): add path traversal attack cases for backupPath",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [
+        "F20260918-002"
+      ],
+      "_h": "d993dd2a29f16111"
+    },
+    {
+      "hash": "114bfb2",
+      "date": "2026-09-19T16:52:39+08:00",
+      "subject": "fix(server): apply CWE-22 safe-path hardening to backup manager (TASK-010 redo)",
+      "kind": "fix",
+      "files": 19,
+      "featureIds": [
+        "F20260918-002"
+      ],
+      "_h": "8c5a69c73036dc73"
+    },
     {
       "hash": "40f2164",
       "date": "2026-09-19T15:45:43+08:00",
@@ -785,15 +843,14 @@
       "F20260918-001"
     ],
     "featuresWithoutRunbooks": [
-      "F20260918-001",
-      "F20260918-002"
+      "F20260918-001"
     ],
     "apisWithoutFeature": [],
     "filesWithoutFeature": 3,
     "hotUnmappedFiles": [
       {
         "file": ".gitignore",
-        "commits": 9
+        "commits": 10
       },
       {
         "file": "README.md",
@@ -805,6 +862,10 @@
       },
       {
         "file": "public/index.html",
+        "commits": 2
+      },
+      {
+        "file": "tests/unit/backup.test.mjs",
         "commits": 2
       },
       {
@@ -829,10 +890,6 @@
       },
       {
         "file": "tests/e2e/gateway-ui-csrf.test.mjs",
-        "commits": 1
-      },
-      {
-        "file": "tests/unit/backup.test.mjs",
         "commits": 1
       }
     ]
