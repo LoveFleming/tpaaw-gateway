@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-09-19T03:22:44.167Z",
+  "generatedAt": "2026-09-19T09:30:48.782Z",
   "filesParsed": 6,
   "totalFiles": 6,
   "languages": {
     "javascript": 6
   },
   "callGraph": {
-    "totalFunctions": 80,
-    "totalCalls": 32,
+    "totalFunctions": 83,
+    "totalCalls": 40,
     "resolvedCalls": 4,
-    "unresolvedCalls": 28
+    "unresolvedCalls": 36
   },
   "apiFunctionMap": {
     "totalRoutes": 24,
@@ -28,10 +28,10 @@
     "totalTestedFunctions": 0
   },
   "symbolIndex": {
-    "total": 111,
-    "functions": 81,
+    "total": 115,
+    "functions": 84,
     "classes": 1,
-    "exports": 5,
+    "exports": 6,
     "routes": 24,
     "components": 0
   },

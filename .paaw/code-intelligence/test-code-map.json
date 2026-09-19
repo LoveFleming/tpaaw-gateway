@@ -5,7 +5,7 @@
       "productionFile": "src/server.mjs",
       "matchType": "import",
       "testedFunctions": [],
-      "testCount": 5
+      "testCount": 7
     }
   ],
   "stats": {

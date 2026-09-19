@@ -556,6 +556,24 @@
     },
     {
       "type": "function",
+      "name": "backupFilesOnDisk",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "restoreEventsInLog",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 5
+    },
+    {
+      "type": "function",
       "name": "getFreePort",
       "file": "tests/e2e/gateway-restart-rbac.test.mjs",
       "kind": "function",
@@ -655,6 +673,15 @@
       "kind": "function",
       "async": false,
       "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "backupPath",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(name)",
       "callCount": 0
     },
     {
@@ -831,6 +858,13 @@
       "name": "BACKUP_DATE_REGEX",
       "file": "src/server.mjs",
       "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "backupPath",
+      "file": "src/server.mjs",
+      "kind": "function",
       "isDefault": false
     },
     {
@@ -1663,6 +1697,28 @@
         "callCount": 0
       }
     ],
+    "backupFilesOnDisk": [
+      {
+        "type": "function",
+        "name": "backupFilesOnDisk",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 3
+      }
+    ],
+    "restoreEventsInLog": [
+      {
+        "type": "function",
+        "name": "restoreEventsInLog",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 5
+      }
+    ],
     "pidAlive": [
       {
         "type": "function",
@@ -1753,6 +1809,24 @@
         "async": false,
         "params": "()",
         "callCount": 0
+      }
+    ],
+    "backupPath": [
+      {
+        "type": "function",
+        "name": "backupPath",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(name)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "backupPath",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "isDefault": false
       }
     ],
     "logEvent": [
@@ -2100,10 +2174,10 @@
     ]
   },
   "stats": {
-    "total": 111,
-    "functions": 81,
+    "total": 115,
+    "functions": 84,
     "classes": 1,
-    "exports": 5,
+    "exports": 6,
     "routes": 24,
     "components": 0
   }

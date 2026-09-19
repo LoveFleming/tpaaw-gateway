@@ -631,6 +631,32 @@
           "params": "(g)",
           "callCount": 0,
           "calls": []
+        },
+        {
+          "name": "backupFilesOnDisk",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 3,
+          "calls": [
+            "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort",
+            "existsSync",
+            "readdirSync"
+          ]
+        },
+        {
+          "name": "restoreEventsInLog",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 5,
+          "calls": [
+            "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter",
+            "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split",
+            "existsSync",
+            "readFileSync",
+            "l.includes"
+          ]
         }
       ],
       "classes": [],
@@ -829,6 +855,11 @@
         },
         {
           "kind": "function",
+          "name": "backupPath",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
           "name": "listBackups",
           "isDefault": false
         },
@@ -887,6 +918,14 @@
           "kind": "function",
           "async": false,
           "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "backupPath",
+          "kind": "function",
+          "async": false,
+          "params": "(name)",
           "callCount": 0,
           "calls": []
         },

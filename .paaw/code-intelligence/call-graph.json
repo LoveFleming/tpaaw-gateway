@@ -417,6 +417,22 @@
       "async": true
     },
     {
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
+      "name": "backupFilesOnDisk",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
+      "name": "restoreEventsInLog",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
       "id": "tests/e2e/gateway-restart-rbac.test.mjs:getFreePort",
       "name": "getFreePort",
       "file": "tests/e2e/gateway-restart-rbac.test.mjs",
@@ -491,6 +507,14 @@
     {
       "id": "src/server.mjs:saveConfig",
       "name": "saveConfig",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:backupPath",
+      "name": "backupPath",
       "file": "src/server.mjs",
       "line": 0,
       "kind": "function",
@@ -748,6 +772,54 @@
       "resolved": false
     },
     {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
+      "callee": "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
+      "callee": "existsSync",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
+      "callee": "readdirSync",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
+      "callee": "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
+      "callee": "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
+      "callee": "existsSync",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
+      "callee": "readFileSync",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
+      "callee": "l.includes",
+      "type": "method",
+      "resolved": false
+    },
+    {
       "caller": "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive",
       "callee": "process.kill",
       "type": "method",
@@ -886,6 +958,28 @@
       "tests/e2e/gateway-backup-auth.test.mjs:sleep",
       "tests/e2e/gateway-ui-csrf.test.mjs:sleep"
     ],
+    "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort": [
+      "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk"
+    ],
+    "existsSync": [
+      "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    ],
+    "readdirSync": [
+      "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk"
+    ],
+    "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter": [
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    ],
+    "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split": [
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    ],
+    "readFileSync": [
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    ],
+    "l.includes": [
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    ],
     "process.kill": [
       "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive"
     ],
@@ -940,6 +1034,18 @@
     "tests/e2e/gateway-backup-auth.test.mjs:sleep": [
       "setTimeout"
     ],
+    "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk": [
+      "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort",
+      "existsSync",
+      "readdirSync"
+    ],
+    "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog": [
+      "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter",
+      "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split",
+      "existsSync",
+      "readFileSync",
+      "l.includes"
+    ],
     "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive": [
       "process.kill"
     ],
@@ -966,9 +1072,9 @@
     ]
   },
   "stats": {
-    "totalFunctions": 80,
-    "totalCalls": 32,
+    "totalFunctions": 83,
+    "totalCalls": 40,
     "resolvedCalls": 4,
-    "unresolvedCalls": 28
+    "unresolvedCalls": 36
   }
 }

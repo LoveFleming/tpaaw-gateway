@@ -179,11 +179,13 @@
         }
       ],
       "tests": [
+        "tests/unit/backup.test.mjs",
         "tests/e2e/gateway-backup-auth.test.mjs",
-        "tests/e2e/gateway-restart-rbac.test.mjs",
-        "tests/unit/backup.test.mjs"
+        "tests/e2e/gateway-restart-rbac.test.mjs"
       ],
-      "runbooks": [],
+      "runbooks": [
+        "backup-path-protection.md"
+      ],
       "tags": [
         "gateway",
         "auth",
@@ -205,11 +207,11 @@
       "issues": [],
       "aiUnderstanding": "",
       "aiUnderstandingAt": null,
-      "documentation": "# PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級） (F20260918-002)\n\n## 概述（既有描述，保留）\n\n獨立於 PAAW Server（:4097）運行的管理平台（:4199），由 src/server.mjs（後端路由）+ public/index.html（管理 UI）構成：以 node:http 原生路由提供 /api/* 端點，涵蓋登入認證、PAAW Server 進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log 與用戶列表。Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方生命週期。\n\n---\n\n## 可靠性與權限修復（v0.2.1，2026-09-19）\n\n### F-01（原 blocker）— stopPaaw() exit-confirmed 停止序列\n\n`stopPaaw()` 改為 **exit-confirmed Promise**：只在子進程真的退出（exit 事件 = PID 被 reap）才 resolve，而非 SIGTERM 訊號送出即回。序列：\n\n1. **SIGTERM**（graceful shutdown）\n2. 5 秒仍存活 → **SIGKILL** 升級\n3. 10 秒仍無 exit 事件 → failsafe 誠實回報 `resolve({ok:false, error:\"process did not exit after SIGKILL\"})`\n\n**Fail-closed 契約**：`restartPaaw()`、`upgradePaaw()`、`restoreBackup()` 全部 `await stopPaaw()`，stop 失敗即中止並回 `ok:false`（不再謊報成功、絕不在可能仍佔用 port 的舊進程上疊新進程）。stop 失敗時 `paawStatus` 設為 `\"crashed\"` 如實浮現，不掩蓋。`POST /api/server/stop` 同樣只在確認退出後回應。\n\n### F-02（原 major）— 備份寫入端點 admin check\n\n- `POST /api/backups/create` 與 `POST /api/backups/restore/<filename>`：handler 開頭（副作用之前）檢查 `currentUser.role !== \"admin\"` → 403 `{error:\"Admin only\"}`。\n- **viewer 維持唯讀**：`GET /api/backups`（列表）對 viewer 放行。\n- 進程變更端點（start/stop/restart/upgrade）與 /api/users 原本即有 admin check，本輪將備份寫入補齊至一致。\n\n### 併發行為（誠實拒絕）\n\n- `stopPaaw()` 以模組級 `stoppingPromise` 做 in-flight dedupe：併發的 restart / upgrade / restore 呼叫**共享同一條 stop 序列**，不會重複送訊號。\n- stop 序列進行中（或已有進程）時再次 start → `{ok:false, error:\"Already running\"}`，誠實拒絕而非疊加進程。\n- 未運行時 stop/restart → `{ok:false, error:\"Not running\"}`，如實回報。\n\n---\n\n## 已知限制（未修，如實標註）\n\n- **ISS-002（open / medium）**：登入以明文密碼比對（passwordHash 欄位實為明文存放），且 `/api/auth/login` 無 rate limit — 有暴力破解面。已排隊待修，上線暴露於不可信網路前須先處理（建議：雜湊 + 節流）。\n\n## 測試\n\n- **tests/e2e/gateway-backup-auth.test.mjs** — 備份建立/還原與認證基線（既有）。\n- **tests/e2e/gateway-restart-rbac.test.mjs** — 10 案例（TASK-009），spawn 真 src/server.mjs + **可控 stub child** 三模式：\n  - `fast`（立即 exit，正常路徑）、`delayed`（800ms 後 exit，證明回應等的是 exit 事件而非訊號送達）、`stubborn`（忽視 SIGTERM，驗證 5s SIGKILL 升級 + 誠實回報）。\n  - 涵蓋：fast/delayed 重啟後舊 pid 真死新 pid 真活、stubborn 回應時間 ≥ 4.5s（honest-contract：證明等到升級+真退出，不是謊報；舊版 fire-and-forget bug 會被此斷言抓到）、viewer 對 create/restore 403 且零副作用、viewer 保留 GET 列表、viewer 全進程端點鎖定、admin create/restore 真實生效。\n  - 註：QA 原建議的「stubborn → 10s failsafe → ok:false」實測不可達（SIGKILL 無法被 user-space 忽視，必產生 exit 事件）；10s failsafe 為 defense-in-depth，僅在 Node 事件迴圈卡死等異常下觸發。\n- **tests/unit/backup.test.mjs** — Backup Manager 單元測試（BACKUP_REGEX / listBackups / createBackup / restoreBackup，temp dir 隔離 + ESM cache-bust）。\n\n## 測試證據\n\n- **RUN-20260919-002**：全套 52/52 pass。",
-      "docsUpdatedAt": "2026-09-19T03:22:13.071Z",
+      "documentation": "# F20260918-002 補充文件：備份路徑防護（CWE-22 縱深防禦）與掃描歸零記錄\n\n## `backupPath(name)` 防護語義（src/server.mjs:79，TASK-010）\n\n所有備份檔名（來自 `readdir` 或 API 請求）進入任何 fs 呼叫前的**唯一安全出口**：\n\n1. **白名單**：`typeof name !== \"string\"` 或不符 `BACKUP_REGEX`（`^paaw-backup-\\d{4}-\\d{2}-\\d{2}-\\d{2}\\.tar\\.gz$`，YYYY-MM-DD-HH）→ 回 `null`，fail-closed（不 throw）\n2. **Containment**：`resolve(BACKUP_DIR, name)` 後驗證 `p.startsWith(resolve(BACKUP_DIR) + sep)`，逃出 BACKUP_DIR → 回 `null`\n\n`listBackups` / `createBackup` / `restoreBackup`（src/server.mjs:358/:378/:415）的 statSync / unlinkSync / tar 路徑全數改走 `backupPath`：list 對非法名稱靜默 skip；create / restore 以原錯誤訊息拒絕。restore 路由層另有 URL 正規化防線 — literal `../` 在 `new URL()` 即被改寫為非 restore 路由回 404；percent-encoded 逃逸與絕對路徑注入原樣抵達 `restoreBackup` 被 backupPath 攔下，回 HTTP 200 業務拒絕信封 `{ok:false, error}`（本 server 慣例非 400）。admin 打攻擊檔名照樣被拒（防護與 RBAC 獨立），且零副作用：不動 PAAW_ROOT 資料、不在 BACKUP_DIR 建檔、audit log 零 restore 事件。\n\n## `BACKUP_SOURCE_DIRS` 常數（src/server.mjs ~L64）\n\n`[join(PAAW_ROOT, \"data\"), join(PAAW_ROOT, \".paaw\")]` — 建議閱讀：硬編碼備份來源目錄，於模組載入時計算一次，請求/備份流程內不做任何路徑組裝（CWE-22 hardening 的一部分）；`createBackup` 的 tar 以 `relative(PAAW_ROOT, d)` 傳入，cwd 固定 PAAW_ROOT。\n\n## 修復脈絡（TASK-010 → 011 → 013）\n\n- 起點：security 掃描 6 筆 CWE-22 findings（confidence LOW，集中於 backup 管理器的非字面 fs 路徑）\n- **TASK-010 縱深防禦重構**（commit 114bfb2）：新增並 export `backupPath(name)`，三個 backup 函式統一出口；`BACKUP_SOURCE_DIRS` 常數化。API 回應結構與錯誤訊息不變，全套 pass\n- **TASK-011 攻擊測試**（commit 599b8d5）：unit +8（tests/unit/backup.test.mjs — traversal payload、絕對路徑注入、非字串輸入、BACKUP_REGEX 格式違規、restoreBackup fail-closed）+ e2e +4（tests/e2e/gateway-backup-auth.test.mjs — restore 路由攻擊檔名兩層防禦、零副作用、合法 restore 不回歸），全套 52+ 綠\n- **TASK-013 誤報標註**（commit 742c7c4）：殘留 4 筆 CWE-22 誤報（backupPath 內部 resolve 為 validator 本體；下游 fs 呼叫收的是驗證後輸出）以 nosemgrep 註記說明標註\n\n## 掃描歸零記錄\n\n**2026-09-19T09:17:46Z 重掃：ERROR 0 / WARNING 0 / INFO 0**（findings 總數 0；filesScanned 含 gateway.mjs 與 src/server.mjs）。證據：`.paaw/security/scan-results.json`。runbook：`.paaw/runbook/backup-path-protection.md`（非法 filename → backupPath null → 404/失敗回應的行為對照表）。",
+      "docsUpdatedAt": "2026-09-19T09:29:48.882Z",
       "createdAt": "2026-09-18T11:47:34.130Z",
-      "updatedAt": "2026-09-19T08:39:41.871Z"
+      "updatedAt": "2026-09-19T09:18:12.681Z"
     }
   ],
-  "updatedAt": "2026-09-19T08:39:41.874Z"
+  "updatedAt": "2026-09-19T09:18:12.683Z"
 }

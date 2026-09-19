@@ -224,6 +224,7 @@
       "exports": [
         "BACKUP_REGEX",
         "BACKUP_DATE_REGEX",
+        "backupPath",
         "listBackups",
         "createBackup",
         "restoreBackup"

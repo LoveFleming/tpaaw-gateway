@@ -2,27 +2,16 @@
 
 ## 2026-09-19
 ### fixed
-- TASK-008（critical，F20260918-002）：修復 src/server.mjs 兩個 QA review findings（2026-09 (1 new file) (3 modified)
-
-
-
-### changed
-- +2845 −661 lines across 12 files
+- 品質補強（TASK-008/009，F20260918-002）：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
 
 ### fixed
-- TASK-009（critical，F20260918-002）：驗證 TASK-008 的 src/server.mjs 修復（F-01 restart ra (1 new file) (2 modified)
+- TASK-010（F20260918-002，CWE-22 縱深防禦重構，commit 114bfb2）：src/server.mjs 新增並 export `backupPath(name)` 統一安全出口 — BACKUP_REGEX 白名單 + `resolve(BACKUP_DIR, name)` 後目錄 containment check（startsWith root），非法／非字串一律回 null fail-closed；listBackups / createBackup / restoreBackup 的 statSync/join/unlinkSync 全數改走 backupPath（非法名稱 skip 或原錯誤訊息拒絕）；BACKUP_SOURCE_DIRS 模組頂層常數化（~L64）+ tar 改傳 relative(PAAW_ROOT, d)。API 回應結構與錯誤訊息不變，全套 pass。
 
-### changed
-- +2886 −856 lines across 14 files
-
-### fixed
-- 品質補強：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
+### added
+- TASK-011（F20260918-002，commit 599b8d5）：backupPath 攻擊測試 +12 案 — unit +8（tests/unit/backup.test.mjs：traversal payload、絕對路徑注入、非字串輸入、BACKUP_REGEX 格式違規、restoreBackup fail-closed）+ e2e +4（tests/e2e/gateway-backup-auth.test.mjs：restore 路由攻擊檔名兩層防禦 — literal `../` 於 URL 正規化即 404、percent-encoded 逃逸／絕對路徑／格式非法 → 200 {ok:false}、零副作用、合法 restore 不回歸），全套 52+ 綠。
 
 ### fixed
-- TASK-010 重做（前次回報不實：當時修復只寫進暫存 fixture log/tmp/tpaaw-gateway/cwe22-fixtures/，src/server.mjs 本體未動）：本次將 safe-path helper 實際套用到 src/server.mjs — 新增並 export `backupPath(name)`（BACKUP_REGEX 白名單 + resolve 目錄 containment，null 表非法，供 TASK-011 攻擊案例測試）；listBackups/createBackup/restoreBackup 之 statSync/join/unlinkSync 全數改走 backupPath，非法名稱 skip 或原錯誤訊息拒絕；BACKUP_SOURCE_DIRS 模組頂層常數化 + tar 改傳 relative(PAAW_ROOT, d)。API 回應結構與錯誤訊息不變，全套 52/52 pass。
-
-### changed
-- +951 −1492 lines across 11 files
+- TASK-013（F20260918-002，commit 742c7c4）：semgrep 殘留 4 筆 CWE-22 誤報以 nosemgrep 標註歸零（backupPath 內部 resolve 為 validator 本體、下游 fs 呼叫收的是驗證後輸出）。歸零記錄：2026-09-19T09:17:46Z 重掃 ERROR 0 / WARNING 0 / INFO 0（filesScanned 含 src/server.mjs，證據 .paaw/security/scan-results.json）。
 
 ## 2026-09-18
 ### fixed
