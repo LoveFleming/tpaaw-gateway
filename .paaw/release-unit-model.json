@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T11:25:28.379Z",
-  "headSha": "f8c2deb",
+  "generatedAt": "2026-09-19T11:38:13.212Z",
+  "headSha": "8dd63d7",
   "tableHashes": {
     "features": "4d8169dcba7280f6",
     "apis": "0e51cf6184baa66b",
     "tests": "2f805533400e3e19",
-    "changes": "233c8a52e3806d9d",
-    "knowledgeGaps": "28200e51b1959831"
+    "changes": "5a84292366282600",
+    "knowledgeGaps": "21195c5d0396a0c0"
   },
   "root": null,
   "summary": {
@@ -17,7 +17,7 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 49,
+    "commits": 51,
     "commitLimit": 200
   },
   "sources": {
@@ -354,6 +354,24 @@
     }
   ],
   "changes": [
+    {
+      "hash": "8dd63d7",
+      "date": "2026-09-19T19:32:33+08:00",
+      "subject": "chore: staged-changes.json 退出版控（runtime — UI 暫存摘要）",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "2ca913fb3199d50f"
+    },
+    {
+      "hash": "92ee583",
+      "date": "2026-09-19T19:27:13+08:00",
+      "subject": "release unit data",
+      "kind": "other",
+      "files": 2,
+      "featureIds": [],
+      "_h": "1e75592c74bff8f5"
+    },
     {
       "hash": "f8c2deb",
       "date": "2026-09-19T19:16:13+08:00",
@@ -850,7 +868,7 @@
     "hotUnmappedFiles": [
       {
         "file": ".gitignore",
-        "commits": 10
+        "commits": 11
       },
       {
         "file": "README.md",

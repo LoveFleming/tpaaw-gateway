@@ -1,9 +1,10 @@
 {
-  "id": "RR-20260919-1500-c23f",
+  "id": "REL-20260919-2004-rrc23f",
+  "releasedAt": "2026-09-19T12:04:17.700Z",
+  "rrId": "RR-20260919-1500-c23f",
   "title": "tpaaw-gateway 0.2.2 — 品質補強（F-01/F-02 安全修復）+ 證據收編",
-  "createdAt": "2026-09-19T07:00:26.243Z",
-  "createdBy": "agent:em",
-  "status": "released",
+  "note": "first release",
+  "decidedBy": "release-request",
   "baseline": {
     "sha": "ff850fdc01ad4311b5ca498b359cccb881d58df4",
     "short": "ff850fd",
@@ -2907,143 +2908,5 @@
       "reviewedAt": "2026-09-19T08:07:53.722Z",
       "note": null
     }
-  ],
-  "releaseId": "REL-20260919-2004-rrc23f",
-  "closedAt": "2026-09-19T12:04:17.701Z",
-  "history": [
-    {
-      "ts": "2026-09-19T07:00:26.243Z",
-      "by": "agent:em",
-      "event": "created",
-      "note": "baseline=ff850fd（first-commit）→ target=7d2ff81，38 commits"
-    },
-    {
-      "ts": "2026-09-19T07:01:19.361Z",
-      "by": "em",
-      "event": "ai-suggested",
-      "note": "tests:pass, gates:pass, qa-records:pass, risk:waived"
-    },
-    {
-      "ts": "2026-09-19T07:59:40.848Z",
-      "by": "system",
-      "event": "target-advanced",
-      "note": "target 前進到 40f2164，scope 重算"
-    },
-    {
-      "ts": "2026-09-19T08:02:45.157Z",
-      "by": "human",
-      "event": "opened",
-      "note": "baseline 鎖定，開始證據審查"
-    },
-    {
-      "ts": "2026-09-19T08:02:54.549Z",
-      "by": "human",
-      "event": "reviewed:tests:pass",
-      "note": "🤖 套用 AI 建議 — RUN-20260919-004 @ 06:54:06 — 19✓/0✗/0⋯（TAP 頂層計數口徑，同口徑全展開為 52/52）。auto=warn 的「落後 2 commits」經查證：那 2 個 commit（12c9315、7d2ff81）正是測試證據本身的落檔 commit，內容 100% 為 .paaw 檔案（14 檔全在 .paaw/），零 src/ 程式碼變更 — 與 ADR-001 已確認的同型假訊號。被測樹內容與跑測時一致。"
-    },
-    {
-      "ts": "2026-09-19T08:02:54.556Z",
-      "by": "human",
-      "event": "reviewed:gates:pass",
-      "note": "🤖 套用 AI 建議 — ru_verify PASS（test gate 12.6s）@ 06:54。auto=warn 的「clean-tree」是因評估當下證據檔尚未 commit；證據已由 developer commit（12c9315 + 7d2ff81），目前 git status 乾淨。build/type-check/test 門檻全過。"
-    },
-    {
-      "ts": "2026-09-19T08:02:54.563Z",
-      "by": "human",
-      "event": "reviewed:qa-records:pass",
-      "note": "🤖 套用 AI 建議 — Pre-flight QA PASS（qr-20260919-065817-cxsl @ 06:58）：①以 reflog + 三向 diff 正面驗證 ADR-002 指控已解除 — F-01（restart race，exit-confirmed + dedupe）與 F-02 修復已 commit（7092757）且在 HEAD 內；②semgrep ERROR 0；③無未解決 QA fail 記錄。"
-    },
-    {
-      "ts": "2026-09-19T08:02:54.576Z",
-      "by": "human",
-      "event": "reviewed:risk:waived",
-      "note": "🤖 套用 AI 建議 — auto=HIGH 三訊號經交叉查證均為假訊號或基線假象：(1)「API 變更 feature 沒測試」— F20260918-001 標 NO TESTS 是靜態分析盲區，tests/e2e/gateway-ui-csrf.test.mjs 以 spawn 真 gateway 覆蓋 16 案（ADR-001 已證實的同型盲區），且本版實際 delta（vs 0.2.1 tag db2671c）F20260918-001 零程式碼變更；(2)「263 檔案 / 24 API 變更」— baseline 誤解析到 first-commit（ff850fd），把全歷史都算進 scope；真實 delta 自 0.2.1 tag 起僅 1 個程式碼 commit（7092757，src/server.mjs 單檔修復）+ chores；(3) DEPLOY.md 含完整回滾程序。實際風險 LOW，safe to ship。"
-    },
-    {
-      "ts": "2026-09-19T08:07:41.576Z",
-      "by": "human",
-      "event": "reviewed:risk:pass",
-      "note": null
-    },
-    {
-      "ts": "2026-09-19T08:07:47.972Z",
-      "by": "human",
-      "event": "reviewed:ops:pass",
-      "note": null
-    },
-    {
-      "ts": "2026-09-19T08:07:53.722Z",
-      "by": "human",
-      "event": "reviewed:handover:pass",
-      "note": null
-    },
-    {
-      "ts": "2026-09-19T10:35:06.116Z",
-      "by": "system",
-      "event": "target-advanced",
-      "note": "target 前進到 2ebada3，scope 重算"
-    },
-    {
-      "ts": "2026-09-19T10:41:26.312Z",
-      "by": "em",
-      "event": "ai-suggested",
-      "note": "security:pass, tests:pass, gates:pass, handover:pass"
-    },
-    {
-      "ts": "2026-09-19T11:42:42.902Z",
-      "by": "system",
-      "event": "target-advanced",
-      "note": "target 前進到 8dd63d7，scope 重算"
-    },
-    {
-      "ts": "2026-09-19T11:42:55.053Z",
-      "by": "human",
-      "event": "reviewed:security:pass",
-      "note": null
-    },
-    {
-      "ts": "2026-09-19T12:04:17.701Z",
-      "by": "human",
-      "event": "closed",
-      "note": "REL-20260919-2004-rrc23f：first release"
-    }
-  ],
-  "suggested": {
-    "tests": {
-      "verdict": "pass",
-      "reason": "原 auto=warn「落後 11 commits」這次是真訊號（其後有 src/server.mjs 兩次實際改動），故於 target 2ebada3 重跑全套：RUN-20260919-005 29✓/0✗ @ 2026-09-19T10:40:10Z，含 e2e。測試證據與 target 樹內容一致，無錯位。",
-      "by": "em",
-      "at": "2026-09-19T10:41:26.312Z"
-    },
-    "gates": {
-      "verdict": "pass",
-      "reason": "ru_verify 於 target 2ebada3 重跑 PASS（test gate 12.6s）@ 2026-09-19 ~10:40Z。先前 clean-tree warning 已不成立 — 收尾 commits（599b8d5/742c7c4/29ae55d/2ebada3）已全部落地，樹乾淨。",
-      "by": "em",
-      "at": "2026-09-19T10:41:26.312Z"
-    },
-    "qa-records": {
-      "verdict": "pass",
-      "reason": "Pre-flight QA PASS（qr-20260919-065817-cxsl @ 06:58）：①以 reflog + 三向 diff 正面驗證 ADR-002 指控已解除 — F-01（restart race，exit-confirmed + dedupe）與 F-02 修復已 commit（7092757）且在 HEAD 內；②semgrep ERROR 0；③無未解決 QA fail 記錄。",
-      "by": "em",
-      "at": "2026-09-19T07:01:19.361Z"
-    },
-    "risk": {
-      "verdict": "waived",
-      "reason": "auto=HIGH 三訊號經交叉查證均為假訊號或基線假象：(1)「API 變更 feature 沒測試」— F20260918-001 標 NO TESTS 是靜態分析盲區，tests/e2e/gateway-ui-csrf.test.mjs 以 spawn 真 gateway 覆蓋 16 案（ADR-001 已證實的同型盲區），且本版實際 delta（vs 0.2.1 tag db2671c）F20260918-001 零程式碼變更；(2)「263 檔案 / 24 API 變更」— baseline 誤解析到 first-commit（ff850fd），把全歷史都算進 scope；真實 delta 自 0.2.1 tag 起僅 1 個程式碼 commit（7092757，src/server.mjs 單檔修復）+ chores；(3) DEPLOY.md 含完整回滾程序。實際風險 LOW，safe to ship。",
-      "by": "em",
-      "at": "2026-09-19T07:01:19.361Z"
-    },
-    "security": {
-      "verdict": "pass",
-      "reason": "掃描於 target 2ebada3 之後重掃（2026-09-19 ~10:41Z）：ERROR 0 / WARNING 0 / INFO 0，落檔 .paaw/security/scan-results.json。CWE-22 系列完整收斂：safe-path 縱深防禦入本體（114bfb2，backupPath + BACKUP_SOURCE_DIRS 常數化）→ 12 案攻擊測試護體（599b8d5，unit+8/e2e+4）→ 4 筆誤報帶理由 nosemgrep 標註（742c7c4）→ 文件三方同步（29ae55d）。歸零為真抑制（filesScanned 含 src/server.mjs），非掃空。",
-      "by": "em",
-      "at": "2026-09-19T10:41:26.312Z"
-    },
-    "handover": {
-      "verdict": "pass",
-      "reason": "handover 已於 2026-09-19T10:40:33Z 刷新至 HEAD 2ebada3（原 auto=warn「落後 11 commits」過期問題已消除），交接包與 target 對齊。",
-      "by": "em",
-      "at": "2026-09-19T10:41:26.312Z"
-    }
-  }
+  ]
 }
