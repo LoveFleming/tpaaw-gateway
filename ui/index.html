@@ -121,10 +121,33 @@
         <span class="lock" id="lockHome" style="display:none">🔒 環境變數 PAAW_HOME 蓋過此設定</span>
       </div>
     </div>
+    <div class="setrow">
+      <label>SEMGREP_PATH</label>
+      <div class="setctl">
+        <input id="inSemgrep" placeholder="（空 = 自動偵測 PATH + ~/.local/bin）">
+        <span class="lock" id="lockSemgrep" style="display:none">🔒 環境變數 SEMGREP_PATH 蓋過此設定</span>
+        <span class="lock">gateway 啟動 PAAW 時注入環境變數；PAAW 執行中變更的話，重啟 PAAW 後生效</span>
+      </div>
+    </div>
     <div class="actions">
       <button id="btnSave">💾 儲存設定</button>
     </div>
     <div class="note" id="setNote"></div>
+  </div>
+
+  <!-- 環境工具：semgrep（2026-09-20 Fleming：安裝檢查 + 一鍵安裝 + 路徑設定） -->
+  <div class="card" style="margin-top:14px">
+    <h2>🔧 環境工具 — semgrep（Code Intel 掃描引擎）</h2>
+    <div class="row" style="margin-bottom:10px">
+      <span class="dot off" id="sgDot"></span>
+      <span class="big off" id="sgState">檢查中…</span>
+      <span class="badge" id="sgVer"></span>
+      <button id="btnSgCheck" class="mini-btn">↻ 重新檢查</button>
+      <button id="btnSgInstall">⬇️ 安裝 semgrep</button>
+    </div>
+    <div class="kv"><span class="k">偵測結果</span><span id="sgPath">—</span></div>
+    <div class="kv"><span class="k">來源</span><span id="sgSource">—</span></div>
+    <div class="note" id="sgNote"></div>
   </div>
 
   <!-- PAAW server log（2026-09-12 Fleming：gateway 啟動 PAAW 後 UI 也要看得到 PAAW log） -->
@@ -233,7 +256,7 @@ async function refresh() {
   const jobMsg = s.job.error ? `⚠ ${s.job.error}` : s.job.message || "";
   $("updateNote").textContent = jobMsg;
 
-  ["btnStart", "btnStop", "btnRestart", "btnUpdate", "btnUpload"].forEach((id) => { $(id).disabled = busy; });
+  ["btnStart", "btnStop", "btnRestart", "btnUpdate", "btnUpload", "btnSgInstall"].forEach((id) => { $(id).disabled = busy; });
   $("btnStop").disabled = busy || !s.running;
   $("btnStart").disabled = busy || s.running;
   $("btnRestart").disabled = busy || !s.current;
@@ -242,6 +265,11 @@ async function refresh() {
 
   const log = await api("/api/log");
   renderLog(log.lines);
+
+  // semgrep：安裝 job 結束的那一拍自動重查狀態
+  const sgJobActive = s.job.active && s.job.kind === "semgrep-install";
+  if (window.__sgJobWas && !sgJobActive) sgRefresh();
+  window.__sgJobWas = sgJobActive;
 }
 
 async function act(path, btnLabel, btn) {
@@ -294,8 +322,10 @@ async function loadSettings() {
     const s = await api("/api/settings");
     if (document.activeElement !== $("inServer")) $("inServer").value = s.packageServer.source === "default" ? "" : s.packageServer.value;
     if (document.activeElement !== $("inHome")) $("inHome").value = s.paawHome.source === "cwd" ? "" : s.paawHome.value;
+    if (document.activeElement !== $("inSemgrep")) $("inSemgrep").value = s.semgrepPath.source === "auto" ? "" : s.semgrepPath.value;
     $("lockServer").style.display = s.packageServer.envLocked ? "" : "none";
     $("lockHome").style.display = s.paawHome.envLocked ? "" : "none";
+    $("lockSemgrep").style.display = s.semgrepPath.envLocked ? "" : "none";
   } catch {}
 }
 
@@ -306,7 +336,7 @@ $("btnSave").onclick = async () => {
     const res = await fetch("/api/settings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ packageServer: $("inServer").value, paawHome: $("inHome").value }),
+      body: JSON.stringify({ packageServer: $("inServer").value, paawHome: $("inHome").value, semgrepPath: $("inSemgrep").value }),
     });
     const r = await res.json();
     $("setNote").textContent = res.ok
@@ -323,6 +353,32 @@ $("btnSave").onclick = async () => {
 refresh();
 loadSettings();
 setInterval(refresh, 2000);
+
+// ── 🔧 semgrep（2026-09-20）：狀態檢查 + 一鍵安裝 ──
+async function sgRefresh() {
+  try {
+    const s = await api("/api/semgrep");
+    $("sgDot").className = "dot " + (s.installed ? "on" : "off");
+    $("sgState").textContent = s.installed ? "已安裝" : "未偵測到";
+    $("sgState").className = "big " + (s.installed ? "on" : "off");
+    $("sgVer").textContent = s.version ? `v${s.version}` : "";
+    $("sgVer").className = "badge" + (s.installed ? " ok" : "");
+    $("sgPath").textContent = s.path || "—";
+    $("sgSource").textContent = s.source || "—";
+    $("sgNote").textContent = s.installed
+      ? (s.configured ? "✓ 已設定路徑 — gateway 啟動 PAAW 時注入 SEMGREP_PATH" : "✓ PATH 自動偵測成功 — 無需額外設定")
+      : "PAAW 本體可用，但 Code Intel 掃描（semgrep-rules）無法執行。按「⬇️ 安裝 semgrep」或在上方設定填路徑。";
+  } catch {}
+}
+$("btnSgCheck").onclick = sgRefresh;
+$("btnSgInstall").onclick = async (e) => {
+  const btn = e.currentTarget;
+  btn.disabled = true; btn.textContent = "⏳ 安裝中…";
+  try { await api("/api/semgrep/install", "POST"); } catch {}
+  btn.textContent = "⬇️ 安裝 semgrep";
+  // 進度見活動記錄；job 結束時 refresh() 會自動 sgRefresh()
+};
+sgRefresh();
 
 // ── 📜 PAAW Server Log（2026-09-12）：offset 輪詢，只在 panel 開著時拉 ──
 let plOffset = 0, plText = "", plFollow = true, plTimer = null, plOpen = false;

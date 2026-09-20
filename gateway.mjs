@@ -223,6 +223,12 @@ function startPaaw(versionDir) {
   // 2026-09-12：PAAW_LOG_HOME 指 data/log — log 跨版本持久（gateway 更新換 version dir 不歸零），
   // gateway UI 的 /api/paaw-log 讀固定路徑就能看完整歷史
   const env = { ...process.env, PAAW_PORT: PORT, PAAW_DATA_HOME: DATA_DIR, PAAW_LOG_HOME: join(DATA_DIR, "log") };
+  // 2026-09-20 Fleming：semgrep 環境注入 — gateway 設定的 SEMGREP_PATH（env var 優先）
+  // 直接傳給 PAAW server process，並把所在目錄 + ~/.local/bin 補進 PATH。
+  // 公司 Linux 不必再改 PAAW 的 .env，gateway 這裡統一管理。
+  const semgrepPath = (GATEWAY_CFG.semgrepPath || "").trim() || (process.env.SEMGREP_PATH || "").trim();
+  if (semgrepPath) env.SEMGREP_PATH = semgrepPath;
+  env.PATH = augmentedPath(semgrepPath ? dirname(semgrepPath) : null, env.PATH);
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
   const tsxBin = join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
   const child = spawn(process.execPath, [tsxBin, "packages/server/src/paaw-server.mjs"], {
@@ -650,6 +656,100 @@ async function uiStatus() {
   };
 }
 
+// ---------- semgrep（2026-09-20 Fleming：UI 檢查 + 一鍵安裝 + SEMGREP_PATH 設定）----------
+
+const PATH_SEP = process.platform === "win32" ? ";" : ":";
+
+// gateway 補強過的 PATH：semgrep 所在目錄（有設 SEMGREP_PATH 時）+ ~/.local/bin
+// （pipx / pip --user 落點 — gateway 用 nohup/systemd 啟動時不吃 .bashrc，這裡統一補）
+function augmentedPath(prependDir, basePath) {
+  const parts = String(basePath || "").split(PATH_SEP).filter(Boolean);
+  if (prependDir && !parts.includes(prependDir)) parts.unshift(prependDir);
+  const localBin = process.env.HOME ? join(process.env.HOME, ".local", "bin") : null;
+  if (localBin && existsSync(localBin) && !parts.includes(localBin)) parts.unshift(localBin);
+  return parts.join(PATH_SEP);
+}
+
+// 跑 `<bin> --version`，解析版本；失敗/逾時回 null。
+// 冷啟動會做線上版本檢查，timeout 60s（對齊 tPAAW semgrep-runner 2026-08-28 的觀察）
+function semgrepVersion(bin, env) {
+  return new Promise((resolvePromise) => {
+    const child = spawn(bin, ["--version"], {
+      env, shell: process.platform === "win32", stdio: ["ignore", "pipe", "pipe"], windowsHide: true,
+    });
+    let out = "", settled = false;
+    const done = (v) => { if (!settled) { settled = true; resolvePromise(v); } };
+    const timer = setTimeout(() => { try { child.kill(); } catch {} done(null); }, 60000);
+    child.stdout.on("data", (c) => { out += c; });
+    child.stderr.on("data", (c) => { out += c; });
+    child.on("error", () => { clearTimeout(timer); done(null); });
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      if (code !== 0) return done(null);
+      const m = String(out).match(/\d+\.\d+\.\d+/);
+      done(m ? m[0] : (String(out).trim().slice(0, 40) || "unknown"));
+    });
+  });
+}
+
+async function checkSemgrep() {
+  const explicit = (GATEWAY_CFG.semgrepPath || "").trim();
+  const fromEnv = (process.env.SEMGREP_PATH || "").trim();
+  const env = { ...process.env, PATH: augmentedPath(null, process.env.PATH) };
+  const candidates = [];
+  if (fromEnv) candidates.push({ bin: fromEnv, source: "環境變數 SEMGREP_PATH" });
+  if (explicit) candidates.push({ bin: explicit, source: "gateway 設定（啟動 PAAW 時注入）" });
+  candidates.push({ bin: "semgrep", source: "PATH 自動偵測（含 ~/.local/bin）" });
+  for (const c of candidates) {
+    const v = await semgrepVersion(c.bin, env);
+    if (v) return { installed: true, version: v, path: c.bin, source: c.source, configured: explicit || fromEnv || null };
+  }
+  return {
+    installed: false, version: null, path: null, source: null,
+    configured: explicit || fromEnv || null,
+    hint: "按「安裝 semgrep」一鍵安裝，或在設定填 SEMGREP_PATH 指向現有執行檔",
+  };
+}
+
+// 串流執行 shell 指令，輸出邊跑邊進活動記錄（jobLog）
+function runCapture(cmdLine, timeoutMs = 600000) {
+  return new Promise((resolvePromise) => {
+    const child = spawn(cmdLine, { shell: true, stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
+    let settled = false;
+    const done = (code, err) => { if (!settled) { settled = true; resolvePromise({ code, err }); } };
+    const timer = setTimeout(() => { try { child.kill("SIGKILL"); } catch {} done(-1, "timeout"); }, timeoutMs);
+    const pump = (c) => {
+      for (const line of String(c).split(/\r?\n/)) {
+        const s = line.trim();
+        if (s) jobLog(`  ${s.slice(0, 200)}`);
+      }
+    };
+    child.stdout.on("data", pump);
+    child.stderr.on("data", pump);
+    child.on("error", (e) => { clearTimeout(timer); done(-1, String(e)); });
+    child.on("close", (code) => { clearTimeout(timer); done(code); });
+  });
+}
+
+async function installSemgrep() {
+  jobLog("安裝 semgrep（相依套件約 100MB，可能需數分鐘）…");
+  const attempts = process.platform === "win32"
+    ? ["pip install --upgrade semgrep", "py -3 -m pip install --upgrade semgrep"]
+    : ["pipx install semgrep", "pip3 install --user --upgrade semgrep", "pip install --upgrade semgrep"];
+  for (const cmd of attempts) {
+    jobLog(`$ ${cmd}`);
+    const r = await runCapture(cmd, 600000);
+    if (r.code === 0) {
+      const chk = await checkSemgrep();
+      return chk.installed
+        ? { ok: true, message: `semgrep ${chk.version} 安裝成功（${chk.path}）` }
+        : { ok: false, message: "pip 回報成功但偵測不到 semgrep — 可能裝在未列入 PATH 的位置，請在設定填 SEMGREP_PATH" };
+    }
+    jobLog(`  指令失敗（exit ${r.code}${r.err ? "：" + r.err : ""}），嘗試下一個…`);
+  }
+  return { ok: false, message: "semgrep 安裝失敗 — 請看活動記錄的 pip 訊息；或手動安裝後在設定填 SEMGREP_PATH" };
+}
+
 async function cmdUI() {
   const UI_PORT = parseInt(process.env.PAAW_GW_PORT || "4290", 10);
   const UI_HOST = process.env.PAAW_GW_HOST || "127.0.0.1";
@@ -718,6 +818,11 @@ async function cmdUI() {
             source: envHome ? "env" : GATEWAY_CFG.paawHome ? "config" : "cwd",
             envLocked: envHome,
           },
+          semgrepPath: {
+            value: process.env.SEMGREP_PATH || GATEWAY_CFG.semgrepPath || "",
+            source: process.env.SEMGREP_PATH ? "env" : GATEWAY_CFG.semgrepPath ? "config" : "auto",
+            envLocked: !!process.env.SEMGREP_PATH,
+          },
         });
       }
       if (method === "POST" && url === "/api/settings") {
@@ -762,11 +867,30 @@ async function cmdUI() {
           applyHome();
           changed.push("paawHome");
         }
+        if (parsed.semgrepPath !== undefined && process.env.SEMGREP_PATH) ignored.push("semgrepPath（環境變數 SEMGREP_PATH 優先）");
+        if (typeof parsed.semgrepPath === "string" && !process.env.SEMGREP_PATH) {
+          const v = parsed.semgrepPath.trim();
+          if (v) {
+            if (!v.startsWith("/") && !/^[A-Za-z]:[\\\/]/.test(v)) return jsonOut(400, { ok: false, message: "SEMGREP_PATH 必須是絕對路徑" });
+            GATEWAY_CFG.semgrepPath = resolve(v);
+          } else {
+            delete GATEWAY_CFG.semgrepPath;
+          }
+          changed.push("semgrepPath");
+        }
         if (changed.length) {
           await saveGatewayCfg();
           jobLog(`設定已更新：${changed.join(", ")}（寫入 gateway.json）`);
         }
         return jsonOut(200, { ok: true, changed, ignored, home: HOME, packageServer: await loadPackageServerUrl() });
+      }
+      if (method === "GET" && url === "/api/semgrep") {
+        return jsonOut(200, await checkSemgrep());
+      }
+      if (method === "POST" && url === "/api/semgrep/install") {
+        if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
+        runJob("semgrep-install", installSemgrep);
+        return jsonOut(202, { ok: true, message: "semgrep 安裝已開始（進度見活動記錄）" });
       }
       if (method === "GET" && url === "/api/status") return jsonOut(200, await uiStatus());
       if (method === "GET" && url === "/api/log") return jsonOut(200, { lines: job.lines });
