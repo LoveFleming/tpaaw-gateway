@@ -360,14 +360,16 @@ async function sgRefresh(force = false) {
     const s = await api("/api/semgrep" + (force ? "?refresh=1" : ""));
     if (s.checking) { setTimeout(() => sgRefresh(false), 1500); return; } // 背景偵測中 — 1.5s 後再問
     $("sgDot").className = "dot " + (s.installed ? "on" : "off");
-    $("sgState").textContent = s.installed ? "已安裝" : "未偵測到";
+    $("sgState").textContent = s.installed ? "已偵測" : "未偵測到";
     $("sgState").className = "big " + (s.installed ? "on" : "off");
-    $("sgVer").textContent = s.version ? `v${s.version}` : "";
+    $("sgVer").textContent = s.version ? `v${s.version}` : (s.installed ? (s.deepChecking ? "版本確認中…" : "—") : "");
     $("sgVer").className = "badge" + (s.installed ? " ok" : "");
     $("sgPath").textContent = s.path || "—";
     $("sgSource").textContent = s.source || "—";
+    // 存在即綠燈；版本/深查結果背景補上後再刷新一次顯示
+    if (s.installed && !s.version && s.deepChecking) setTimeout(() => sgRefresh(false), 3000);
     $("sgNote").textContent = s.installed
-      ? (s.configured ? "✓ 已設定路徑 — gateway 啟動 PAAW 時注入 SEMGREP_PATH" : "✓ PATH 自動偵測成功 — 無需額外設定")
+      ? (s.configured ? "✓ 已設定路徑 — gateway 啟動 PAAW 時注入 SEMGREP_PATH" : "✓ 已偵測到 semgrep — 無需額外設定")
       : (s.diagnostics && s.diagnostics.length
           ? "偵測失敗原因：" + s.diagnostics.join("；")
             + (s.processEnv && s.processEnv.HOME ? `（gateway HOME=${s.processEnv.HOME}）` : "")

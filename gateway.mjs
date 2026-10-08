@@ -35,7 +35,7 @@ import { createWriteStream } from "node:fs";
 import { cp, mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { existsSync, statSync, openSync, readSync, closeSync } from "node:fs";
 import { spawn } from "node:child_process";
-import { dirname, join, resolve, sep, basename } from "node:path";
+import { dirname, join, resolve, sep, basename, delimiter } from "node:path";
 import { fileURLToPath } from "node:url";
 import { unzipSync, strFromU8 } from "fflate";
 
@@ -741,6 +741,36 @@ function semgrepVersion(bin, env) {
   });
 }
 
+// 同步存在檢查（瞬回，不 spawn）：路徑有 semgrep 就算偵測到 — 2026-10-08 Fleming 定調：
+// 首次使用體驗優先，實跑驗證/版本號另走背景深查（checkSemgrep），不得擋在偵測路上。
+function semgrepPresence() {
+  const explicit = (GATEWAY_CFG.semgrepPath || "").trim();
+  const fromEnv = (process.env.SEMGREP_PATH || "").trim();
+  const exe = process.platform === "win32" ? "semgrep.exe" : "semgrep";
+  const cands = [];
+  if (fromEnv) cands.push({ bin: fromEnv, source: "環境變數 SEMGREP_PATH" });
+  if (explicit) cands.push({ bin: explicit, source: "gateway 設定（啟動 PAAW 時注入）" });
+  const home = process.env.HOME;
+  if (home) {
+    cands.push({ bin: join(home, ".local", "bin", exe), source: "~/.local/bin 直擊（pipx/pip --user 落點）" });
+    cands.push({ bin: join(process.env.PIPX_HOME || join(home, ".local", "pipx"), "venvs", "semgrep", "bin", exe), source: "pipx venv 直擊（~/.local/pipx/venvs/semgrep/bin）" });
+  }
+  // PATH 掃描：純 fs stat，不 spawn — 即便 PATH 很長也是微秒級
+  for (const d of String(augmentedPath(null, process.env.PATH) || "").split(delimiter).filter(Boolean)) {
+    cands.push({ bin: join(d, exe), source: "PATH 自動偵測（含 ~/.local/bin）" });
+  }
+  for (const c of cands) {
+    try {
+      const st = statSync(c.bin);
+      if (st.isFile() || st.isSymbolicLink()) {
+        SEMGREP_DETECTED = c.bin; // 未明確設定時 startPaaw 兜底注入用
+        return { installed: true, path: c.bin, source: c.source, configured: explicit || fromEnv || null };
+      }
+    } catch {}
+  }
+  return { installed: false, path: null, source: null, configured: explicit || fromEnv || null };
+}
+
 async function checkSemgrep(force = false) {
   // 2026-10-08：10 分鐘快取 — UI 每次載入不再冷啟 semgrep；「🔄 檢查」帶 ?refresh=1 強制重查
   if (!force && SEMGREP_CHECK_CACHE.result && Date.now() - SEMGREP_CHECK_CACHE.at < 10 * 60 * 1000) {
@@ -984,12 +1014,20 @@ async function cmdUI() {
         return jsonOut(200, { ok: true, changed, ignored, home: HOME, packageServer: await loadPackageServerUrl() });
       }
       if (method === "GET" && /^\/api\/semgrep(?:\?.*)?$/.test(req.url || "")) {
-        // 立即回：checking 中回 {checking:true}（UI 輪詢），完成回結果 — 偵測背景跑不阻塞
+        // 存在即答案（瞬回）：路徑有 semgrep 就算偵測到；版本/可執行驗證背景補（deepChecking）
         const q = new URL(req.url, "http://localhost").searchParams;
         semgrepCheckKick(q.get("refresh") === "1");
-        return jsonOut(200, SEMGREP_CHECK_STATE.status === "checking"
-          ? { checking: true }
-          : { checking: false, ...SEMGREP_CHECK_STATE.result });
+        const p = semgrepPresence();
+        const deep = SEMGREP_CHECK_STATE.status === "done" ? SEMGREP_CHECK_STATE.result : null;
+        return jsonOut(200, {
+          checking: false,
+          ...p,
+          version: deep && deep.installed && deep.path === p.path ? deep.version : null,
+          deepChecking: SEMGREP_CHECK_STATE.status === "checking",
+          diagnostics: !p.installed && deep && deep.diagnostics ? deep.diagnostics : null,
+          processEnv: !p.installed && deep && deep.processEnv ? deep.processEnv : null,
+          hint: p.installed ? null : "按「安裝 semgrep」一鍵安裝，或在設定填 SEMGREP_PATH 指向現有執行檔",
+        });
       }
       if (method === "POST" && url === "/api/semgrep/install") {
         if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
