@@ -238,15 +238,10 @@ function startPaaw(versionDir) {
   if (semgrepPath) env.SEMGREP_PATH = semgrepPath;
   env.PATH = augmentedPath(semgrepPath ? dirname(semgrepPath) : null, env.PATH);
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
-  // 2026-10-08 跨平台修：node 不能直接執行 .bin/tsx.cmd（batch 當 JS 讀 → SyntaxError）。
-  // 一律優先用 tsx 的純 JS entry（dist/cli.mjs）由 node 直接跑，三平台同一條路；
-  // 套件結構變了才 fallback .bin（POSIX 可、Windows 僅盡力）。
-  const tsxEntry = join(versionDir, "node_modules", "tsx", "dist", "cli.mjs");
-  const tsxBin = existsSync(tsxEntry) ? tsxEntry : join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
-  // 2026-10-08：stdio inherit → pipe + tee — 啟動失敗時抓得到 child 真正死因
-  //（exit code + stderr tail），不再只有「已退出或 90 秒無回應」一句話。
-  // 輸出仍即時鏡射到 gateway console（inherit 的可見性保留），同時留 tail 供失敗診斷。
-  const child = spawn(process.execPath, [tsxBin, "packages/server/src/paaw-server.mjs"], {
+  // 2026-10-08 根因修：tsx 在 tPAAW devDependencies，--omit=dev 裝不到 → Cannot find module .bin/tsx。
+  // PAAW 官方啟動就是純 node（packages/server "start": "node src/paaw-server.mjs"，src 無 .ts import）。
+  // gateway 對齊：直接 node 跑，不再依賴 tsx / .bin wrapper（跨平台問題一併消失）。
+  const child = spawn(process.execPath, ["packages/server/src/paaw-server.mjs"], {
     cwd: versionDir,
     env,
     stdio: ["ignore", "pipe", "pipe"],
