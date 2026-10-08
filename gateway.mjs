@@ -576,6 +576,7 @@ let paawChild = null; // 受監管的 PAAW process
 let paawChildVersion = null; // 實際啟動的版本（update 切 current 後、重啟前會與 current 不同）
 let LAST_START_FAIL = null; // 最近一次啟動失敗的死因（startAndVerify 寫入，uiStart 帶給 UI）
 let SEMGREP_DETECTED = null; // checkSemgrep 偵測到的絕對路徑（未明確設定時 startPaaw 兜底注入）
+let SEMGREP_CHECK_CACHE = { at: 0, result: null }; // 偵測結果快取（10 分鐘）— UI 載入即回，不再每次冷啟
 const job = { active: false, kind: null, lines: [], error: null, message: null, startedAt: null, finishedAt: null };
 
 function jobLog(line) {
@@ -740,7 +741,11 @@ function semgrepVersion(bin, env) {
   });
 }
 
-async function checkSemgrep() {
+async function checkSemgrep(force = false) {
+  // 2026-10-08：10 分鐘快取 — UI 每次載入不再冷啟 semgrep；「🔄 檢查」帶 ?refresh=1 強制重查
+  if (!force && SEMGREP_CHECK_CACHE.result && Date.now() - SEMGREP_CHECK_CACHE.at < 10 * 60 * 1000) {
+    return SEMGREP_CHECK_CACHE.result;
+  }
   const explicit = (GATEWAY_CFG.semgrepPath || "").trim();
   const fromEnv = (process.env.SEMGREP_PATH || "").trim();
   const env = { ...process.env, PATH: augmentedPath(null, process.env.PATH) };
@@ -761,15 +766,23 @@ async function checkSemgrep() {
   candidates.push({ bin: "semgrep", source: "PATH 自動偵測（含 ~/.local/bin）" });
   const diagnostics = [];
   for (const c of candidates) {
-    const r = await semgrepVersion(c.bin, env);
+    // 2026-10-08：先帶 --disable-version-check（~1s 出答案；公司網路擋 semgrep.dev 時純 --version
+    // 會掛在線上檢查等到 timeout——「檢查中很久」與「已安裝但偵測不到」都是它）。
+    // 舊版 semgrep 不認旗標（unrecognized）才退回純 --version（60s）。
+    let r = await semgrepVersion(c.bin, env, 15000, ["--disable-version-check"]);
+    if (!r.ok && /unrecognized|unknown|invalid choice/i.test(r.reason || "")) {
+      r = await semgrepVersion(c.bin, env, 60000);
+    }
     if (r.ok) {
       // 快取給 startPaaw 注入：沒明確設定時，偵測到的絕對路徑也注入 SEMGREP_PATH（venv 直擊情境）
       SEMGREP_DETECTED = c.bin;
-      return { installed: true, version: r.version, path: c.bin, source: c.source, configured: explicit || fromEnv || null, diagnostics };
+      const result = { installed: true, version: r.version, path: c.bin, source: c.source, configured: explicit || fromEnv || null, diagnostics };
+      SEMGREP_CHECK_CACHE = { at: Date.now(), result };
+      return result;
     }
     diagnostics.push(`「${c.source}」${c.bin} → ${r.reason}`);
   }
-  return {
+  const result = {
     installed: false, version: null, path: null, source: null,
     configured: explicit || fromEnv || null,
     diagnostics,
@@ -777,6 +790,8 @@ async function checkSemgrep() {
     processEnv: { HOME: process.env.HOME || null, PATH: String(process.env.PATH || "").slice(0, 400) },
     hint: "按「安裝 semgrep」一鍵安裝，或在設定填 SEMGREP_PATH 指向現有執行檔；偵測失敗原因見 diagnostics",
   };
+  SEMGREP_CHECK_CACHE = { at: Date.now(), result };
+  return result;
 }
 
 // 串流執行 shell 指令，輸出邊跑邊進活動記錄（jobLog）
@@ -954,8 +969,9 @@ async function cmdUI() {
         }
         return jsonOut(200, { ok: true, changed, ignored, home: HOME, packageServer: await loadPackageServerUrl() });
       }
-      if (method === "GET" && url === "/api/semgrep") {
-        return jsonOut(200, await checkSemgrep());
+      if (method === "GET" && /^\/api\/semgrep(?:\?.*)?$/.test(req.url || "")) {
+        const q = new URL(req.url, "http://localhost").searchParams;
+        return jsonOut(200, await checkSemgrep(q.get("refresh") === "1"));
       }
       if (method === "POST" && url === "/api/semgrep/install") {
         if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });

@@ -268,7 +268,7 @@ async function refresh() {
 
   // semgrep：安裝 job 結束的那一拍自動重查狀態
   const sgJobActive = s.job.active && s.job.kind === "semgrep-install";
-  if (window.__sgJobWas && !sgJobActive) sgRefresh();
+  if (window.__sgJobWas && !sgJobActive) sgRefresh(true);
   window.__sgJobWas = sgJobActive;
 }
 
@@ -355,9 +355,9 @@ loadSettings();
 setInterval(refresh, 2000);
 
 // ── 🔧 semgrep（2026-09-20）：狀態檢查 + 一鍵安裝 ──
-async function sgRefresh() {
+async function sgRefresh(force = false) {
   try {
-    const s = await api("/api/semgrep");
+    const s = await api("/api/semgrep" + (force ? "?refresh=1" : ""));
     $("sgDot").className = "dot " + (s.installed ? "on" : "off");
     $("sgState").textContent = s.installed ? "已安裝" : "未偵測到";
     $("sgState").className = "big " + (s.installed ? "on" : "off");
@@ -373,7 +373,7 @@ async function sgRefresh() {
           : "PAAW 本體可用，但 Code Intel 掃描（semgrep-rules）無法執行。按「⬇️ 安裝 semgrep」或在上方設定填路徑。");
   } catch {}
 }
-$("btnSgCheck").onclick = sgRefresh;
+$("btnSgCheck").onclick = () => sgRefresh(true);
 $("btnSgInstall").onclick = async (e) => {
   const btn = e.currentTarget;
   btn.disabled = true; btn.textContent = "⏳ 安裝中…";
