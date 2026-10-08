@@ -159,9 +159,11 @@ async function extractZip(zipPath, destDir) {
   await mkdir(destDir, { recursive: true });
   const destRoot = resolve(destDir) + sep;
   for (const [name, data] of Object.entries(entries)) {
-    const target = resolve(destDir, name);
-    if (!target.startsWith(destRoot)) throw new Error(`zip-slip 偵測：${name}`);
-    if (name.endsWith("/")) {
+    // Windows 打包工具可能寫入反斜線 entry name — 統一轉 / 再解析（跨平台一致，zip-slip 檢查也在正規化後做）
+    const safeName = name.replace(/\\/g, "/");
+    const target = resolve(destDir, safeName);
+    if (!target.startsWith(destRoot)) throw new Error(`zip-slip 偵測：${safeName}`);
+    if (safeName.endsWith("/")) {
       await mkdir(target, { recursive: true });
     } else {
       await mkdir(dirname(target), { recursive: true });
@@ -187,9 +189,15 @@ async function verifySkeleton(dir) {
 
 function run(cmd, args, cwd) {
   return new Promise((resolvePromise) => {
-    // shell:false + 平台對應 cmd（npm / npm.cmd），避免 DEP0190；args 全為固定常數
-    const bin = process.platform === "win32" && cmd === "npm" ? "npm.cmd" : cmd;
-    const child = spawn(bin, args, { cwd, stdio: "inherit" });
+    // Windows：Node 2024 安全 patch 後 shell:false 直接 spawn .cmd/.bat 會 EINVAL。
+    // 走 cmd.exe /c（不用 shell:true，避 DEP0190 帶 args 的 deprecation）。
+    let bin = cmd;
+    let finalArgs = args;
+    if (process.platform === "win32" && cmd === "npm") {
+      bin = "cmd.exe";
+      finalArgs = ["/d", "/s", "/c", "npm", ...args];
+    }
+    const child = spawn(bin, finalArgs, { cwd, stdio: "inherit" });
     child.on("exit", (code) => resolvePromise(code ?? 1));
     child.on("error", () => resolvePromise(1));
   });
@@ -230,7 +238,11 @@ function startPaaw(versionDir) {
   if (semgrepPath) env.SEMGREP_PATH = semgrepPath;
   env.PATH = augmentedPath(semgrepPath ? dirname(semgrepPath) : null, env.PATH);
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
-  const tsxBin = join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
+  // 2026-10-08 跨平台修：node 不能直接執行 .bin/tsx.cmd（batch 當 JS 讀 → SyntaxError）。
+  // 一律優先用 tsx 的純 JS entry（dist/cli.mjs）由 node 直接跑，三平台同一條路；
+  // 套件結構變了才 fallback .bin（POSIX 可、Windows 僅盡力）。
+  const tsxEntry = join(versionDir, "node_modules", "tsx", "dist", "cli.mjs");
+  const tsxBin = existsSync(tsxEntry) ? tsxEntry : join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
   // 2026-10-08：stdio inherit → pipe + tee — 啟動失敗時抓得到 child 真正死因
   //（exit code + stderr tail），不再只有「已退出或 90 秒無回應」一句話。
   // 輸出仍即時鏡射到 gateway console（inherit 的可見性保留），同時留 tail 供失敗診斷。
