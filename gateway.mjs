@@ -234,7 +234,7 @@ function startPaaw(versionDir) {
   // 2026-09-20 Fleming：semgrep 環境注入 — gateway 設定的 SEMGREP_PATH（env var 優先）
   // 直接傳給 PAAW server process，並把所在目錄 + ~/.local/bin 補進 PATH。
   // 公司 Linux 不必再改 PAAW 的 .env，gateway 這裡統一管理。
-  const semgrepPath = (GATEWAY_CFG.semgrepPath || "").trim() || (process.env.SEMGREP_PATH || "").trim();
+  const semgrepPath = (GATEWAY_CFG.semgrepPath || "").trim() || (process.env.SEMGREP_PATH || "").trim() || (SEMGREP_DETECTED || "").trim();
   if (semgrepPath) env.SEMGREP_PATH = semgrepPath;
   env.PATH = augmentedPath(semgrepPath ? dirname(semgrepPath) : null, env.PATH);
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
@@ -575,6 +575,7 @@ function hangAround(child) {
 let paawChild = null; // 受監管的 PAAW process
 let paawChildVersion = null; // 實際啟動的版本（update 切 current 後、重啟前會與 current 不同）
 let LAST_START_FAIL = null; // 最近一次啟動失敗的死因（startAndVerify 寫入，uiStart 帶給 UI）
+let SEMGREP_DETECTED = null; // checkSemgrep 偵測到的絕對路徑（未明確設定時 startPaaw 兜底注入）
 const job = { active: false, kind: null, lines: [], error: null, message: null, startedAt: null, finishedAt: null };
 
 function jobLog(line) {
@@ -746,15 +747,26 @@ async function checkSemgrep() {
   const candidates = [];
   if (fromEnv) candidates.push({ bin: fromEnv, source: "環境變數 SEMGREP_PATH" });
   if (explicit) candidates.push({ bin: explicit, source: "gateway 設定（啟動 PAAW 時注入）" });
-  // 2026-10-08：絕對路徑直擊——pipx/pip --user 落點，不靠 PATH（gateway 用 nohup/systemd
-  // 啟動時 HOME/PATH 可能跟登入 shell 不同，PATH 自動偵測會漏）
+  // 2026-10-08：pipx 落點直擊 — ~/.local/bin（symlink）與 venv 內 bin（公司 Linux pipx 裝法，
+  // symlink 缺失/損壞時 venv 本體仍在；尊重 PIPX_HOME/PIPX_BIN_DIR 自訂位置）
   const localSemgrep = process.env.HOME ? join(process.env.HOME, ".local", "bin", "semgrep") : null;
-  if (localSemgrep && existsSync(localSemgrep)) candidates.push({ bin: localSemgrep, source: "~/.local/bin 直擊（不靠 PATH）" });
+  const pxVenvSemgrep = (process.env.PIPX_HOME || (process.env.HOME ? join(process.env.HOME, ".local", "pipx") : null))
+    ? join(process.env.PIPX_HOME || join(process.env.HOME, ".local", "pipx"), "venvs", "semgrep", "bin", "semgrep")
+    : null;
+  const directHits = [
+    localSemgrep && { bin: localSemgrep, source: "~/.local/bin 直擊（pipx/pip --user 落點）" },
+    pxVenvSemgrep && { bin: pxVenvSemgrep, source: "pipx venv 直擊（~/.local/pipx/venvs/semgrep/bin）" },
+  ];
+  for (const c of directHits) if (c && existsSync(c.bin)) candidates.push(c);
   candidates.push({ bin: "semgrep", source: "PATH 自動偵測（含 ~/.local/bin）" });
   const diagnostics = [];
   for (const c of candidates) {
     const r = await semgrepVersion(c.bin, env);
-    if (r.ok) return { installed: true, version: r.version, path: c.bin, source: c.source, configured: explicit || fromEnv || null, diagnostics };
+    if (r.ok) {
+      // 快取給 startPaaw 注入：沒明確設定時，偵測到的絕對路徑也注入 SEMGREP_PATH（venv 直擊情境）
+      SEMGREP_DETECTED = c.bin;
+      return { installed: true, version: r.version, path: c.bin, source: c.source, configured: explicit || fromEnv || null, diagnostics };
+    }
     diagnostics.push(`「${c.source}」${c.bin} → ${r.reason}`);
   }
   return {
