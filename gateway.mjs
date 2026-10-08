@@ -773,6 +773,8 @@ async function checkSemgrep() {
     installed: false, version: null, path: null, source: null,
     configured: explicit || fromEnv || null,
     diagnostics,
+    // gateway process 眼中的環境（偵測不到時自我招供：HOME 跟登入 shell 不同就是它）
+    processEnv: { HOME: process.env.HOME || null, PATH: String(process.env.PATH || "").slice(0, 400) },
     hint: "按「安裝 semgrep」一鍵安裝，或在設定填 SEMGREP_PATH 指向現有執行檔；偵測失敗原因見 diagnostics",
   };
 }
