@@ -367,7 +367,9 @@ async function sgRefresh() {
     $("sgSource").textContent = s.source || "—";
     $("sgNote").textContent = s.installed
       ? (s.configured ? "✓ 已設定路徑 — gateway 啟動 PAAW 時注入 SEMGREP_PATH" : "✓ PATH 自動偵測成功 — 無需額外設定")
-      : "PAAW 本體可用，但 Code Intel 掃描（semgrep-rules）無法執行。按「⬇️ 安裝 semgrep」或在上方設定填路徑。";
+      : (s.diagnostics && s.diagnostics.length
+          ? "偵測失敗原因：" + s.diagnostics.join("；")
+          : "PAAW 本體可用，但 Code Intel 掃描（semgrep-rules）無法執行。按「⬇️ 安裝 semgrep」或在上方設定填路徑。");
   } catch {}
 }
 $("btnSgCheck").onclick = sgRefresh;
