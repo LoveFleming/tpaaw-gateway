@@ -313,7 +313,7 @@ async function stageInstall(zipPath, v) {
 
   await rm(versionDir, { recursive: true, force: true });
   await rename(tmpDir, versionDir);
-  L.ok(`versions/${v}/ 定版`);
+  L.ok(`versions/${v}/ 定版 → ${versionDir}`);
 
   await installDeps(versionDir);
   await rm(zipPath, { force: true });
@@ -379,8 +379,9 @@ async function installUploadedZip(zipBuf, label) {
 
   const versionDir = await stageInstall(zipPath, v);
   await writeCurrentAtomic(v);
-  L.ok(`手動安裝完成：versions/${v}/ 已定版並切 current（重啟後生效）`);
-  return { ok: true, version: v, versionDir, message: `已上傳安裝 ${v} — 按「重啟」生效` };
+  L.ok(`手動安裝完成：${versionDir} 已定版並切 current（重啟後生效）`);
+  L.info(`PAAW_HOME = ${HOME}（找套件/資料都從這裡看）`);
+  return { ok: true, version: v, versionDir, message: `已上傳安裝 ${v} → ${versionDir}（按「重啟」生效）` };
 }
 
 // ---------- 指令 ----------
@@ -952,7 +953,7 @@ async function cmdUI() {
         let fname = "upload.zip";
         try { if (req.headers["x-filename"]) fname = decodeURIComponent(req.headers["x-filename"]); } catch {}
         runJob("upload", async () => {
-          jobLog(`⬆️ 上傳安裝 ${fname}（${(buf.length / 1048576).toFixed(1)} MB）…`);
+          jobLog(`⬆️ 上傳安裝 ${fname}（${(buf.length / 1048576).toFixed(1)} MB）… PAAW_HOME = ${HOME}`);
           return await installUploadedZip(buf, fname);
         });
         return jsonOut(202, { ok: true, message: "上傳安裝已開始（進度見活動記錄）" });
