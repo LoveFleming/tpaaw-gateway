@@ -358,6 +358,7 @@ setInterval(refresh, 2000);
 async function sgRefresh(force = false) {
   try {
     const s = await api("/api/semgrep" + (force ? "?refresh=1" : ""));
+    if (s.checking) { setTimeout(() => sgRefresh(false), 1500); return; } // 背景偵測中 — 1.5s 後再問
     $("sgDot").className = "dot " + (s.installed ? "on" : "off");
     $("sgState").textContent = s.installed ? "已安裝" : "未偵測到";
     $("sgState").className = "big " + (s.installed ? "on" : "off");

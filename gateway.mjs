@@ -769,7 +769,7 @@ async function checkSemgrep(force = false) {
     // 2026-10-08：先帶 --disable-version-check（~1s 出答案；公司網路擋 semgrep.dev 時純 --version
     // 會掛在線上檢查等到 timeout——「檢查中很久」與「已安裝但偵測不到」都是它）。
     // 舊版 semgrep 不認旗標（unrecognized）才退回純 --version（60s）。
-    let r = await semgrepVersion(c.bin, env, 15000, ["--disable-version-check"]);
+    let r = await semgrepVersion(c.bin, env, 30000, ["--disable-version-check"]);
     if (!r.ok && /unrecognized|unknown|invalid choice/i.test(r.reason || "")) {
       r = await semgrepVersion(c.bin, env, 60000);
     }
@@ -790,8 +790,22 @@ async function checkSemgrep(force = false) {
     processEnv: { HOME: process.env.HOME || null, PATH: String(process.env.PATH || "").slice(0, 400) },
     hint: "按「安裝 semgrep」一鍵安裝，或在設定填 SEMGREP_PATH 指向現有執行檔；偵測失敗原因見 diagnostics",
   };
-  SEMGREP_CHECK_CACHE = { at: Date.now(), result };
   return result;
+}
+
+// 背景偵測狀態機（2026-10-08）：API 立即回應，偵測背景跑——公司慢機/慢網不再把 UI 卡在「檢查中」
+// idle → checking → done（result 帶結果；10 分鐘内直用，refresh=1 或安裝完重跑）
+const SEMGREP_CHECK_STATE = { status: "idle", result: null, startedAt: 0 };
+function semgrepCheckKick(force = false) {
+  if (SEMGREP_CHECK_STATE.status === "checking") return; // 跑中不重入
+  const fresh = SEMGREP_CHECK_STATE.status === "done" && Date.now() - SEMGREP_CHECK_STATE.startedAt < 10 * 60 * 1000;
+  if (!force && fresh) return;
+  SEMGREP_CHECK_STATE.status = "checking";
+  SEMGREP_CHECK_STATE.startedAt = Date.now();
+  checkSemgrep(true)
+    .then((result) => { SEMGREP_CHECK_STATE.result = result; })
+    .catch((e) => { SEMGREP_CHECK_STATE.result = { installed: false, version: null, path: null, source: null, configured: null, diagnostics: [`偵測程序異常：${String((e && e.message) || e)}`] }; })
+    .finally(() => { SEMGREP_CHECK_STATE.status = "done"; SEMGREP_CHECK_STATE.startedAt = Date.now(); });
 }
 
 // 串流執行 shell 指令，輸出邊跑邊進活動記錄（jobLog）
@@ -825,7 +839,7 @@ async function installSemgrep() {
     jobLog(`$ ${cmd}`);
     const r = await runCapture(cmd, 600000);
     if (r.code === 0) {
-      const chk = await checkSemgrep();
+      const chk = await checkSemgrep(true);
       if (chk.installed) return { ok: true, message: `semgrep ${chk.version} 安裝成功（${chk.path}）` };
       const why = (chk.diagnostics || []).join("｜").slice(0, 300);
       return { ok: false, message: `pip 回報成功但偵測不到 semgrep — ${why || "原因不明"} — 在設定填 SEMGREP_PATH 指向執行檔可繞過` };
@@ -970,8 +984,12 @@ async function cmdUI() {
         return jsonOut(200, { ok: true, changed, ignored, home: HOME, packageServer: await loadPackageServerUrl() });
       }
       if (method === "GET" && /^\/api\/semgrep(?:\?.*)?$/.test(req.url || "")) {
+        // 立即回：checking 中回 {checking:true}（UI 輪詢），完成回結果 — 偵測背景跑不阻塞
         const q = new URL(req.url, "http://localhost").searchParams;
-        return jsonOut(200, await checkSemgrep(q.get("refresh") === "1"));
+        semgrepCheckKick(q.get("refresh") === "1");
+        return jsonOut(200, SEMGREP_CHECK_STATE.status === "checking"
+          ? { checking: true }
+          : { checking: false, ...SEMGREP_CHECK_STATE.result });
       }
       if (method === "POST" && url === "/api/semgrep/install") {
         if (job.active) return jsonOut(409, { ok: false, message: `正在執行「${job.kind}」中` });
