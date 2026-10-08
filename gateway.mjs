@@ -231,12 +231,36 @@ function startPaaw(versionDir) {
   env.PATH = augmentedPath(semgrepPath ? dirname(semgrepPath) : null, env.PATH);
   if (process.env.PAAW_WS_PORT) env.PAAW_WS_PORT = process.env.PAAW_WS_PORT;
   const tsxBin = join(versionDir, "node_modules", ".bin", process.platform === "win32" ? "tsx.cmd" : "tsx");
+  // 2026-10-08：stdio inherit → pipe + tee — 啟動失敗時抓得到 child 真正死因
+  //（exit code + stderr tail），不再只有「已退出或 90 秒無回應」一句話。
+  // 輸出仍即時鏡射到 gateway console（inherit 的可見性保留），同時留 tail 供失敗診斷。
   const child = spawn(process.execPath, [tsxBin, "packages/server/src/paaw-server.mjs"], {
     cwd: versionDir,
     env,
-    stdio: ["ignore", "inherit", "inherit"],
+    stdio: ["ignore", "pipe", "pipe"],
   });
+  const TAIL_MAX = 64 * 1024;
+  child.__tail = "";
+  const pump = (stream, mirror) => {
+    stream.on("data", (c) => {
+      try { mirror.write(c); } catch {}
+      child.__tail = (child.__tail + c).slice(-TAIL_MAX);
+    });
+  };
+  pump(child.stdout, process.stdout);
+  pump(child.stderr, process.stderr);
+  child.__spawnError = null;
+  child.on("error", (e) => { child.__spawnError = String((e && e.code) || e); });
   return child;
+}
+
+// 失敗原因摘要：spawn error / exit code + child 輸出最後幾行
+function childFailReason(child) {
+  const tail = (child.__tail || "").split(/\r?\n/).filter((l) => l.trim()).slice(-15).join("\n");
+  const head = child.__spawnError
+    ? `spawn 失敗（${child.__spawnError}）— tsx/bin 不存在或不可執行`
+    : `exitCode=${child.exitCode ?? "?"}${child.signalCode ? ` signal=${child.signalCode}` : ""}`;
+  return tail ? `${head}\n── child 輸出最後幾行 ──\n${tail}` : head;
 }
 
 async function waitForHealthy(timeoutMs = 90000) {
@@ -281,11 +305,17 @@ async function startAndVerify(versionDir, version) {
   }
   L.info(`啟動 PAAW ${version}（port ${PORT}）…`);
   const child = startPaaw(versionDir);
-  // child 提前炸掉就不用傻等 90 秒
-  const dead = new Promise((r) => child.on("exit", () => r("dead")));
+  // child 提前炸掉就不用傻等 90 秒（spawn error 與 exit 都算死）
+  const dead = new Promise((r) => {
+    child.on("exit", () => r("dead"));
+    child.on("error", () => r("dead"));
+  });
   const healthy = await Promise.race([waitForHealthy().then(() => "up"), dead]);
   if (healthy !== "up") {
-    L.err(`PAAW ${version} 啟動失敗（process 已退出或 90 秒無 HTTP 回應）`);
+    const reason = childFailReason(child);
+    LAST_START_FAIL = `PAAW ${version} 啟動失敗 — ${reason}`;
+    L.err(`${LAST_START_FAIL}`);
+    logFile(`start-fail ${version}: ${reason.replace(/\n/g, " | ")}`);
     await killChild(child);
     return null;
   }
@@ -293,7 +323,10 @@ async function startAndVerify(versionDir, version) {
   // 夭折期再確認 child 還活著，才算真的上線（防 child 通過檢查後晚死的 race）
   await new Promise((r) => setTimeout(r, 2500));
   if (child.exitCode !== null) {
-    L.err(`PAAW ${version} 通過健康檢查後隨即退出（exitCode=${child.exitCode}）— 不視為已上線`);
+    const reason = childFailReason(child);
+    LAST_START_FAIL = `PAAW ${version} 通過健康檢查後隨即退出 — ${reason}`;
+    L.err(`${LAST_START_FAIL}（不視為已上線）`);
+    logFile(`start-fail-post ${version}: ${reason.replace(/\n/g, " | ")}`);
     return null;
   }
   L.ok(`PAAW ${version} 已上線 → http://127.0.0.1:${PORT}/`);
@@ -534,6 +567,7 @@ function hangAround(child) {
 
 let paawChild = null; // 受監管的 PAAW process
 let paawChildVersion = null; // 實際啟動的版本（update 切 current 後、重啟前會與 current 不同）
+let LAST_START_FAIL = null; // 最近一次啟動失敗的死因（startAndVerify 寫入，uiStart 帶給 UI）
 const job = { active: false, kind: null, lines: [], error: null, message: null, startedAt: null, finishedAt: null };
 
 function jobLog(line) {
@@ -571,7 +605,10 @@ async function uiStart() {
   await installDeps(versionDir);
   jobLog(`啟動 PAAW ${current.version}（port ${PORT}）…`);
   const child = await startAndVerify(versionDir, current.version);
-  if (!child) return { ok: false, message: `PAAW ${current.version} 啟動失敗（詳情見 gateway 終端機輸出）` };
+  if (!child) {
+    const reason = (LAST_START_FAIL || `PAAW ${current.version} 啟動失敗`).split("\n").filter((l) => l.trim()).slice(0, 6).join("\n");
+    return { ok: false, message: reason };
+  }
   paawChild = child;
   paawChildVersion = current.version;
   child.on("exit", () => {
