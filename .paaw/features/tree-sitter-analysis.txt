@@ -1,6 +1,6 @@
 # Project Source Analysis (Tree-sitter)
-Parsed 5 of 5 source files
-Languages: javascript(5)
+Parsed 6 of 6 source files
+Languages: javascript(6)
 
 ## gateway.mjs [javascript]
   Imports:
@@ -29,6 +29,8 @@ Languages: javascript(5)
     async function installDeps(versionDir)
     async function ensureData(versionDir)
     function startPaaw(versionDir)
+    arrow pump(stream, mirror)
+    function childFailReason(child)
     async function waitForHealthy(timeoutMs = 90000)
     function killChild(child)
     async function isPortOccupied()
@@ -52,6 +54,16 @@ Languages: javascript(5)
     async function uiUpdate()
     async function runJob(kind, fn)
     async function uiStatus()
+    function augmentedPath(prependDir, basePath)
+    function semgrepVersion(bin, env)
+    arrow done(r)
+    function semgrepPresence()
+    async function checkSemgrep(force = false)
+    function semgrepCheckKick(force = false)
+    function runCapture(cmdLine, timeoutMs = 600000)
+    arrow done(code, err)
+    arrow pump(c)
+    async function installSemgrep()
     async function cmdUI()
     arrow jsonOut(code, obj)
     arrow hostOf(h)
@@ -62,6 +74,7 @@ Languages: javascript(5)
     GET /index.html
     GET /api/settings
     POST /api/settings
+    POST /api/semgrep/install
     GET /api/status
     GET /api/log
     GET /api/paaw-log
@@ -102,6 +115,25 @@ Languages: javascript(5)
     async function jsonReq(base, path, { method = "GET", token, body } = {})
     async function startGateway(configOverrides = {})
     async function stopGateway(g)
+    arrow backupFilesOnDisk()
+    arrow restoreEventsInLog()
+
+## tests/e2e/gateway-restart-rbac.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← node:fs
+    * ← node:net
+    * ← node:os
+    * ← node:path
+    * ← node:child_process
+    * ← node:url
+    * ← node:timers/promises
+  Functions:
+    function getFreePort()
+    arrow pidAlive
+  Classes:
+    class TestEnv { constructor, setup, api, waitStubReady, setStubMode, teardown }
 
 ## tests/e2e/gateway-ui-csrf.test.mjs [javascript]
   Imports:
@@ -134,16 +166,19 @@ Languages: javascript(5)
   Exports:
     variable: BACKUP_REGEX
     variable: BACKUP_DATE_REGEX
+    function: backupPath
     function: listBackups
     function: createBackup
     function: restoreBackup
   Functions:
     function loadConfig()
     function saveConfig()
+    function backupPath(name)
     function logEvent(type, detail, userId = "system")
     function startPaaw()
     function stopPaaw()
-    function restartPaaw()
+    arrow finish(ok, error)
+    async function restartPaaw()
     function getCurrentVersion()
     function getGitInfo()
     function getLatestVersion()

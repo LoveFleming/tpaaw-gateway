@@ -1,90 +1,92 @@
 {
   "features": [
     {
-      "id": "F20260918-001",
-      "name": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
-      "description": "使用者機器上的單檔 bootloader（gateway.mjs），同時提供 CLI（start/update/upload/status/ui）與本機網頁控制台（GET /index.html + 10 個 /api/* endpoint），負責 PAAW 套包的安裝、更新、手動上傳，以及 PAAW 進程的啟動/停止/重啟與狀態/日誌監看。目錄佈局以 versions/<x.y.z>/ 做版本隔離、data/ 存使用者資料、current.json 指向最後驗證過的版本。",
-      "bizLogic": "更新走 staged install：fetch package server 的 stable.json → semver 比對（永不降級，除非手動）→ 串流下載邊算 sha256 → 解壓到 versions/<v>.tmp（含 zip-slip 防護與關鍵檔骨架驗證）→ rename 定版 → npm install（失敗 retry --omit=optional）→ data-seed 播種（僅首次，更新永不覆蓄 data/）→ 啟動並健康檢查（GET / 200）成功才寫 current.json；任何一步失敗 current.json 不動、自動回滾跑上一版，壞版本目錄保留現場。除遠端更新外也支援手動上傳 zip（POST /api/upload 或 CLI upload），版本取自 zip 內建 paaw-manifest.json 或檔名 paaw-x.y.z.zip，不依賴 package server。安全規則：manifest.version 必須符合 /^\\d+\\.\\d+\\.\\d+$/（fail-closed 擋路徑注入，MAJ-001）、下載 URL 以提供",
+      "id": "F20261009-001",
+      "name": "PAAW Gateway 啟動器與本機控制台：套包安裝更新、版本回滾與 PAAW 生命週期管理",
+      "description": "單檔 Node bootloader（gateway.mjs），同時提供 CLI（ui/start/update/upload/status）與本機網頁控制台（預設 127.0.0.1:4290，12 條 API 路由），負責在使用者機器上安裝、更新、啟停 PAAW。由 staged 安裝管線（下載→驗證→解壓→定版）、PAAW 子程序監管（start/stop/restart + 健康檢查 + 自動回滾）、settings/semgrep 管理與 log 查看四部分構成。",
+      "bizLogic": "staged 安裝鐵律：fetch package server 的 stable.json → semver 比對（不降級）→ 串流下載邊算 sha256（不符即拒裝）→ 解壓到 versions/<v>.tmp（含 zip-slip 防護與骨架檔驗證）→ rename 定版 → npm install（失敗 retry --omit=optional）→ 成功才原子寫 current.json；任何一步失敗 current.json 不動、自動回滾跑上一個驗證過的版本，壞版本目錄保留現場。目錄佈局長在 PAAW_HOME（env > gateway.json > cwd）：versions/<x.y.z>/ 舊版保留當天然 rollback、data/ 只在首次從 data-seed 播種且更新永不覆蓋。不可信輸入 fail-closed：遠端 manifest.version 必須通過 VERSION_RE 才能進路徑拼接（擋 ../ 注入）；手動上傳 zip 的版本取自包內 paaw-manifest.json 或檔名 paaw-x.y.z.zip，product 非 paaw",
       "status": "active",
       "codeFiles": [
-        "gateway.mjs",
-        "ui/index.html"
+        "gateway.mjs"
       ],
       "apis": [
         {
-          "file": "gateway.mjs",
           "method": "GET",
-          "path": "/index.html"
+          "path": "/api/log",
+          "file": "gateway.mjs"
         },
         {
-          "file": "gateway.mjs",
           "method": "GET",
-          "path": "/api/settings"
+          "path": "/api/paaw-log",
+          "file": "gateway.mjs"
         },
         {
-          "file": "gateway.mjs",
           "method": "POST",
-          "path": "/api/settings"
+          "path": "/api/restart",
+          "file": "gateway.mjs"
         },
         {
-          "file": "gateway.mjs",
+          "method": "POST",
+          "path": "/api/semgrep/install",
+          "file": "gateway.mjs"
+        },
+        {
           "method": "GET",
-          "path": "/api/status"
+          "path": "/api/settings",
+          "file": "gateway.mjs"
         },
         {
-          "file": "gateway.mjs",
+          "method": "POST",
+          "path": "/api/settings",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/start",
+          "file": "gateway.mjs"
+        },
+        {
           "method": "GET",
-          "path": "/api/log"
+          "path": "/api/status",
+          "file": "gateway.mjs"
         },
         {
-          "file": "gateway.mjs",
+          "method": "POST",
+          "path": "/api/stop",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/update",
+          "file": "gateway.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/upload",
+          "file": "gateway.mjs"
+        },
+        {
           "method": "GET",
-          "path": "/api/paaw-log"
-        },
-        {
-          "file": "gateway.mjs",
-          "method": "POST",
-          "path": "/api/update"
-        },
-        {
-          "file": "gateway.mjs",
-          "method": "POST",
-          "path": "/api/upload"
-        },
-        {
-          "file": "gateway.mjs",
-          "method": "POST",
-          "path": "/api/start"
-        },
-        {
-          "file": "gateway.mjs",
-          "method": "POST",
-          "path": "/api/stop"
-        },
-        {
-          "file": "gateway.mjs",
-          "method": "POST",
-          "path": "/api/restart"
+          "path": "/index.html",
+          "file": "gateway.mjs"
         }
       ],
-      "tests": [
-        "tests/e2e/gateway-ui-csrf.test.mjs"
-      ],
+      "tests": [],
       "runbooks": [],
       "tags": [
         "bootloader",
+        "package-installer",
+        "auto-update",
         "staged-install",
-        "version-management",
-        "auto-rollback",
-        "process-supervisor",
-        "update"
+        "version-rollback",
+        "process-supervisor"
       ],
       "grade": "deterministic",
       "evidence": {
         "kinds": {
-          "http": 11
+          "http": 12
         },
-        "entryCount": 11,
+        "entryCount": 12,
         "reachFiles": 1,
         "method": "entry-reach-jaccard",
         "enrichedBy": "agent-loop"
@@ -92,107 +94,98 @@
       "issues": [],
       "aiUnderstanding": "",
       "aiUnderstandingAt": null,
-      "documentation": "# PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理 (F20260918-001)\n\n## 概述（既有描述，保留）\n\n使用者機器上的單檔 bootloader（gateway.mjs），同時提供 CLI（start/update/upload/status/ui）與本機網頁控制台（GET /index.html + 10 個 /api/* endpoint），負責 PAAW 套包的安裝、更新、手動上傳，以及 PAAW 進程的啟動/停止/重啟與狀態/日誌監看。目錄佈局以 versions/<x.y.z>/ 做版本隔離、data/ 存使用者資料、current.json 指向最後驗證過的版本。\n\n---\n\n## 安全修復（v0.2.1，2026-09-18/19 品質補強輪）\n\n### F7 — CSRF 防護：Host 白名單 + Origin 驗證（cmdUI()）\n\n控制台的狀態改變操作（POST /api/settings、/api/update、/api/upload、/api/start、/api/stop、/api/restart）需防 DNS rebinding 與惡意網頁對 localhost 發動的 CSRF。實作（gateway.mjs `cmdUI()` 內）：\n\n- **Host 白名單** `HOST_WHITELIST`：`{127.0.0.1, localhost, ::1}` 外加 `PAAW_GW_HOST`（UI_HOST）的 hostname（綁 0.0.0.0 / 網卡 IP 時不誤擋合法使用）。Host header 一律拆出 hostname 再比（去 port、去 IPv6 括號、轉小寫，`hostOf()`），防 `localhost.evil.example` 後綴偽裝與帶 port 繞過。\n- **Origin 驗證（僅 POST）** `isTrustedOrigin()`：以 `new URL()` 解析 Origin 後比 hostname；解析失敗（如 sandbox 的 `\"null\"`、非 URL 字串）一律拒絕。POST 缺 Origin header 放行（curl / 同源 form 情境不誤擋）。\n- 拒絕回應：403 `{ok:false, message:\"Forbidden: untrusted Host\"}` / `\"Forbidden: untrusted Origin\"`。\n\n### MED-001 — Host gate 擴及所有請求（含 GET）\n\n同日補強：Host 白名單檢查套用於**全部請求**（GET+POST），防 DNS rebinding 偽 Host 讀取 `/api/paaw-log`、`/api/status` 等本機資訊。瀏覽器直連 127.0.0.1 時 Host 必在白名單，不誤擋。Origin 驗證維持只有 POST 需要（GET 不帶有意義 Origin；同源 GET 帶 Origin 也放行）。\n\n### MAJ-001 — update 路徑 manifest.version 驗證（fail-closed）\n\n`VERSION_RE = /^\\d+\\.\\d+\\.\\d+$/` 三道入口驗證，擋 `\"../\"`、query、fragment 等路徑注入，驗證不過即拒絕（fail-closed，不 fallback）：\n\n1. `installVersion()` 入口：`v` 非 string 或未通過 VERSION_RE → 拒\n2. `updateLogic()`：manifest 無合法 version → `v = null`\n3. 下載後 `manifest.version` 再驗：非 string 或未通過 → `job.error` 報 \"invalid version\"，HOME 零寫入\n\n### MIN-001 — POST /api/settings body 上限 1MB\n\n`MAX_SETTINGS_BODY = 1024 * 1024`。config json 遠用不到 1MB，超限即 `req.destroy()` 斷線並回 413 `{ok:false, message:\"body 超過 1MB 上限\"}`，避免無上限累積（與 /api/upload 的 600MB cap 對稱）。正常大小（512KB 合法 JSON）不受影響。\n\n### MAJ-001b — UI stable 版本字串 XSS 防護（esc()）\n\nui/index.html 定義 `esc()`（`&` `<` `>` 轉義）。stable 版本字串進 innerHTML 前必過 `esc(String(s.stable))`；「有新版」提示（newBadge）走 `textContent`，無注入面。\n\n---\n\n## 測試\n\n- **tests/e2e/gateway-ui-csrf.test.mjs** — 16 案例，spawn 真 gateway（隔離 env：current null、stable null、running false）。涵蓋：惡意/後綴偽裝/非法 Origin 403、合法 Origin（127.0.0.1 / localhost / [::1] 帶 port）200、無 Origin 放行、惡意 Host（含帶 port）403（GET+POST）、GET 帶惡意 Origin 但合法 Host 200、body >1MB 斷線/413 且 server 存活、512KB 正常通過、惡意 stable.version（999.0.0/../../x）job.error + HOME 零寫入。\n\n## 版本\n\n- v0.2.1（package.json）— 含上述安全修復與品質補強。",
-      "docsUpdatedAt": "2026-09-19T03:20:59.342Z",
-      "createdAt": "2026-09-18T11:47:34.130Z",
-      "updatedAt": "2026-09-18T11:47:34.130Z"
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-10-09T00:56:37.765Z",
+      "updatedAt": "2026-10-09T00:56:37.765Z"
     },
     {
-      "id": "F20260918-002",
+      "id": "F20261009-002",
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
-      "description": "獨立於 PAAW Server（:4097）運行的管理平台（:4199），由單一檔案 src/server.mjs 構成：以 node:http 原生路由提供 13 個 /api/* 端點，涵蓋登入認證、PAAW Server 進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log 與用戶列表，並在 / 提供管理 UI（public/index.html）。Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方生命週期。",
-      "bizLogic": "認證：POST /api/auth/login 以 body 的 userId+password 對 config.json 的 users（含 passwordHash 欄位）比對，成功核發 randomUUID session token（in-memory Map，預設 sessionMaxAge 24h 過期即刪），其餘路由一律要求 Authorization: Bearer <token>（缺前綴視同未授權回 401），僅 /api/auth/login、/api/health、/ 及靜態資產為 public；upgrade 與 server start/stop/restart、/api/users 另要求 role=admin 否則 403。進程守護：startPaaw 以 config.paawServerCmd 在 PAAW_ROOT spawn 子進程（PORT env 指向 paawServerPort），追蹤狀態機 stopped/starting/running/crashed 與 restartCount，stop 先 SIGTERM、5 秒後 SIGKIL",
+      "description": "單檔 Node HTTP server（src/server.mjs，port 4199，獨立於 PAAW Server :4097 的守護者），構成 PAAW 的維運控制平面：Bearer token 認證與 RBAC、PAAW Server 子進程生命週期管理（start/stop/restart/健康檢查）、tar.gz 備份排程與還原、git pull 升級流水線、JSONL 事件稽核軌跡，以及 dashboard/version/users 等 13 支 API 與內嵌管理 UI。E2E 測試（tests/e2e/gateway-backup-auth.test.mjs）以 env ",
+      "bizLogic": "認證：users 存於 config.json（admin/viewer 角色），POST /api/auth/login 以 userId+password 換 randomUUID Bearer token，sessions 為 in-memory Map、逾 sessionMaxAge（預設 24h）即刪除回 401；公開路由僅 /api/auth/login、/api/health 與 /，其餘一律 401，而 server start/stop/restart、upgrade、backup restore、users 查詢另要求 admin 角色（非 admin 回 403）。進程守護：以 config.paawServerCmd 在 PAAW_ROOT spawn PAAW Server（PORT 指 :4097），gateway 開機時 autoStartPaaw 預設自動拉起；stopPaaw 是 exit-confirmed 語意（SIGTERM→5 秒後 SIGKILL→10 秒 failsafe，且以 stoppingPromise 讓 restart/upgra",
       "status": "active",
       "codeFiles": [
         "src/server.mjs"
       ],
       "apis": [
         {
-          "file": "src/server.mjs",
           "method": "POST",
-          "path": "/api/auth/login"
+          "path": "/api/auth/login",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
           "method": "GET",
-          "path": "/api/auth/me"
+          "path": "/api/auth/me",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
           "method": "POST",
-          "path": "/api/backups/create"
+          "path": "/api/backups/create",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
+          "method": "GET",
+          "path": "/api/backups",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/dashboard",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/events",
+          "file": "src/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/health",
+          "file": "src/server.mjs"
+        },
+        {
           "method": "POST",
-          "path": "/api/backups/restore/<filename>"
+          "path": "/api/server/restart",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
-          "method": "GET",
-          "path": "/api/backups"
-        },
-        {
-          "file": "src/server.mjs",
-          "method": "GET",
-          "path": "/api/dashboard"
-        },
-        {
-          "file": "src/server.mjs",
-          "method": "GET",
-          "path": "/api/events"
-        },
-        {
-          "file": "src/server.mjs",
-          "method": "GET",
-          "path": "/api/health"
-        },
-        {
-          "file": "src/server.mjs",
           "method": "POST",
-          "path": "/api/server/restart"
+          "path": "/api/server/start",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
           "method": "POST",
-          "path": "/api/server/start"
+          "path": "/api/server/stop",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
           "method": "POST",
-          "path": "/api/server/stop"
+          "path": "/api/upgrade",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
-          "method": "POST",
-          "path": "/api/upgrade"
-        },
-        {
-          "file": "src/server.mjs",
           "method": "GET",
-          "path": "/api/users"
+          "path": "/api/users",
+          "file": "src/server.mjs"
         },
         {
-          "file": "src/server.mjs",
           "method": "GET",
-          "path": "/api/version"
+          "path": "/api/version",
+          "file": "src/server.mjs"
         }
       ],
       "tests": [
-        "tests/unit/backup.test.mjs",
-        "tests/e2e/gateway-backup-auth.test.mjs",
-        "tests/e2e/gateway-restart-rbac.test.mjs"
+        "tests/e2e/gateway-backup-auth.test.mjs"
       ],
-      "runbooks": [
-        "backup-path-protection.md"
-      ],
+      "runbooks": [],
       "tags": [
-        "gateway",
-        "auth",
-        "session",
-        "bearer-token",
+        "authentication",
+        "session-management",
         "rbac",
-        "process-management"
+        "process-supervisor",
+        "backup-restore",
+        "upgrade"
       ],
       "grade": "deterministic",
       "evidence": {
@@ -207,11 +200,11 @@
       "issues": [],
       "aiUnderstanding": "",
       "aiUnderstandingAt": null,
-      "documentation": "# F20260918-002 補充文件：備份路徑防護（CWE-22 縱深防禦）與掃描歸零記錄\n\n## `backupPath(name)` 防護語義（src/server.mjs:79，TASK-010）\n\n所有備份檔名（來自 `readdir` 或 API 請求）進入任何 fs 呼叫前的**唯一安全出口**：\n\n1. **白名單**：`typeof name !== \"string\"` 或不符 `BACKUP_REGEX`（`^paaw-backup-\\d{4}-\\d{2}-\\d{2}-\\d{2}\\.tar\\.gz$`，YYYY-MM-DD-HH）→ 回 `null`，fail-closed（不 throw）\n2. **Containment**：`resolve(BACKUP_DIR, name)` 後驗證 `p.startsWith(resolve(BACKUP_DIR) + sep)`，逃出 BACKUP_DIR → 回 `null`\n\n`listBackups` / `createBackup` / `restoreBackup`（src/server.mjs:358/:378/:415）的 statSync / unlinkSync / tar 路徑全數改走 `backupPath`：list 對非法名稱靜默 skip；create / restore 以原錯誤訊息拒絕。restore 路由層另有 URL 正規化防線 — literal `../` 在 `new URL()` 即被改寫為非 restore 路由回 404；percent-encoded 逃逸與絕對路徑注入原樣抵達 `restoreBackup` 被 backupPath 攔下，回 HTTP 200 業務拒絕信封 `{ok:false, error}`（本 server 慣例非 400）。admin 打攻擊檔名照樣被拒（防護與 RBAC 獨立），且零副作用：不動 PAAW_ROOT 資料、不在 BACKUP_DIR 建檔、audit log 零 restore 事件。\n\n## `BACKUP_SOURCE_DIRS` 常數（src/server.mjs ~L64）\n\n`[join(PAAW_ROOT, \"data\"), join(PAAW_ROOT, \".paaw\")]` — 建議閱讀：硬編碼備份來源目錄，於模組載入時計算一次，請求/備份流程內不做任何路徑組裝（CWE-22 hardening 的一部分）；`createBackup` 的 tar 以 `relative(PAAW_ROOT, d)` 傳入，cwd 固定 PAAW_ROOT。\n\n## 修復脈絡（TASK-010 → 011 → 013）\n\n- 起點：security 掃描 6 筆 CWE-22 findings（confidence LOW，集中於 backup 管理器的非字面 fs 路徑）\n- **TASK-010 縱深防禦重構**（commit 114bfb2）：新增並 export `backupPath(name)`，三個 backup 函式統一出口；`BACKUP_SOURCE_DIRS` 常數化。API 回應結構與錯誤訊息不變，全套 pass\n- **TASK-011 攻擊測試**（commit 599b8d5）：unit +8（tests/unit/backup.test.mjs — traversal payload、絕對路徑注入、非字串輸入、BACKUP_REGEX 格式違規、restoreBackup fail-closed）+ e2e +4（tests/e2e/gateway-backup-auth.test.mjs — restore 路由攻擊檔名兩層防禦、零副作用、合法 restore 不回歸），全套 52+ 綠\n- **TASK-013 誤報標註**（commit 742c7c4）：殘留 4 筆 CWE-22 誤報（backupPath 內部 resolve 為 validator 本體；下游 fs 呼叫收的是驗證後輸出）以 nosemgrep 註記說明標註\n\n## 掃描歸零記錄\n\n**2026-09-19T09:17:46Z 重掃：ERROR 0 / WARNING 0 / INFO 0**（findings 總數 0；filesScanned 含 gateway.mjs 與 src/server.mjs）。證據：`.paaw/security/scan-results.json`。runbook：`.paaw/runbook/backup-path-protection.md`（非法 filename → backupPath null → 404/失敗回應的行為對照表）。",
-      "docsUpdatedAt": "2026-09-19T09:29:48.882Z",
-      "createdAt": "2026-09-18T11:47:34.130Z",
-      "updatedAt": "2026-09-19T09:18:12.681Z"
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-10-09T00:56:37.765Z",
+      "updatedAt": "2026-10-09T00:56:37.765Z"
     }
   ],
-  "updatedAt": "2026-09-19T09:18:12.683Z"
+  "updatedAt": "2026-10-09T00:56:37.765Z"
 }

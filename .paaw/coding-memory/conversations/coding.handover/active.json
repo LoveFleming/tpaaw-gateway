@@ -4,10 +4,15 @@
       "role": "assistant",
       "content": "你好！👋 我是 Zofia Kowalska，交接工程師。\n\n我的工作是幫你把專案的「做到哪、沒做完什麼、怎麼接手」整理清楚，讓接手的人（人類工程師或 AI agent）能立刻上手。\n\n我可以幫你做這些事：\n\n| 服務 | 說明 |\n|------|------|\n| 📦 **交接包產出** | 依九大項盤點專案，產出 `.paaw/HANDOVER.md` 或盤點報告 |\n| 🛗 **交接電梯簡報** | 30 秒 / 3 分鐘 / 10 分鐘三層深度的專案全貌導覽 |\n| 🏺 **決策考古** | 追溯「當初為什麼這樣設計」的完整脈絡與約束條件 |\n| 🧭 **新人上手指引** | 第一天 / 第一週的 checklist + 起手 task 建議 |\n\n目前我手上看到的專案概況：\n- 這是 **tpaaw-gateway** 專案，有 2 個 active features（Gateway 控制台 + 系統維運管理平台）\n- 最近一次跨 agent 紀錄是 security scan 的 CWE-22 triage 完成\n\n請問你今天需要什麼協助？例如：\n- 「給我一份完整交接包」（full 模式）\n- 「做個交接盤點看看缺什麼」（audit 模式）\n- 「考古一下為什麼 gateway 要綁 127.0.0.1」",
       "ts": "2026-09-12T04:06:01.479Z"
+    },
+    {
+      "role": "assistant",
+      "content": "# tpaaw-gateway Release Unit — 全貌說明\n\n## 一句話定位（30 秒版）\n\n這是 **PAAW Gateway**（v0.2.1）：一個安裝在使用者機器上的 **bootloader（啟動載入器）＋維運管理平台**，負責 PAAW 套包的**安裝、更新、執行**，以及 PAAW 進程的生命週期管理與備份維運。\n[來源: package.json — `tpaaw-gateway@0.2.1 — PAAW Gateway — install / update / run PAAW (bootloader)`]\n\n## 兩大功能（3 分鐘版）\n\n### F20260918-001 — PAAW Gateway 控制台（套包安裝更新與生命週期管理）\n- **形態**：單檔 bootloader（`gateway.mjs`），同時提供 **CLI**（start / update / upload / status / ui）與**本機網頁控制台**（`ui/index.html` + 11 個 API endpoint）。\n- **職責**：PAAW 套包的安裝、更新、手動上傳；PAAW 進程的啟動／停止／重啟；狀態與日誌監看。\n- **目錄設計**：`versions/<x.y.z>/` 做版本隔離、`data/` 存使用者資料、`current.json` 指向最後驗證過的版本。\n- **測試**：`tests/e2e/gateway-ui-csrf.test.mjs`。\n\n### F20260918-002 — 系統維運管理平台（認證・進程守護・備份・升級）\n- **形態**：獨立運行的管理平台（port **:4199**），由單一檔案 `src/server.mjs` 以 node:http 原生路由構成，提供 14 個 API endpoint + 管理 UI。\n- **職責**：登入認證（login / me / users）、PAAW Server（:4097）進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log。\n- **關鍴架構原則**：**Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方的生命週期**（PAAW Server 掛了，Gateway 仍能把拉起來）。\n- **測試**：3 個測試檔（unit/backup + e2e/backup-auth + e2e/restart-rbac）。\n\n## 整體統計\n\n| 項目 | 數量 | 內容 |\n|---|---|---|\n| Features | 2 | 上述兩個，均 active |\n| API endpoints | 24 | 11（控制台）+ 14（維運平台）—3 個管理 API，其餘為操作與查詢 |\n| Code files | 6 | `gateway.mjs`、`src/server.mjs`、`ui/index.html` + 4 個測試檔 |\n| 技術棧 | — | Node.js（node:http 原生路由，無框架依賴的跡象） |\n\n[來源: release-unit-model 統計 + feature map]\n\n## 證據與文件新鮮度（誠實聲明）\n\n- ⚠️ **`.paaw/project/PROJECT.md` 是未填寫的自動生成範本**（Name: auto-detect、技術棧待補）— 本簡報的產品定位**不是來自 PROJECT.md**，而是以 `package.json` 的 description 與 feature map 為依據交叉確認。\n- ARCHITECTURE.md 亦無獨立內容可引用；模組關係（兩進程、雙 port、守護者關係）係從 feature map 的描述整理。\n- 依「文件與 code 矛盾時以 code 為準」原則：如需更精確的邊界確認，建議直接讀 `gateway.mjs` 與 `src/server.mjs` 的進程啟動段落。\n\n---\n\n**一句話總結**：這個 Release Unit 是「PAAW 的守門員」— 下層（F-001）負責把 PAAW 裝起來、更新、跑起來；上層（F-002）在旁邊顧著它，顧認證、備份、升級與健康狀態。",
+      "ts": "2026-10-08T23:20:39.669Z"
     }
   ],
   "_meta": {
-    "updatedAt": "2026-09-12T04:06:01.480Z",
+    "updatedAt": "2026-10-08T23:20:39.669Z",
     "savedBy": "a2a-stream-recovery"
   }
 }

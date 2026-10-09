@@ -1,22 +1,22 @@
 {
-  "scannedAt": "2026-09-18T11:48:07.229Z",
+  "scannedAt": "2026-10-09T01:01:53.686Z",
   "method": "llm-v2",
   "conventions": "none",
-  "conventionNote": "全部 error 皆為 throw new Error(\"inline 字串\")，無任何 error code 常數或 registry；僅靠中文/英文混合的訊息文字與少數 HTTP status 數字（直接嵌在訊息裡）區分錯誤，test 檔的 assert/throw 屬測試雜訊已過濾。",
+  "conventionNote": "全部 error 皆為 inline `throw new Error(中英混合訊息)`，無任何 error code 常數、registry 或結構化分類；部分底層函式（如 backup）回傳 ok/false，但多數路徑仍是裸 exception 與字串訊息，僅靠訊息文字判斷成因。",
   "recommendation": {
     "suggest": true,
-    "plan": "以 Error Code Rules v1 導入：格式 {CODE_CLASS}_{AREA}_{FAMILY}_{DETAIL}（全大寫蛇底）。建議第一批 area：BUNDLE（套包下載/驗證/安裝）與 OPS（維運：備份/升級/進程）。建立 error registry 檔（如 gateway/errors.mjs），export 一張 code → {message, httpStatus, kind} 對照表；throw 點改為 throw new AppError(ErrorCode.XXX, context)。Seed codes（從現有訊息轉寫）：EXT_BUNDLE_DOWNLOAD_HTTP_FAIL（下載失敗 HTTP status）、EXT_BUNDLE_CHECKSUM_MISMATCH（sha256 不符/套包損毀）、BIZ_BUNDLE_PACKAGE_INVALID（壞包/缺檔/manifest 版本無效/非 paaw 包）、SYS_BUNDLE_DEPENDENCY_INSTALL_FAIL（npm install 兩次失敗）、BIZ_OPS_BACKUP_FILENAME_INVALID（Invalid backup filename）、EXT_BUNDLE_SERVER_UNREACHABLE（package server 連不上且本機無版本）。另建議 zip-slip 偵測獨立為 BIZ_BUNDLE_ARCHIVE_PATH_UNSAFE 以利資安事件追蹤。"
+    "plan": "建議導入 Error Code Rules v1（{CODE_CLASS}_{AREA}_{FAMILY}_{DETAIL}，全大寫蛇底）。第一批 area 依照 gateway.mjs 的既有分層：PKG（套包下載/驗證/安裝）、MANIFEST（版本與 manifest 判讀）、INSTALL（解壓/npm install/切版）、BACKUP（備份還原）、PROC（進程健康）。建立 src/errors.mjs（或 errors/registry.mjs）集中定義 code 與預設 message，並提供 `fail(code, detail)` helper 讓 throw 點改為 `throw new AppError('EXT_PKG_DOWNLOAD_HTTP_FAIL', ...)`,頂層統一映射 httpStatus。Seed codes（由現有訊息轉寫）：1) `EXT_PKG_DOWNLOAD_HTTP_FAIL`（下載失敗 HTTP ${status}，httpStatus 502）；2) `BIZ_PKG_CHECKSUM_MISMATCH`（sha256 不符/套包損毀，409）；3) `BIZ_PKG_ZIP_SLIP_DETECTED`（路徑逃逸偵測，409）；4) `BIZ_MANIFEST_VERSION_INVALID`（invalid version from manifest，422）；5) `BIZ_MANIFEST_PRODUCT_MISMATCH`（product 非 paaw 包，409）；6) `EXT_PKG_SERVER_UNREACHABLE`（package server 連不上且無本機版本，502）。實作順序：先建 registry → 改 gateway.mjs 的 13 個 throw 點 → server.mjs 與測試 helper 跟進，e2e 斷言可依 code 而非訊息文字比對。"
   },
   "stats": {
-    "total": 15,
-    "uniqueCodes": 15,
-    "featureCount": 2
+    "total": 14,
+    "uniqueCodes": 14,
+    "featureCount": 1
   },
   "byFeature": [
     {
-      "featureId": "F20260918-001",
-      "featureName": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
-      "summary": "全部為 inline 字串 throw，集中在套包下載、checksum/size 驗證、解壓安全（zip-slip）、manifest 驗證與 npm install 流程；無任何 error code，僅能靠訊息文字比對。",
+      "featureId": "F20261009-001",
+      "featureName": "PAAW Gateway 啟動器與本機控制台：套包安裝更新、版本回滾與 PAAW 生命週期管理",
+      "summary": "套包下載、校驗、解壓與切版流程全靠 inline throw 訊息字串（中英混合），訊息語意清楚但無任何 error code，呼叫端無法程式化判別失敗原因（如損毀 vs 網路失敗）。",
       "codes": [
         {
           "code": null,
@@ -28,7 +28,7 @@
         },
         {
           "code": null,
-          "message": "sha256 不符…套包損毀或被竄改，拒絕安裝",
+          "message": "sha256 不符（下載=… manifest=…）— 套包損毀或被竄改，拒絕安裝",
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
@@ -44,12 +44,12 @@
         },
         {
           "code": null,
-          "message": "zip-slip 偵測：${name}",
+          "message": "zip-slip 偵測：${safeName}",
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 163,
-          "note": "資安相關，值得獨立 code"
+          "line": 165,
+          "note": "安全防護性錯誤，建議獨立 code 以利監控"
         },
         {
           "code": null,
@@ -57,7 +57,7 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 182
+          "line": 184
         },
         {
           "code": null,
@@ -65,7 +65,7 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 207
+          "line": 215
         },
         {
           "code": null,
@@ -73,7 +73,7 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 323
+          "line": 369
         },
         {
           "code": null,
@@ -81,7 +81,7 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 332
+          "line": 378
         },
         {
           "code": null,
@@ -89,7 +89,7 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 367
+          "line": 413
         },
         {
           "code": null,
@@ -97,7 +97,7 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 368
+          "line": 414
         },
         {
           "code": null,
@@ -105,15 +105,15 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 411
+          "line": 458
         },
         {
           "code": null,
-          "message": "package server 連不上且本機無任何版本 — 無法安裝",
+          "message": "package server 連不上且本機無任何版本 — 無法安裝（${e.message}）",
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 418
+          "line": 465
         },
         {
           "code": null,
@@ -121,36 +121,68 @@
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 425
+          "line": 472
         },
         {
           "code": null,
-          "message": "",
+          "message": "(rethrow original error)",
           "kind": "throw",
           "httpStatus": null,
           "file": "gateway.mjs",
-          "line": 462,
-          "note": "單純 rethrow，非新錯誤"
+          "line": 509
         }
       ],
       "uniqueCount": 14
-    },
-    {
-      "featureId": "F20260918-002",
-      "featureName": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
-      "summary": "production 代碼僅 src/server.mjs 一處 inline throw（備份檔名驗證）；其餘信號來自 e2e 測試 harness，屬測試輔助非 runtime error handling，已過濾不列。",
-      "codes": [
-        {
-          "code": null,
-          "message": "Invalid backup filename: + filename",
-          "kind": "throw",
-          "httpStatus": null,
-          "file": "src/server.mjs",
-          "line": 293
-        }
-      ],
-      "uniqueCount": 1
     }
   ],
-  "unmapped": []
+  "unmapped": [
+    {
+      "code": null,
+      "message": "Invalid backup filename: ${filename}",
+      "kind": "throw",
+      "httpStatus": null,
+      "file": "src/server.mjs",
+      "line": 385
+    },
+    {
+      "code": null,
+      "message": "gateway 子進程提前退出 (code=${child.exitCode})",
+      "kind": "throw",
+      "httpStatus": null,
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "line": 121
+    },
+    {
+      "code": null,
+      "message": "gateway 在 ${HEALTH_TIMEOUT_MS}ms 內沒有起來",
+      "kind": "throw",
+      "httpStatus": null,
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "line": 129
+    },
+    {
+      "code": null,
+      "message": "gateway did not become healthy in time",
+      "kind": "throw",
+      "httpStatus": null,
+      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "line": 144
+    },
+    {
+      "code": null,
+      "message": "gateway ui 子進程提前退出 (code=${child.exitCode})",
+      "kind": "throw",
+      "httpStatus": null,
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 142
+    },
+    {
+      "code": null,
+      "message": "gateway ui 在 ${READY_TIMEOUT_MS}ms 內沒有起來",
+      "kind": "throw",
+      "httpStatus": null,
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 150
+    }
+  ]
 }

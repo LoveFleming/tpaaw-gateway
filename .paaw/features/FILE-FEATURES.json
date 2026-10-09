@@ -2,46 +2,46 @@
   "files": {
     "gateway.mjs": [
       {
-        "id": "F20260918-001",
-        "name": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
+        "id": "F20261009-001",
+        "name": "PAAW Gateway 啟動器與本機控制台：套包安裝更新、版本回滾與 PAAW 生命週期管理",
         "tags": [
           "bootloader",
+          "package-installer",
+          "auto-update",
           "staged-install",
-          "version-management",
-          "auto-rollback",
-          "process-supervisor",
-          "update"
+          "version-rollback",
+          "process-supervisor"
         ]
       }
     ],
     "src/server.mjs": [
       {
-        "id": "F20260918-002",
+        "id": "F20261009-002",
         "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
         "tags": [
-          "gateway",
-          "auth",
-          "session",
-          "bearer-token",
+          "authentication",
+          "session-management",
           "rbac",
-          "process-management"
+          "process-supervisor",
+          "backup-restore",
+          "upgrade"
         ]
       }
     ],
     "tests/e2e/gateway-backup-auth.test.mjs": [
       {
-        "id": "F20260918-002",
+        "id": "F20261009-002",
         "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
         "tags": [
-          "gateway",
-          "auth",
-          "session",
-          "bearer-token",
+          "authentication",
+          "session-management",
           "rbac",
-          "process-management"
+          "process-supervisor",
+          "backup-restore",
+          "upgrade"
         ]
       }
     ]
   },
-  "updatedAt": "2026-09-18T11:47:34.130Z"
+  "updatedAt": "2026-10-09T00:56:37.765Z"
 }

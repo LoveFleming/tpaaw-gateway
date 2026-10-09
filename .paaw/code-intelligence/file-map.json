@@ -164,6 +164,26 @@
           "calls": []
         },
         {
+          "name": "pump",
+          "kind": "arrow",
+          "async": false,
+          "params": "(stream, mirror)",
+          "callCount": 3,
+          "calls": [
+            "stream.on",
+            "mirror.write",
+            "(child.__tail + c).slice"
+          ]
+        },
+        {
+          "name": "childFailReason",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
           "name": "waitForHealthy",
           "kind": "function",
           "async": true,
@@ -351,6 +371,96 @@
           "calls": []
         },
         {
+          "name": "augmentedPath",
+          "kind": "function",
+          "async": false,
+          "params": "(prependDir, basePath)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semgrepVersion",
+          "kind": "function",
+          "async": false,
+          "params": "(bin, env)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "done",
+          "kind": "arrow",
+          "async": false,
+          "params": "(r)",
+          "callCount": 1,
+          "calls": [
+            "resolvePromise"
+          ]
+        },
+        {
+          "name": "semgrepPresence",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "checkSemgrep",
+          "kind": "function",
+          "async": true,
+          "params": "(force = false)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semgrepCheckKick",
+          "kind": "function",
+          "async": false,
+          "params": "(force = false)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "runCapture",
+          "kind": "function",
+          "async": false,
+          "params": "(cmdLine, timeoutMs = 600000)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "done",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, err)",
+          "callCount": 1,
+          "calls": [
+            "resolvePromise"
+          ]
+        },
+        {
+          "name": "pump",
+          "kind": "arrow",
+          "async": false,
+          "params": "(c)",
+          "callCount": 5,
+          "calls": [
+            "String(c).split",
+            "String",
+            "line.trim",
+            "jobLog",
+            "s.slice"
+          ]
+        },
+        {
+          "name": "installSemgrep",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
           "name": "cmdUI",
           "kind": "function",
           "async": true,
@@ -434,6 +544,11 @@
         {
           "method": "POST",
           "path": "/api/settings",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/semgrep/install",
           "handler": ""
         },
         {

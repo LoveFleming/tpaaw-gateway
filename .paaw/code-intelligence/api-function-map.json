@@ -79,6 +79,32 @@
       ]
     },
     {
+      "method": "POST",
+      "path": "/api/semgrep/install",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "callChain": [
+        {
+          "function": "res.writeHead",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "res.end",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        },
+        {
+          "function": "JSON.stringify",
+          "depth": 5,
+          "file": "",
+          "resolved": false
+        }
+      ]
+    },
+    {
       "method": "GET",
       "path": "/api/status",
       "file": "gateway.mjs",
@@ -626,8 +652,8 @@
     }
   ],
   "stats": {
-    "totalRoutes": 24,
-    "withHandler": 24,
+    "totalRoutes": 25,
+    "withHandler": 25,
     "withoutHandler": 0
   }
 }

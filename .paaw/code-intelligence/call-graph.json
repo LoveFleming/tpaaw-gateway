@@ -121,6 +121,22 @@
       "async": false
     },
     {
+      "id": "gateway.mjs:pump",
+      "name": "pump",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:childFailReason",
+      "name": "childFailReason",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
       "id": "gateway.mjs:waitForHealthy",
       "name": "waitForHealthy",
       "file": "gateway.mjs",
@@ -299,6 +315,70 @@
     {
       "id": "gateway.mjs:uiStatus",
       "name": "uiStatus",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "gateway.mjs:augmentedPath",
+      "name": "augmentedPath",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:semgrepVersion",
+      "name": "semgrepVersion",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:done",
+      "name": "done",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:semgrepPresence",
+      "name": "semgrepPresence",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:checkSemgrep",
+      "name": "checkSemgrep",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "gateway.mjs:semgrepCheckKick",
+      "name": "semgrepCheckKick",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:runCapture",
+      "name": "runCapture",
+      "file": "gateway.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "gateway.mjs:installSemgrep",
+      "name": "installSemgrep",
       "file": "gateway.mjs",
       "line": 0,
       "kind": "function",
@@ -667,6 +747,24 @@
   ],
   "edges": [
     {
+      "caller": "gateway.mjs:pump",
+      "callee": "stream.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "mirror.write",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "(child.__tail + c).slice",
+      "type": "chained",
+      "resolved": false
+    },
+    {
       "caller": "gateway.mjs:bye",
       "callee": "child.kill",
       "type": "method",
@@ -675,6 +773,47 @@
     {
       "caller": "gateway.mjs:bye",
       "callee": "process.exit",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:done",
+      "callee": "resolvePromise",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:done",
+      "callee": "resolvePromise",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "String(c).split",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "String",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "line.trim",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "gateway.mjs:jobLog",
+      "type": "direct"
+    },
+    {
+      "caller": "gateway.mjs:pump",
+      "callee": "s.slice",
       "type": "method",
       "resolved": false
     },
@@ -904,12 +1043,41 @@
     }
   ],
   "callersOf": {
+    "stream.on": [
+      "gateway.mjs:pump"
+    ],
+    "mirror.write": [
+      "gateway.mjs:pump"
+    ],
+    "(child.__tail + c).slice": [
+      "gateway.mjs:pump"
+    ],
     "child.kill": [
       "gateway.mjs:bye"
     ],
     "process.exit": [
       "gateway.mjs:bye",
       "gateway.mjs:bye"
+    ],
+    "resolvePromise": [
+      "gateway.mjs:done",
+      "gateway.mjs:done"
+    ],
+    "String(c).split": [
+      "gateway.mjs:pump"
+    ],
+    "String": [
+      "gateway.mjs:pump",
+      "gateway.mjs:hostOf"
+    ],
+    "line.trim": [
+      "gateway.mjs:pump"
+    ],
+    "gateway.mjs:jobLog": [
+      "gateway.mjs:pump"
+    ],
+    "s.slice": [
+      "gateway.mjs:pump"
     ],
     "res.writeHead": [
       "gateway.mjs:jsonOut",
@@ -930,9 +1098,6 @@
       "gateway.mjs:hostOf"
     ],
     "String(h).toLowerCase": [
-      "gateway.mjs:hostOf"
-    ],
-    "String": [
       "gateway.mjs:hostOf"
     ],
     "HOST_WHITELIST.has": [
@@ -1004,12 +1169,26 @@
     ]
   },
   "calleesOf": {
+    "gateway.mjs:pump": [
+      "stream.on",
+      "mirror.write",
+      "(child.__tail + c).slice",
+      "String(c).split",
+      "String",
+      "line.trim",
+      "gateway.mjs:jobLog",
+      "s.slice"
+    ],
     "gateway.mjs:bye": [
       "child.kill",
       "process.exit",
       "gateway.mjs:paawRunning",
       "gateway.mjs:killChild",
       "process.exit"
+    ],
+    "gateway.mjs:done": [
+      "resolvePromise",
+      "resolvePromise"
     ],
     "gateway.mjs:jsonOut": [
       "res.writeHead",
@@ -1072,9 +1251,9 @@
     ]
   },
   "stats": {
-    "totalFunctions": 83,
-    "totalCalls": 40,
-    "resolvedCalls": 4,
-    "unresolvedCalls": 36
+    "totalFunctions": 93,
+    "totalCalls": 50,
+    "resolvedCalls": 5,
+    "unresolvedCalls": 45
   }
 }

@@ -1,23 +1,24 @@
 {
   "method": "deterministic-v2",
-  "scannedAt": "2026-09-18T11:47:34.130Z",
+  "scannedAt": "2026-10-09T00:56:37.765Z",
   "stats": {
-    "files": 5,
+    "files": 6,
     "edges": 1,
-    "entries": 24,
+    "entries": 25,
     "clusters": 2,
     "shared": 0,
     "orphans": 0,
     "tests": {
-      "total": 3,
+      "total": 4,
       "mapped": 1,
-      "unmapped": 2
+      "unmapped": 3
     },
     "edgeCoverage": 100
   },
   "shared": [],
   "orphans": [],
   "unmappedTests": [
+    "tests/e2e/gateway-restart-rbac.test.mjs",
     "tests/e2e/gateway-ui-csrf.test.mjs",
     "tests/unit/backup.test.mjs"
   ],
@@ -26,8 +27,8 @@
     "ok": 2,
     "degraded": 0,
     "resumed": 0,
-    "totalTurns": 4,
-    "totalMs": 122277,
+    "totalTurns": 9,
+    "totalMs": 126054,
     "usage": {
       "promptTokens": 0,
       "completionTokens": 0

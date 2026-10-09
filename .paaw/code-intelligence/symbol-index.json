@@ -137,6 +137,24 @@
     },
     {
       "type": "function",
+      "name": "pump",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(stream, mirror)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "childFailReason",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "waitForHealthy",
       "file": "gateway.mjs",
       "kind": "function",
@@ -344,6 +362,96 @@
     },
     {
       "type": "function",
+      "name": "augmentedPath",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(prependDir, basePath)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semgrepVersion",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(bin, env)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "done",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(r)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "semgrepPresence",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "checkSemgrep",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(force = false)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semgrepCheckKick",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(force = false)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "runCapture",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(cmdLine, timeoutMs = 600000)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "done",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(code, err)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "pump",
+      "file": "gateway.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(c)",
+      "callCount": 5
+    },
+    {
+      "type": "function",
+      "name": "installSemgrep",
+      "file": "gateway.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "cmdUI",
       "file": "gateway.mjs",
       "kind": "function",
@@ -416,6 +524,13 @@
       "file": "gateway.mjs",
       "method": "POST",
       "path": "/api/settings"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/semgrep/install",
+      "file": "gateway.mjs",
+      "method": "POST",
+      "path": "/api/semgrep/install"
     },
     {
       "type": "route",
@@ -1155,6 +1270,37 @@
         "callCount": 0
       }
     ],
+    "pump": [
+      {
+        "type": "function",
+        "name": "pump",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(stream, mirror)",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "pump",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(c)",
+        "callCount": 5
+      }
+    ],
+    "childFailReason": [
+      {
+        "type": "function",
+        "name": "childFailReason",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      }
+    ],
     "waitForHealthy": [
       {
         "type": "function",
@@ -1417,6 +1563,103 @@
         "callCount": 0
       }
     ],
+    "augmentedPath": [
+      {
+        "type": "function",
+        "name": "augmentedPath",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(prependDir, basePath)",
+        "callCount": 0
+      }
+    ],
+    "semgrepVersion": [
+      {
+        "type": "function",
+        "name": "semgrepVersion",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(bin, env)",
+        "callCount": 0
+      }
+    ],
+    "done": [
+      {
+        "type": "function",
+        "name": "done",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(r)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "done",
+        "file": "gateway.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, err)",
+        "callCount": 1
+      }
+    ],
+    "semgrepPresence": [
+      {
+        "type": "function",
+        "name": "semgrepPresence",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "checkSemgrep": [
+      {
+        "type": "function",
+        "name": "checkSemgrep",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(force = false)",
+        "callCount": 0
+      }
+    ],
+    "semgrepCheckKick": [
+      {
+        "type": "function",
+        "name": "semgrepCheckKick",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(force = false)",
+        "callCount": 0
+      }
+    ],
+    "runCapture": [
+      {
+        "type": "function",
+        "name": "runCapture",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(cmdLine, timeoutMs = 600000)",
+        "callCount": 0
+      }
+    ],
+    "installSemgrep": [
+      {
+        "type": "function",
+        "name": "installSemgrep",
+        "file": "gateway.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
     "cmdUI": [
       {
         "type": "function",
@@ -1497,6 +1740,15 @@
         "file": "gateway.mjs",
         "method": "POST",
         "path": "/api/settings"
+      }
+    ],
+    "POST /api/semgrep/install": [
+      {
+        "type": "route",
+        "name": "POST /api/semgrep/install",
+        "file": "gateway.mjs",
+        "method": "POST",
+        "path": "/api/semgrep/install"
       }
     ],
     "GET /api/status": [
@@ -2174,11 +2426,11 @@
     ]
   },
   "stats": {
-    "total": 115,
-    "functions": 84,
+    "total": 128,
+    "functions": 96,
     "classes": 1,
     "exports": 6,
-    "routes": 24,
+    "routes": 25,
     "components": 0
   }
 }

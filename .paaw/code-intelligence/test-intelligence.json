@@ -102,7 +102,7 @@
   "coverageGaps": [
     {
       "file": "gateway.mjs",
-      "functionCount": 44,
+      "functionCount": 56,
       "exportCount": 0
     }
   ],

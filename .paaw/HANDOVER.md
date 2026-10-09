@@ -1,27 +1,21 @@
 # HANDOVER — 交接狀態
 
-> 生成：2026-09-19T10:40:33.801Z · 自動保鮮（task 變動即更新）· 下一步：**commit** — 18 個未提交檔案
+> 生成：2026-10-08T23:28:54.526Z · 自動保鮮（task 變動即更新）· 下一步：**commit** — 9 個未提交檔案
 
 ## 1. 現在的狀態（currentState）
 
-- Branch: `main` @ `2ebada3`
-- 未提交檔案: **18** ⚠️
-  - M .paaw/changelog/CHANGELOG.md
+- Branch: `main` @ `26f996d`
+- 未提交檔案: **9** ⚠️
+  - M .paaw/HANDOVER.md
   -  M .paaw/coding-memory/conversations/coding.developer/active.json
   -  M .paaw/coding-memory/conversations/coding.em/active.json
+  -  M .paaw/coding-memory/conversations/coding.handover/active.json
+  -  D .paaw/coding-memory/conversations/coding.tester/active.json
   -  M .paaw/coding-memory/dispatch-log.jsonl
-  -  D .paaw/features/backups/FEATURES-1789790067190.json
-  -  D .paaw/features/backups/FEATURES-1789790067195.json
-  -  D .paaw/features/backups/FEATURES-1789806273372.json
-  -  D .paaw/features/backups/FEATURES-1789806273377.json
-  -  D .paaw/features/backups/FEATURES-1789807181873.json
-  -  M .paaw/release-requests/RR-20260919-1500-c23f.json
-- 未 push commits: **12** ⚠️
-  - 2ebada3 chore(security): record CWE-22 zero-findings verification evidence
-  - 29ae55d docs(security): record CWE-22 defense docs and clean changelog pollution
-  - 742c7c4 fix(security): annotate 4 false-positive CWE-22 findings with nosemgrep
-  - 599b8d5 test(backup): add path traversal attack cases for backupPath
-  - 114bfb2 fix(server): apply CWE-22 safe-path hardening to backup manager (TASK-010 redo)
+  -  M .paaw/handover-state.json
+  -  M .paaw/release-unit-model.json
+  - ?? .paaw/uploads/1791292477633-slferx.jpg
+- 未 push commits: **0** ✅
 
 ## 2. 進行中的工作（workingPlan）
 
@@ -30,16 +24,16 @@
 
 ## 3. 最近變更（changes）
 
-- `2ebada3` 2026-09-19 chore(security): record CWE-22 zero-findings verification evidence
-- `29ae55d` 2026-09-19 docs(security): record CWE-22 defense docs and clean changelog pollution
-- `742c7c4` 2026-09-19 fix(security): annotate 4 false-positive CWE-22 findings with nosemgrep
-- `599b8d5` 2026-09-19 test(backup): add path traversal attack cases for backupPath
-- `114bfb2` 2026-09-19 fix(server): apply CWE-22 safe-path hardening to backup manager (TASK-010 redo)
-- `40f2164` 2026-09-19 chore: EM 資產同步 rev 2026-09-19-5（版控分層）
-- `06b6de2` 2026-09-19 chore: EM 新開的 RR 草稿入版控（資產層）
-- `0f9cbca` 2026-09-19 chore: gitignore runtime 區塊 + coding-memory 收編
-- `6b517dc` 2026-09-19 chore(ru): PAAW runtime 層退出版控 — 平台自動管理（sessions/test-runs/changes/security+四狀態檔；資產層全留）
-- `7d2ff81` 2026-09-19 chore(release): staged-changes snapshot for evidence commit 12c9315
+- `26f996d` 2026-10-08 feat(ui): 全螢幕雙欄各半 — 左右各 50%，右欄活動記錄/server log 上下各半併滿視窗高
+- `5482d71` 2026-10-08 feat(ui): 雙欄布局 — 活動記錄/PAAW log 移右側常駐側欄（sticky），操作不捲動就能看執行狀況
+- `78ffe41` 2026-10-08 feat(semgrep): 偵測改存在檢查（瞬回）— 路徑有 semgrep 即綠燈，版本/實跑驗證背景補
+- `1d7fa51` 2026-10-08 perf(semgrep): 偵測改背景執行 + UI 輪詢 — API 立即回 checking，慢機不再卡「檢查中」凍結整卡
+- `876a8d8` 2026-10-08 perf(semgrep): 偵測不再卡線上版本檢查 — --disable-version-check 快取版 + 10 分鐘結果快取
+- `163b367` 2026-10-08 fix(diag): semgrep 偵測失敗回應附 gateway process HOME/PATH — nohup/systemd 啟動環境不一致直接現形
+- `8ec043f` 2026-10-08 feat(semgrep): pipx venv 直擊候選（~/.local/pipx/venvs/semgrep/bin）+ 偵測結果快取注入 PAAW
+- `b739bbf` 2026-10-08 fix(diag): semgrep 偵測失敗必須帶原因 — diagnostics 逐候選交代（找不到/exit code+stderr tail/timeout）
+- `1d209de` 2026-10-08 fix(root-cause): 啟動改純 node 直跑 paaw-server.mjs — tsx 在 devDependencies，--omit=dev 裝不到導致 Cannot find module .bin/tsx
+- `12b65fd` 2026-10-08 fix(win): Windows 啟動/安裝地雷 — tsx 改走 dist/cli.mjs（node 直跑 JS entry，不碰 .bin/tsx.cmd）；npm install 走 cmd.exe /c（避 Node 2024 E
 
 ## 4. 待處理問題（issues）
 
@@ -51,11 +45,11 @@ _(尚未有 ADR 記錄)_
 
 ## 6. 下一步（nextAction）
 
-> **commit** — 18 個未提交檔案
+> **commit** — 9 個未提交檔案
 ```
-M .paaw/changelog/CHANGELOG.md
+M .paaw/HANDOVER.md
  M .paaw/coding-memory/conversations/coding.developer/active.json
  M .paaw/coding-memory/conversations/coding.em/active.json
- M .paaw/coding-memory/dispatch-log.jsonl
- D .paaw/features/backups/FEATURES-1789790067190.json
+ M .paaw/coding-memory/conversations/coding.handover/active.json
+ D .paaw/coding-memory/conversations/coding.tester/active.json
 ```

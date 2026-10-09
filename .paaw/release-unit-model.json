@@ -1,23 +1,23 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-19T11:38:13.212Z",
-  "headSha": "8dd63d7",
+  "generatedAt": "2026-10-09T00:54:01.840Z",
+  "headSha": "26f996d",
   "tableHashes": {
-    "features": "4d8169dcba7280f6",
-    "apis": "0e51cf6184baa66b",
+    "features": "1c5cb03d5d898f5f",
+    "apis": "51388ad520f9c7b6",
     "tests": "2f805533400e3e19",
-    "changes": "5a84292366282600",
+    "changes": "c7f2182243ca5e3f",
     "knowledgeGaps": "21195c5d0396a0c0"
   },
   "root": null,
   "summary": {
     "features": 2,
-    "apis": 24,
-    "apisWithFeature": 24,
+    "apis": 25,
+    "apisWithFeature": 25,
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 51,
+    "commits": 65,
     "commitLimit": 200
   },
   "sources": {
@@ -41,6 +41,7 @@
         "GET /api/log",
         "GET /api/paaw-log",
         "POST /api/restart",
+        "POST /api/semgrep/install",
         "GET /api/settings",
         "POST /api/settings",
         "POST /api/start",
@@ -50,16 +51,16 @@
         "POST /api/upload",
         "GET /index.html"
       ],
-      "apiCount": 11,
+      "apiCount": 12,
       "tests": [],
       "testCount": 0,
-      "changeCount": 12,
-      "lastChangeAt": "2026-09-18T19:58:25+08:00",
+      "changeCount": 25,
+      "lastChangeAt": "2026-10-08T16:12:00+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "9447e6952b63e3bf"
+      "_h": "2d2cd4a0de5b22f2"
     },
     {
       "id": "F20260918-002",
@@ -199,6 +200,16 @@
         "F20260918-001"
       ],
       "_h": "2c1d04df9f9dd48e"
+    },
+    {
+      "method": "POST",
+      "path": "/api/semgrep/install",
+      "file": "gateway.mjs",
+      "handler": "jsonOut",
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "87404b3b6c079cfe"
     },
     {
       "method": "POST",
@@ -354,6 +365,158 @@
     }
   ],
   "changes": [
+    {
+      "hash": "26f996d",
+      "date": "2026-10-08T16:12:00+08:00",
+      "subject": "feat(ui): 全螢幕雙欄各半 — 左右各 50%，右欄活動記錄/server log 上下各半併滿視窗高",
+      "kind": "feat",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "e281ded619cc90a9"
+    },
+    {
+      "hash": "5482d71",
+      "date": "2026-10-08T15:55:11+08:00",
+      "subject": "feat(ui): 雙欄布局 — 活動記錄/PAAW log 移右側常駐側欄（sticky），操作不捲動就能看執行狀況",
+      "kind": "feat",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "8e324cfd4437977c"
+    },
+    {
+      "hash": "78ffe41",
+      "date": "2026-10-08T15:13:48+08:00",
+      "subject": "feat(semgrep): 偵測改存在檢查（瞬回）— 路徑有 semgrep 即綠燈，版本/實跑驗證背景補",
+      "kind": "feat",
+      "files": 2,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "eeb525763d74da04"
+    },
+    {
+      "hash": "1d7fa51",
+      "date": "2026-10-08T15:06:36+08:00",
+      "subject": "perf(semgrep): 偵測改背景執行 + UI 輪詢 — API 立即回 checking，慢機不再卡「檢查中」凍結整卡",
+      "kind": "refactor",
+      "files": 2,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "2038e753f3bdec22"
+    },
+    {
+      "hash": "876a8d8",
+      "date": "2026-10-08T14:57:29+08:00",
+      "subject": "perf(semgrep): 偵測不再卡線上版本檢查 — --disable-version-check 快取版 + 10 分鐘結果快取",
+      "kind": "refactor",
+      "files": 2,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "ab08540cf0c8b7c1"
+    },
+    {
+      "hash": "163b367",
+      "date": "2026-10-08T14:44:30+08:00",
+      "subject": "fix(diag): semgrep 偵測失敗回應附 gateway process HOME/PATH — nohup/systemd 啟動環境不一致直接現形",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "345fdb25db88d63e"
+    },
+    {
+      "hash": "8ec043f",
+      "date": "2026-10-08T14:29:59+08:00",
+      "subject": "feat(semgrep): pipx venv 直擊候選（~/.local/pipx/venvs/semgrep/bin）+ 偵測結果快取注入 PAAW",
+      "kind": "feat",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "5ec2cad203831c3b"
+    },
+    {
+      "hash": "b739bbf",
+      "date": "2026-10-08T13:56:59+08:00",
+      "subject": "fix(diag): semgrep 偵測失敗必須帶原因 — diagnostics 逐候選交代（找不到/exit code+stderr tail/timeout）",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "544868ab93b01070"
+    },
+    {
+      "hash": "1d209de",
+      "date": "2026-10-08T13:37:41+08:00",
+      "subject": "fix(root-cause): 啟動改純 node 直跑 paaw-server.mjs — tsx 在 devDependencies，--omit=dev 裝不到導致 Cannot find module .bin/tsx",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "68b7831f8ff7306c"
+    },
+    {
+      "hash": "12b65fd",
+      "date": "2026-10-08T13:31:18+08:00",
+      "subject": "fix(win): Windows 啟動/安裝地雷 — tsx 改走 dist/cli.mjs（node 直跑 JS entry，不碰 .bin/tsx.cmd）；npm install 走 cmd.exe /c（避 Node 2024 EINVAL）；zip entry 反斜線正規化（Windows 打包工具相容）",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "c29eb747578f7139"
+    },
+    {
+      "hash": "20fb995",
+      "date": "2026-10-08T13:26:41+08:00",
+      "subject": "fix(diag): 啟動失敗必須帶死因 — child stdio pipe+tee，exit code/spawn error/stderr tail 進 console+gateway.log+UI 活動記錄",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "e609ffefdb50aebc"
+    },
+    {
+      "hash": "621ac19",
+      "date": "2026-10-08T13:18:12+08:00",
+      "subject": "fix(ux): 安裝/上傳成功訊息印絕對路徑 + PAAW_HOME — home 指錯邊時看得出套件裝到哪",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "2587f2d076d967e9"
+    },
+    {
+      "hash": "afa06d3",
+      "date": "2026-09-20T13:52:06+08:00",
+      "subject": "feat(semgrep): gateway UI 新增 semgrep 檢查/一鍵安裝/SEMGREP_PATH 設定",
+      "kind": "feat",
+      "files": 2,
+      "featureIds": [
+        "F20260918-001"
+      ],
+      "_h": "5c3e71514871f7ce"
+    },
+    {
+      "hash": "bebd0b4",
+      "date": "2026-09-19T20:09:45+08:00",
+      "subject": "chore(release): 結案 0.2.2 收編 — REL 台帳（baseline 錨點）+ RR 記錄 + coding-memory",
+      "kind": "chore",
+      "files": 4,
+      "featureIds": [],
+      "_h": "d24b6e68e470b8cb"
+    },
     {
       "hash": "8dd63d7",
       "date": "2026-09-19T19:32:33+08:00",
