@@ -9,10 +9,25 @@
       "role": "assistant",
       "content": "# tpaaw-gateway Release Unit — 全貌說明\n\n## 一句話定位（30 秒版）\n\n這是 **PAAW Gateway**（v0.2.1）：一個安裝在使用者機器上的 **bootloader（啟動載入器）＋維運管理平台**，負責 PAAW 套包的**安裝、更新、執行**，以及 PAAW 進程的生命週期管理與備份維運。\n[來源: package.json — `tpaaw-gateway@0.2.1 — PAAW Gateway — install / update / run PAAW (bootloader)`]\n\n## 兩大功能（3 分鐘版）\n\n### F20260918-001 — PAAW Gateway 控制台（套包安裝更新與生命週期管理）\n- **形態**：單檔 bootloader（`gateway.mjs`），同時提供 **CLI**（start / update / upload / status / ui）與**本機網頁控制台**（`ui/index.html` + 11 個 API endpoint）。\n- **職責**：PAAW 套包的安裝、更新、手動上傳；PAAW 進程的啟動／停止／重啟；狀態與日誌監看。\n- **目錄設計**：`versions/<x.y.z>/` 做版本隔離、`data/` 存使用者資料、`current.json` 指向最後驗證過的版本。\n- **測試**：`tests/e2e/gateway-ui-csrf.test.mjs`。\n\n### F20260918-002 — 系統維運管理平台（認證・進程守護・備份・升級）\n- **形態**：獨立運行的管理平台（port **:4199**），由單一檔案 `src/server.mjs` 以 node:http 原生路由構成，提供 14 個 API endpoint + 管理 UI。\n- **職責**：登入認證（login / me / users）、PAAW Server（:4097）進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log。\n- **關鍴架構原則**：**Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方的生命週期**（PAAW Server 掛了，Gateway 仍能把拉起來）。\n- **測試**：3 個測試檔（unit/backup + e2e/backup-auth + e2e/restart-rbac）。\n\n## 整體統計\n\n| 項目 | 數量 | 內容 |\n|---|---|---|\n| Features | 2 | 上述兩個，均 active |\n| API endpoints | 24 | 11（控制台）+ 14（維運平台）—3 個管理 API，其餘為操作與查詢 |\n| Code files | 6 | `gateway.mjs`、`src/server.mjs`、`ui/index.html` + 4 個測試檔 |\n| 技術棧 | — | Node.js（node:http 原生路由，無框架依賴的跡象） |\n\n[來源: release-unit-model 統計 + feature map]\n\n## 證據與文件新鮮度（誠實聲明）\n\n- ⚠️ **`.paaw/project/PROJECT.md` 是未填寫的自動生成範本**（Name: auto-detect、技術棧待補）— 本簡報的產品定位**不是來自 PROJECT.md**，而是以 `package.json` 的 description 與 feature map 為依據交叉確認。\n- ARCHITECTURE.md 亦無獨立內容可引用；模組關係（兩進程、雙 port、守護者關係）係從 feature map 的描述整理。\n- 依「文件與 code 矛盾時以 code 為準」原則：如需更精確的邊界確認，建議直接讀 `gateway.mjs` 與 `src/server.mjs` 的進程啟動段落。\n\n---\n\n**一句話總結**：這個 Release Unit 是「PAAW 的守門員」— 下層（F-001）負責把 PAAW 裝起來、更新、跑起來；上層（F-002）在旁邊顧著它，顧認證、備份、升級與健康狀態。",
       "ts": "2026-10-08T23:20:39.669Z"
+    },
+    {
+      "role": "assistant",
+      "content": "以上簡報已記錄至 action log。若您想深入某一層（例如：三個埠的請求資料流細節、release 放行流程、或備份機制的考古），我可以再展開。",
+      "ts": "2026-10-09T02:05:37.675Z"
+    },
+    {
+      "role": "assistant",
+      "content": "風險盤點已記錄至 action log。若您需要，我可以進一步：\n\n1. **將此盤點整理為「接手者地雷圖」** 寫入 `.paaw/HANDOVER.md`（需您同意，audit 模式預設不寫檔）；\n2. **對任一風險做決策考古**（例如：為什麼 :4290 控制台當初選擇不做認證？從 git 歷史與註解重建約束條件）；\n3. 針對 `ui/index.html` 的 14 個 commits 做逐筆變更性質分析（需時間，且受限於我無 bash 工具，僅能以 diff tool 對照特定版本）。\n\n提醒一句：風險三（`PAAW_GW_HOST=0.0.0.0`）若在您環境中有實際使用情境，建議轉請 Developer（Priya）評估是否加認證門檻或至少加啟動警告——這超出我「只整理不改 code」的職責範圍。",
+      "ts": "2026-10-09T03:15:22.011Z"
+    },
+    {
+      "role": "assistant",
+      "content": "阿明您好，已讀取完成。\n\n**版本號：`0.2.1`**\n\n`/Users/steward/App/tPAAW-gateway/package.json` 相關欄位：\n\n| 欄位 | 值 |\n| --- | --- |\n| name | `tpaaw-gateway` |\n| **version** | **`0.2.1`** |\n| description | PAAW Gateway — install / update / run PAAW (bootloader) |\n| bin | `paaw-gateway` → `gateway.mjs` |\n| engines | Node.js `>=20` |\n\n補充一點交接脈絡供您參考：根據 ADR-002 的紀錄，0.2.1 正是 RR-20260918-1242-bd43 那個 release（曾因 F-01/F-02 修復未 commit 而改判 gates=fail）；另 action log 顯示 EM 已在準備 Release 0.2.2（RR-20260919-1500-c23f，證據全綠、待人類放行）。若您接下來要處理 release 事務，建議先確認 package.json 的版本號是否需配合 0.2.2 更新 — 目前仍停留在 0.2.1。\n\n如需進一步盤點（例如交接包 audit 或 release 現況整理），請隨時告知。",
+      "ts": "2026-10-09T03:17:11.167Z"
     }
   ],
   "_meta": {
-    "updatedAt": "2026-10-08T23:20:39.669Z",
+    "updatedAt": "2026-10-09T03:17:11.167Z",
     "savedBy": "a2a-stream-recovery"
   }
 }

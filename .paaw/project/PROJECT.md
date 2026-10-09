@@ -1,12 +1,8 @@
 # tpaaw-gateway
 
-> 📄 Schema v2 · AI 區每次 CU 重寫 · 上次生成 2026-10-09 01:02 · User Remarks 由人維護
+> 📄 Schema v2 · AI 區每次 CU 重寫 · 上次生成 2026-10-09 01:28 · User Remarks 由人維護
 
 <!-- USER:START — 人的區（AI 絕不覆蓋） -->
-## 📌 User Remarks
-
-## 📌 User Remarks
-
 ## 📌 User Remarks
 
 # Project Overview

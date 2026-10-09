@@ -1,22 +1,12 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-08T23:28:54.526Z",
+  "generatedAt": "2026-10-09T01:19:55.370Z",
   "initialized": true,
   "currentState": {
     "branch": "main",
-    "headSha": "26f996d",
-    "dirtyCount": 9,
-    "dirtyFiles": [
-      "M .paaw/HANDOVER.md",
-      " M .paaw/coding-memory/conversations/coding.developer/active.json",
-      " M .paaw/coding-memory/conversations/coding.em/active.json",
-      " M .paaw/coding-memory/conversations/coding.handover/active.json",
-      " D .paaw/coding-memory/conversations/coding.tester/active.json",
-      " M .paaw/coding-memory/dispatch-log.jsonl",
-      " M .paaw/handover-state.json",
-      " M .paaw/release-unit-model.json",
-      "?? .paaw/uploads/1791292477633-slferx.jpg"
-    ],
+    "headSha": "05eb862",
+    "dirtyCount": 0,
+    "dirtyFiles": [],
     "unpushedCount": 0,
     "unpushedCommits": []
   },
@@ -36,6 +26,11 @@
   },
   "changes": {
     "recentCommits": [
+      {
+        "hash": "05eb862",
+        "date": "2026-10-09T09:13:33+08:00",
+        "subject": "release unit data"
+      },
       {
         "hash": "26f996d",
         "date": "2026-10-08T16:12:00+08:00",
@@ -80,11 +75,6 @@
         "hash": "1d209de",
         "date": "2026-10-08T13:37:41+08:00",
         "subject": "fix(root-cause): 啟動改純 node 直跑 paaw-server.mjs — tsx 在 devDependencies，--omit=dev 裝不到導致 Cannot find module .bin/tsx"
-      },
-      {
-        "hash": "12b65fd",
-        "date": "2026-10-08T13:31:18+08:00",
-        "subject": "fix(win): Windows 啟動/安裝地雷 — tsx 改走 dist/cli.mjs（node 直跑 JS entry，不碰 .bin/tsx.cmd）；npm install 走 cmd.exe /c（避 Node 2024 E"
       }
     ]
   },
@@ -94,14 +84,8 @@
     "recent": []
   },
   "nextAction": {
-    "step": "commit",
-    "reason": "9 個未提交檔案",
-    "detail": [
-      "M .paaw/HANDOVER.md",
-      " M .paaw/coding-memory/conversations/coding.developer/active.json",
-      " M .paaw/coding-memory/conversations/coding.em/active.json",
-      " M .paaw/coding-memory/conversations/coding.handover/active.json",
-      " D .paaw/coding-memory/conversations/coding.tester/active.json"
-    ]
+    "step": "dispatch-phase",
+    "reason": "TASK-012 下一階段：spec",
+    "detail": "更新 F20260918-002 文件：backupPath 防護重構後的 feature docs + mapping + runbook"
   }
 }

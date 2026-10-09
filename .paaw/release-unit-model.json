@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-09T00:54:01.840Z",
-  "headSha": "26f996d",
+  "generatedAt": "2026-10-09T01:31:05.019Z",
+  "headSha": "05eb862",
   "tableHashes": {
-    "features": "1c5cb03d5d898f5f",
-    "apis": "51388ad520f9c7b6",
-    "tests": "2f805533400e3e19",
-    "changes": "c7f2182243ca5e3f",
-    "knowledgeGaps": "21195c5d0396a0c0"
+    "features": "c41b9758041876d3",
+    "apis": "d3cc93653d2f6851",
+    "tests": "2abf613f69869f9e",
+    "changes": "66d331bc0af72c28",
+    "knowledgeGaps": "3b2ec424c665cb26"
   },
   "root": null,
   "summary": {
@@ -17,25 +17,24 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 65,
+    "commits": 66,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-09-19T09:18:12.683Z"
+    "featuresUpdatedAt": "2026-10-09T00:56:37.765Z"
   },
   "features": [
     {
-      "id": "F20260918-001",
-      "name": "PAAW Gateway 控制台：套包安裝更新與 PAAW 生命週期管理",
+      "id": "F20261009-001",
+      "name": "PAAW Gateway 啟動器與本機控制台：套包安裝更新、版本回滾與 PAAW 生命週期管理",
       "status": "active",
-      "description": "使用者機器上的單檔 bootloader（gateway.mjs），同時提供 CLI（start/update/upload/status/ui）與本機網頁控制台（GET /index.html + 10 個 /api/* endpoint），負責 PAAW 套包的安裝、更新、手動上傳，以及 PAAW 進程的啟動/停止/重啟與狀態/日誌監看。目錄佈局以 versions/<x.y.z>/ 做版本隔離、data/ 存使用者資料、current.json 指向最後驗證過的版本。",
-      "fileCount": 2,
+      "description": "單檔 Node bootloader（gateway.mjs），同時提供 CLI（ui/start/update/upload/status）與本機網頁控制台（預設 127.0.0.1:4290，12 條 API 路由），負責在使用者機器上安裝、更新、啟停 PAAW。由 staged 安裝管線（下載→驗證→解壓→定版）、PAAW 子程序監管（start/stop/restart + 健康檢查 + 自動回滾）、settings/semgrep 管理與 log 查看四部分構成。",
+      "fileCount": 1,
       "files": [
-        "gateway.mjs",
-        "ui/index.html"
+        "gateway.mjs"
       ],
       "apis": [
         "GET /api/log",
@@ -54,19 +53,19 @@
       "apiCount": 12,
       "tests": [],
       "testCount": 0,
-      "changeCount": 25,
-      "lastChangeAt": "2026-10-08T16:12:00+08:00",
+      "changeCount": 22,
+      "lastChangeAt": "2026-10-08T15:13:48+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "2d2cd4a0de5b22f2"
+      "_h": "2f4174e05a433d5f"
     },
     {
-      "id": "F20260918-002",
+      "id": "F20261009-002",
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "status": "active",
-      "description": "獨立於 PAAW Server（:4097）運行的管理平台（:4199），由單一檔案 src/server.mjs 構成：以 node:http 原生路由提供 13 個 /api/* 端點，涵蓋登入認證、PAAW Server 進程 start/stop/restart、tar.gz 備份建立與還原、git pull 升級、健康監控 dashboard、事件 audit log 與用戶列表，並在 / 提供管理 UI（public/index.html）。Gateway 不依賴 PAAW Server 運行 — 它是守護者，可管理對方生命週期。",
+      "description": "單檔 Node HTTP server（src/server.mjs，port 4199，獨立於 PAAW Server :4097 的守護者），構成 PAAW 的維運控制平面：Bearer token 認證與 RBAC、PAAW Server 子進程生命週期管理（start/stop/restart/健康檢查）、tar.gz 備份排程與還原、git pull 升級流水線、JSONL 事件稽核軌跡，以及 dashboard/version/users 等 13 支 API 與內嵌管理 UI。E2E 測試（tests/e2e/gateway-backup-auth.test.mjs）以 env ",
       "fileCount": 1,
       "files": [
         "src/server.mjs"
@@ -96,8 +95,10 @@
       "testCount": 7,
       "changeCount": 9,
       "lastChangeAt": "2026-09-19T17:16:45+08:00",
-      "knowledgeGaps": [],
-      "_h": "dc2700e5b2589f24"
+      "knowledgeGaps": [
+        "no-runbook"
+      ],
+      "_h": "fac60d944afcf8b0"
     }
   ],
   "apis": [
@@ -107,9 +108,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "b5fa9b9113dc6877"
+      "_h": "1fbb6e50b684f222"
     },
     {
       "method": "GET",
@@ -117,9 +118,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "e48fc9c37a0280fe"
+      "_h": "ca0c47e7567eb62c"
     },
     {
       "method": "GET",
@@ -127,9 +128,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "1bc7822269efb6ee"
+      "_h": "42e201f6b9f59688"
     },
     {
       "method": "POST",
@@ -137,9 +138,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "698d03014062a84a"
+      "_h": "f0e10af0325467bf"
     },
     {
       "method": "GET",
@@ -147,9 +148,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "cb5169829459b385"
+      "_h": "411ac51de91595d7"
     },
     {
       "method": "GET",
@@ -157,9 +158,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "2e3960388d85bd46"
+      "_h": "8d1dbb6c5cb2088b"
     },
     {
       "method": "GET",
@@ -167,9 +168,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "3b39e47de1b78e5f"
+      "_h": "a04a7703d8ef7283"
     },
     {
       "method": "GET",
@@ -177,9 +178,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "6b91c88aee3e6282"
+      "_h": "62cdd1b7aa01d411"
     },
     {
       "method": "GET",
@@ -187,9 +188,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "0650dbcce835d790"
+      "_h": "6aa27c14f94ce971"
     },
     {
       "method": "POST",
@@ -197,9 +198,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "2c1d04df9f9dd48e"
+      "_h": "251026fd349f1562"
     },
     {
       "method": "POST",
@@ -207,9 +208,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "87404b3b6c079cfe"
+      "_h": "b48e796f70025723"
     },
     {
       "method": "POST",
@@ -217,9 +218,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "222e01e1b162d513"
+      "_h": "1cb6bd6772bed24b"
     },
     {
       "method": "POST",
@@ -227,9 +228,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "be32bb031205db27"
+      "_h": "eada2f1c179db20f"
     },
     {
       "method": "POST",
@@ -237,9 +238,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "bb8a6c9a082c7874"
+      "_h": "8162d4de9d5085a4"
     },
     {
       "method": "GET",
@@ -247,9 +248,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "1f73df369dd1f88d"
+      "_h": "fec950e68d27bf41"
     },
     {
       "method": "POST",
@@ -257,9 +258,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "7a02261d48204eff"
+      "_h": "6f476989e6ff6f56"
     },
     {
       "method": "POST",
@@ -267,9 +268,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "b095a51d253fda8f"
+      "_h": "a4d9d2902ef9a6ff"
     },
     {
       "method": "GET",
@@ -277,9 +278,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "771ac3544feec2ef"
+      "_h": "de7118b5bf2a050a"
     },
     {
       "method": "POST",
@@ -287,9 +288,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "2d14086921e3cc50"
+      "_h": "a8838a93d5819d88"
     },
     {
       "method": "POST",
@@ -297,9 +298,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "57825c23218c7be3"
+      "_h": "474ea26f63e6dc10"
     },
     {
       "method": "POST",
@@ -307,9 +308,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "e8208f0b09f45672"
+      "_h": "b784b77426df82da"
     },
     {
       "method": "POST",
@@ -317,9 +318,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "248183a7e72d763e"
+      "_h": "f799646cd2561bdc"
     },
     {
       "method": "GET",
@@ -327,9 +328,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "dd93c280597bf1f9"
+      "_h": "773c27924c8e3da6"
     },
     {
       "method": "GET",
@@ -337,9 +338,9 @@
       "file": "src/server.mjs",
       "handler": "sendJSON",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "e325a892c7ce59fb"
+      "_h": "19e4960d7e597829"
     },
     {
       "method": "GET",
@@ -347,9 +348,9 @@
       "file": "gateway.mjs",
       "handler": "jsonOut",
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "7bdb9013ea740194"
+      "_h": "85c0a85c095de47e"
     }
   ],
   "tests": [
@@ -359,22 +360,29 @@
       "testCount": 7,
       "kind": "e2e",
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "0b3424ccbe3720c1"
+      "_h": "ec828f1159f3c616"
     }
   ],
   "changes": [
+    {
+      "hash": "05eb862",
+      "date": "2026-10-09T09:13:33+08:00",
+      "subject": "release unit data",
+      "kind": "other",
+      "files": 22,
+      "featureIds": [],
+      "_h": "8e7a813fca8ed2ab"
+    },
     {
       "hash": "26f996d",
       "date": "2026-10-08T16:12:00+08:00",
       "subject": "feat(ui): 全螢幕雙欄各半 — 左右各 50%，右欄活動記錄/server log 上下各半併滿視窗高",
       "kind": "feat",
       "files": 1,
-      "featureIds": [
-        "F20260918-001"
-      ],
-      "_h": "e281ded619cc90a9"
+      "featureIds": [],
+      "_h": "97431c5d707257ca"
     },
     {
       "hash": "5482d71",
@@ -382,10 +390,8 @@
       "subject": "feat(ui): 雙欄布局 — 活動記錄/PAAW log 移右側常駐側欄（sticky），操作不捲動就能看執行狀況",
       "kind": "feat",
       "files": 1,
-      "featureIds": [
-        "F20260918-001"
-      ],
-      "_h": "8e324cfd4437977c"
+      "featureIds": [],
+      "_h": "e5834dcdb5b63c00"
     },
     {
       "hash": "78ffe41",
@@ -394,9 +400,9 @@
       "kind": "feat",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "eeb525763d74da04"
+      "_h": "c5b12174bf6a8c3b"
     },
     {
       "hash": "1d7fa51",
@@ -405,9 +411,9 @@
       "kind": "refactor",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "2038e753f3bdec22"
+      "_h": "875e32b3ebc3a11a"
     },
     {
       "hash": "876a8d8",
@@ -416,9 +422,9 @@
       "kind": "refactor",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "ab08540cf0c8b7c1"
+      "_h": "3bf18e8a34bda184"
     },
     {
       "hash": "163b367",
@@ -427,9 +433,9 @@
       "kind": "fix",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "345fdb25db88d63e"
+      "_h": "f291bff86f76a8b2"
     },
     {
       "hash": "8ec043f",
@@ -438,9 +444,9 @@
       "kind": "feat",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "5ec2cad203831c3b"
+      "_h": "d40f0ed5bbe248b0"
     },
     {
       "hash": "b739bbf",
@@ -449,9 +455,9 @@
       "kind": "fix",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "544868ab93b01070"
+      "_h": "c92daf5c131d5a1b"
     },
     {
       "hash": "1d209de",
@@ -460,9 +466,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "68b7831f8ff7306c"
+      "_h": "8f1fb417c3a34660"
     },
     {
       "hash": "12b65fd",
@@ -471,9 +477,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "c29eb747578f7139"
+      "_h": "07c18d035e3a2e15"
     },
     {
       "hash": "20fb995",
@@ -482,9 +488,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "e609ffefdb50aebc"
+      "_h": "112e5bfc8a7e1042"
     },
     {
       "hash": "621ac19",
@@ -493,9 +499,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "2587f2d076d967e9"
+      "_h": "be7e4f77dccd9417"
     },
     {
       "hash": "afa06d3",
@@ -504,9 +510,9 @@
       "kind": "feat",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "5c3e71514871f7ce"
+      "_h": "68cf7fdc96c33499"
     },
     {
       "hash": "bebd0b4",
@@ -569,9 +575,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "9da81b358426f8ca"
+      "_h": "caad698ef29b045f"
     },
     {
       "hash": "599b8d5",
@@ -580,9 +586,9 @@
       "kind": "chore",
       "files": 2,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "d993dd2a29f16111"
+      "_h": "1660e64235474b49"
     },
     {
       "hash": "114bfb2",
@@ -591,9 +597,9 @@
       "kind": "fix",
       "files": 19,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "8c5a69c73036dc73"
+      "_h": "6ece34420339f986"
     },
     {
       "hash": "40f2164",
@@ -719,9 +725,9 @@
       "kind": "fix",
       "files": 3,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "b5d253d90ea4c562"
+      "_h": "e17af46b01413e8a"
     },
     {
       "hash": "20a85b8",
@@ -757,9 +763,9 @@
       "kind": "chore",
       "files": 59,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "bc0dcb55b1b9e2e7"
+      "_h": "9d1cfb86f2f8a06b"
     },
     {
       "hash": "4a06afb",
@@ -767,10 +773,8 @@
       "subject": "feat(ui): 按鈕操作反饋 — 動作日誌列、進行中禁點、狀態色（big.on/off）、錯誤訊息入 log",
       "kind": "feat",
       "files": 1,
-      "featureIds": [
-        "F20260918-001"
-      ],
-      "_h": "5eee1a52a8b824ca"
+      "featureIds": [],
+      "_h": "d366a3e6453a9b31"
     },
     {
       "hash": "3bdb4bd",
@@ -797,9 +801,9 @@
       "kind": "fix",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "20fc996905bd6353"
+      "_h": "bc0d06478d435bc2"
     },
     {
       "hash": "69c2fbe",
@@ -808,9 +812,9 @@
       "kind": "other",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "af7c2ff232a2b903"
+      "_h": "bcc34b5e46b8a218"
     },
     {
       "hash": "dc9c1a5",
@@ -819,9 +823,9 @@
       "kind": "feat",
       "files": 4,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "52963572b48182b0"
+      "_h": "58cd3329e35b7fba"
     },
     {
       "hash": "b0a4049",
@@ -866,9 +870,9 @@
       "kind": "chore",
       "files": 4,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "98dab4f47b453941"
+      "_h": "2f267810d1d48466"
     },
     {
       "hash": "d940eb9",
@@ -886,9 +890,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "809af0b4aa44f165"
+      "_h": "427a5699922ac908"
     },
     {
       "hash": "e8c453d",
@@ -897,9 +901,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "b7766076033ae2ad"
+      "_h": "fe52dbf01d8486e2"
     },
     {
       "hash": "a8eb20b",
@@ -908,9 +912,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "a04ac195fe96720f"
+      "_h": "161c1f1f81ce834a"
     },
     {
       "hash": "fac5510",
@@ -928,9 +932,9 @@
       "kind": "feat",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "540b78f05bb2c849"
+      "_h": "2123b87cf65b4d1f"
     },
     {
       "hash": "a4e1d30",
@@ -939,9 +943,9 @@
       "kind": "feat",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "7d2bb32f40dbdc69"
+      "_h": "d2eecba75e819409"
     },
     {
       "hash": "dabedb2",
@@ -950,9 +954,9 @@
       "kind": "fix",
       "files": 1,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "c57b4b76195636f0"
+      "_h": "742d02c88115510d"
     },
     {
       "hash": "3f0fbcb",
@@ -961,9 +965,9 @@
       "kind": "feat",
       "files": 3,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "5082ffcca4c07d83"
+      "_h": "228a6b296892b1a2"
     },
     {
       "hash": "e6c70c6",
@@ -972,9 +976,9 @@
       "kind": "feat",
       "files": 4,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "1c35a954cbd6ee59"
+      "_h": "ec4a38faddea8018"
     },
     {
       "hash": "eada6f5",
@@ -983,9 +987,9 @@
       "kind": "feat",
       "files": 2,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "4df639da5c3022e3"
+      "_h": "c7c8f4fa6b053074"
     },
     {
       "hash": "d4ffe77",
@@ -1003,9 +1007,9 @@
       "kind": "other",
       "files": 45,
       "featureIds": [
-        "F20260918-001"
+        "F20261009-001"
       ],
-      "_h": "5da06c5676c80196"
+      "_h": "a43afcd01091ec05"
     },
     {
       "hash": "ff850fd",
@@ -1014,21 +1018,26 @@
       "kind": "other",
       "files": 6,
       "featureIds": [
-        "F20260918-002"
+        "F20261009-002"
       ],
-      "_h": "7c2e8100de216c23"
+      "_h": "fb73f33d512731e5"
     }
   ],
   "knowledgeGaps": {
     "featuresWithoutTests": [
-      "F20260918-001"
+      "F20261009-001"
     ],
     "featuresWithoutRunbooks": [
-      "F20260918-001"
+      "F20261009-001",
+      "F20261009-002"
     ],
     "apisWithoutFeature": [],
     "filesWithoutFeature": 3,
     "hotUnmappedFiles": [
+      {
+        "file": "ui/index.html",
+        "commits": 14
+      },
       {
         "file": ".gitignore",
         "commits": 11
