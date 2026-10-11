@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-11
+### changed
+- refactor(server): split `src/server.mjs` into thin entry + 5 modules（ADR-003 P1）— 抽出 `src/server/{auth,backup,config,events,paaw-control}.mjs`，`server.mjs` 由 841 行瘦身為薄入口；行為與 API 不變，測試全綠（+734 −792，7 檔）。
+
 ## 2026-09-19
 ### fixed
 - 品質補強（TASK-008/009，F20260918-002）：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
