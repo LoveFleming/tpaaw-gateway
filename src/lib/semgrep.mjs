@@ -31,20 +31,21 @@ const SEMGREP_CHECK_STATE = { status: "idle", result: null, startedAt: 0 };
 export function getDetectedPath() { return SEMGREP_DETECTED; }
 export function getCheckState() { return SEMGREP_CHECK_STATE; }
 
-// 跑 `<bin> --version`，解析版本；回 { ok, version, reason }——失敗原因必須帶出（2026-10-08：
+// 跑 `<bin> --version [extraArgs]`，解析版本；回 { ok, version, reason }——失敗原因必須帶出（2026-10-08：
 // 公司 Linux 「已安裝但未偵測到」沒線索可查，跟啟動死因同病根）。
-// 冷啟動會做線上版本檢查，timeout 60s（對齊 tPAAW semgrep-runner 2026-08-28 的觀察）。
-// 註（pre-existing，非本重構所改）：下方 checkSemgrep 呼叫端傳了 (timeoutMs, extraArgs)，
-// 但此簽名只收 (bin, env)，多餘引數向來被忽略 —— 故實際一律 `--version` + 60s。此行為
-// 在 P3 refactor 中「逐字保留」，不趁拆檔順手修掉（改行為屬 scope 外，另開 issue 追蹤）。
-function semgrepVersion(bin, env) {
+// timeoutMs 預設 60s（冷啟動做線上版本檢查，對齊 tPAAW semgrep-runner 2026-08-28 的觀察）。
+// extraArgs 讓呼叫端注入如 --disable-version-check 的快路徑旗標（~1s 出答案，公司網路擋
+// semgrep.dev 時關鍵）。TASK-017：簽章原只收 (bin, env)，呼叫端傳的 (timeoutMs, extraArgs)
+// 被 JS 忽略，快路徑從未生效；此處補齊使旗標與自訂 timeout 真正傳遞。
+function semgrepVersion(bin, env, timeoutMs = 60000, extraArgs = []) {
   return new Promise((resolvePromise) => {
-    const child = spawn(bin, ["--version"], {
+    const args = ["--version", ...(Array.isArray(extraArgs) ? extraArgs : [])];
+    const child = spawn(bin, args, {
       env, shell: process.platform === "win32", stdio: ["ignore", "pipe", "pipe"], windowsHide: true,
     });
     let out = "", settled = false;
     const done = (r) => { if (!settled) { settled = true; resolvePromise(r); } };
-    const timer = setTimeout(() => { try { child.kill(); } catch {} done({ ok: false, reason: "timeout 60s（冷啟動線上檢查？網路不通？）" }); }, 60000);
+    const timer = setTimeout(() => { try { child.kill(); } catch {} done({ ok: false, reason: `timeout ${Math.round(timeoutMs / 1000)}s（冷啟動線上檢查？網路不通？）` }); }, timeoutMs);
     child.stdout.on("data", (c) => { out += c; });
     child.stderr.on("data", (c) => { out += c; });
     child.on("error", (e) => { clearTimeout(timer); done({ ok: false, reason: `找不到執行檔（${(e && e.code) || e}）` }); });
