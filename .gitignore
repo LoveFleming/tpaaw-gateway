@@ -8,6 +8,9 @@ gateway.json
 data/
 # Gateway runtime audit trail（含真實登入事件；機器自己產生的 runtime 資產，不進版控）
 events.jsonl
+# Gateway 本地設定（含真實憑證雜湊 / sessionSecret）—— 版控改追 config.example.json
+# 首次使用：cp config.example.json config.json 再改密碼（或用 PAAW_GATEWAY_PASSWORD 注入）
+config.json
 # Release unit 資產（2026-09-06：.paaw 100% 進版控 — runtime log 在 PAAW log/ 中央目錄）
 # versions/ = 更新備份 legacy 位置（寫入者未定案前先留著 ignore）
 # .paaw/tmp/ = agent 暫存腳本（runtime 垃圾，不進版控；正式暫存用 $PAAW_TMP）

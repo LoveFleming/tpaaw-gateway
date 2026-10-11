@@ -25,13 +25,144 @@
       "id": "ISS-002",
       "title": "Gateway 認證硬化：明文密碼比對 + 無 rate limit",
       "priority": "medium",
-      "status": "open",
+      "status": "resolved",
       "labels": [],
       "description": "QA review TASK-007 F-03（major，非 release 阻斷，排隊處理）：src/server.mjs 登入認證為明文密碼比對且無 rate limit。\n\n緩解措施（短期小項，可與其他改動順手做）：\n1. config.json 加入 .gitignore（若已含密碼則先輪換）\n2. 密碼支援環境變數覆寫（PAAW_GATEWAY_PASSWORD 等）\n\n根本修法（排期）：密碼改 hash 比對（scrypt/bcrypt）、登入端點加 rate limit / 失敗鎖定。\n\n定位脈絡：localhost 管理工具（:4199），攻擊面限本機，故降級為排隊處理。",
       "featureId": "F20260918-002",
       "createdAt": "2026-09-19T02:17:46.133Z",
+      "notes": [
+        {
+          "text": "TASK-018 修復完成（commit 4fc5e58）：bcrypt 雜湊（bcryptjs，cost 12）+ timing-safe 驗證 + DUMMY_HASH 防帳號列舉；login per-user/per-IP rate limit/鎖定（5 次/15min → 429+Retry-After）；錯誤訊息統一 401 Invalid credentials；移除預設 change_me（config fallback 不再供預設憑證 + validateAuthConfig fail-closed 拒絕啟動）。待 QA 武大安 Gate Check 重驗。",
+          "at": "2026-10-11T09:40:28.689Z"
+        }
+      ],
+      "updatedAt": "2026-10-11T09:40:28.689Z"
+    },
+    {
+      "id": "ISS-006",
+      "title": "行政平台 :4199 server.listen 未指定 host，綁定 0.0.0.0（網路暴露）",
+      "priority": "high",
+      "status": "resolved",
+      "labels": [
+        "security",
+        "network",
+        "F20261009-002"
+      ],
+      "description": "src/server.mjs:259 `server.listen(config.port)` 未帶 host，Node 預設綁定所有網卡（0.0.0.0/::）。此平台權限最高（可 start/stop/restore/upgrade PAAW Server），卻比 UI server（src/ui/server.mjs:409 刻意綁 127.0.0.1 + Host 白名單）更暴露。同網段攻擊者可直接連入；與 ISS-002 明文密碼/無 rate limit 疊加後果嚴重。修法：server.listen(config.port, \"127.0.0.1\")（或明確由 config 提供 bind host 並白名單）。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:28.135Z",
+      "notes": [
+        {
+          "text": "TASK-019 修復完成（commit 4fc5e58）：server.listen 明確帶 config.host；config.mjs DEFAULT_HOST=127.0.0.1，可經 config.host / PAAW_GATEWAY_HOST 覆寫，預設安全。e2e 驗證預設只聽 127.0.0.1。待 QA 武大安 Gate Check 重驗。",
+          "at": "2026-10-11T09:40:28.691Z"
+        }
+      ],
+      "updatedAt": "2026-10-11T09:40:28.691Z"
+    },
+    {
+      "id": "ISS-007",
+      "title": "備份檔名小時級碰撞導致靜默覆蓋（冪等/資料遺失）",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "bug",
+        "backup",
+        "idempotency",
+        "F20261009-002"
+      ],
+      "description": "src/server/backup.mjs:88 createBackup 檔名為 paaw-backup-YYYY-MM-DD-HH（僅到小時）。同一小時內第二次 createBackup 用同一檔名 tar czf 覆蓋前一份 → 手動備份與 restore 前的 safety backup 在同一小時內互相覆蓋，無去重/conflict 檢查。建議檔名加分鐘或序號，或偵測已存在即更名。為重複執行（冪等）問題。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:28.138Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-008",
+      "title": "admin API readBody 無大小上限（DoS）",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "security",
+        "dos",
+        "F20261009-002"
+      ],
+      "description": "src/server.mjs:92 readBody 以 body += chunk 無限累積，無大小上限。對比 UI server 有 MAX_SETTINGS_BODY=1MB 保護，:4199 這支沒有。大 POST 可打爆記憶體。建議加 body 上限並超限即 destroy。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:28.139Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-009",
+      "title": "session store 無 TTL 回收且缺 logout 端點",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "bug",
+        "resource-leak",
+        "F20261009-002"
+      ],
+      "description": "src/server/auth.mjs sessions Map 僅在 validateSession 命中過期 token 時刪該筆；無定期 sweep、無 logout API。長時運行 session 單向累積（記憶體成長）。建議加週期清理 + logout 端點。屬資源清理（#13）。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:28.140Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-010",
+      "title": "排程備份（backupSchedule）規格宣告但未實作",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "spec-gap",
+        "backup",
+        "F20261009-002"
+      ],
+      "description": "config.mjs:37 有 backupSchedule: \"0 3 * * *\"，feature F20261009-002 描述為「資料備份（排程 + 手動 + 還原）」，但全 codebase grep 不到 cron/setInterval/schedule 任何排程實作。手動備份與還原有、排程沒有 → spec vs 實作落差。需與 PM/Architect 確認是漏實作或描述過期。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:28.141Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-011",
+      "title": "同步 execSync（git 指令）阻塞 event loop，最高 15s",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "performance",
+        "event-loop",
+        "F20261009-002"
+      ],
+      "description": "src/server/paaw-control.mjs getGitInfo 使用多支 execSync（git rev-parse×3、status、rev-list），getLatestVersion 使用 execSync(\"git fetch --tags\", timeout 15s)，皆在 request handler 內同步執行。期間 Node event loop 被阻塞，全站請求卡死（最高可達 15s）。建議改 async（execFile + await）或加入快取/TTL。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:31.213Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-012",
+      "title": "硬化缺口：/api/health 版本硬編 0.1.0、CORS *、缺安全標頭",
+      "priority": "low",
+      "status": "open",
+      "labels": [
+        "hardening",
+        "F20261009-002"
+      ],
+      "description": "(1) src/server.mjs:136 GET /api/health 回傳 version 硬編 \"0.1.0\"，與 package.json 0.2.1 不符，監控會讀到錯版本。(2) src/server.mjs:77 CORS Access-Control-Allow-Origin: * 掛在 admin API 上，屬硬化缺口。(3) :4199 無任何安全標頭（CSP / X-Frame-Options / HSTS）。皆為硬化建議，非阻擋項。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:31.215Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-013",
+      "title": "覆蓋率缺口：install/process/semgrep 模組幾無 unit 測試",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "test-gap",
+        "F20261009-001"
+      ],
+      "description": "F20261009-001 的核心邏輯幾無 unit 覆蓋：src/lib/install.mjs（downloadVerified sha256 串流、extractZip zip-slip、verifySkeleton、stageInstall、updateLogic）、src/lib/process.mjs（waitForHealthy、startAndVerify 失敗路徑）、src/lib/semgrep.mjs（installer fallback chain、版本解析）僅靠 3 個 e2e 間接覆蓋。建議 Tester (Divya) 補 unit test，尤其 updateLogic 的 semver 決策與 stageInstall 失敗回滾。",
+      "featureId": null,
+      "createdAt": "2026-10-11T07:36:31.216Z",
       "notes": []
     }
   ],
-  "nextId": 6
+  "nextId": 14
 }

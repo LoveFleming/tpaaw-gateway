@@ -9,6 +9,19 @@
 
 ## 部署方式（二選一）
 
+### 首次設定 config.json（Gateway Admin）
+
+`config.json` 不進版控（含真實憑證）。首次部署請從範本建立：
+
+```bash
+cp config.example.json config.json
+# 編輯 config.json：users[].passwordHash 換成 bcrypt 雜湊、sessionSecret 換成隨機值
+# 或：PAAW_GATEWAY_PASSWORD='<強密碼>' node src/server.mjs（啟動時自動雜湊注入 admin）
+```
+
+啟動時 fail-closed：無憑證或仍是預設佔位符（`CHANGE_ME`）會拒絕啟動。Admin 預設綁
+`127.0.0.1:4199`（`PAAW_GATEWAY_HOST` 可覆蓋，明確設定才會對外）。
+
 ### A. 手動 zip 上傳（2026-09-07 起，不需要 package server）
 
 ```bash

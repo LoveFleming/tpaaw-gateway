@@ -128,7 +128,8 @@ Token 由 login 取得，存在**記憶體** session Map，效期 `sessionMaxAge
 
 **Response 401** `{ "error": "Invalid credentials" }`
 
-> ⚠️ 帳號密碼定義在 `config.json` 的 `users[]`。目前為明文比對，部署前請改用 hash —— 見 README「安全注意事項」。
+> ⚠️ 帳號密碼為 **bcrypt 雜湊**（`users[].passwordHash`，TASK-018 起）；登入有 rate limit。
+> 明文舊值於登入時自動就地升級。首次設定憑證見 README「config.json」。
 
 ### GET /api/auth/me
 回傳目前 token 對應的使用者。
@@ -228,10 +229,18 @@ POST /api/backups/restore/paaw-backup-2026-09-04-03.tar.gz
 
 ## 3. config.json（Admin server 設定）
 
-路徑：repo 根目錄 `config.json`（`PAAW_CONFIG` 可覆蓋）。不存在時使用內建預設值。
+路徑：repo 根目錄 `config.json`（`PAAW_CONFIG` 可覆蓋）。**此檔不進版控**（含真實憑證）；
+版控中的範本是 `config.example.json`：
+
+```bash
+cp config.example.json config.json   # 首次使用；再改 passwordHash / sessionSecret
+```
+
+不存在時使用內建預設值（**無預設帳號**，啟動時 fail-closed）。
 
 | 欄位 | 預設 | 說明 |
 |---|---|---|
+| `host` | `127.0.0.1` | Admin server 綁定 host（僅 loopback；`PAAW_GATEWAY_HOST` 可覆蓋） |
 | `port` | `4199` | Admin server port |
 | `paawRoot` | `../../../`（相對 src/） | PAAW repo 根目錄（開發實例） |
 | `paawServerCmd` | `node packages/server/src/index.mjs` | PAAW 啟動指令 |

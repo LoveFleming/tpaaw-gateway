@@ -151,8 +151,21 @@ node src/server.mjs        # http://127.0.0.1:4199/
 
 ### config.json
 
+**`config.json` 不進版控**（含真實憑證；`.gitignore` 已排除）。版控中的範本是
+`config.example.json`。首次使用請複製範本再改：
+
+```bash
+cp config.example.json config.json
+# 編輯 config.json，把 users[].passwordHash 換成 bcrypt 雜湊、sessionSecret 換成隨機值
+# 或改用環境變數注入（見下方），不改檔案
+```
+
+範本 `config.example.json` 內容（`passwordHash` 為佔位符 `CHANGE_ME`，**啟動時會 fail-closed**，
+不會被誤用成真密碼）：
+
 ```json
 {
+  "host": "127.0.0.1",
   "port": 4199,
   "paawRoot": "../tPAAW",
   "paawServerCmd": "node packages/server/src/index.mjs",
@@ -161,11 +174,14 @@ node src/server.mjs        # http://127.0.0.1:4199/
   "backupSchedule": "0 3 * * *",
   "maxBackups": 7,
   "autoStartPaaw": false,
-  "users": [{ "id": "admin", "name": "Fleming", "role": "admin", "passwordHash": "changeme" }],
-  "sessionSecret": "paaw-gateway-secret-change-me",
+  "users": [{ "id": "admin", "name": "Admin", "role": "admin", "passwordHash": "CHANGE_ME" }],
+  "sessionSecret": "change-me-to-a-random-secret",
   "sessionMaxAge": 86400000
 }
 ```
+
+**憑證快速設定（不改檔案）**：設定環境變數 `PAAW_GATEWAY_PASSWORD=<強密碼>`，
+啟動時會自動雜湊並覆寫 `admin` 的 `passwordHash`。`PAAW_GATEWAY_HOST` 可覆蓋綁定 host。
 
 環境變數 `PAAW_CONFIG` / `PAAW_ROOT` / `PAAW_BACKUP_DIR` / `PAAW_EVENT_LOG` / `PAAW_MAX_BACKUPS` 可覆蓋（主要供測試隔離用）。完整欄位說明見 [`docs/api.md`](docs/api.md#3-configjson-admin-server-設定)。
 
@@ -184,6 +200,8 @@ npm test    # node --test tests/**/*.test.mjs
 
 ## 安全注意事項
 
-- `config.json` 目前**未進版控**（.gitignore 已排除），但仍請確認 repo 內不含真實密碼
-- `users[].passwordHash` 欄位目前為**明文比對**（login 直接 `===` 比對）—— 若要對外開放 port，應先改為 hash + salt（已知技術債，見 issue tracker）
-- Admin server 預設只聽本機；`sessionSecret` 部署前請換掉預設值
+- `config.json` **不進版控**（`.gitignore` 已排除，含真實憑證）；版控追的是無憑證的 `config.example.json`
+- `users[].passwordHash` 為 **bcrypt 雜湊**（TASK-018 起；plaintext 舊值登入時會自動就地升級）
+- 登入有 **per-user / per-IP rate limit + 鎖定**，失敗一律回相同 401（不洩漏帳號是否存在）
+- 啟動時 **fail-closed**：無憑證或仍是預設密碼（如 `CHANGE_ME`）會拒絕啟動
+- Admin server **預設只綁 `127.0.0.1`**（TASK-019）；`sessionSecret` 部署前請換掉預設值

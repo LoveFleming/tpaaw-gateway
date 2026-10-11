@@ -698,7 +698,94 @@
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-10-11T04:50:27.343Z"
+    },
+    {
+      "id": "TASK-018",
+      "featureId": "F20261009-002",
+      "title": "修復 ISS-002：Gateway 認證硬化（密碼雜湊 + rate limit + 移除預設 change_me）",
+      "type": "dev",
+      "status": "close",
+      "priority": "high",
+      "parentId": null,
+      "description": "來源：ISS-002（QA RU 全量 review，qr-20261011-073635-9j75）。\n\n問題（src/server/auth.mjs + src/server/config.mjs）：\n1. 使用者密碼以明文 stored + 明文比對（timing-safe compare 亦缺）。\n2. 預設帳號密碼為 change_me 之類的固定值，未強制首登改密。\n3. POST /api/auth/login 無 rate limit / 無失敗鎖定，可無限暴力破解。\n\n要求（實作交 Developer Priya，完成後由 QA 武大安 Gate Check 重驗）：\n- 密碼改 bcrypt/argon2 雜湊儲存（禁止 MD5/SHA-1/明文）。\n- 移除或強制更換預設密碼；找不到設定時 fail-closed（拒絕啟動或要求設定）。\n- login 端點加 rate limit / 連續失敗鎖定。\n- 錯誤訊息不得洩漏「帳號是否存在」（統一回 401 Invalid credentials）。\n\n驗收：新增測試涵蓋（正確/錯誤密碼、不存在用戶訊息一致、連續失敗觸發鎖定），npm test 全綠。",
+      "labels": [
+        "security",
+        "auth",
+        "ISS-002"
+      ],
+      "createdAt": "2026-10-11T07:38:29.182Z",
+      "updatedAt": "2026-10-11T09:40:23.098Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "issue"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-10-11T08:02:48.777Z",
+          "content": "Assigned to undefined"
+        }
+      ],
+      "result": "已實作認證硬化：新增 src/server/password.mjs（bcryptjs 雜湊/驗證、timing-safe、DUMMY_HASH 防列舉、weak-default 黑名單、env 憑證覆寫）；src/server/auth.mjs login 改 async 雜湊驗證 + per-user/per-IP rate limit/鎖定（5 次/15min，429+Retry-After）+ 統一失敗不洩漏帳號存在；src/server.mjs login route 統一 401/429、main guard fail-closed（validateAuthConfig）；config.mjs 移除預設 change_me 憑證。新增測試 password/auth unit + login-hardening e2e。commit 4fc5e58。npm test 91 pass / 0 fail。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-11T09:40:23.098Z"
+    },
+    {
+      "id": "TASK-019",
+      "featureId": "F20261009-002",
+      "title": "修復 ISS-006：行政平台 :4199 server.listen 未指定 host（0.0.0.0 網路暴露）",
+      "type": "dev",
+      "status": "close",
+      "priority": "high",
+      "parentId": null,
+      "description": "來源：ISS-006（QA RU 全量 review，qr-20261011-073635-9j75）。\n\n問題（src/server.mjs:259）：\nserver.listen(config.port, ...) 未指定 host，Node 預設綁 0.0.0.0，使 :4199 行政平台對同網段所有主機暴露（結合 ISS-002 明文密碼 = 可直接接管 PAAW Server）。\n\n要求（實作交 Developer Priya，完成後由 QA 武大安 Gate Check 重驗）：\n- 明確綁定 127.0.0.1（或由 config.host 控制，預設 127.0.0.1），與 gateway UI server（src/ui/server.mjs UI_HOST）行為一致。\n- 若仍需對外，須顯式設定且可經 config/env 覆寫，預設安全。\n\n驗收：e2e 驗證預設只聽 127.0.0.1（非 0.0.0.0）；npm test 全綠。",
+      "labels": [
+        "security",
+        "network",
+        "ISS-006"
+      ],
+      "createdAt": "2026-10-11T07:38:29.191Z",
+      "updatedAt": "2026-10-11T09:40:23.103Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "issue"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-10-11T08:02:48.780Z",
+          "content": "Assigned to undefined"
+        }
+      ],
+      "result": "已修復：config.mjs 新增 DEFAULT_HOST=127.0.0.1，createConfig 解析 config.host = PAAW_GATEWAY_HOST || config.host || DEFAULT_HOST（空字串視為安全預設）；server.mjs server.listen(config.port, config.host) 明確帶 host，啟動 log 顯示實際綁定位址。e2e 驗證預設只聽 127.0.0.1（非 0.0.0.0）。commit 4fc5e58。npm test 91 pass / 0 fail。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-11T09:40:23.103Z"
+    },
+    {
+      "id": "TASK-020",
+      "featureId": "F20261009-002",
+      "title": "config.json 版控策略：改採 config.example.json（真實憑證不進版控）",
+      "type": "dev",
+      "status": "open",
+      "priority": "medium",
+      "parentId": null,
+      "description": "來源：TASK-018/019 收尾發現。config.json 為 tracked 檔且不在 .gitignore，導致本機真實 bcrypt 憑證有被 commit 進版控的風險（TASK-018 已還原一次）。\n\n目標：\n1. 新增 config.example.json（進版控）— 結構同 config.json，passwordHash 用明文佔位符 CHANGE_ME。\n2. config.json 加入 .gitignore。\n3. git rm --cached config.json（保留本地實體檔）。\n4. 更新 DEPLOY.md/README 啟動說明：複製 config.example.json → config.json 再改密碼。\n\n驗收：\n- git ls-files 不含 config.json，含 config.example.json。\n- 本地 config.json 檔案仍存在且服務可用（env 注入憑證）。\n- npm test 全綠。\n- 文件說明可照做。",
+      "labels": [],
+      "assignee": null,
+      "createdAt": "2026-10-11T09:41:31.622Z",
+      "updatedAt": "2026-10-11T09:41:31.622Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
     }
   ],
-  "updatedAt": "2026-10-11T03:49:16.067Z"
+  "updatedAt": "2026-10-11T09:41:31.622Z"
 }
