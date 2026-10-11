@@ -1,0 +1,56 @@
+[
+  {
+    "id": "req-1791690298345",
+    "ts": "2026-10-11T03:44:58.345Z",
+    "method": "GET",
+    "url": "http://127.0.0.1:4290/api/status",
+    "status": 200,
+    "elapsed": 29,
+    "headers": [],
+    "body": "",
+    "streamMode": false,
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:44:58 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": "{\n  \"home\": \"/users/steward/App/my-paaw\",\n  \"packageServer\": \"http://localhost:4180\",\n  \"current\": \"0.6.1\",\n  \"installed\": [\n    \"0.6.1\",\n    \"0.6.0\",\n    \"0.3.9\",\n    \"0.3.8\",\n    \"0.3.7\",\n    \"0.3.6\",\n    \"0.3.5\",\n    \"0.3.4\",\n    \"0.3.3\",\n    \"0.3.2\",\n    \"0.3.1\",\n    \"0.3.0\",\n    \"0.2.0\"\n  ],\n  \"stable\": null,\n  \"stableSize\": null,\n  \"stableNewer\": false,\n  \"dataSeeded\": true,\n  \"autoUpdate\": false,\n  \"running\": false,\n  \"runningVersion\": null,\n  \"paawUrl\": \"http://127.0.0.1:4097/\",\n  \"job\": {\n    \"active\": false,\n    \"kind\": null,\n    \"error\": null,\n    \"message\": null\n  }\n}",
+      "elapsed": 29,
+      "size": 586
+    },
+    "source": "agent",
+    "agent": "developer"
+  },
+  {
+    "id": "req-1791690295876",
+    "ts": "2026-10-11T03:44:55.876Z",
+    "method": "GET",
+    "url": "http://127.0.0.1:4290/api/settings",
+    "status": 200,
+    "elapsed": 2,
+    "headers": [],
+    "body": "",
+    "streamMode": false,
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:44:55 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "body": "{\n  \"packageServer\": {\n    \"value\": \"http://localhost:4180\",\n    \"source\": \"config\",\n    \"envLocked\": false\n  },\n  \"paawHome\": {\n    \"value\": \"/users/steward/App/my-paaw\",\n    \"source\": \"config\",\n    \"envLocked\": false\n  },\n  \"semgrepPath\": {\n    \"value\": \"\",\n    \"source\": \"auto\",\n    \"envLocked\": false\n  }\n}",
+      "elapsed": 2,
+      "size": 310
+    },
+    "source": "agent",
+    "agent": "developer"
+  }
+]

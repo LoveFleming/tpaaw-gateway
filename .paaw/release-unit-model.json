@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-11T05:48:20.115Z",
-  "headSha": "bed7571",
+  "generatedAt": "2026-10-11T07:05:19.655Z",
+  "headSha": "460fc6c",
   "tableHashes": {
-    "features": "139c98cb35d8d77d",
+    "features": "705115326a378cc9",
     "apis": "a10f3411c6bf82f8",
-    "tests": "d34ac11c610ddda8",
-    "changes": "71e7eb919285f982",
-    "knowledgeGaps": "97c5a6749f39ead7"
+    "tests": "bc9c8611d5f9d32b",
+    "changes": "b87503aaedb294ea",
+    "knowledgeGaps": "ca24eab71971439e"
   },
   "root": null,
   "summary": {
@@ -15,16 +15,16 @@
     "apis": 25,
     "apisWithFeature": 13,
     "files": 16,
-    "filesMapped": 3,
+    "filesMapped": 8,
     "tests": 7,
-    "commits": 73,
+    "commits": 74,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-10-11T04:50:27.347Z"
+    "featuresUpdatedAt": "2026-10-11T07:05:19.595Z"
   },
   "features": [
     {
@@ -53,9 +53,14 @@
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "status": "active",
       "description": "獨立在 :4199 的 PAAW 守護管理平台（不依賴 PAAW Server :4097 運行），由單一 src/server.mjs 承載全部後端：用戶認證與角色權限、PAAW Server 進程生命週期管理、資料備份/還原、版本升級、健康監控與事件稽核，並供應前端 UI 靜態檔。",
-      "fileCount": 1,
+      "fileCount": 6,
       "files": [
-        "src/server.mjs"
+        "src/server.mjs",
+        "src/server/config.mjs",
+        "src/server/events.mjs",
+        "src/server/auth.mjs",
+        "src/server/paaw-control.mjs",
+        "src/server/backup.mjs"
       ],
       "apis": [
         "POST /api/auth/login",
@@ -75,17 +80,19 @@
       "apiCount": 13,
       "tests": [
         {
+          "file": "src/server.mjs",
+          "kind": null
+        },
+        {
           "file": "tests/e2e/gateway-backup-auth.test.mjs",
           "kind": "e2e"
         }
       ],
-      "testCount": 7,
+      "testCount": 9,
       "changeCount": 10,
       "lastChangeAt": "2026-10-11T10:33:07+08:00",
-      "knowledgeGaps": [
-        "no-runbook"
-      ],
-      "_h": "00504669f5c89008"
+      "knowledgeGaps": [],
+      "_h": "dec0e7fcdba6a3a9"
     }
   ],
   "apis": [
@@ -354,8 +361,10 @@
       "productionFile": "src/server/config.mjs",
       "testCount": 2,
       "kind": null,
-      "featureIds": [],
-      "_h": "8b657e381a4a3192"
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "f8202d9f514e56eb"
     },
     {
       "testFile": "src/ui/server.mjs",
@@ -377,6 +386,15 @@
     }
   ],
   "changes": [
+    {
+      "hash": "460fc6c",
+      "date": "2026-10-11T14:19:06+08:00",
+      "subject": "docs(paaw): sync CWE-22 backupPath docs to ADR-003 module split (TASK-012)",
+      "kind": "chore",
+      "files": 6,
+      "featureIds": [],
+      "_h": "e1023e702ae64761"
+    },
     {
       "hash": "bed7571",
       "date": "2026-10-11T12:50:41+08:00",
@@ -1108,8 +1126,7 @@
       "F20261009-001"
     ],
     "featuresWithoutRunbooks": [
-      "F20261009-001",
-      "F20261009-002"
+      "F20261009-001"
     ],
     "apisWithoutFeature": [
       "GET /api/log (src/ui/server.mjs)",
@@ -1125,7 +1142,7 @@
       "POST /api/upload (src/ui/server.mjs)",
       "GET /index.html (src/ui/server.mjs)"
     ],
-    "filesWithoutFeature": 13,
+    "filesWithoutFeature": 8,
     "hotUnmappedFiles": [
       {
         "file": "ui/index.html",
@@ -1184,7 +1201,7 @@
         "commits": 1
       },
       {
-        "file": "src/server/auth.mjs",
+        "file": "src/ui/server.mjs",
         "commits": 1
       }
     ]

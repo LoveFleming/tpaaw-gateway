@@ -1673,7 +1673,7 @@
       "file": "src/lib/semgrep.mjs",
       "kind": "function",
       "async": false,
-      "params": "(bin, env)",
+      "params": "(bin, env, timeoutMs = 60000, extraArgs = [])",
       "callCount": 0
     },
     {
@@ -3768,7 +3768,7 @@
         "file": "src/lib/semgrep.mjs",
         "kind": "function",
         "async": false,
-        "params": "(bin, env)",
+        "params": "(bin, env, timeoutMs = 60000, extraArgs = [])",
         "callCount": 0
       }
     ],

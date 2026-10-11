@@ -2013,7 +2013,7 @@
           "name": "semgrepVersion",
           "kind": "function",
           "async": false,
-          "params": "(bin, env)",
+          "params": "(bin, env, timeoutMs = 60000, extraArgs = [])",
           "callCount": 0,
           "calls": []
         },

@@ -99,18 +99,7 @@
       "id": "F20261009-001",
       "riskProfile": {
         "dataTouch": [],
-        "apiSurface": [
-          "/api/settings",
-          "/api/semgrep/install",
-          "/api/status",
-          "/api/log",
-          "/api/paaw-log",
-          "/api/update",
-          "/api/upload",
-          "/api/start",
-          "/api/stop",
-          "/api/restart"
-        ],
+        "apiSurface": [],
         "externalCalls": [],
         "mutatingOutbound": true,
         "migration": false,
@@ -118,13 +107,13 @@
         "computedSeverity": "S1",
         "computedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用"
       },
-      "riskProfileScannedAt": "2026-10-10T14:38:19.690Z",
+      "riskProfileScannedAt": "2026-10-11T07:05:19.593Z",
       "severityComputed": "S1",
       "severitySuggested": "S1",
       "severitySuggestedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用",
       "severitySuggestedNotes": "",
       "severitySuggestedBy": "scan",
-      "severitySuggestedAt": "2026-10-10T14:38:19.690Z"
+      "severitySuggestedAt": "2026-10-11T07:05:19.593Z"
     },
     {
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
@@ -260,24 +249,23 @@
           "/api/backups/create",
           "/api/backups/restore",
           "/api/events",
-          "/api/users",
-          "/api/server"
+          "/api/users"
         ],
         "externalCalls": [],
         "mutatingOutbound": true,
         "migration": false,
-        "fileCount": 1,
+        "fileCount": 6,
         "computedSeverity": "S1",
         "computedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用"
       },
-      "riskProfileScannedAt": "2026-10-10T14:38:19.690Z",
+      "riskProfileScannedAt": "2026-10-11T07:05:19.593Z",
       "severityComputed": "S1",
       "severitySuggested": "S1",
       "severitySuggestedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用",
       "severitySuggestedNotes": "",
       "severitySuggestedBy": "scan",
-      "severitySuggestedAt": "2026-10-10T14:38:19.690Z"
+      "severitySuggestedAt": "2026-10-11T07:05:19.593Z"
     }
   ],
-  "updatedAt": "2026-10-11T06:18:26.885Z"
+  "updatedAt": "2026-10-11T07:05:19.595Z"
 }

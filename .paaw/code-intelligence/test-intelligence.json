@@ -177,7 +177,8 @@
       "featureId": "F20261009-002",
       "featureName": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "tests": [
-        "tests/e2e/gateway-backup-auth.test.mjs"
+        "tests/e2e/gateway-backup-auth.test.mjs",
+        "tests/unit/backup.test.mjs"
       ]
     }
   ],
