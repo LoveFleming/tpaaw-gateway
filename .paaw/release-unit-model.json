@@ -1,30 +1,30 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-11T02:52:44.235Z",
-  "headSha": "128fbdf",
+  "generatedAt": "2026-10-11T05:48:20.115Z",
+  "headSha": "bed7571",
   "tableHashes": {
-    "features": "2da7f67d9bcf099a",
-    "apis": "d3cc93653d2f6851",
-    "tests": "2abf613f69869f9e",
-    "changes": "30768476ea937cd0",
-    "knowledgeGaps": "60df9b82da084278"
+    "features": "139c98cb35d8d77d",
+    "apis": "a10f3411c6bf82f8",
+    "tests": "d34ac11c610ddda8",
+    "changes": "71e7eb919285f982",
+    "knowledgeGaps": "97c5a6749f39ead7"
   },
   "root": null,
   "summary": {
     "features": 2,
     "apis": 25,
-    "apisWithFeature": 25,
-    "files": 6,
+    "apisWithFeature": 13,
+    "files": 16,
     "filesMapped": 3,
-    "tests": 1,
-    "commits": 69,
+    "tests": 7,
+    "commits": 73,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-10-11T02:26:37.502Z"
+    "featuresUpdatedAt": "2026-10-11T04:50:27.347Z"
   },
   "features": [
     {
@@ -36,30 +36,17 @@
       "files": [
         "gateway.mjs"
       ],
-      "apis": [
-        "GET /api/log",
-        "GET /api/paaw-log",
-        "POST /api/restart",
-        "POST /api/semgrep/install",
-        "GET /api/settings",
-        "POST /api/settings",
-        "POST /api/start",
-        "GET /api/status",
-        "POST /api/stop",
-        "POST /api/update",
-        "POST /api/upload",
-        "GET /index.html"
-      ],
-      "apiCount": 12,
+      "apis": [],
+      "apiCount": 0,
       "tests": [],
       "testCount": 0,
-      "changeCount": 22,
-      "lastChangeAt": "2026-10-08T15:13:48+08:00",
+      "changeCount": 24,
+      "lastChangeAt": "2026-10-11T11:49:00+08:00",
       "knowledgeGaps": [
         "no-tests",
         "no-runbook"
       ],
-      "_h": "0f3ae1b864b80fa5"
+      "_h": "94c48b08a1e1bfc9"
     },
     {
       "id": "F20261009-002",
@@ -175,42 +162,34 @@
     {
       "method": "GET",
       "path": "/api/log",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "62cdd1b7aa01d411"
+      "featureIds": [],
+      "_h": "51e26fc0a1b5647a"
     },
     {
       "method": "GET",
       "path": "/api/paaw-log",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "6aa27c14f94ce971"
+      "featureIds": [],
+      "_h": "e41f855b404931a2"
     },
     {
       "method": "POST",
       "path": "/api/restart",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "251026fd349f1562"
+      "featureIds": [],
+      "_h": "b79f331a73f462a1"
     },
     {
       "method": "POST",
       "path": "/api/semgrep/install",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "b48e796f70025723"
+      "featureIds": [],
+      "_h": "af22bebeb2097dd6"
     },
     {
       "method": "POST",
@@ -245,62 +224,50 @@
     {
       "method": "GET",
       "path": "/api/settings",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "fec950e68d27bf41"
+      "featureIds": [],
+      "_h": "32ce087072b2dd24"
     },
     {
       "method": "POST",
       "path": "/api/settings",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "6f476989e6ff6f56"
+      "featureIds": [],
+      "_h": "ecee8ddaf6da25bf"
     },
     {
       "method": "POST",
       "path": "/api/start",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "a4d9d2902ef9a6ff"
+      "featureIds": [],
+      "_h": "f83d2a807db6c688"
     },
     {
       "method": "GET",
       "path": "/api/status",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "de7118b5bf2a050a"
+      "featureIds": [],
+      "_h": "329bfe3e8ea655ca"
     },
     {
       "method": "POST",
       "path": "/api/stop",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "a8838a93d5819d88"
+      "featureIds": [],
+      "_h": "cef4e37e29d618d2"
     },
     {
       "method": "POST",
       "path": "/api/update",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "474ea26f63e6dc10"
+      "featureIds": [],
+      "_h": "70de832bf0bb6ff0"
     },
     {
       "method": "POST",
@@ -315,12 +282,10 @@
     {
       "method": "POST",
       "path": "/api/upload",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "f799646cd2561bdc"
+      "featureIds": [],
+      "_h": "9d711c7139f419b2"
     },
     {
       "method": "GET",
@@ -345,15 +310,61 @@
     {
       "method": "GET",
       "path": "/index.html",
-      "file": "gateway.mjs",
+      "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [
-        "F20261009-001"
-      ],
-      "_h": "85c0a85c095de47e"
+      "featureIds": [],
+      "_h": "7be4f8a2fc369f42"
     }
   ],
   "tests": [
+    {
+      "testFile": "gateway.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "testCount": 4,
+      "kind": null,
+      "featureIds": [],
+      "_h": "87181273e9b267fe"
+    },
+    {
+      "testFile": "src/lib/install.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "testCount": 11,
+      "kind": null,
+      "featureIds": [],
+      "_h": "179ffd5a376c7ab8"
+    },
+    {
+      "testFile": "src/lib/process.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "testCount": 19,
+      "kind": null,
+      "featureIds": [],
+      "_h": "f7131789db499d10"
+    },
+    {
+      "testFile": "src/lib/semgrep.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "testCount": 11,
+      "kind": null,
+      "featureIds": [],
+      "_h": "be045fad988a424c"
+    },
+    {
+      "testFile": "src/server.mjs",
+      "productionFile": "src/server/config.mjs",
+      "testCount": 2,
+      "kind": null,
+      "featureIds": [],
+      "_h": "8b657e381a4a3192"
+    },
+    {
+      "testFile": "src/ui/server.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "testCount": 12,
+      "kind": null,
+      "featureIds": [],
+      "_h": "cfeebcfba71d0e19"
+    },
     {
       "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
       "productionFile": "src/server.mjs",
@@ -366,6 +377,46 @@
     }
   ],
   "changes": [
+    {
+      "hash": "bed7571",
+      "date": "2026-10-11T12:50:41+08:00",
+      "subject": "fix(semgrep): pass timeoutMs/extraArgs to semgrepVersion so fast path works",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [],
+      "_h": "dd4aa743cab0257d"
+    },
+    {
+      "hash": "82fac64",
+      "date": "2026-10-11T11:54:04+08:00",
+      "subject": "chore(paaw): sync metadata after ADR-003 refactor (P1-P3)",
+      "kind": "chore",
+      "files": 20,
+      "featureIds": [],
+      "_h": "48c04252f4268ead"
+    },
+    {
+      "hash": "60e38e5",
+      "date": "2026-10-11T11:49:00+08:00",
+      "subject": "refactor(gateway): ADR-003 P3 — thin CLI entry, extract semgrep & ui-server",
+      "kind": "refactor",
+      "files": 4,
+      "featureIds": [
+        "F20261009-001"
+      ],
+      "_h": "775f0be3875e8d41"
+    },
+    {
+      "hash": "a5ae75d",
+      "date": "2026-10-11T11:34:14+08:00",
+      "subject": "refactor(gateway): split gateway.mjs core into src/lib/{config,install,process}.mjs",
+      "kind": "refactor",
+      "files": 5,
+      "featureIds": [
+        "F20261009-001"
+      ],
+      "_h": "e8e2b95446f68a58"
+    },
     {
       "hash": "128fbdf",
       "date": "2026-10-11T10:33:07+08:00",
@@ -1060,8 +1111,21 @@
       "F20261009-001",
       "F20261009-002"
     ],
-    "apisWithoutFeature": [],
-    "filesWithoutFeature": 3,
+    "apisWithoutFeature": [
+      "GET /api/log (src/ui/server.mjs)",
+      "GET /api/paaw-log (src/ui/server.mjs)",
+      "POST /api/restart (src/ui/server.mjs)",
+      "POST /api/semgrep/install (src/ui/server.mjs)",
+      "GET /api/settings (src/ui/server.mjs)",
+      "POST /api/settings (src/ui/server.mjs)",
+      "POST /api/start (src/ui/server.mjs)",
+      "GET /api/status (src/ui/server.mjs)",
+      "POST /api/stop (src/ui/server.mjs)",
+      "POST /api/update (src/ui/server.mjs)",
+      "POST /api/upload (src/ui/server.mjs)",
+      "GET /index.html (src/ui/server.mjs)"
+    ],
+    "filesWithoutFeature": 13,
     "hotUnmappedFiles": [
       {
         "file": "ui/index.html",
@@ -1081,6 +1145,10 @@
       },
       {
         "file": "public/index.html",
+        "commits": 2
+      },
+      {
+        "file": "src/lib/semgrep.mjs",
         "commits": 2
       },
       {
@@ -1104,23 +1172,19 @@
         "commits": 1
       },
       {
+        "file": "src/lib/config.mjs",
+        "commits": 1
+      },
+      {
+        "file": "src/lib/install.mjs",
+        "commits": 1
+      },
+      {
+        "file": "src/lib/process.mjs",
+        "commits": 1
+      },
+      {
         "file": "src/server/auth.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/server/backup.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/server/config.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/server/events.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/server/paaw-control.mjs",
         "commits": 1
       }
     ]

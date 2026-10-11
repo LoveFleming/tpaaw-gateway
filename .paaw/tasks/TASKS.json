@@ -484,10 +484,10 @@
     },
     {
       "id": "TASK-012",
-      "featureId": "F20260918-002",
+      "featureId": "F20261009-002",
       "title": "更新 F20260918-002 文件：backupPath 防護重構後的 feature docs + mapping + runbook",
       "type": "docs",
-      "status": "pending",
+      "status": "close",
       "priority": "low",
       "parentId": null,
       "description": "前置：TASK-010（safe-path helper 重構）與 TASK-011（攻擊案例測試）完成後執行。\n\n更新 F20260918-002 文件以反映 CWE-22 修復：\n\n1. **feature docs**（project_edit action=feature_update_docs）：\n   - `backupPath(name)` 成為新 export：語義 = regex 驗證（BACKUP_REGEX）+ directory containment check（resolve 後必須落在 BACKUP_DIR 內），listBackups / restoreBackup 統一走它\n   - 記錄修復動機：6 筆 CWE-22（confidence LOW、登入後、多為誤報）→ 以縱深防禦重構取代 nosemgrep 降噪\n   - 修復後需記錄重掃結果：CWE-22 歸零日期與 scan id\n\n2. **feature mapping**（project_edit action=feature_update_mapping）：\n   - TASK-011 若新增測試檔（如 tests/unit/backup-path.test.mjs），把新檔掛進 F20260918-002 的 tests\n   - src/server.mjs 新增 export backupPath 的 symbol 對應\n\n3. **runbook / HANDOVER**（.paaw/runbook/ 如有 backup 相關條目）：\n   - backup 路徑防護行為：restore 收到非法 filename（含 ../、絕對路徑、encoded traversal）時的回應行為與錯誤碼\n\n驗收：文件與程式碼現況一致（backupPath 語義、測試清單、掃描歸零記錄），feature map 三方（docs / mapping / tests）同步。",
@@ -498,7 +498,7 @@
       ],
       "assignee": "doc-writer",
       "createdAt": "2026-09-19T08:39:41.871Z",
-      "updatedAt": "2026-09-19T08:39:46.376Z",
+      "updatedAt": "2026-10-11T06:18:26.882Z",
       "createdBy": "agent",
       "source": {
         "type": "manual"
@@ -510,10 +510,10 @@
           "content": "Assigned to doc-writer"
         }
       ],
-      "result": null,
+      "result": "完成（並修復前次交付後的過時）。原 TASK-012 曾於 2026-09-19（commit 29ae55d）實質完成但未結案；其後兩件事使其失效：(1) feature ID 由 F20260918-002 重生成為 F20261009-002（2026-10-09 feature map rescan），舊 ID 已不存在；(2) ADR-003 P1 重構（2026-10-11, commit 128fbdf）把 backupPath/listBackups/createBackup/restoreBackup 由 src/server.mjs 抽出至 src/server/backup.mjs，文件的行號與檔案路徑全部指向錯的位置。\n\n本次重做：(1) feature docs（F20261009-002）— 補 backupPath 防護語義（BACKUP_REGEX 白名單 + resolve containment、fail-closed 回 null）、修復動機（6 筆 CWE-22 confidence LOW → 縱深防禦取代 nosemgrep 降噪）、測試清單、歸零記錄（findings 空陣列，scannedAt 2026-09-19T10:41:13.970Z）。(2) feature mapping — tests 補 tests/unit/backup.test.mjs、apis 補 POST /api/backups/restore/<filename>（13→14）、runbooks 掛 backup-path-protection.md、codeFiles 對齊 ADR-003 六模組。(3) runbook — 更正程式碼位置 src/server.mjs:79/358/415/649 → src/server/backup.mjs:55/62/119 + 入口 route :205，加註 ADR-003 P1 搬遷與 feature ID 重生成。\n\n驗收：feature map 三方（docs / mapping / tests）同步且與程式碼現況一致；npm test 65/65 全綠。",
       "git": null,
       "timeoutSeconds": 0,
-      "resolvedAt": null
+      "resolvedAt": "2026-10-11T06:18:26.882Z"
     },
     {
       "id": "TASK-013",
@@ -676,7 +676,7 @@
       "featureId": "F20261009-001",
       "title": "修 pre-existing bug：semgrepVersion(bin, env) 只收 2 參數但呼叫端傳 4 個，快路徑從未生效",
       "type": "dev",
-      "status": "open",
+      "status": "close",
       "priority": "low",
       "parentId": null,
       "description": "【來源】ADR-003 P3（TASK-016）重構時由 Developer 發現，屬 pre-existing bug，非本次重構引入。\n\n【問題】src/lib/semgrep.mjs 的 semgrepVersion(bin, env) 簽章只收 2 個參數，但 checkSemgrep 呼叫端傳 4 個（timeoutMs, extraArgs）。JS 會忽略多餘引數 → 原設計「先帶 --disable-version-check 走 ~1s 快路徑」實際從未生效，一律退回純 --version + 60s timeout。\n\n【影響】semgrep 版本偵測首次（快取未命中時）可能慢達 60s；屬效能問題，非安全/正確性問題。\n\n【修法方向】讓 semgrepVersion 正確接收並傳遞 timeoutMs / extraArgs，使 --disable-version-check 快路徑生效。\n\n【實作注意事項】\n- 需驗證：帶 --disable-version-check 快路徑確實生效（可觀察 version 偵測耗時）。\n- 保持偵測結果（版本字串）正確；不得因快路徑而誤判。\n- 屬 F20261009-001（gateway）。\n\n【驗收標準】semgrep 版本偵測快路徑生效；npm test 全綠；無回歸。",
@@ -688,16 +688,16 @@
       ],
       "assignee": null,
       "createdAt": "2026-10-11T03:49:16.067Z",
-      "updatedAt": "2026-10-11T03:49:16.067Z",
+      "updatedAt": "2026-10-11T04:50:27.343Z",
       "createdBy": "agent",
       "source": {
         "type": "discussion"
       },
       "notes": [],
-      "result": null,
+      "result": "semgrepVersion 簽章補齊 (timeoutMs, extraArgs)，--disable-version-check 快路徑生效。smoke: 偵測耗時 563ms（修正前退回 8s 慢路徑），版本解析正確。npm test 65/65 全綠。",
       "git": null,
       "timeoutSeconds": 0,
-      "resolvedAt": null
+      "resolvedAt": "2026-10-11T04:50:27.343Z"
     }
   ],
   "updatedAt": "2026-10-11T03:49:16.067Z"

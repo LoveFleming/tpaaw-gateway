@@ -8,9 +8,9 @@ summary: restore/backup 收到非法 filename 時的兩層防禦行為與預期�
 
 # 備份檔名路徑防護（backupPath）
 
-**Feature**: F20260918-002（PAAW Gateway 系統維運管理平台）
-**Code**: `src/server.mjs` — `backupPath()` :79、`listBackups()` :358、`createBackup()` :378、`restoreBackup()` :415、route `POST /api/backups/restore/<filename>` :649
-**測試**: `tests/unit/backup.test.mjs`（backupPath 攻擊案例）、`tests/e2e/gateway-backup-auth.test.mjs`（restore 路由攻擊 e2e，TASK-011）
+**Feature**: F20261009-002（PAAW Gateway 系統維運管理平台；2026-10-09 feature map 重生成，前身 F20260918-002）
+**Code**: `src/server/backup.mjs` — `backupPath()` :55、`listBackups()` :62、`createBackup()` :82、`restoreBackup()` :119（ADR-003 P1 自 `src/server.mjs` 抽出，入口僅 re-export）；restore route `POST /api/backups/restore/<filename>` 於 `src/server.mjs` :205
+**測試**: `tests/unit/backup.test.mjs`（backupPath 攻擊案例，22 案）、`tests/e2e/gateway-backup-auth.test.mjs`（restore 路由攻擊 e2e，TASK-011）
 
 ## 防護語義
 
@@ -48,4 +48,6 @@ summary: restore/backup 收到非法 filename 時的兩層防禦行為與預期�
 ## 背景
 
 - 修復脈絡：6 筆 CWE-22 findings（confidence LOW）→ TASK-010 縱深防禦重構（commit 114bfb2）→ TASK-011 攻擊測試 unit +8 / e2e +4（commit 599b8d5）→ TASK-013 殘留 4 筆誤報 nosemgrep 標註（commit 742c7c4）
-- 歸零記錄：2026-09-19T09:17:46Z 重掃 ERROR 0 / WARNING 0 / INFO 0（`.paaw/security/scan-results.json`，filesScanned 含 src/server.mjs）
+- 歸零記錄：重掃 ERROR 0 / WARNING 0 / INFO 0，findings 空陣列（`.paaw/security/scan-results.json`，`scannedAt` 2026-09-19T10:41:13.970Z；filesScanned 含 gateway.mjs 與 src/server.mjs）
+- **模組搬遷（ADR-003 P1，2026-10-11）**：`backupPath` / `listBackups` / `createBackup` / `restoreBackup` 由 `src/server.mjs` 抽出至 `src/server/backup.mjs`（`createBackupManager(deps)` factory 內，BACKUP_DIR 以 deps 注入）；`src/server.mjs` 僅保留 re-export（:68-69）。防護語義與行為不變，純重構。nosemgrep 標註隨函式一併落於 `src/server/backup.mjs`（L58/69/96/124）。
+- 現行 feature 識別碼為 **F20261009-002**（2026-10-09 feature map 重生成；F20260918-002 為其前身）。

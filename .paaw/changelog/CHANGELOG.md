@@ -18,6 +18,9 @@
 ### changed
 - +7079 −2923 lines across 23 files
 
+### changed
+- TASK-012 結案（docs，F20261009-002 前身 F20260918-002）：CWE-22 防護文件三方同步，並修復 ADR-003 P1 造成的文件過時。(1) feature docs：F20261009-002 補上 backupPath 防護語義（BACKUP_REGEX 白名單 + resolve containment、fail-closed 回 null）、修復動機（6 筆 CWE-22 confidence LOW → 以縱深防禦取代 nosemgrep 降噪）、測試清單與歸零記錄（findings 空陣列，scannedAt 2026-09-19T10:41:13.970Z）。(2) feature mapping：tests 補 tests/unit/backup.test.mjs、apis 補 POST /api/backups/restore/&lt;filename&gt;（13→14）、runbooks 掛 backup-path-protection.md、codeFiles 對齊 ADR-003 模組拆分（server.mjs + 5 子模組）。(3) runbook：程式碼位置由 src/server.mjs（:79/:358/:415/:649）更正為 src/server/backup.mjs（:55/:62/:119）+ 入口 route :205，並記錄 ADR-003 P1 模組搬遷與 feature ID 重生成（F20260918-002 → F20261009-002）。npm test 65/65 全綠。
+
 ## 2026-09-19
 ### fixed
 - 品質補強（TASK-008/009，F20260918-002）：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
