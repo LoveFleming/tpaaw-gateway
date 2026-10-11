@@ -28,7 +28,7 @@ import { readFileSync } from "fs";
 import { join, dirname, basename } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
-import { createConfig } from "./server/config.mjs";
+import { createConfig, validateAuthConfig } from "./server/config.mjs";
 import { createEventLog } from "./server/events.mjs";
 import { createAuth } from "./server/auth.mjs";
 import { createPaawControl } from "./server/paaw-control.mjs";
@@ -44,7 +44,7 @@ const { config, saveConfig, PAAW_ROOT, BACKUP_DIR, EVENT_LOG_PATH, MAX_BACKUPS, 
 const { events, logEvent } = createEventLog(EVENT_LOG_PATH);
 
 // ── Auth ──
-const { createSession, validateSession } = createAuth(config);
+const { createSession, validateSession, login } = createAuth(config);
 
 // ── PAAW control (child-process lifecycle) ──
 const {
@@ -115,12 +115,26 @@ const server = createServer(async (req, res) => {
   // Auth
   if (url.pathname === "/api/auth/login" && method === "POST") {
     const body = await readBody();
-    const user = config.users.find(u => u.id === body.userId && u.passwordHash === body.password);
-    if (user) {
-      const token = createSession(user.id);
-      logEvent("login", `User ${user.name} logged in`, user.id);
-      sendJSON(200, { token, user: { id: user.id, name: user.name, role: user.role } });
+    // Per-IP throttling key: the socket address (no proxy trust configured).
+    const clientIp = req.socket?.remoteAddress || "unknown";
+    const result = await login(body.userId, body.password, clientIp);
+    if (result.ok) {
+      // Persist the re-hashed credential if the stored one was legacy/weak.
+      if (result.upgraded) {
+        try { saveConfig(config); } catch { /* non-fatal: login still succeeds */ }
+      }
+      logEvent("login", `User ${result.user.name} logged in`, result.user.id);
+      sendJSON(200, {
+        token: result.token,
+        user: { id: result.user.id, name: result.user.name, role: result.user.role },
+      });
+    } else if (result.locked) {
+      const retryAfterSec = Math.max(1, Math.ceil((result.retryAfterMs || 0) / 1000));
+      res.setHeader("Retry-After", String(retryAfterSec));
+      logEvent("login_locked", `Login locked for "${body.userId}" from ${clientIp}`);
+      sendJSON(429, { error: "Too many failed attempts, try again later" });
     } else {
+      // Uniform failure — never reveal whether the account exists.
       sendJSON(401, { error: "Invalid credentials" });
     }
     return;
@@ -256,17 +270,31 @@ const server = createServer(async (req, res) => {
 // Being imported (e.g. by unit tests) must not bind the port or spawn anything.
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
-server.listen(config.port, () => {
-  console.log(`[PAAW Gateway] ⚙️ Running on http://localhost:${config.port}`);
-  console.log(`[PAAW Gateway] PAAW root: ${PAAW_ROOT}`);
-  logEvent("gateway_started", `PAAW Gateway started on :${config.port}`);
-
-  // Auto-start PAAW Server
-  if (config.autoStartPaaw !== false) {
-    setTimeout(() => {
-      console.log("[PAAW Gateway] Auto-starting PAAW Server...");
-      startPaaw();
-    }, 1000);
+  // Fail-closed (TASK-018): refuse to start the admin platform without a real
+  // credential — a missing/default password must never expose :4199.
+  const authCheck = validateAuthConfig(config);
+  if (!authCheck.ok) {
+    console.error(`[PAAW Gateway] ✖ Refusing to start: ${authCheck.error}.`);
+    console.error(
+      "[PAAW Gateway]   Set users[].passwordHash (bcrypt) in config.json, or provide " +
+      "PAAW_GATEWAY_PASSWORD / PAAW_GATEWAY_PASSWORD_HASH.",
+    );
+    process.exit(1);
   }
-});
+
+  // Bind host (TASK-019): default loopback only; widen explicitly via config.host
+  // or PAAW_GATEWAY_HOST. Never rely on Node's all-interfaces default.
+  server.listen(config.port, config.host, () => {
+    console.log(`[PAAW Gateway] ⚙️ Running on http://${config.host}:${config.port}`);
+    console.log(`[PAAW Gateway] PAAW root: ${PAAW_ROOT}`);
+    logEvent("gateway_started", `PAAW Gateway started on ${config.host}:${config.port}`);
+
+    // Auto-start PAAW Server
+    if (config.autoStartPaaw !== false) {
+      setTimeout(() => {
+        console.log("[PAAW Gateway] Auto-starting PAAW Server...");
+        startPaaw();
+      }, 1000);
+    }
+  });
 }

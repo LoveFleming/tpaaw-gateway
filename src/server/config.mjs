@@ -19,8 +19,19 @@
 import { readFileSync, writeFileSync } from "fs";
 import { join, resolve } from "path";
 
+import { applyPasswordOverride, isWeakDefaultPassword } from "./password.mjs";
+
+/** Default bind host — loopback only, so :4199 is never exposed to the network. */
+export const DEFAULT_HOST = "127.0.0.1";
+
 /**
  * Load config.json; fall back to sane defaults when missing/unparseable.
+ *
+ * Security note (TASK-018): the fallback deliberately ships NO default user /
+ * credential. Previously it defaulted to `admin` / `change_me`, which meant a
+ * mis-configured install was trivially taken over. Now an install with no
+ * configured credential fails the startup check in `validateAuthConfig`.
+ *
  * @param {string} configPath absolute path to config.json
  * @returns {object} parsed config
  */
@@ -29,6 +40,7 @@ export function loadConfig(configPath, baseDir) {
     return JSON.parse(readFileSync(configPath, "utf-8"));
   } catch {
     return {
+      host: DEFAULT_HOST,
       port: 4199,
       paawRoot: resolve(baseDir, "..", "..", ".."),
       paawServerCmd: "node packages/server/src/index.mjs",
@@ -36,11 +48,46 @@ export function loadConfig(configPath, baseDir) {
       backupDir: resolve(baseDir, "..", "..", "..", "backups"),
       backupSchedule: "0 3 * * *",
       maxBackups: 7,
-      users: [{ id: "admin", name: "Admin", role: "admin", passwordHash: "change_me" }],
+      users: [], // no default credential — must be configured (config.json or env)
       sessionSecret: "paaw-gw-default",
       sessionMaxAge: 86400000,
     };
   }
+}
+
+/**
+ * Fail-closed startup check for the auth configuration.
+ *
+ * Rejects (returns { ok:false, error }) when:
+ *  - there are no users, or
+ *  - no user has any credential, or
+ *  - a user still carries an obvious shipped default password in plaintext.
+ *
+ * Callers (the entry's main guard) must refuse to start on failure.
+ *
+ * @param {object} config parsed config
+ * @returns {{ ok: boolean, error?: string }}
+ */
+export function validateAuthConfig(config) {
+  const users = Array.isArray(config.users) ? config.users : [];
+  if (users.length === 0) {
+    return { ok: false, error: "no users configured" };
+  }
+  const withCredential = users.filter(
+    (u) => typeof u?.passwordHash === "string" && u.passwordHash.length > 0,
+  );
+  if (withCredential.length === 0) {
+    return { ok: false, error: "no user has a password configured" };
+  }
+  for (const u of withCredential) {
+    if (isWeakDefaultPassword(u.passwordHash)) {
+      return {
+        ok: false,
+        error: `user "${u.id}" still uses a default password — set a real one`,
+      };
+    }
+  }
+  return { ok: true };
 }
 
 /**
@@ -72,6 +119,17 @@ export function createConfig(baseDir) {
   // never touch the developer's real gateway on :4199.
   const CONFIG_PATH = process.env.PAAW_CONFIG || join(baseDir, "..", "config.json");
   const config = loadConfig(CONFIG_PATH, baseDir);
+
+  // ── Bind host / port (TASK-019) ──
+  // Default to loopback only; an operator must explicitly opt in to a wider
+  // bind via config.host or PAAW_GATEWAY_HOST. Empty string would let Node bind
+  // all interfaces, so treat blank as "use the safe default".
+  config.host = process.env.PAAW_GATEWAY_HOST || config.host || DEFAULT_HOST;
+  if (process.env.PAAW_GATEWAY_PORT) config.port = Number(process.env.PAAW_GATEWAY_PORT);
+
+  // ── Credential override from env (TASK-018) ──
+  // Lets an operator set a strong password without editing config.json.
+  applyPasswordOverride(config, process.env);
 
   const PAAW_ROOT = resolve(baseDir, process.env.PAAW_ROOT || config.paawRoot || "../../..");
   const BACKUP_DIR = resolve(baseDir, process.env.PAAW_BACKUP_DIR || config.backupDir || "../../../backups");
