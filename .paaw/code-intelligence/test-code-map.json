@@ -1,16 +1,58 @@
 {
   "mappings": [
     {
+      "testFile": "gateway.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 4
+    },
+    {
       "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
       "productionFile": "src/server.mjs",
       "matchType": "import",
       "testedFunctions": [],
       "testCount": 7
+    },
+    {
+      "testFile": "src/server.mjs",
+      "productionFile": "src/server/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 2
+    },
+    {
+      "testFile": "src/ui/server.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 12
+    },
+    {
+      "testFile": "src/lib/install.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 11
+    },
+    {
+      "testFile": "src/lib/process.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 19
+    },
+    {
+      "testFile": "src/lib/semgrep.mjs",
+      "productionFile": "src/lib/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 11
     }
   ],
   "stats": {
     "totalTestFiles": 4,
-    "matchedTests": 1,
+    "matchedTests": 7,
     "totalTestedFunctions": 0
   }
 }

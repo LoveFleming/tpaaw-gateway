@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-09T01:31:05.019Z",
-  "headSha": "05eb862",
+  "generatedAt": "2026-10-11T02:52:44.235Z",
+  "headSha": "128fbdf",
   "tableHashes": {
-    "features": "c41b9758041876d3",
+    "features": "2da7f67d9bcf099a",
     "apis": "d3cc93653d2f6851",
     "tests": "2abf613f69869f9e",
-    "changes": "66d331bc0af72c28",
-    "knowledgeGaps": "3b2ec424c665cb26"
+    "changes": "30768476ea937cd0",
+    "knowledgeGaps": "60df9b82da084278"
   },
   "root": null,
   "summary": {
@@ -17,21 +17,21 @@
     "files": 6,
     "filesMapped": 3,
     "tests": 1,
-    "commits": 66,
+    "commits": 69,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-10-09T00:56:37.765Z"
+    "featuresUpdatedAt": "2026-10-11T02:26:37.502Z"
   },
   "features": [
     {
       "id": "F20261009-001",
-      "name": "PAAW Gateway 啟動器與本機控制台：套包安裝更新、版本回滾與 PAAW 生命週期管理",
+      "name": "PAAW 套包安裝更新與本機啟動控制台",
       "status": "active",
-      "description": "單檔 Node bootloader（gateway.mjs），同時提供 CLI（ui/start/update/upload/status）與本機網頁控制台（預設 127.0.0.1:4290，12 條 API 路由），負責在使用者機器上安裝、更新、啟停 PAAW。由 staged 安裝管線（下載→驗證→解壓→定版）、PAAW 子程序監管（start/stop/restart + 健康檢查 + 自動回滾）、settings/semgrep 管理與 log 查看四部分構成。",
+      "description": "這個 feature 是使用者機器上的 PAAW bootloader 與本機操作控制台（gateway.mjs）：負責從 package server 下載或手動上傳 PAAW 套包做 staged 安裝、以多版本目錄保留現場達成回滾，並透過本機 dashboard（index.html + REST API）查看狀態/活動記錄/PAAW console log，執行更新、上傳安裝、啟動、停止、重啟等生命周期操作。同時內建 semgrep 環境偵測、一鍵安裝與 SEMGREP_PATH 注入，確保 PAAW 啟動時掃描工具可用。",
       "fileCount": 1,
       "files": [
         "gateway.mjs"
@@ -59,13 +59,13 @@
         "no-tests",
         "no-runbook"
       ],
-      "_h": "2f4174e05a433d5f"
+      "_h": "0f3ae1b864b80fa5"
     },
     {
       "id": "F20261009-002",
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "status": "active",
-      "description": "單檔 Node HTTP server（src/server.mjs，port 4199，獨立於 PAAW Server :4097 的守護者），構成 PAAW 的維運控制平面：Bearer token 認證與 RBAC、PAAW Server 子進程生命週期管理（start/stop/restart/健康檢查）、tar.gz 備份排程與還原、git pull 升級流水線、JSONL 事件稽核軌跡，以及 dashboard/version/users 等 13 支 API 與內嵌管理 UI。E2E 測試（tests/e2e/gateway-backup-auth.test.mjs）以 env ",
+      "description": "獨立在 :4199 的 PAAW 守護管理平台（不依賴 PAAW Server :4097 運行），由單一 src/server.mjs 承載全部後端：用戶認證與角色權限、PAAW Server 進程生命週期管理、資料備份/還原、版本升級、健康監控與事件稽核，並供應前端 UI 靜態檔。",
       "fileCount": 1,
       "files": [
         "src/server.mjs"
@@ -93,12 +93,12 @@
         }
       ],
       "testCount": 7,
-      "changeCount": 9,
-      "lastChangeAt": "2026-09-19T17:16:45+08:00",
+      "changeCount": 10,
+      "lastChangeAt": "2026-10-11T10:33:07+08:00",
       "knowledgeGaps": [
         "no-runbook"
       ],
-      "_h": "fac60d944afcf8b0"
+      "_h": "00504669f5c89008"
     }
   ],
   "apis": [
@@ -366,6 +366,35 @@
     }
   ],
   "changes": [
+    {
+      "hash": "128fbdf",
+      "date": "2026-10-11T10:33:07+08:00",
+      "subject": "refactor(server): split src/server.mjs into thin entry + 5 modules",
+      "kind": "refactor",
+      "files": 7,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "bc4a8e8811d1d3db"
+    },
+    {
+      "hash": "b8aedeb",
+      "date": "2026-10-09T13:18:04+08:00",
+      "subject": "chore: .paaw/agents coding.* override 清除 — module registry 接管（2026-10-09 firmware 化）",
+      "kind": "chore",
+      "files": 19,
+      "featureIds": [],
+      "_h": "517d76862cf0993f"
+    },
+    {
+      "hash": "2d01f75",
+      "date": "2026-10-09T11:27:13+08:00",
+      "subject": "chore: handover agent override 同步 2026-10-09-c（toolsDeny action_log_add + handover group + 地雷圖流程）",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "255b313ad1e1128b"
+    },
     {
       "hash": "05eb862",
       "date": "2026-10-09T09:13:33+08:00",
@@ -1075,11 +1104,23 @@
         "commits": 1
       },
       {
-        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "file": "src/server/auth.mjs",
         "commits": 1
       },
       {
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "file": "src/server/backup.mjs",
+        "commits": 1
+      },
+      {
+        "file": "src/server/config.mjs",
+        "commits": 1
+      },
+      {
+        "file": "src/server/events.mjs",
+        "commits": 1
+      },
+      {
+        "file": "src/server/paaw-control.mjs",
         "commits": 1
       }
     ]

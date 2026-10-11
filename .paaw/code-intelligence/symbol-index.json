@@ -2,241 +2,7 @@
   "symbols": [
     {
       "type": "function",
-      "name": "applyHome",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "saveGatewayCfg",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "logFile",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(line)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "semverGt",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(a, b)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "loadPackageServerUrl",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "readCurrent",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "writeCurrentAtomic",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(version)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "listInstalledVersions",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "downloadVerified",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(url, sha256Expected, destPath, sizeExpected)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "extractZip",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(zipPath, destDir)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "verifySkeleton",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(dir)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "run",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(cmd, args, cwd)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "installDeps",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(versionDir)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "ensureData",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(versionDir)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "startPaaw",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(versionDir)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "pump",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(stream, mirror)",
-      "callCount": 3
-    },
-    {
-      "type": "function",
-      "name": "childFailReason",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(child)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "waitForHealthy",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(timeoutMs = 90000)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "killChild",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(child)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "isPortOccupied",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "startAndVerify",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(versionDir, version)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "stageInstall",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(zipPath, v)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "installVersion",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(manifest, server)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "readZipManifest",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(buf)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "installUploadedZip",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(zipBuf, label)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
       "name": "cmdStatus",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "updateLogic",
       "file": "gateway.mjs",
       "kind": "function",
       "async": true,
@@ -269,324 +35,6 @@
       "async": true,
       "params": "()",
       "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "hangAround",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(child)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "bye",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "()",
-      "callCount": 2
-    },
-    {
-      "type": "function",
-      "name": "jobLog",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(line)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "paawRunning",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "openBrowserTab",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(url)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "uiStart",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "uiStop",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "uiUpdate",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "runJob",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(kind, fn)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "uiStatus",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "augmentedPath",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(prependDir, basePath)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "semgrepVersion",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(bin, env)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "done",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(r)",
-      "callCount": 1
-    },
-    {
-      "type": "function",
-      "name": "semgrepPresence",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "checkSemgrep",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(force = false)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "semgrepCheckKick",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(force = false)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "runCapture",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(cmdLine, timeoutMs = 600000)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "done",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(code, err)",
-      "callCount": 1
-    },
-    {
-      "type": "function",
-      "name": "pump",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(c)",
-      "callCount": 5
-    },
-    {
-      "type": "function",
-      "name": "installSemgrep",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "cmdUI",
-      "file": "gateway.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "jsonOut",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(code, obj)",
-      "callCount": 3
-    },
-    {
-      "type": "function",
-      "name": "hostOf",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(h)",
-      "callCount": 4
-    },
-    {
-      "type": "function",
-      "name": "isTrustedHost",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(hostHeader)",
-      "callCount": 2
-    },
-    {
-      "type": "function",
-      "name": "isTrustedOrigin",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(originHeader)",
-      "callCount": 3
-    },
-    {
-      "type": "function",
-      "name": "bye",
-      "file": "gateway.mjs",
-      "kind": "arrow",
-      "async": true,
-      "params": "()",
-      "callCount": 3
-    },
-    {
-      "type": "route",
-      "name": "GET /index.html",
-      "file": "gateway.mjs",
-      "method": "GET",
-      "path": "/index.html"
-    },
-    {
-      "type": "route",
-      "name": "GET /api/settings",
-      "file": "gateway.mjs",
-      "method": "GET",
-      "path": "/api/settings"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/settings",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/settings"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/semgrep/install",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/semgrep/install"
-    },
-    {
-      "type": "route",
-      "name": "GET /api/status",
-      "file": "gateway.mjs",
-      "method": "GET",
-      "path": "/api/status"
-    },
-    {
-      "type": "route",
-      "name": "GET /api/log",
-      "file": "gateway.mjs",
-      "method": "GET",
-      "path": "/api/log"
-    },
-    {
-      "type": "route",
-      "name": "GET /api/paaw-log",
-      "file": "gateway.mjs",
-      "method": "GET",
-      "path": "/api/paaw-log"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/update",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/update"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/upload",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/upload"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/start",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/start"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/stop",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/stop"
-    },
-    {
-      "type": "route",
-      "name": "POST /api/restart",
-      "file": "gateway.mjs",
-      "method": "POST",
-      "path": "/api/restart"
     },
     {
       "type": "function",
@@ -774,177 +222,6 @@
     },
     {
       "type": "function",
-      "name": "loadConfig",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "saveConfig",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "backupPath",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(name)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "logEvent",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(type, detail, userId = \"system\")",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "startPaaw",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "stopPaaw",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "finish",
-      "file": "src/server.mjs",
-      "kind": "arrow",
-      "async": false,
-      "params": "(ok, error)",
-      "callCount": 4
-    },
-    {
-      "type": "function",
-      "name": "restartPaaw",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "getCurrentVersion",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "getGitInfo",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "getLatestVersion",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "upgradePaaw",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(userId = \"system\")",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "listBackups",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "createBackup",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(userId = \"system\")",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "restoreBackup",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(filename, userId = \"system\")",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "healthCheckPaaw",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "getSystemHealth",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "createSession",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(userId)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "validateSession",
-      "file": "src/server.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(token)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
       "name": "sendJSON",
       "file": "src/server.mjs",
       "kind": "arrow",
@@ -965,42 +242,42 @@
       "type": "export",
       "name": "BACKUP_REGEX",
       "file": "src/server.mjs",
-      "kind": "variable",
+      "kind": "named",
       "isDefault": false
     },
     {
       "type": "export",
       "name": "BACKUP_DATE_REGEX",
       "file": "src/server.mjs",
-      "kind": "variable",
+      "kind": "named",
       "isDefault": false
     },
     {
       "type": "export",
       "name": "backupPath",
       "file": "src/server.mjs",
-      "kind": "function",
+      "kind": "named",
       "isDefault": false
     },
     {
       "type": "export",
       "name": "listBackups",
       "file": "src/server.mjs",
-      "kind": "function",
+      "kind": "named",
       "isDefault": false
     },
     {
       "type": "export",
       "name": "createBackup",
       "file": "src/server.mjs",
-      "kind": "function",
+      "kind": "named",
       "isDefault": false
     },
     {
       "type": "export",
       "name": "restoreBackup",
       "file": "src/server.mjs",
-      "kind": "function",
+      "kind": "named",
       "isDefault": false
     },
     {
@@ -1093,317 +370,1425 @@
       "file": "src/server.mjs",
       "method": "GET",
       "path": "/api/users"
+    },
+    {
+      "type": "function",
+      "name": "jobLog",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(line)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiStart",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiStop",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiUpdate",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "runJob",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(kind, fn)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "uiStatus",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "cmdUI",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "jsonOut",
+      "file": "src/ui/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(code, obj)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "hostOf",
+      "file": "src/ui/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(h)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "isTrustedHost",
+      "file": "src/ui/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(hostHeader)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "isTrustedOrigin",
+      "file": "src/ui/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(originHeader)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "bye",
+      "file": "src/ui/server.mjs",
+      "kind": "arrow",
+      "async": true,
+      "params": "()",
+      "callCount": 4
+    },
+    {
+      "type": "export",
+      "name": "cmdUI",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "route",
+      "name": "GET /index.html",
+      "file": "src/ui/server.mjs",
+      "method": "GET",
+      "path": "/index.html"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/settings",
+      "file": "src/ui/server.mjs",
+      "method": "GET",
+      "path": "/api/settings"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/settings",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/settings"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/semgrep/install",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/semgrep/install"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/status",
+      "file": "src/ui/server.mjs",
+      "method": "GET",
+      "path": "/api/status"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/log",
+      "file": "src/ui/server.mjs",
+      "method": "GET",
+      "path": "/api/log"
+    },
+    {
+      "type": "route",
+      "name": "GET /api/paaw-log",
+      "file": "src/ui/server.mjs",
+      "method": "GET",
+      "path": "/api/paaw-log"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/update",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/update"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/upload",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/upload"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/start",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/start"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/stop",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/stop"
+    },
+    {
+      "type": "route",
+      "name": "POST /api/restart",
+      "file": "src/ui/server.mjs",
+      "method": "POST",
+      "path": "/api/restart"
+    },
+    {
+      "type": "function",
+      "name": "createAuth",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(config)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "createSession",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(userId)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "validateSession",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(token)",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "createAuth",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "createBackupManager",
+      "file": "src/server/backup.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(deps)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "backupPath",
+      "file": "src/server/backup.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(name)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "listBackups",
+      "file": "src/server/backup.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "createBackup",
+      "file": "src/server/backup.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "restoreBackup",
+      "file": "src/server/backup.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(filename, userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "BACKUP_REGEX",
+      "file": "src/server/backup.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "BACKUP_DATE_REGEX",
+      "file": "src/server/backup.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "createBackupManager",
+      "file": "src/server/backup.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "loadConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(configPath, baseDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "saveConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(configPath, config)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "createConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(baseDir)",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "loadConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "saveConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "createConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "createEventLog",
+      "file": "src/server/events.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(eventLogPath)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "logEvent",
+      "file": "src/server/events.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(type, detail, userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "createEventLog",
+      "file": "src/server/events.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "createPaawControl",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(deps)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stopPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "finish",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(ok, error)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "onExit",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(code, signal)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "restartPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getCurrentVersion",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getGitInfo",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getLatestVersion",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "upgradePaaw",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(userId = \"system\")",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "healthCheckPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getSystemHealth",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getPaawProcess",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "isRunning",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "createPaawControl",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "getCfg",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setCfgField",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(key, value)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "deleteCfgField",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(key)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "applyHome",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getHome",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getVersionsDir",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getDataDir",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getCurrentFile",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getLogsDir",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "saveGatewayCfg",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "logFile",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(line)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semverGt",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(a, b)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "loadPackageServerUrl",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "readCurrent",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "writeCurrentAtomic",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(version)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "listInstalledVersions",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "augmentedPath",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(prependDir, basePath)",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "VERSION_RE",
+      "file": "src/lib/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getCfg",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "setCfgField",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "deleteCfgField",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "applyHome",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getHome",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getVersionsDir",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getDataDir",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getCurrentFile",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getLogsDir",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "saveGatewayCfg",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "PORT",
+      "file": "src/lib/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "AUTO_UPDATE",
+      "file": "src/lib/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "EMOJI_OK",
+      "file": "src/lib/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "L",
+      "file": "src/lib/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "logFile",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "semverGt",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "loadPackageServerUrl",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "readCurrent",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "writeCurrentAtomic",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "listInstalledVersions",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "PATH_SEP",
+      "file": "src/lib/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "augmentedPath",
+      "file": "src/lib/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "downloadVerified",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(url, sha256Expected, destPath, sizeExpected)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "extractZip",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(zipPath, destDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "verifySkeleton",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(dir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "run",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(cmd, args, cwd)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "installDeps",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(versionDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "ensureData",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(versionDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stageInstall",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(zipPath, v)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "installVersion",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(manifest, server)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "readZipManifest",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(buf)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "installUploadedZip",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(zipBuf, label)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "updateLogic",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "downloadVerified",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "extractZip",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "verifySkeleton",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "installDeps",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "ensureData",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "stageInstall",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "installVersion",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "readZipManifest",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "installUploadedZip",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "updateLogic",
+      "file": "src/lib/install.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "getPaawChild",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setPaawChild",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getPaawChildVersion",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setPaawChildVersion",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(v)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getLastStartFail",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setLastStartFail",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(msg)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "paawRunning",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semgrepDetectedProvider",
+      "file": "src/lib/process.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setSemgrepDetectedProvider",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(fn)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "openBrowserTab",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(url)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startPaaw",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(versionDir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "pump",
+      "file": "src/lib/process.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(stream, mirror)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "childFailReason",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "waitForHealthy",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(timeoutMs = 90000)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "killChild",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "isPortOccupied",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startAndVerify",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(versionDir, version)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "hangAround",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(child)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "bye",
+      "file": "src/lib/process.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 2
+    },
+    {
+      "type": "export",
+      "name": "getPaawChild",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "setPaawChild",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getPaawChildVersion",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "setPaawChildVersion",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getLastStartFail",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "setLastStartFail",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "paawRunning",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "setSemgrepDetectedProvider",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "OPEN_BROWSER",
+      "file": "src/lib/process.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "openBrowserTab",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "startPaaw",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "childFailReason",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "waitForHealthy",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "killChild",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "isPortOccupied",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "startAndVerify",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "hangAround",
+      "file": "src/lib/process.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "getDetectedPath",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getCheckState",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semgrepVersion",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(bin, env)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "done",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(r)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "semgrepPresence",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "checkSemgrep",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(force = false)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "semgrepCheckKick",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(force = false)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "runCapture",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(cmdLine, timeoutMs, jobLog)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "done",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(code, err)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "pump",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(c)",
+      "callCount": 5
+    },
+    {
+      "type": "function",
+      "name": "installSemgrep",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(jobLog)",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "getDetectedPath",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "getCheckState",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "semgrepPresence",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "semgrepCheckKick",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "installSemgrep",
+      "file": "src/lib/semgrep.mjs",
+      "kind": "function",
+      "isDefault": false
     }
   ],
   "byName": {
-    "applyHome": [
-      {
-        "type": "function",
-        "name": "applyHome",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "saveGatewayCfg": [
-      {
-        "type": "function",
-        "name": "saveGatewayCfg",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "logFile": [
-      {
-        "type": "function",
-        "name": "logFile",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(line)",
-        "callCount": 0
-      }
-    ],
-    "semverGt": [
-      {
-        "type": "function",
-        "name": "semverGt",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(a, b)",
-        "callCount": 0
-      }
-    ],
-    "loadPackageServerUrl": [
-      {
-        "type": "function",
-        "name": "loadPackageServerUrl",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "readCurrent": [
-      {
-        "type": "function",
-        "name": "readCurrent",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "writeCurrentAtomic": [
-      {
-        "type": "function",
-        "name": "writeCurrentAtomic",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(version)",
-        "callCount": 0
-      }
-    ],
-    "listInstalledVersions": [
-      {
-        "type": "function",
-        "name": "listInstalledVersions",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "downloadVerified": [
-      {
-        "type": "function",
-        "name": "downloadVerified",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(url, sha256Expected, destPath, sizeExpected)",
-        "callCount": 0
-      }
-    ],
-    "extractZip": [
-      {
-        "type": "function",
-        "name": "extractZip",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(zipPath, destDir)",
-        "callCount": 0
-      }
-    ],
-    "verifySkeleton": [
-      {
-        "type": "function",
-        "name": "verifySkeleton",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(dir)",
-        "callCount": 0
-      }
-    ],
-    "run": [
-      {
-        "type": "function",
-        "name": "run",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(cmd, args, cwd)",
-        "callCount": 0
-      }
-    ],
-    "installDeps": [
-      {
-        "type": "function",
-        "name": "installDeps",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(versionDir)",
-        "callCount": 0
-      }
-    ],
-    "ensureData": [
-      {
-        "type": "function",
-        "name": "ensureData",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(versionDir)",
-        "callCount": 0
-      }
-    ],
-    "startPaaw": [
-      {
-        "type": "function",
-        "name": "startPaaw",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(versionDir)",
-        "callCount": 0
-      },
-      {
-        "type": "function",
-        "name": "startPaaw",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "pump": [
-      {
-        "type": "function",
-        "name": "pump",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(stream, mirror)",
-        "callCount": 3
-      },
-      {
-        "type": "function",
-        "name": "pump",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(c)",
-        "callCount": 5
-      }
-    ],
-    "childFailReason": [
-      {
-        "type": "function",
-        "name": "childFailReason",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(child)",
-        "callCount": 0
-      }
-    ],
-    "waitForHealthy": [
-      {
-        "type": "function",
-        "name": "waitForHealthy",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(timeoutMs = 90000)",
-        "callCount": 0
-      }
-    ],
-    "killChild": [
-      {
-        "type": "function",
-        "name": "killChild",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(child)",
-        "callCount": 0
-      }
-    ],
-    "isPortOccupied": [
-      {
-        "type": "function",
-        "name": "isPortOccupied",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "startAndVerify": [
-      {
-        "type": "function",
-        "name": "startAndVerify",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(versionDir, version)",
-        "callCount": 0
-      }
-    ],
-    "stageInstall": [
-      {
-        "type": "function",
-        "name": "stageInstall",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(zipPath, v)",
-        "callCount": 0
-      }
-    ],
-    "installVersion": [
-      {
-        "type": "function",
-        "name": "installVersion",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(manifest, server)",
-        "callCount": 0
-      }
-    ],
-    "readZipManifest": [
-      {
-        "type": "function",
-        "name": "readZipManifest",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(buf)",
-        "callCount": 0
-      }
-    ],
-    "installUploadedZip": [
-      {
-        "type": "function",
-        "name": "installUploadedZip",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(zipBuf, label)",
-        "callCount": 0
-      }
-    ],
     "cmdStatus": [
       {
         "type": "function",
         "name": "cmdStatus",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "updateLogic": [
-      {
-        "type": "function",
-        "name": "updateLogic",
         "file": "gateway.mjs",
         "kind": "function",
         "async": true,
@@ -1442,385 +1827,6 @@
         "async": true,
         "params": "()",
         "callCount": 0
-      }
-    ],
-    "hangAround": [
-      {
-        "type": "function",
-        "name": "hangAround",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(child)",
-        "callCount": 0
-      }
-    ],
-    "bye": [
-      {
-        "type": "function",
-        "name": "bye",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "()",
-        "callCount": 2
-      },
-      {
-        "type": "function",
-        "name": "bye",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": true,
-        "params": "()",
-        "callCount": 3
-      }
-    ],
-    "jobLog": [
-      {
-        "type": "function",
-        "name": "jobLog",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(line)",
-        "callCount": 0
-      }
-    ],
-    "paawRunning": [
-      {
-        "type": "function",
-        "name": "paawRunning",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "openBrowserTab": [
-      {
-        "type": "function",
-        "name": "openBrowserTab",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(url)",
-        "callCount": 0
-      }
-    ],
-    "uiStart": [
-      {
-        "type": "function",
-        "name": "uiStart",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "uiStop": [
-      {
-        "type": "function",
-        "name": "uiStop",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "uiUpdate": [
-      {
-        "type": "function",
-        "name": "uiUpdate",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "runJob": [
-      {
-        "type": "function",
-        "name": "runJob",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(kind, fn)",
-        "callCount": 0
-      }
-    ],
-    "uiStatus": [
-      {
-        "type": "function",
-        "name": "uiStatus",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "augmentedPath": [
-      {
-        "type": "function",
-        "name": "augmentedPath",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(prependDir, basePath)",
-        "callCount": 0
-      }
-    ],
-    "semgrepVersion": [
-      {
-        "type": "function",
-        "name": "semgrepVersion",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(bin, env)",
-        "callCount": 0
-      }
-    ],
-    "done": [
-      {
-        "type": "function",
-        "name": "done",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(r)",
-        "callCount": 1
-      },
-      {
-        "type": "function",
-        "name": "done",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(code, err)",
-        "callCount": 1
-      }
-    ],
-    "semgrepPresence": [
-      {
-        "type": "function",
-        "name": "semgrepPresence",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "checkSemgrep": [
-      {
-        "type": "function",
-        "name": "checkSemgrep",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(force = false)",
-        "callCount": 0
-      }
-    ],
-    "semgrepCheckKick": [
-      {
-        "type": "function",
-        "name": "semgrepCheckKick",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(force = false)",
-        "callCount": 0
-      }
-    ],
-    "runCapture": [
-      {
-        "type": "function",
-        "name": "runCapture",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(cmdLine, timeoutMs = 600000)",
-        "callCount": 0
-      }
-    ],
-    "installSemgrep": [
-      {
-        "type": "function",
-        "name": "installSemgrep",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "cmdUI": [
-      {
-        "type": "function",
-        "name": "cmdUI",
-        "file": "gateway.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "jsonOut": [
-      {
-        "type": "function",
-        "name": "jsonOut",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(code, obj)",
-        "callCount": 3
-      }
-    ],
-    "hostOf": [
-      {
-        "type": "function",
-        "name": "hostOf",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(h)",
-        "callCount": 4
-      }
-    ],
-    "isTrustedHost": [
-      {
-        "type": "function",
-        "name": "isTrustedHost",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(hostHeader)",
-        "callCount": 2
-      }
-    ],
-    "isTrustedOrigin": [
-      {
-        "type": "function",
-        "name": "isTrustedOrigin",
-        "file": "gateway.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(originHeader)",
-        "callCount": 3
-      }
-    ],
-    "GET /index.html": [
-      {
-        "type": "route",
-        "name": "GET /index.html",
-        "file": "gateway.mjs",
-        "method": "GET",
-        "path": "/index.html"
-      }
-    ],
-    "GET /api/settings": [
-      {
-        "type": "route",
-        "name": "GET /api/settings",
-        "file": "gateway.mjs",
-        "method": "GET",
-        "path": "/api/settings"
-      }
-    ],
-    "POST /api/settings": [
-      {
-        "type": "route",
-        "name": "POST /api/settings",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/settings"
-      }
-    ],
-    "POST /api/semgrep/install": [
-      {
-        "type": "route",
-        "name": "POST /api/semgrep/install",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/semgrep/install"
-      }
-    ],
-    "GET /api/status": [
-      {
-        "type": "route",
-        "name": "GET /api/status",
-        "file": "gateway.mjs",
-        "method": "GET",
-        "path": "/api/status"
-      }
-    ],
-    "GET /api/log": [
-      {
-        "type": "route",
-        "name": "GET /api/log",
-        "file": "gateway.mjs",
-        "method": "GET",
-        "path": "/api/log"
-      }
-    ],
-    "GET /api/paaw-log": [
-      {
-        "type": "route",
-        "name": "GET /api/paaw-log",
-        "file": "gateway.mjs",
-        "method": "GET",
-        "path": "/api/paaw-log"
-      }
-    ],
-    "POST /api/update": [
-      {
-        "type": "route",
-        "name": "POST /api/update",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/update"
-      }
-    ],
-    "POST /api/upload": [
-      {
-        "type": "route",
-        "name": "POST /api/upload",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/upload"
-      }
-    ],
-    "POST /api/start": [
-      {
-        "type": "route",
-        "name": "POST /api/start",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/start"
-      }
-    ],
-    "POST /api/stop": [
-      {
-        "type": "route",
-        "name": "POST /api/stop",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/stop"
-      }
-    ],
-    "POST /api/restart": [
-      {
-        "type": "route",
-        "name": "POST /api/restart",
-        "file": "gateway.mjs",
-        "method": "POST",
-        "path": "/api/restart"
       }
     ],
     "loadServer": [
@@ -2041,232 +2047,6 @@
         "callCount": 0
       }
     ],
-    "loadConfig": [
-      {
-        "type": "function",
-        "name": "loadConfig",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "saveConfig": [
-      {
-        "type": "function",
-        "name": "saveConfig",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "backupPath": [
-      {
-        "type": "function",
-        "name": "backupPath",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(name)",
-        "callCount": 0
-      },
-      {
-        "type": "export",
-        "name": "backupPath",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "isDefault": false
-      }
-    ],
-    "logEvent": [
-      {
-        "type": "function",
-        "name": "logEvent",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(type, detail, userId = \"system\")",
-        "callCount": 0
-      }
-    ],
-    "stopPaaw": [
-      {
-        "type": "function",
-        "name": "stopPaaw",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "finish": [
-      {
-        "type": "function",
-        "name": "finish",
-        "file": "src/server.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(ok, error)",
-        "callCount": 4
-      }
-    ],
-    "restartPaaw": [
-      {
-        "type": "function",
-        "name": "restartPaaw",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "getCurrentVersion": [
-      {
-        "type": "function",
-        "name": "getCurrentVersion",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "getGitInfo": [
-      {
-        "type": "function",
-        "name": "getGitInfo",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "getLatestVersion": [
-      {
-        "type": "function",
-        "name": "getLatestVersion",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "upgradePaaw": [
-      {
-        "type": "function",
-        "name": "upgradePaaw",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(userId = \"system\")",
-        "callCount": 0
-      }
-    ],
-    "listBackups": [
-      {
-        "type": "function",
-        "name": "listBackups",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      },
-      {
-        "type": "export",
-        "name": "listBackups",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "isDefault": false
-      }
-    ],
-    "createBackup": [
-      {
-        "type": "function",
-        "name": "createBackup",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(userId = \"system\")",
-        "callCount": 0
-      },
-      {
-        "type": "export",
-        "name": "createBackup",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "isDefault": false
-      }
-    ],
-    "restoreBackup": [
-      {
-        "type": "function",
-        "name": "restoreBackup",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(filename, userId = \"system\")",
-        "callCount": 0
-      },
-      {
-        "type": "export",
-        "name": "restoreBackup",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "isDefault": false
-      }
-    ],
-    "healthCheckPaaw": [
-      {
-        "type": "function",
-        "name": "healthCheckPaaw",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "getSystemHealth": [
-      {
-        "type": "function",
-        "name": "getSystemHealth",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "createSession": [
-      {
-        "type": "function",
-        "name": "createSession",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(userId)",
-        "callCount": 0
-      }
-    ],
-    "validateSession": [
-      {
-        "type": "function",
-        "name": "validateSession",
-        "file": "src/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(token)",
-        "callCount": 0
-      }
-    ],
     "sendJSON": [
       {
         "type": "function",
@@ -2294,6 +2074,13 @@
         "type": "export",
         "name": "BACKUP_REGEX",
         "file": "src/server.mjs",
+        "kind": "named",
+        "isDefault": false
+      },
+      {
+        "type": "export",
+        "name": "BACKUP_REGEX",
+        "file": "src/server/backup.mjs",
         "kind": "variable",
         "isDefault": false
       }
@@ -2303,8 +2090,87 @@
         "type": "export",
         "name": "BACKUP_DATE_REGEX",
         "file": "src/server.mjs",
+        "kind": "named",
+        "isDefault": false
+      },
+      {
+        "type": "export",
+        "name": "BACKUP_DATE_REGEX",
+        "file": "src/server/backup.mjs",
         "kind": "variable",
         "isDefault": false
+      }
+    ],
+    "backupPath": [
+      {
+        "type": "export",
+        "name": "backupPath",
+        "file": "src/server.mjs",
+        "kind": "named",
+        "isDefault": false
+      },
+      {
+        "type": "function",
+        "name": "backupPath",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(name)",
+        "callCount": 0
+      }
+    ],
+    "listBackups": [
+      {
+        "type": "export",
+        "name": "listBackups",
+        "file": "src/server.mjs",
+        "kind": "named",
+        "isDefault": false
+      },
+      {
+        "type": "function",
+        "name": "listBackups",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "createBackup": [
+      {
+        "type": "export",
+        "name": "createBackup",
+        "file": "src/server.mjs",
+        "kind": "named",
+        "isDefault": false
+      },
+      {
+        "type": "function",
+        "name": "createBackup",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(userId = \"system\")",
+        "callCount": 0
+      }
+    ],
+    "restoreBackup": [
+      {
+        "type": "export",
+        "name": "restoreBackup",
+        "file": "src/server.mjs",
+        "kind": "named",
+        "isDefault": false
+      },
+      {
+        "type": "function",
+        "name": "restoreBackup",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(filename, userId = \"system\")",
+        "callCount": 0
       }
     ],
     "POST /api/auth/login": [
@@ -2423,13 +2289,1591 @@
         "method": "GET",
         "path": "/api/users"
       }
+    ],
+    "jobLog": [
+      {
+        "type": "function",
+        "name": "jobLog",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(line)",
+        "callCount": 0
+      }
+    ],
+    "uiStart": [
+      {
+        "type": "function",
+        "name": "uiStart",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "uiStop": [
+      {
+        "type": "function",
+        "name": "uiStop",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "uiUpdate": [
+      {
+        "type": "function",
+        "name": "uiUpdate",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "runJob": [
+      {
+        "type": "function",
+        "name": "runJob",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(kind, fn)",
+        "callCount": 0
+      }
+    ],
+    "uiStatus": [
+      {
+        "type": "function",
+        "name": "uiStatus",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "cmdUI": [
+      {
+        "type": "function",
+        "name": "cmdUI",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "cmdUI",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "jsonOut": [
+      {
+        "type": "function",
+        "name": "jsonOut",
+        "file": "src/ui/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, obj)",
+        "callCount": 3
+      }
+    ],
+    "hostOf": [
+      {
+        "type": "function",
+        "name": "hostOf",
+        "file": "src/ui/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(h)",
+        "callCount": 4
+      }
+    ],
+    "isTrustedHost": [
+      {
+        "type": "function",
+        "name": "isTrustedHost",
+        "file": "src/ui/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(hostHeader)",
+        "callCount": 2
+      }
+    ],
+    "isTrustedOrigin": [
+      {
+        "type": "function",
+        "name": "isTrustedOrigin",
+        "file": "src/ui/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(originHeader)",
+        "callCount": 3
+      }
+    ],
+    "bye": [
+      {
+        "type": "function",
+        "name": "bye",
+        "file": "src/ui/server.mjs",
+        "kind": "arrow",
+        "async": true,
+        "params": "()",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "bye",
+        "file": "src/lib/process.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 2
+      }
+    ],
+    "GET /index.html": [
+      {
+        "type": "route",
+        "name": "GET /index.html",
+        "file": "src/ui/server.mjs",
+        "method": "GET",
+        "path": "/index.html"
+      }
+    ],
+    "GET /api/settings": [
+      {
+        "type": "route",
+        "name": "GET /api/settings",
+        "file": "src/ui/server.mjs",
+        "method": "GET",
+        "path": "/api/settings"
+      }
+    ],
+    "POST /api/settings": [
+      {
+        "type": "route",
+        "name": "POST /api/settings",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/settings"
+      }
+    ],
+    "POST /api/semgrep/install": [
+      {
+        "type": "route",
+        "name": "POST /api/semgrep/install",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/semgrep/install"
+      }
+    ],
+    "GET /api/status": [
+      {
+        "type": "route",
+        "name": "GET /api/status",
+        "file": "src/ui/server.mjs",
+        "method": "GET",
+        "path": "/api/status"
+      }
+    ],
+    "GET /api/log": [
+      {
+        "type": "route",
+        "name": "GET /api/log",
+        "file": "src/ui/server.mjs",
+        "method": "GET",
+        "path": "/api/log"
+      }
+    ],
+    "GET /api/paaw-log": [
+      {
+        "type": "route",
+        "name": "GET /api/paaw-log",
+        "file": "src/ui/server.mjs",
+        "method": "GET",
+        "path": "/api/paaw-log"
+      }
+    ],
+    "POST /api/update": [
+      {
+        "type": "route",
+        "name": "POST /api/update",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/update"
+      }
+    ],
+    "POST /api/upload": [
+      {
+        "type": "route",
+        "name": "POST /api/upload",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/upload"
+      }
+    ],
+    "POST /api/start": [
+      {
+        "type": "route",
+        "name": "POST /api/start",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/start"
+      }
+    ],
+    "POST /api/stop": [
+      {
+        "type": "route",
+        "name": "POST /api/stop",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/stop"
+      }
+    ],
+    "POST /api/restart": [
+      {
+        "type": "route",
+        "name": "POST /api/restart",
+        "file": "src/ui/server.mjs",
+        "method": "POST",
+        "path": "/api/restart"
+      }
+    ],
+    "createAuth": [
+      {
+        "type": "function",
+        "name": "createAuth",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(config)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createAuth",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "createSession": [
+      {
+        "type": "function",
+        "name": "createSession",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(userId)",
+        "callCount": 0
+      }
+    ],
+    "validateSession": [
+      {
+        "type": "function",
+        "name": "validateSession",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(token)",
+        "callCount": 0
+      }
+    ],
+    "createBackupManager": [
+      {
+        "type": "function",
+        "name": "createBackupManager",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(deps)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createBackupManager",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "loadConfig": [
+      {
+        "type": "function",
+        "name": "loadConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(configPath, baseDir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "loadConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "saveConfig": [
+      {
+        "type": "function",
+        "name": "saveConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(configPath, config)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "saveConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "createConfig": [
+      {
+        "type": "function",
+        "name": "createConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(baseDir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "createEventLog": [
+      {
+        "type": "function",
+        "name": "createEventLog",
+        "file": "src/server/events.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(eventLogPath)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createEventLog",
+        "file": "src/server/events.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "logEvent": [
+      {
+        "type": "function",
+        "name": "logEvent",
+        "file": "src/server/events.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(type, detail, userId = \"system\")",
+        "callCount": 0
+      }
+    ],
+    "createPaawControl": [
+      {
+        "type": "function",
+        "name": "createPaawControl",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(deps)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createPaawControl",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "startPaaw": [
+      {
+        "type": "function",
+        "name": "startPaaw",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "startPaaw",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(versionDir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "startPaaw",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "stopPaaw": [
+      {
+        "type": "function",
+        "name": "stopPaaw",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "finish": [
+      {
+        "type": "function",
+        "name": "finish",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(ok, error)",
+        "callCount": 3
+      }
+    ],
+    "onExit": [
+      {
+        "type": "function",
+        "name": "onExit",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, signal)",
+        "callCount": 2
+      }
+    ],
+    "restartPaaw": [
+      {
+        "type": "function",
+        "name": "restartPaaw",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getCurrentVersion": [
+      {
+        "type": "function",
+        "name": "getCurrentVersion",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getGitInfo": [
+      {
+        "type": "function",
+        "name": "getGitInfo",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getLatestVersion": [
+      {
+        "type": "function",
+        "name": "getLatestVersion",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "upgradePaaw": [
+      {
+        "type": "function",
+        "name": "upgradePaaw",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(userId = \"system\")",
+        "callCount": 0
+      }
+    ],
+    "healthCheckPaaw": [
+      {
+        "type": "function",
+        "name": "healthCheckPaaw",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getSystemHealth": [
+      {
+        "type": "function",
+        "name": "getSystemHealth",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getPaawProcess": [
+      {
+        "type": "function",
+        "name": "getPaawProcess",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "isRunning": [
+      {
+        "type": "function",
+        "name": "isRunning",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "getCfg": [
+      {
+        "type": "function",
+        "name": "getCfg",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getCfg",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "setCfgField": [
+      {
+        "type": "function",
+        "name": "setCfgField",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(key, value)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "setCfgField",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "deleteCfgField": [
+      {
+        "type": "function",
+        "name": "deleteCfgField",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(key)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "deleteCfgField",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "applyHome": [
+      {
+        "type": "function",
+        "name": "applyHome",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "applyHome",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getHome": [
+      {
+        "type": "function",
+        "name": "getHome",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getHome",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getVersionsDir": [
+      {
+        "type": "function",
+        "name": "getVersionsDir",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getVersionsDir",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getDataDir": [
+      {
+        "type": "function",
+        "name": "getDataDir",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getDataDir",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getCurrentFile": [
+      {
+        "type": "function",
+        "name": "getCurrentFile",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getCurrentFile",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getLogsDir": [
+      {
+        "type": "function",
+        "name": "getLogsDir",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getLogsDir",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "saveGatewayCfg": [
+      {
+        "type": "function",
+        "name": "saveGatewayCfg",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "saveGatewayCfg",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "logFile": [
+      {
+        "type": "function",
+        "name": "logFile",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(line)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "logFile",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "semverGt": [
+      {
+        "type": "function",
+        "name": "semverGt",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(a, b)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "semverGt",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "loadPackageServerUrl": [
+      {
+        "type": "function",
+        "name": "loadPackageServerUrl",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "loadPackageServerUrl",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "readCurrent": [
+      {
+        "type": "function",
+        "name": "readCurrent",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "readCurrent",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "writeCurrentAtomic": [
+      {
+        "type": "function",
+        "name": "writeCurrentAtomic",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(version)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "writeCurrentAtomic",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "listInstalledVersions": [
+      {
+        "type": "function",
+        "name": "listInstalledVersions",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "listInstalledVersions",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "augmentedPath": [
+      {
+        "type": "function",
+        "name": "augmentedPath",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(prependDir, basePath)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "augmentedPath",
+        "file": "src/lib/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "VERSION_RE": [
+      {
+        "type": "export",
+        "name": "VERSION_RE",
+        "file": "src/lib/config.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "PORT": [
+      {
+        "type": "export",
+        "name": "PORT",
+        "file": "src/lib/config.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "AUTO_UPDATE": [
+      {
+        "type": "export",
+        "name": "AUTO_UPDATE",
+        "file": "src/lib/config.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "EMOJI_OK": [
+      {
+        "type": "export",
+        "name": "EMOJI_OK",
+        "file": "src/lib/config.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "L": [
+      {
+        "type": "export",
+        "name": "L",
+        "file": "src/lib/config.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "PATH_SEP": [
+      {
+        "type": "export",
+        "name": "PATH_SEP",
+        "file": "src/lib/config.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "downloadVerified": [
+      {
+        "type": "function",
+        "name": "downloadVerified",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(url, sha256Expected, destPath, sizeExpected)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "downloadVerified",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "extractZip": [
+      {
+        "type": "function",
+        "name": "extractZip",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(zipPath, destDir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "extractZip",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "verifySkeleton": [
+      {
+        "type": "function",
+        "name": "verifySkeleton",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(dir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "verifySkeleton",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "run": [
+      {
+        "type": "function",
+        "name": "run",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(cmd, args, cwd)",
+        "callCount": 0
+      }
+    ],
+    "installDeps": [
+      {
+        "type": "function",
+        "name": "installDeps",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(versionDir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "installDeps",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "ensureData": [
+      {
+        "type": "function",
+        "name": "ensureData",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(versionDir)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "ensureData",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "stageInstall": [
+      {
+        "type": "function",
+        "name": "stageInstall",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(zipPath, v)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "stageInstall",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "installVersion": [
+      {
+        "type": "function",
+        "name": "installVersion",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(manifest, server)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "installVersion",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "readZipManifest": [
+      {
+        "type": "function",
+        "name": "readZipManifest",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(buf)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "readZipManifest",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "installUploadedZip": [
+      {
+        "type": "function",
+        "name": "installUploadedZip",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(zipBuf, label)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "installUploadedZip",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "updateLogic": [
+      {
+        "type": "function",
+        "name": "updateLogic",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "updateLogic",
+        "file": "src/lib/install.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getPaawChild": [
+      {
+        "type": "function",
+        "name": "getPaawChild",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getPaawChild",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "setPaawChild": [
+      {
+        "type": "function",
+        "name": "setPaawChild",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "setPaawChild",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getPaawChildVersion": [
+      {
+        "type": "function",
+        "name": "getPaawChildVersion",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getPaawChildVersion",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "setPaawChildVersion": [
+      {
+        "type": "function",
+        "name": "setPaawChildVersion",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(v)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "setPaawChildVersion",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getLastStartFail": [
+      {
+        "type": "function",
+        "name": "getLastStartFail",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getLastStartFail",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "setLastStartFail": [
+      {
+        "type": "function",
+        "name": "setLastStartFail",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(msg)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "setLastStartFail",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "paawRunning": [
+      {
+        "type": "function",
+        "name": "paawRunning",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "paawRunning",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "semgrepDetectedProvider": [
+      {
+        "type": "function",
+        "name": "semgrepDetectedProvider",
+        "file": "src/lib/process.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "setSemgrepDetectedProvider": [
+      {
+        "type": "function",
+        "name": "setSemgrepDetectedProvider",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(fn)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "setSemgrepDetectedProvider",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "openBrowserTab": [
+      {
+        "type": "function",
+        "name": "openBrowserTab",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(url)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "openBrowserTab",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "pump": [
+      {
+        "type": "function",
+        "name": "pump",
+        "file": "src/lib/process.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(stream, mirror)",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "pump",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(c)",
+        "callCount": 5
+      }
+    ],
+    "childFailReason": [
+      {
+        "type": "function",
+        "name": "childFailReason",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "childFailReason",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "waitForHealthy": [
+      {
+        "type": "function",
+        "name": "waitForHealthy",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(timeoutMs = 90000)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "waitForHealthy",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "killChild": [
+      {
+        "type": "function",
+        "name": "killChild",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "killChild",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "isPortOccupied": [
+      {
+        "type": "function",
+        "name": "isPortOccupied",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "isPortOccupied",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "startAndVerify": [
+      {
+        "type": "function",
+        "name": "startAndVerify",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(versionDir, version)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "startAndVerify",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "hangAround": [
+      {
+        "type": "function",
+        "name": "hangAround",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(child)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "hangAround",
+        "file": "src/lib/process.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "OPEN_BROWSER": [
+      {
+        "type": "export",
+        "name": "OPEN_BROWSER",
+        "file": "src/lib/process.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "getDetectedPath": [
+      {
+        "type": "function",
+        "name": "getDetectedPath",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getDetectedPath",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "getCheckState": [
+      {
+        "type": "function",
+        "name": "getCheckState",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "getCheckState",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "semgrepVersion": [
+      {
+        "type": "function",
+        "name": "semgrepVersion",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(bin, env)",
+        "callCount": 0
+      }
+    ],
+    "done": [
+      {
+        "type": "function",
+        "name": "done",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(r)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "done",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, err)",
+        "callCount": 1
+      }
+    ],
+    "semgrepPresence": [
+      {
+        "type": "function",
+        "name": "semgrepPresence",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "semgrepPresence",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "checkSemgrep": [
+      {
+        "type": "function",
+        "name": "checkSemgrep",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(force = false)",
+        "callCount": 0
+      }
+    ],
+    "semgrepCheckKick": [
+      {
+        "type": "function",
+        "name": "semgrepCheckKick",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(force = false)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "semgrepCheckKick",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "runCapture": [
+      {
+        "type": "function",
+        "name": "runCapture",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(cmdLine, timeoutMs, jobLog)",
+        "callCount": 0
+      }
+    ],
+    "installSemgrep": [
+      {
+        "type": "function",
+        "name": "installSemgrep",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(jobLog)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "installSemgrep",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
     ]
   },
   "stats": {
-    "total": 128,
-    "functions": 96,
+    "total": 219,
+    "functions": 122,
     "classes": 1,
-    "exports": 6,
+    "exports": 71,
     "routes": 25,
     "components": 0
   }

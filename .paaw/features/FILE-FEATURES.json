@@ -3,14 +3,13 @@
     "gateway.mjs": [
       {
         "id": "F20261009-001",
-        "name": "PAAW Gateway 啟動器與本機控制台：套包安裝更新、版本回滾與 PAAW 生命週期管理",
+        "name": "PAAW 套包安裝更新與本機啟動控制台",
         "tags": [
-          "bootloader",
-          "package-installer",
-          "auto-update",
+          "paaw-bootloader",
           "staged-install",
           "version-rollback",
-          "process-supervisor"
+          "local-console",
+          "semgrep-setup"
         ]
       }
     ],
@@ -19,12 +18,12 @@
         "id": "F20261009-002",
         "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
         "tags": [
-          "authentication",
-          "session-management",
+          "gateway",
+          "admin-platform",
+          "auth",
           "rbac",
-          "process-supervisor",
-          "backup-restore",
-          "upgrade"
+          "backup",
+          "restore"
         ]
       }
     ],
@@ -33,15 +32,15 @@
         "id": "F20261009-002",
         "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
         "tags": [
-          "authentication",
-          "session-management",
+          "gateway",
+          "admin-platform",
+          "auth",
           "rbac",
-          "process-supervisor",
-          "backup-restore",
-          "upgrade"
+          "backup",
+          "restore"
         ]
       }
     ]
   },
-  "updatedAt": "2026-10-09T00:56:37.765Z"
+  "updatedAt": "2026-10-10T14:38:19.689Z"
 }

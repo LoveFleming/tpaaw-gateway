@@ -6,18 +6,6 @@
       "exports": [],
       "imports": [
         {
-          "source": "node:http",
-          "names": []
-        },
-        {
-          "source": "node:crypto",
-          "names": []
-        },
-        {
-          "source": "node:fs",
-          "names": []
-        },
-        {
           "source": "node:fs/promises",
           "names": []
         },
@@ -26,237 +14,33 @@
           "names": []
         },
         {
-          "source": "node:child_process",
-          "names": []
-        },
-        {
           "source": "node:path",
           "names": []
         },
         {
-          "source": "node:url",
+          "source": "./src/lib/config.mjs",
           "names": []
         },
         {
-          "source": "fflate",
+          "source": "./src/lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/lib/process.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/lib/semgrep.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/ui/server.mjs",
           "names": []
         }
       ],
       "functions": [
         {
-          "name": "applyHome",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "saveGatewayCfg",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "logFile",
-          "kind": "function",
-          "async": false,
-          "params": "(line)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "semverGt",
-          "kind": "function",
-          "async": false,
-          "params": "(a, b)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "loadPackageServerUrl",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "readCurrent",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "writeCurrentAtomic",
-          "kind": "function",
-          "async": true,
-          "params": "(version)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "listInstalledVersions",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "downloadVerified",
-          "kind": "function",
-          "async": true,
-          "params": "(url, sha256Expected, destPath, sizeExpected)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "extractZip",
-          "kind": "function",
-          "async": true,
-          "params": "(zipPath, destDir)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "verifySkeleton",
-          "kind": "function",
-          "async": true,
-          "params": "(dir)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "run",
-          "kind": "function",
-          "async": false,
-          "params": "(cmd, args, cwd)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "installDeps",
-          "kind": "function",
-          "async": true,
-          "params": "(versionDir)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "ensureData",
-          "kind": "function",
-          "async": true,
-          "params": "(versionDir)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startPaaw",
-          "kind": "function",
-          "async": false,
-          "params": "(versionDir)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "pump",
-          "kind": "arrow",
-          "async": false,
-          "params": "(stream, mirror)",
-          "callCount": 3,
-          "calls": [
-            "stream.on",
-            "mirror.write",
-            "(child.__tail + c).slice"
-          ]
-        },
-        {
-          "name": "childFailReason",
-          "kind": "function",
-          "async": false,
-          "params": "(child)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "waitForHealthy",
-          "kind": "function",
-          "async": true,
-          "params": "(timeoutMs = 90000)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "killChild",
-          "kind": "function",
-          "async": false,
-          "params": "(child)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "isPortOccupied",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startAndVerify",
-          "kind": "function",
-          "async": true,
-          "params": "(versionDir, version)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "stageInstall",
-          "kind": "function",
-          "async": true,
-          "params": "(zipPath, v)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "installVersion",
-          "kind": "function",
-          "async": true,
-          "params": "(manifest, server)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "readZipManifest",
-          "kind": "function",
-          "async": false,
-          "params": "(buf)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "installUploadedZip",
-          "kind": "function",
-          "async": true,
-          "params": "(zipBuf, label)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
           "name": "cmdStatus",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "updateLogic",
           "kind": "function",
           "async": true,
           "params": "()",
@@ -286,312 +70,10 @@
           "params": "()",
           "callCount": 0,
           "calls": []
-        },
-        {
-          "name": "hangAround",
-          "kind": "function",
-          "async": false,
-          "params": "(child)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "bye",
-          "kind": "arrow",
-          "async": false,
-          "params": "()",
-          "callCount": 2,
-          "calls": [
-            "child.kill",
-            "process.exit"
-          ]
-        },
-        {
-          "name": "jobLog",
-          "kind": "function",
-          "async": false,
-          "params": "(line)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "paawRunning",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "openBrowserTab",
-          "kind": "function",
-          "async": false,
-          "params": "(url)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "uiStart",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "uiStop",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "uiUpdate",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "runJob",
-          "kind": "function",
-          "async": true,
-          "params": "(kind, fn)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "uiStatus",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "augmentedPath",
-          "kind": "function",
-          "async": false,
-          "params": "(prependDir, basePath)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "semgrepVersion",
-          "kind": "function",
-          "async": false,
-          "params": "(bin, env)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "done",
-          "kind": "arrow",
-          "async": false,
-          "params": "(r)",
-          "callCount": 1,
-          "calls": [
-            "resolvePromise"
-          ]
-        },
-        {
-          "name": "semgrepPresence",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "checkSemgrep",
-          "kind": "function",
-          "async": true,
-          "params": "(force = false)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "semgrepCheckKick",
-          "kind": "function",
-          "async": false,
-          "params": "(force = false)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "runCapture",
-          "kind": "function",
-          "async": false,
-          "params": "(cmdLine, timeoutMs = 600000)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "done",
-          "kind": "arrow",
-          "async": false,
-          "params": "(code, err)",
-          "callCount": 1,
-          "calls": [
-            "resolvePromise"
-          ]
-        },
-        {
-          "name": "pump",
-          "kind": "arrow",
-          "async": false,
-          "params": "(c)",
-          "callCount": 5,
-          "calls": [
-            "String(c).split",
-            "String",
-            "line.trim",
-            "jobLog",
-            "s.slice"
-          ]
-        },
-        {
-          "name": "installSemgrep",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "cmdUI",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "jsonOut",
-          "kind": "arrow",
-          "async": false,
-          "params": "(code, obj)",
-          "callCount": 3,
-          "calls": [
-            "res.writeHead",
-            "res.end",
-            "JSON.stringify"
-          ]
-        },
-        {
-          "name": "hostOf",
-          "kind": "arrow",
-          "async": false,
-          "params": "(h)",
-          "callCount": 4,
-          "calls": [
-            "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
-            "new URL(`http://${h}`).hostname.replace",
-            "String(h).toLowerCase",
-            "String"
-          ]
-        },
-        {
-          "name": "isTrustedHost",
-          "kind": "arrow",
-          "async": false,
-          "params": "(hostHeader)",
-          "callCount": 2,
-          "calls": [
-            "HOST_WHITELIST.has",
-            "hostOf"
-          ]
-        },
-        {
-          "name": "isTrustedOrigin",
-          "kind": "arrow",
-          "async": false,
-          "params": "(originHeader)",
-          "callCount": 3,
-          "calls": [
-            "HOST_WHITELIST.has",
-            "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
-            "new URL(originHeader).hostname.replace"
-          ]
-        },
-        {
-          "name": "bye",
-          "kind": "arrow",
-          "async": true,
-          "params": "()",
-          "callCount": 3,
-          "calls": [
-            "paawRunning",
-            "killChild",
-            "process.exit"
-          ]
         }
       ],
       "classes": [],
-      "routes": [
-        {
-          "method": "GET",
-          "path": "/index.html",
-          "handler": ""
-        },
-        {
-          "method": "GET",
-          "path": "/api/settings",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/settings",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/semgrep/install",
-          "handler": ""
-        },
-        {
-          "method": "GET",
-          "path": "/api/status",
-          "handler": ""
-        },
-        {
-          "method": "GET",
-          "path": "/api/log",
-          "handler": ""
-        },
-        {
-          "method": "GET",
-          "path": "/api/paaw-log",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/update",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/upload",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/start",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/stop",
-          "handler": ""
-        },
-        {
-          "method": "POST",
-          "path": "/api/restart",
-          "handler": ""
-        }
-      ],
+      "routes": [],
       "components": []
     },
     {
@@ -959,32 +441,32 @@
       "language": "javascript",
       "exports": [
         {
-          "kind": "variable",
+          "kind": "named",
           "name": "BACKUP_REGEX",
           "isDefault": false
         },
         {
-          "kind": "variable",
+          "kind": "named",
           "name": "BACKUP_DATE_REGEX",
           "isDefault": false
         },
         {
-          "kind": "function",
+          "kind": "named",
           "name": "backupPath",
           "isDefault": false
         },
         {
-          "kind": "function",
+          "kind": "named",
           "name": "listBackups",
           "isDefault": false
         },
         {
-          "kind": "function",
+          "kind": "named",
           "name": "createBackup",
           "isDefault": false
         },
         {
-          "kind": "function",
+          "kind": "named",
           "name": "restoreBackup",
           "isDefault": false
         }
@@ -1003,180 +485,31 @@
           "names": []
         },
         {
-          "source": "child_process",
-          "names": []
-        },
-        {
-          "source": "crypto",
-          "names": []
-        },
-        {
           "source": "url",
           "names": []
         },
         {
-          "source": "fs",
+          "source": "./server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/events.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/auth.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/paaw-control.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/backup.mjs",
           "names": []
         }
       ],
       "functions": [
-        {
-          "name": "loadConfig",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "saveConfig",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "backupPath",
-          "kind": "function",
-          "async": false,
-          "params": "(name)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "logEvent",
-          "kind": "function",
-          "async": false,
-          "params": "(type, detail, userId = \"system\")",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startPaaw",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "stopPaaw",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "finish",
-          "kind": "arrow",
-          "async": false,
-          "params": "(ok, error)",
-          "callCount": 4,
-          "calls": [
-            "clearTimeout",
-            "clearTimeout",
-            "logEvent",
-            "resolve"
-          ]
-        },
-        {
-          "name": "restartPaaw",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "getCurrentVersion",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "getGitInfo",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "getLatestVersion",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "upgradePaaw",
-          "kind": "function",
-          "async": true,
-          "params": "(userId = \"system\")",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "listBackups",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "createBackup",
-          "kind": "function",
-          "async": false,
-          "params": "(userId = \"system\")",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "restoreBackup",
-          "kind": "function",
-          "async": false,
-          "params": "(filename, userId = \"system\")",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "healthCheckPaaw",
-          "kind": "function",
-          "async": true,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "getSystemHealth",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "createSession",
-          "kind": "function",
-          "async": false,
-          "params": "(userId)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "validateSession",
-          "kind": "function",
-          "async": false,
-          "params": "(token)",
-          "callCount": 0,
-          "calls": []
-        },
         {
           "name": "sendJSON",
           "kind": "arrow",
@@ -1273,14 +606,1503 @@
         }
       ],
       "components": []
+    },
+    {
+      "file": "src/ui/server.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "cmdUI",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "node:http",
+          "names": []
+        },
+        {
+          "source": "node:fs/promises",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "../lib/process.mjs",
+          "names": []
+        },
+        {
+          "source": "../lib/semgrep.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "jobLog",
+          "kind": "function",
+          "async": false,
+          "params": "(line)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiStart",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiStop",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiUpdate",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "runJob",
+          "kind": "function",
+          "async": true,
+          "params": "(kind, fn)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "uiStatus",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "cmdUI",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "jsonOut",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, obj)",
+          "callCount": 3,
+          "calls": [
+            "res.writeHead",
+            "res.end",
+            "JSON.stringify"
+          ]
+        },
+        {
+          "name": "hostOf",
+          "kind": "arrow",
+          "async": false,
+          "params": "(h)",
+          "callCount": 4,
+          "calls": [
+            "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+            "new URL(`http://${h}`).hostname.replace",
+            "String(h).toLowerCase",
+            "String"
+          ]
+        },
+        {
+          "name": "isTrustedHost",
+          "kind": "arrow",
+          "async": false,
+          "params": "(hostHeader)",
+          "callCount": 2,
+          "calls": [
+            "HOST_WHITELIST.has",
+            "hostOf"
+          ]
+        },
+        {
+          "name": "isTrustedOrigin",
+          "kind": "arrow",
+          "async": false,
+          "params": "(originHeader)",
+          "callCount": 3,
+          "calls": [
+            "HOST_WHITELIST.has",
+            "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+            "new URL(originHeader).hostname.replace"
+          ]
+        },
+        {
+          "name": "bye",
+          "kind": "arrow",
+          "async": true,
+          "params": "()",
+          "callCount": 4,
+          "calls": [
+            "paawRunning",
+            "killChild",
+            "getPaawChild",
+            "process.exit"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/index.html",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/settings",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/semgrep/install",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/status",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/log",
+          "handler": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/paaw-log",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/update",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/upload",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/start",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/stop",
+          "handler": ""
+        },
+        {
+          "method": "POST",
+          "path": "/api/restart",
+          "handler": ""
+        }
+      ],
+      "components": []
+    },
+    {
+      "file": "src/server/auth.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "createAuth",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "crypto",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "createAuth",
+          "kind": "function",
+          "async": false,
+          "params": "(config)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createSession",
+          "kind": "function",
+          "async": false,
+          "params": "(userId)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "validateSession",
+          "kind": "function",
+          "async": false,
+          "params": "(token)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/server/backup.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "variable",
+          "name": "BACKUP_REGEX",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "BACKUP_DATE_REGEX",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "createBackupManager",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": []
+        },
+        {
+          "source": "path",
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "createBackupManager",
+          "kind": "function",
+          "async": false,
+          "params": "(deps)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "backupPath",
+          "kind": "function",
+          "async": false,
+          "params": "(name)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "listBackups",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "restoreBackup",
+          "kind": "function",
+          "async": false,
+          "params": "(filename, userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/server/config.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "loadConfig",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "saveConfig",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "createConfig",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": []
+        },
+        {
+          "source": "path",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "loadConfig",
+          "kind": "function",
+          "async": false,
+          "params": "(configPath, baseDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "saveConfig",
+          "kind": "function",
+          "async": false,
+          "params": "(configPath, config)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "createConfig",
+          "kind": "function",
+          "async": false,
+          "params": "(baseDir)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/server/events.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "createEventLog",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "createEventLog",
+          "kind": "function",
+          "async": false,
+          "params": "(eventLogPath)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "logEvent",
+          "kind": "function",
+          "async": false,
+          "params": "(type, detail, userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/server/paaw-control.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "createPaawControl",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": []
+        },
+        {
+          "source": "path",
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "createPaawControl",
+          "kind": "function",
+          "async": false,
+          "params": "(deps)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stopPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "finish",
+          "kind": "arrow",
+          "async": false,
+          "params": "(ok, error)",
+          "callCount": 3,
+          "calls": [
+            "clearTimeout",
+            "clearTimeout",
+            "resolve"
+          ]
+        },
+        {
+          "name": "onExit",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, signal)",
+          "callCount": 2,
+          "calls": [
+            "proc.removeListener",
+            "finish"
+          ]
+        },
+        {
+          "name": "restartPaaw",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getCurrentVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getGitInfo",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getLatestVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "upgradePaaw",
+          "kind": "function",
+          "async": true,
+          "params": "(userId = \"system\")",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "healthCheckPaaw",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getSystemHealth",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getPaawProcess",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "isRunning",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/lib/config.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "variable",
+          "name": "VERSION_RE",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getCfg",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "setCfgField",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "deleteCfgField",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "applyHome",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getHome",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getVersionsDir",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getDataDir",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getCurrentFile",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getLogsDir",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "saveGatewayCfg",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "PORT",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "AUTO_UPDATE",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "EMOJI_OK",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "L",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "logFile",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "semverGt",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "loadPackageServerUrl",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "readCurrent",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "writeCurrentAtomic",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "listInstalledVersions",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "PATH_SEP",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "augmentedPath",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "node:fs/promises",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getCfg",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "setCfgField",
+          "kind": "function",
+          "async": false,
+          "params": "(key, value)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "deleteCfgField",
+          "kind": "function",
+          "async": false,
+          "params": "(key)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "applyHome",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getHome",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getVersionsDir",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getDataDir",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getCurrentFile",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getLogsDir",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "saveGatewayCfg",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "logFile",
+          "kind": "function",
+          "async": false,
+          "params": "(line)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semverGt",
+          "kind": "function",
+          "async": false,
+          "params": "(a, b)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "loadPackageServerUrl",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "readCurrent",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "writeCurrentAtomic",
+          "kind": "function",
+          "async": true,
+          "params": "(version)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "listInstalledVersions",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "augmentedPath",
+          "kind": "function",
+          "async": false,
+          "params": "(prependDir, basePath)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/lib/install.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "downloadVerified",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "extractZip",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "verifySkeleton",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "installDeps",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "ensureData",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "stageInstall",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "installVersion",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "readZipManifest",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "installUploadedZip",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "updateLogic",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "node:crypto",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:fs/promises",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "fflate",
+          "names": []
+        },
+        {
+          "source": "./config.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "downloadVerified",
+          "kind": "function",
+          "async": true,
+          "params": "(url, sha256Expected, destPath, sizeExpected)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "extractZip",
+          "kind": "function",
+          "async": true,
+          "params": "(zipPath, destDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "verifySkeleton",
+          "kind": "function",
+          "async": true,
+          "params": "(dir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "run",
+          "kind": "function",
+          "async": false,
+          "params": "(cmd, args, cwd)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "installDeps",
+          "kind": "function",
+          "async": true,
+          "params": "(versionDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "ensureData",
+          "kind": "function",
+          "async": true,
+          "params": "(versionDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stageInstall",
+          "kind": "function",
+          "async": true,
+          "params": "(zipPath, v)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "installVersion",
+          "kind": "function",
+          "async": true,
+          "params": "(manifest, server)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "readZipManifest",
+          "kind": "function",
+          "async": false,
+          "params": "(buf)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "installUploadedZip",
+          "kind": "function",
+          "async": true,
+          "params": "(zipBuf, label)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "updateLogic",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/lib/process.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "getPaawChild",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "setPaawChild",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getPaawChildVersion",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "setPaawChildVersion",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getLastStartFail",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "setLastStartFail",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "paawRunning",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "setSemgrepDetectedProvider",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "OPEN_BROWSER",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "openBrowserTab",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "startPaaw",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "childFailReason",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "waitForHealthy",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "killChild",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "isPortOccupied",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "startAndVerify",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "hangAround",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "./config.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getPaawChild",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "setPaawChild",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getPaawChildVersion",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "setPaawChildVersion",
+          "kind": "function",
+          "async": false,
+          "params": "(v)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getLastStartFail",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "setLastStartFail",
+          "kind": "function",
+          "async": false,
+          "params": "(msg)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "paawRunning",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semgrepDetectedProvider",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "setSemgrepDetectedProvider",
+          "kind": "function",
+          "async": false,
+          "params": "(fn)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "openBrowserTab",
+          "kind": "function",
+          "async": false,
+          "params": "(url)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startPaaw",
+          "kind": "function",
+          "async": false,
+          "params": "(versionDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "pump",
+          "kind": "arrow",
+          "async": false,
+          "params": "(stream, mirror)",
+          "callCount": 3,
+          "calls": [
+            "stream.on",
+            "mirror.write",
+            "(child.__tail + c).slice"
+          ]
+        },
+        {
+          "name": "childFailReason",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "waitForHealthy",
+          "kind": "function",
+          "async": true,
+          "params": "(timeoutMs = 90000)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "killChild",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "isPortOccupied",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startAndVerify",
+          "kind": "function",
+          "async": true,
+          "params": "(versionDir, version)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "hangAround",
+          "kind": "function",
+          "async": false,
+          "params": "(child)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "bye",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 2,
+          "calls": [
+            "child.kill",
+            "process.exit"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/lib/semgrep.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "getDetectedPath",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "getCheckState",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "semgrepPresence",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "semgrepCheckKick",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "installSemgrep",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "./config.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getDetectedPath",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "getCheckState",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semgrepVersion",
+          "kind": "function",
+          "async": false,
+          "params": "(bin, env)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "done",
+          "kind": "arrow",
+          "async": false,
+          "params": "(r)",
+          "callCount": 1,
+          "calls": [
+            "resolvePromise"
+          ]
+        },
+        {
+          "name": "semgrepPresence",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "checkSemgrep",
+          "kind": "function",
+          "async": true,
+          "params": "(force = false)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "semgrepCheckKick",
+          "kind": "function",
+          "async": false,
+          "params": "(force = false)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "runCapture",
+          "kind": "function",
+          "async": false,
+          "params": "(cmdLine, timeoutMs, jobLog)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "done",
+          "kind": "arrow",
+          "async": false,
+          "params": "(code, err)",
+          "callCount": 1,
+          "calls": [
+            "resolvePromise"
+          ]
+        },
+        {
+          "name": "pump",
+          "kind": "arrow",
+          "async": false,
+          "params": "(c)",
+          "callCount": 5,
+          "calls": [
+            "String(c).split",
+            "String",
+            "line.trim",
+            "jobLog",
+            "s.slice"
+          ]
+        },
+        {
+          "name": "installSemgrep",
+          "kind": "function",
+          "async": true,
+          "params": "(jobLog)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
     }
   ],
   "stats": {
-    "totalFiles": 6,
-    "parsedFiles": 6,
+    "totalFiles": 16,
+    "parsedFiles": 16,
     "errors": 0,
     "languages": {
-      "javascript": 6
+      "javascript": 16
     }
   }
 }

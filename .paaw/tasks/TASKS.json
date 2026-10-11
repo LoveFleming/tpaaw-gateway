@@ -541,7 +541,164 @@
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": "2026-09-19T09:16:56.287Z"
+    },
+    {
+      "id": "TASK-014",
+      "featureId": "F20261009-002",
+      "title": "[重構 P1] src/server.mjs 模組化：拆 5 模組 + 刪 300 行死碼（ADR-003）",
+      "type": "dev",
+      "status": "close",
+      "priority": "medium",
+      "parentId": null,
+      "description": "",
+      "labels": [
+        "refactor",
+        "ADR-003",
+        "phase-1"
+      ],
+      "assignee": "developer",
+      "createdAt": "2026-10-11T02:12:54.357Z",
+      "updatedAt": "2026-10-11T02:26:37.497Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "discussion"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:13:03.005Z",
+          "content": "施工規格見 ADR-003（.paaw/DECISIONS.md）。\n\n目標: src/server.mjs（~1015 行）拆為薄入口 + 5 模組，刪除 699–1016 行 buildFallbackUI 已註解死碼（~300 行）。\n\n新結構:\n- src/server.mjs（保留原檔名，e2e spawn target）→ createServer + 路由分派 + main guard，~200 行\n- src/lib/config.mjs → loadConfig / saveConfig\n- src/lib/events.mjs → logEvent\n- src/lib/auth.mjs → createSession / validateSession / users\n- src/lib/paaw-control.mjs → startPaaw / stopPaaw / restartPaaw / healthCheckPaaw（含 stoppingPromise in-flight dedupe）\n- src/lib/backup.mjs → backupPath / listBackups / createBackup / restoreBackup\n\n地雷:\n1. src/server.mjs 檔名不可改（3 個 e2e 以 node src/server.mjs spawn）。\n2. backupPath 已 export（unit test 依賴），搬家後 export 契約不可變。\n3. config/events 為 leaf，paaw-control → auth 不得反向依賴。\n4. 純 refactor，不改行為/API/路由。\n\n驗收: npm test 52 案全綠；node src/server.mjs 可啟動；/api/health 回 200。"
+        },
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:13:03.010Z",
+          "content": "Assigned to developer"
+        },
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:26:35.142Z",
+          "content": "實作完成（Developer）。變更已 git add（未 commit — 依系統護欄，commit/push 由人類執行）。\n\n模組路徑決議：指令清單寫 src/lib/，但標題「路徑依 ADR-003 為準」+ ADR-003 內文 + ARCHITECTURE.md §2.2 三者一致為 src/server/，故採 src/server/{config,events,auth,paaw-control,backup}.mjs。\n\n成果：\n- src/server.mjs 1015 → 271 行（薄入口 + 全域 factory 組裝 + re-export）\n- src/server/config.mjs (98行) / events.mjs (37行) / auth.mjs (42行) / paaw-control.mjs (341行) / backup.mjs (158行)\n- 刪除 ~300 行 buildFallbackUI 死碼\n- 採 factory + 依賴注入，滿足 unit test 的 ?case=N cache-bust env 契約\n- 外部 export 契約不變（BACKUP_REGEX/BACKUP_DATE_REGEX/backupPath/listBackups/createBackup/restoreBackup）\n- 所有模組只 import node builtins → 零循環依賴\n\n證據：\n- npm test → 1..29 / # tests 65 / # pass 65 / # fail 0\n- node src/server.mjs → Running on :4199\n- GET /api/health → HTTP 200 {\"status\":\"ok\",\"gateway\":true,...}\n- 建議 commit：refactor(server): split src/server.mjs into thin entry + 5 modules (ADR-003 P1)"
+        }
+      ],
+      "result": "完成。src/server.mjs 1015→271 行，新增 5 模組（src/server/{config,events,auth,paaw-control,backup}.mjs），刪 ~300 行死碼。npm test 65/65 pass；node src/server.mjs 啟動 :4199；/api/health 回 200。已 git add（未 commit，依護欄由人類執行）。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-11T02:26:37.497Z"
+    },
+    {
+      "id": "TASK-015",
+      "featureId": "F20261009-001",
+      "title": "[重構 P2] gateway.mjs 核心模組化：拆 config/install/process（ADR-003）",
+      "type": "dev",
+      "status": "close",
+      "priority": "medium",
+      "parentId": null,
+      "description": "",
+      "labels": [
+        "refactor",
+        "ADR-003",
+        "phase-2"
+      ],
+      "assignee": "developer",
+      "createdAt": "2026-10-11T02:12:54.364Z",
+      "updatedAt": "2026-10-11T03:49:09.811Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "discussion"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:13:03.007Z",
+          "content": "施工規格見 ADR-003。前置: TASK-014 完成且 52 案全綠。\n\n目標: gateway.mjs 核心職責拆出:\n- src/lib/config.mjs → GATEWAY_CFG / HOME / VERSIONS_DIR / DATA_DIR / CURRENT_FILE / LOGS_DIR / applyHome / saveGatewayCfg / logFile / semverGt / readCurrent / writeCurrentAtomic / listInstalledVersions\n- src/lib/install.mjs → downloadVerified / extractZip / verifySkeleton / stageInstall / installVersion / installUploadedZip / readZipManifest\n- src/lib/process.mjs → startPaaw / killChild / waitForHealthy / isPortOccupied / startAndVerify / hangAround / childFailReason / paawChild 狀態\n\n地雷:\n1. gateway.mjs 為 package.json bin，檔名不可改。\n2. 共享可變狀態 HOME/GATEWAY_CFG/paawChild 收斂到單一 owner，跨模組以 getter 存取，不 export 可寫變數。\n3. import.meta.url 相對路徑深度改變，路徑解析要對齊。\n\n驗收: npm test 52 案全綠；node gateway.mjs status 正常。"
+        },
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:13:03.012Z",
+          "content": "Assigned to developer"
+        },
+        {
+          "by": "agent",
+          "at": "2026-10-11T03:33:16.525Z",
+          "content": "P2 實作完成（已 git add，待人類 commit）。產出：gateway.mjs 721 行（原 ~1166）、src/lib/config.mjs 142 行、src/lib/install.mjs 259 行、src/lib/process.mjs 183 行。驗收：`node --check` 四檔全過；`npm test` 65/65 pass（含 3 個 spawn 真 gateway 的 e2e）；`node gateway.mjs status` 正常輸出。依賴單向：config(leaf) ← install、process，無循環依賴。共享狀態 owner：GATEWAY_CFG/佈局路徑→config、paawChild→process，皆以 getter/setter 存取，無 export 可寫 binding。注意：task note 寫「52 案」為舊數字，實際 test 總數為 65。"
+        }
+      ],
+      "result": "P2 完成並 commit a5ae75d：gateway.mjs 1166→721，新增 src/lib/{config,install,process}.mjs；npm test 65/65 全綠；node gateway.mjs status OK；無循環依賴。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-11T03:49:09.811Z"
+    },
+    {
+      "id": "TASK-016",
+      "featureId": "F20261009-001",
+      "title": "[重構 P3] gateway.mjs 周邊模組化：拆 semgrep/ui-server + 入口瘦身（ADR-003）",
+      "type": "dev",
+      "status": "close",
+      "priority": "low",
+      "parentId": null,
+      "description": "",
+      "labels": [
+        "refactor",
+        "ADR-003",
+        "phase-3"
+      ],
+      "assignee": "developer",
+      "createdAt": "2026-10-11T02:12:54.369Z",
+      "updatedAt": "2026-10-11T03:49:09.818Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "discussion"
+      },
+      "notes": [
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:13:03.008Z",
+          "content": "施工規格見 ADR-003。前置: TASK-015 完成且 52 案全綠。\n\n目標: gateway.mjs 周邊職責拆出，入口瘦身為 ~30 行 CLI dispatcher:\n- src/lib/semgrep.mjs → semgrep* 全套（安裝/偵測/路徑注入）\n- src/ui/server.mjs → cmdUI() 的 http.createServer（含 CSRF/Host 防護）\n\n地雷:\n1. semgrep 的 jobLog 以參數注入，切斷 semgrep ↔ ui 循環依賴。\n2. ui-server 的 UI_DIR 路徑需上移兩層（src/ui/ → ../../ui/）。\n3. gateway.mjs 入口僅保留 argv 分派。\n\n驗收: npm test 52 案全綠（含 e2e/gateway-ui-csrf.test.mjs）；node gateway.mjs ui 起得來且 CSRF 防護有效。"
+        },
+        {
+          "by": "agent",
+          "at": "2026-10-11T02:13:03.019Z",
+          "content": "Assigned to developer"
+        },
+        {
+          "by": "agent",
+          "at": "2026-10-11T03:48:00.310Z",
+          "content": "P3 交付：gateway.mjs(181) + src/lib/semgrep.mjs(196) + src/ui/server.mjs(426)。純 refactor（逐函式 diff 驗證）。npm test 65/65、gateway-ui-csrf 16/16、`node gateway.mjs ui` 起得來。已 stage（gateway.mjs / semgrep.mjs / ui/server.mjs），待人類 commit。附帶發現（scope 外，建議另開 task）：pre-existing bug — semgrepVersion(bin, env) 定義只收 2 參數，但 checkSemgrep 呼叫端傳 4 個（timeoutMs, extraArgs），多餘引數向來被忽略，故 --disable-version-check 快路徑實際從未生效（一律純 --version + 60s）。P3 逐字保留此行為未修。"
+        }
+      ],
+      "result": "P3 完成並 commit 60e38e5：gateway.mjs 721→181（純 CLI 入口），新增 src/lib/semgrep.mjs(196)、src/ui/server.mjs(426)；npm test 65/65（gateway-ui-csrf 16/16）；node gateway.mjs ui 啟動 OK；CSRF/Host gate 逐字未動。附帶發現 pre-existing 的 semgrepVersion 參數不符 bug。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-11T03:47:56.798Z"
+    },
+    {
+      "id": "TASK-017",
+      "featureId": "F20261009-001",
+      "title": "修 pre-existing bug：semgrepVersion(bin, env) 只收 2 參數但呼叫端傳 4 個，快路徑從未生效",
+      "type": "dev",
+      "status": "open",
+      "priority": "low",
+      "parentId": null,
+      "description": "【來源】ADR-003 P3（TASK-016）重構時由 Developer 發現，屬 pre-existing bug，非本次重構引入。\n\n【問題】src/lib/semgrep.mjs 的 semgrepVersion(bin, env) 簽章只收 2 個參數，但 checkSemgrep 呼叫端傳 4 個（timeoutMs, extraArgs）。JS 會忽略多餘引數 → 原設計「先帶 --disable-version-check 走 ~1s 快路徑」實際從未生效，一律退回純 --version + 60s timeout。\n\n【影響】semgrep 版本偵測首次（快取未命中時）可能慢達 60s；屬效能問題，非安全/正確性問題。\n\n【修法方向】讓 semgrepVersion 正確接收並傳遞 timeoutMs / extraArgs，使 --disable-version-check 快路徑生效。\n\n【實作注意事項】\n- 需驗證：帶 --disable-version-check 快路徑確實生效（可觀察 version 偵測耗時）。\n- 保持偵測結果（版本字串）正確；不得因快路徑而誤判。\n- 屬 F20261009-001（gateway）。\n\n【驗收標準】semgrep 版本偵測快路徑生效；npm test 全綠；無回歸。",
+      "labels": [
+        "bug",
+        "pre-existing",
+        "semgrep",
+        "P3-followup"
+      ],
+      "assignee": null,
+      "createdAt": "2026-10-11T03:49:16.067Z",
+      "updatedAt": "2026-10-11T03:49:16.067Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "discussion"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
     }
   ],
-  "updatedAt": "2026-09-19T09:10:49.181Z"
+  "updatedAt": "2026-10-11T03:49:16.067Z"
 }

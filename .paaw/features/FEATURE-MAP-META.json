@@ -1,6 +1,6 @@
 {
   "method": "deterministic-v2",
-  "scannedAt": "2026-10-09T00:56:37.765Z",
+  "scannedAt": "2026-10-10T14:38:19.689Z",
   "stats": {
     "files": 6,
     "edges": 1,
@@ -27,8 +27,8 @@
     "ok": 2,
     "degraded": 0,
     "resumed": 0,
-    "totalTurns": 9,
-    "totalMs": 126054,
+    "totalTurns": 5,
+    "totalMs": 60394,
     "usage": {
       "promptTokens": 0,
       "completionTokens": 0

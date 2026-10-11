@@ -1,216 +1,8 @@
 {
   "nodes": [
     {
-      "id": "gateway.mjs:applyHome",
-      "name": "applyHome",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:saveGatewayCfg",
-      "name": "saveGatewayCfg",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:logFile",
-      "name": "logFile",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:semverGt",
-      "name": "semverGt",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:loadPackageServerUrl",
-      "name": "loadPackageServerUrl",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:readCurrent",
-      "name": "readCurrent",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:writeCurrentAtomic",
-      "name": "writeCurrentAtomic",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:listInstalledVersions",
-      "name": "listInstalledVersions",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:downloadVerified",
-      "name": "downloadVerified",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:extractZip",
-      "name": "extractZip",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:verifySkeleton",
-      "name": "verifySkeleton",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:run",
-      "name": "run",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:installDeps",
-      "name": "installDeps",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:ensureData",
-      "name": "ensureData",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:startPaaw",
-      "name": "startPaaw",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:pump",
-      "name": "pump",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:childFailReason",
-      "name": "childFailReason",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:waitForHealthy",
-      "name": "waitForHealthy",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:killChild",
-      "name": "killChild",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:isPortOccupied",
-      "name": "isPortOccupied",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:startAndVerify",
-      "name": "startAndVerify",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:stageInstall",
-      "name": "stageInstall",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:installVersion",
-      "name": "installVersion",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:readZipManifest",
-      "name": "readZipManifest",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:installUploadedZip",
-      "name": "installUploadedZip",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
       "id": "gateway.mjs:cmdStatus",
       "name": "cmdStatus",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:updateLogic",
-      "name": "updateLogic",
       "file": "gateway.mjs",
       "line": 0,
       "kind": "function",
@@ -239,190 +31,6 @@
       "line": 0,
       "kind": "function",
       "async": true
-    },
-    {
-      "id": "gateway.mjs:hangAround",
-      "name": "hangAround",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:bye",
-      "name": "bye",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:jobLog",
-      "name": "jobLog",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:paawRunning",
-      "name": "paawRunning",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:openBrowserTab",
-      "name": "openBrowserTab",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:uiStart",
-      "name": "uiStart",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:uiStop",
-      "name": "uiStop",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:uiUpdate",
-      "name": "uiUpdate",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:runJob",
-      "name": "runJob",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:uiStatus",
-      "name": "uiStatus",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:augmentedPath",
-      "name": "augmentedPath",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:semgrepVersion",
-      "name": "semgrepVersion",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:done",
-      "name": "done",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:semgrepPresence",
-      "name": "semgrepPresence",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:checkSemgrep",
-      "name": "checkSemgrep",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:semgrepCheckKick",
-      "name": "semgrepCheckKick",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:runCapture",
-      "name": "runCapture",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:installSemgrep",
-      "name": "installSemgrep",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:cmdUI",
-      "name": "cmdUI",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "gateway.mjs:jsonOut",
-      "name": "jsonOut",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:hostOf",
-      "name": "hostOf",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:isTrustedHost",
-      "name": "isTrustedHost",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "gateway.mjs:isTrustedOrigin",
-      "name": "isTrustedOrigin",
-      "file": "gateway.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
     },
     {
       "id": "tests/unit/backup.test.mjs:loadServer",
@@ -577,158 +185,6 @@
       "async": false
     },
     {
-      "id": "src/server.mjs:loadConfig",
-      "name": "loadConfig",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:saveConfig",
-      "name": "saveConfig",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:backupPath",
-      "name": "backupPath",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:logEvent",
-      "name": "logEvent",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:startPaaw",
-      "name": "startPaaw",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:stopPaaw",
-      "name": "stopPaaw",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:finish",
-      "name": "finish",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:restartPaaw",
-      "name": "restartPaaw",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "src/server.mjs:getCurrentVersion",
-      "name": "getCurrentVersion",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:getGitInfo",
-      "name": "getGitInfo",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:getLatestVersion",
-      "name": "getLatestVersion",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:upgradePaaw",
-      "name": "upgradePaaw",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "src/server.mjs:listBackups",
-      "name": "listBackups",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:createBackup",
-      "name": "createBackup",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:restoreBackup",
-      "name": "restoreBackup",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:healthCheckPaaw",
-      "name": "healthCheckPaaw",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "src/server.mjs:getSystemHealth",
-      "name": "getSystemHealth",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:createSession",
-      "name": "createSession",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "src/server.mjs:validateSession",
-      "name": "validateSession",
-      "file": "src/server.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
       "id": "src/server.mjs:sendJSON",
       "name": "sendJSON",
       "file": "src/server.mjs",
@@ -743,167 +199,777 @@
       "line": 0,
       "kind": "arrow",
       "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:jobLog",
+      "name": "jobLog",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:uiStart",
+      "name": "uiStart",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/ui/server.mjs:uiStop",
+      "name": "uiStop",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/ui/server.mjs:uiUpdate",
+      "name": "uiUpdate",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/ui/server.mjs:runJob",
+      "name": "runJob",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/ui/server.mjs:uiStatus",
+      "name": "uiStatus",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/ui/server.mjs:cmdUI",
+      "name": "cmdUI",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/ui/server.mjs:jsonOut",
+      "name": "jsonOut",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:hostOf",
+      "name": "hostOf",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:isTrustedHost",
+      "name": "isTrustedHost",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:isTrustedOrigin",
+      "name": "isTrustedOrigin",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:bye",
+      "name": "bye",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": true
+    },
+    {
+      "id": "src/server/auth.mjs:createAuth",
+      "name": "createAuth",
+      "file": "src/server/auth.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/auth.mjs:createSession",
+      "name": "createSession",
+      "file": "src/server/auth.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/auth.mjs:validateSession",
+      "name": "validateSession",
+      "file": "src/server/auth.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/backup.mjs:createBackupManager",
+      "name": "createBackupManager",
+      "file": "src/server/backup.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/backup.mjs:backupPath",
+      "name": "backupPath",
+      "file": "src/server/backup.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/backup.mjs:listBackups",
+      "name": "listBackups",
+      "file": "src/server/backup.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/backup.mjs:createBackup",
+      "name": "createBackup",
+      "file": "src/server/backup.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/backup.mjs:restoreBackup",
+      "name": "restoreBackup",
+      "file": "src/server/backup.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/config.mjs:loadConfig",
+      "name": "loadConfig",
+      "file": "src/server/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/config.mjs:saveConfig",
+      "name": "saveConfig",
+      "file": "src/server/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/config.mjs:createConfig",
+      "name": "createConfig",
+      "file": "src/server/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/events.mjs:createEventLog",
+      "name": "createEventLog",
+      "file": "src/server/events.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/events.mjs:logEvent",
+      "name": "logEvent",
+      "file": "src/server/events.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:createPaawControl",
+      "name": "createPaawControl",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:startPaaw",
+      "name": "startPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:stopPaaw",
+      "name": "stopPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:finish",
+      "name": "finish",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:onExit",
+      "name": "onExit",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:restartPaaw",
+      "name": "restartPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server/paaw-control.mjs:getCurrentVersion",
+      "name": "getCurrentVersion",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:getGitInfo",
+      "name": "getGitInfo",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:getLatestVersion",
+      "name": "getLatestVersion",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:upgradePaaw",
+      "name": "upgradePaaw",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server/paaw-control.mjs:healthCheckPaaw",
+      "name": "healthCheckPaaw",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server/paaw-control.mjs:getSystemHealth",
+      "name": "getSystemHealth",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:getPaawProcess",
+      "name": "getPaawProcess",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:isRunning",
+      "name": "isRunning",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:getCfg",
+      "name": "getCfg",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:setCfgField",
+      "name": "setCfgField",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:deleteCfgField",
+      "name": "deleteCfgField",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:applyHome",
+      "name": "applyHome",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:getHome",
+      "name": "getHome",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:getVersionsDir",
+      "name": "getVersionsDir",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:getDataDir",
+      "name": "getDataDir",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:getCurrentFile",
+      "name": "getCurrentFile",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:getLogsDir",
+      "name": "getLogsDir",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:saveGatewayCfg",
+      "name": "saveGatewayCfg",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/config.mjs:logFile",
+      "name": "logFile",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:semverGt",
+      "name": "semverGt",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/config.mjs:loadPackageServerUrl",
+      "name": "loadPackageServerUrl",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/config.mjs:readCurrent",
+      "name": "readCurrent",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/config.mjs:writeCurrentAtomic",
+      "name": "writeCurrentAtomic",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/config.mjs:listInstalledVersions",
+      "name": "listInstalledVersions",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/config.mjs:augmentedPath",
+      "name": "augmentedPath",
+      "file": "src/lib/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/install.mjs:downloadVerified",
+      "name": "downloadVerified",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:extractZip",
+      "name": "extractZip",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:verifySkeleton",
+      "name": "verifySkeleton",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:run",
+      "name": "run",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/install.mjs:installDeps",
+      "name": "installDeps",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:ensureData",
+      "name": "ensureData",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:stageInstall",
+      "name": "stageInstall",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:installVersion",
+      "name": "installVersion",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:readZipManifest",
+      "name": "readZipManifest",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/install.mjs:installUploadedZip",
+      "name": "installUploadedZip",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/install.mjs:updateLogic",
+      "name": "updateLogic",
+      "file": "src/lib/install.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/process.mjs:getPaawChild",
+      "name": "getPaawChild",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:setPaawChild",
+      "name": "setPaawChild",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:getPaawChildVersion",
+      "name": "getPaawChildVersion",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:setPaawChildVersion",
+      "name": "setPaawChildVersion",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:getLastStartFail",
+      "name": "getLastStartFail",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:setLastStartFail",
+      "name": "setLastStartFail",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:paawRunning",
+      "name": "paawRunning",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:semgrepDetectedProvider",
+      "name": "semgrepDetectedProvider",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:setSemgrepDetectedProvider",
+      "name": "setSemgrepDetectedProvider",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:openBrowserTab",
+      "name": "openBrowserTab",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:startPaaw",
+      "name": "startPaaw",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:pump",
+      "name": "pump",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:childFailReason",
+      "name": "childFailReason",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:waitForHealthy",
+      "name": "waitForHealthy",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/process.mjs:killChild",
+      "name": "killChild",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:isPortOccupied",
+      "name": "isPortOccupied",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/process.mjs:startAndVerify",
+      "name": "startAndVerify",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/process.mjs:hangAround",
+      "name": "hangAround",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/process.mjs:bye",
+      "name": "bye",
+      "file": "src/lib/process.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:getDetectedPath",
+      "name": "getDetectedPath",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:getCheckState",
+      "name": "getCheckState",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:semgrepVersion",
+      "name": "semgrepVersion",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:done",
+      "name": "done",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:semgrepPresence",
+      "name": "semgrepPresence",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:checkSemgrep",
+      "name": "checkSemgrep",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/lib/semgrep.mjs:semgrepCheckKick",
+      "name": "semgrepCheckKick",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:runCapture",
+      "name": "runCapture",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:pump",
+      "name": "pump",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/lib/semgrep.mjs:installSemgrep",
+      "name": "installSemgrep",
+      "file": "src/lib/semgrep.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
     }
   ],
   "edges": [
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "stream.on",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "mirror.write",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "(child.__tail + c).slice",
-      "type": "chained",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:bye",
-      "callee": "child.kill",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:bye",
-      "callee": "process.exit",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:done",
-      "callee": "resolvePromise",
-      "type": "direct",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:done",
-      "callee": "resolvePromise",
-      "type": "direct",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "String(c).split",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "String",
-      "type": "direct",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "line.trim",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "gateway.mjs:jobLog",
-      "type": "direct"
-    },
-    {
-      "caller": "gateway.mjs:pump",
-      "callee": "s.slice",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:jsonOut",
-      "callee": "res.writeHead",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:jsonOut",
-      "callee": "res.end",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:jsonOut",
-      "callee": "JSON.stringify",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:hostOf",
-      "callee": "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
-      "type": "chained",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:hostOf",
-      "callee": "new URL(`http://${h}`).hostname.replace",
-      "type": "chained",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:hostOf",
-      "callee": "String(h).toLowerCase",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:hostOf",
-      "callee": "String",
-      "type": "direct",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:isTrustedHost",
-      "callee": "HOST_WHITELIST.has",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:isTrustedHost",
-      "callee": "gateway.mjs:hostOf",
-      "type": "direct"
-    },
-    {
-      "caller": "gateway.mjs:isTrustedOrigin",
-      "callee": "HOST_WHITELIST.has",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:isTrustedOrigin",
-      "callee": "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
-      "type": "chained",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:isTrustedOrigin",
-      "callee": "new URL(originHeader).hostname.replace",
-      "type": "chained",
-      "resolved": false
-    },
-    {
-      "caller": "gateway.mjs:bye",
-      "callee": "gateway.mjs:paawRunning",
-      "type": "direct"
-    },
-    {
-      "caller": "gateway.mjs:bye",
-      "callee": "gateway.mjs:killChild",
-      "type": "direct"
-    },
-    {
-      "caller": "gateway.mjs:bye",
-      "callee": "process.exit",
-      "type": "method",
-      "resolved": false
-    },
     {
       "caller": "tests/e2e/gateway-backup-auth.test.mjs:sleep",
       "callee": "setTimeout",
@@ -971,29 +1037,6 @@
       "resolved": false
     },
     {
-      "caller": "src/server.mjs:finish",
-      "callee": "clearTimeout",
-      "type": "direct",
-      "resolved": false
-    },
-    {
-      "caller": "src/server.mjs:finish",
-      "callee": "clearTimeout",
-      "type": "direct",
-      "resolved": false
-    },
-    {
-      "caller": "src/server.mjs:finish",
-      "callee": "src/server.mjs:logEvent",
-      "type": "direct"
-    },
-    {
-      "caller": "src/server.mjs:finish",
-      "callee": "resolve",
-      "type": "direct",
-      "resolved": false
-    },
-    {
       "caller": "src/server.mjs:sendJSON",
       "callee": "res.writeHead",
       "type": "method",
@@ -1040,85 +1083,204 @@
       "callee": "resolve",
       "type": "direct",
       "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:jsonOut",
+      "callee": "res.writeHead",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:jsonOut",
+      "callee": "res.end",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:jsonOut",
+      "callee": "JSON.stringify",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:hostOf",
+      "callee": "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:hostOf",
+      "callee": "new URL(`http://${h}`).hostname.replace",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:hostOf",
+      "callee": "String(h).toLowerCase",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:hostOf",
+      "callee": "String",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:isTrustedHost",
+      "callee": "HOST_WHITELIST.has",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:isTrustedHost",
+      "callee": "src/ui/server.mjs:hostOf",
+      "type": "direct"
+    },
+    {
+      "caller": "src/ui/server.mjs:isTrustedOrigin",
+      "callee": "HOST_WHITELIST.has",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:isTrustedOrigin",
+      "callee": "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:isTrustedOrigin",
+      "callee": "new URL(originHeader).hostname.replace",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:bye",
+      "callee": "paawRunning",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:bye",
+      "callee": "killChild",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:bye",
+      "callee": "getPaawChild",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/ui/server.mjs:bye",
+      "callee": "process.exit",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server/paaw-control.mjs:finish",
+      "callee": "clearTimeout",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server/paaw-control.mjs:finish",
+      "callee": "clearTimeout",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server/paaw-control.mjs:finish",
+      "callee": "resolve",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server/paaw-control.mjs:onExit",
+      "callee": "proc.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server/paaw-control.mjs:onExit",
+      "callee": "src/server/paaw-control.mjs:finish",
+      "type": "direct"
+    },
+    {
+      "caller": "src/lib/process.mjs:pump",
+      "callee": "stream.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/process.mjs:pump",
+      "callee": "mirror.write",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/process.mjs:pump",
+      "callee": "(child.__tail + c).slice",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/process.mjs:bye",
+      "callee": "child.kill",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/process.mjs:bye",
+      "callee": "process.exit",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:done",
+      "callee": "resolvePromise",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:done",
+      "callee": "resolvePromise",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:pump",
+      "callee": "String(c).split",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:pump",
+      "callee": "String",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:pump",
+      "callee": "line.trim",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:pump",
+      "callee": "src/ui/server.mjs:jobLog",
+      "type": "direct"
+    },
+    {
+      "caller": "src/lib/semgrep.mjs:pump",
+      "callee": "s.slice",
+      "type": "method",
+      "resolved": false
     }
   ],
   "callersOf": {
-    "stream.on": [
-      "gateway.mjs:pump"
-    ],
-    "mirror.write": [
-      "gateway.mjs:pump"
-    ],
-    "(child.__tail + c).slice": [
-      "gateway.mjs:pump"
-    ],
-    "child.kill": [
-      "gateway.mjs:bye"
-    ],
-    "process.exit": [
-      "gateway.mjs:bye",
-      "gateway.mjs:bye"
-    ],
-    "resolvePromise": [
-      "gateway.mjs:done",
-      "gateway.mjs:done"
-    ],
-    "String(c).split": [
-      "gateway.mjs:pump"
-    ],
-    "String": [
-      "gateway.mjs:pump",
-      "gateway.mjs:hostOf"
-    ],
-    "line.trim": [
-      "gateway.mjs:pump"
-    ],
-    "gateway.mjs:jobLog": [
-      "gateway.mjs:pump"
-    ],
-    "s.slice": [
-      "gateway.mjs:pump"
-    ],
-    "res.writeHead": [
-      "gateway.mjs:jsonOut",
-      "src/server.mjs:sendJSON"
-    ],
-    "res.end": [
-      "gateway.mjs:jsonOut",
-      "src/server.mjs:sendJSON"
-    ],
-    "JSON.stringify": [
-      "gateway.mjs:jsonOut",
-      "src/server.mjs:sendJSON"
-    ],
-    "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
-      "gateway.mjs:hostOf"
-    ],
-    "new URL(`http://${h}`).hostname.replace": [
-      "gateway.mjs:hostOf"
-    ],
-    "String(h).toLowerCase": [
-      "gateway.mjs:hostOf"
-    ],
-    "HOST_WHITELIST.has": [
-      "gateway.mjs:isTrustedHost",
-      "gateway.mjs:isTrustedOrigin"
-    ],
-    "gateway.mjs:hostOf": [
-      "gateway.mjs:isTrustedHost"
-    ],
-    "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
-      "gateway.mjs:isTrustedOrigin"
-    ],
-    "new URL(originHeader).hostname.replace": [
-      "gateway.mjs:isTrustedOrigin"
-    ],
-    "gateway.mjs:paawRunning": [
-      "gateway.mjs:bye"
-    ],
-    "gateway.mjs:killChild": [
-      "gateway.mjs:bye"
-    ],
     "setTimeout": [
       "tests/e2e/gateway-backup-auth.test.mjs:sleep",
       "tests/e2e/gateway-ui-csrf.test.mjs:sleep"
@@ -1148,68 +1310,109 @@
     "process.kill": [
       "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive"
     ],
-    "clearTimeout": [
-      "src/server.mjs:finish",
-      "src/server.mjs:finish"
+    "res.writeHead": [
+      "src/server.mjs:sendJSON",
+      "src/ui/server.mjs:jsonOut"
     ],
-    "src/server.mjs:logEvent": [
-      "src/server.mjs:finish"
+    "res.end": [
+      "src/server.mjs:sendJSON",
+      "src/ui/server.mjs:jsonOut"
     ],
-    "resolve": [
-      "src/server.mjs:finish",
-      "src/server.mjs:readBody",
-      "src/server.mjs:readBody"
+    "JSON.stringify": [
+      "src/server.mjs:sendJSON",
+      "src/ui/server.mjs:jsonOut"
     ],
     "req.on": [
       "src/server.mjs:readBody",
       "src/server.mjs:readBody"
     ],
+    "resolve": [
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server/paaw-control.mjs:finish"
+    ],
     "JSON.parse": [
       "src/server.mjs:readBody"
+    ],
+    "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
+      "src/ui/server.mjs:hostOf"
+    ],
+    "new URL(`http://${h}`).hostname.replace": [
+      "src/ui/server.mjs:hostOf"
+    ],
+    "String(h).toLowerCase": [
+      "src/ui/server.mjs:hostOf"
+    ],
+    "String": [
+      "src/ui/server.mjs:hostOf",
+      "src/lib/semgrep.mjs:pump"
+    ],
+    "HOST_WHITELIST.has": [
+      "src/ui/server.mjs:isTrustedHost",
+      "src/ui/server.mjs:isTrustedOrigin"
+    ],
+    "src/ui/server.mjs:hostOf": [
+      "src/ui/server.mjs:isTrustedHost"
+    ],
+    "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
+      "src/ui/server.mjs:isTrustedOrigin"
+    ],
+    "new URL(originHeader).hostname.replace": [
+      "src/ui/server.mjs:isTrustedOrigin"
+    ],
+    "paawRunning": [
+      "src/ui/server.mjs:bye"
+    ],
+    "killChild": [
+      "src/ui/server.mjs:bye"
+    ],
+    "getPaawChild": [
+      "src/ui/server.mjs:bye"
+    ],
+    "process.exit": [
+      "src/ui/server.mjs:bye",
+      "src/lib/process.mjs:bye"
+    ],
+    "clearTimeout": [
+      "src/server/paaw-control.mjs:finish",
+      "src/server/paaw-control.mjs:finish"
+    ],
+    "proc.removeListener": [
+      "src/server/paaw-control.mjs:onExit"
+    ],
+    "src/server/paaw-control.mjs:finish": [
+      "src/server/paaw-control.mjs:onExit"
+    ],
+    "stream.on": [
+      "src/lib/process.mjs:pump"
+    ],
+    "mirror.write": [
+      "src/lib/process.mjs:pump"
+    ],
+    "(child.__tail + c).slice": [
+      "src/lib/process.mjs:pump"
+    ],
+    "child.kill": [
+      "src/lib/process.mjs:bye"
+    ],
+    "resolvePromise": [
+      "src/lib/semgrep.mjs:done",
+      "src/lib/semgrep.mjs:done"
+    ],
+    "String(c).split": [
+      "src/lib/semgrep.mjs:pump"
+    ],
+    "line.trim": [
+      "src/lib/semgrep.mjs:pump"
+    ],
+    "src/ui/server.mjs:jobLog": [
+      "src/lib/semgrep.mjs:pump"
+    ],
+    "s.slice": [
+      "src/lib/semgrep.mjs:pump"
     ]
   },
   "calleesOf": {
-    "gateway.mjs:pump": [
-      "stream.on",
-      "mirror.write",
-      "(child.__tail + c).slice",
-      "String(c).split",
-      "String",
-      "line.trim",
-      "gateway.mjs:jobLog",
-      "s.slice"
-    ],
-    "gateway.mjs:bye": [
-      "child.kill",
-      "process.exit",
-      "gateway.mjs:paawRunning",
-      "gateway.mjs:killChild",
-      "process.exit"
-    ],
-    "gateway.mjs:done": [
-      "resolvePromise",
-      "resolvePromise"
-    ],
-    "gateway.mjs:jsonOut": [
-      "res.writeHead",
-      "res.end",
-      "JSON.stringify"
-    ],
-    "gateway.mjs:hostOf": [
-      "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
-      "new URL(`http://${h}`).hostname.replace",
-      "String(h).toLowerCase",
-      "String"
-    ],
-    "gateway.mjs:isTrustedHost": [
-      "HOST_WHITELIST.has",
-      "gateway.mjs:hostOf"
-    ],
-    "gateway.mjs:isTrustedOrigin": [
-      "HOST_WHITELIST.has",
-      "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
-      "new URL(originHeader).hostname.replace"
-    ],
     "tests/e2e/gateway-backup-auth.test.mjs:sleep": [
       "setTimeout"
     ],
@@ -1231,12 +1434,6 @@
     "tests/e2e/gateway-ui-csrf.test.mjs:sleep": [
       "setTimeout"
     ],
-    "src/server.mjs:finish": [
-      "clearTimeout",
-      "clearTimeout",
-      "src/server.mjs:logEvent",
-      "resolve"
-    ],
     "src/server.mjs:sendJSON": [
       "res.writeHead",
       "res.end",
@@ -1248,12 +1445,67 @@
       "resolve",
       "JSON.parse",
       "resolve"
+    ],
+    "src/ui/server.mjs:jsonOut": [
+      "res.writeHead",
+      "res.end",
+      "JSON.stringify"
+    ],
+    "src/ui/server.mjs:hostOf": [
+      "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "new URL(`http://${h}`).hostname.replace",
+      "String(h).toLowerCase",
+      "String"
+    ],
+    "src/ui/server.mjs:isTrustedHost": [
+      "HOST_WHITELIST.has",
+      "src/ui/server.mjs:hostOf"
+    ],
+    "src/ui/server.mjs:isTrustedOrigin": [
+      "HOST_WHITELIST.has",
+      "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
+      "new URL(originHeader).hostname.replace"
+    ],
+    "src/ui/server.mjs:bye": [
+      "paawRunning",
+      "killChild",
+      "getPaawChild",
+      "process.exit"
+    ],
+    "src/server/paaw-control.mjs:finish": [
+      "clearTimeout",
+      "clearTimeout",
+      "resolve"
+    ],
+    "src/server/paaw-control.mjs:onExit": [
+      "proc.removeListener",
+      "src/server/paaw-control.mjs:finish"
+    ],
+    "src/lib/process.mjs:pump": [
+      "stream.on",
+      "mirror.write",
+      "(child.__tail + c).slice"
+    ],
+    "src/lib/process.mjs:bye": [
+      "child.kill",
+      "process.exit"
+    ],
+    "src/lib/semgrep.mjs:done": [
+      "resolvePromise",
+      "resolvePromise"
+    ],
+    "src/lib/semgrep.mjs:pump": [
+      "String(c).split",
+      "String",
+      "line.trim",
+      "src/ui/server.mjs:jobLog",
+      "s.slice"
     ]
   },
   "stats": {
-    "totalFunctions": 93,
-    "totalCalls": 50,
-    "resolvedCalls": 5,
-    "unresolvedCalls": 45
+    "totalFunctions": 121,
+    "totalCalls": 52,
+    "resolvedCalls": 3,
+    "unresolvedCalls": 49
   }
 }

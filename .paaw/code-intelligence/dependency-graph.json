@@ -5,11 +5,132 @@
       "language": "javascript",
       "imports": [
         {
-          "source": "node:http",
+          "source": "node:fs/promises",
           "resolved": false,
           "targetFile": null,
           "names": []
         },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "./src/lib/config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/lib/install.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/lib/process.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/process.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/lib/semgrep.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/semgrep.mjs",
+          "names": []
+        },
+        {
+          "source": "./src/ui/server.mjs",
+          "resolved": true,
+          "targetFile": "src/ui/server.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "src/lib/config.mjs": {
+      "path": "src/lib/config.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:fs/promises",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "gateway.mjs",
+          "names": []
+        },
+        {
+          "source": "src/ui/server.mjs",
+          "names": []
+        },
+        {
+          "source": "src/lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "src/lib/process.mjs",
+          "names": []
+        },
+        {
+          "source": "src/lib/semgrep.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "VERSION_RE",
+        "getCfg",
+        "setCfgField",
+        "deleteCfgField",
+        "applyHome",
+        "getHome",
+        "getVersionsDir",
+        "getDataDir",
+        "getCurrentFile",
+        "getLogsDir",
+        "saveGatewayCfg",
+        "PORT",
+        "AUTO_UPDATE",
+        "EMOJI_OK",
+        "L",
+        "logFile",
+        "semverGt",
+        "loadPackageServerUrl",
+        "readCurrent",
+        "writeCurrentAtomic",
+        "listInstalledVersions",
+        "PATH_SEP",
+        "augmentedPath"
+      ]
+    },
+    "src/lib/install.mjs": {
+      "path": "src/lib/install.mjs",
+      "language": "javascript",
+      "imports": [
         {
           "source": "node:crypto",
           "resolved": false,
@@ -47,20 +168,209 @@
           "names": []
         },
         {
+          "source": "fflate",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "./config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "gateway.mjs",
+          "names": []
+        },
+        {
+          "source": "src/ui/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "downloadVerified",
+        "extractZip",
+        "verifySkeleton",
+        "installDeps",
+        "ensureData",
+        "stageInstall",
+        "installVersion",
+        "readZipManifest",
+        "installUploadedZip",
+        "updateLogic"
+      ]
+    },
+    "src/lib/process.mjs": {
+      "path": "src/lib/process.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "./config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "gateway.mjs",
+          "names": []
+        },
+        {
+          "source": "src/ui/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "getPaawChild",
+        "setPaawChild",
+        "getPaawChildVersion",
+        "setPaawChildVersion",
+        "getLastStartFail",
+        "setLastStartFail",
+        "paawRunning",
+        "setSemgrepDetectedProvider",
+        "OPEN_BROWSER",
+        "openBrowserTab",
+        "startPaaw",
+        "childFailReason",
+        "waitForHealthy",
+        "killChild",
+        "isPortOccupied",
+        "startAndVerify",
+        "hangAround"
+      ]
+    },
+    "src/lib/semgrep.mjs": {
+      "path": "src/lib/semgrep.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "./config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "gateway.mjs",
+          "names": []
+        },
+        {
+          "source": "src/ui/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "getDetectedPath",
+        "getCheckState",
+        "semgrepPresence",
+        "semgrepCheckKick",
+        "installSemgrep"
+      ]
+    },
+    "src/ui/server.mjs": {
+      "path": "src/ui/server.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:http",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs/promises",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
           "source": "node:url",
           "resolved": false,
           "targetFile": null,
           "names": []
         },
         {
-          "source": "fflate",
-          "resolved": false,
-          "targetFile": null,
+          "source": "../lib/config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../lib/install.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "../lib/process.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/process.mjs",
+          "names": []
+        },
+        {
+          "source": "../lib/semgrep.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/semgrep.mjs",
           "names": []
         }
       ],
-      "importedBy": [],
-      "exports": []
+      "importedBy": [
+        {
+          "source": "gateway.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "cmdUI"
+      ]
     },
     "tests/unit/backup.test.mjs": {
       "path": "tests/unit/backup.test.mjs",
@@ -191,27 +501,39 @@
           "names": []
         },
         {
-          "source": "child_process",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "crypto",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
           "source": "url",
           "resolved": false,
           "targetFile": null,
           "names": []
         },
         {
-          "source": "fs",
-          "resolved": false,
-          "targetFile": null,
+          "source": "./server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/events.mjs",
+          "resolved": true,
+          "targetFile": "src/server/events.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/auth.mjs",
+          "resolved": true,
+          "targetFile": "src/server/auth.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/paaw-control.mjs",
+          "resolved": true,
+          "targetFile": "src/server/paaw-control.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/backup.mjs",
+          "resolved": true,
+          "targetFile": "src/server/backup.mjs",
           "names": []
         }
       ],
@@ -353,19 +675,249 @@
       ],
       "importedBy": [],
       "exports": []
+    },
+    "src/server/config.mjs": {
+      "path": "src/server/config.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "loadConfig",
+        "saveConfig",
+        "createConfig"
+      ]
+    },
+    "src/server/events.mjs": {
+      "path": "src/server/events.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "createEventLog"
+      ]
+    },
+    "src/server/auth.mjs": {
+      "path": "src/server/auth.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "crypto",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "createAuth"
+      ]
+    },
+    "src/server/paaw-control.mjs": {
+      "path": "src/server/paaw-control.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "createPaawControl"
+      ]
+    },
+    "src/server/backup.mjs": {
+      "path": "src/server/backup.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "BACKUP_REGEX",
+        "BACKUP_DATE_REGEX",
+        "createBackupManager"
+      ]
     }
   },
   "edges": [
     {
+      "from": "gateway.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "gateway.mjs",
+      "to": "src/lib/install.mjs",
+      "names": []
+    },
+    {
+      "from": "gateway.mjs",
+      "to": "src/lib/process.mjs",
+      "names": []
+    },
+    {
+      "from": "gateway.mjs",
+      "to": "src/lib/semgrep.mjs",
+      "names": []
+    },
+    {
+      "from": "gateway.mjs",
+      "to": "src/ui/server.mjs",
+      "names": []
+    },
+    {
       "from": "tests/e2e/gateway-backup-auth.test.mjs",
       "to": "src/server.mjs",
+      "names": []
+    },
+    {
+      "from": "src/server.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
+      "from": "src/server.mjs",
+      "to": "src/server/events.mjs",
+      "names": []
+    },
+    {
+      "from": "src/server.mjs",
+      "to": "src/server/auth.mjs",
+      "names": []
+    },
+    {
+      "from": "src/server.mjs",
+      "to": "src/server/paaw-control.mjs",
+      "names": []
+    },
+    {
+      "from": "src/server.mjs",
+      "to": "src/server/backup.mjs",
+      "names": []
+    },
+    {
+      "from": "src/ui/server.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "src/ui/server.mjs",
+      "to": "src/lib/install.mjs",
+      "names": []
+    },
+    {
+      "from": "src/ui/server.mjs",
+      "to": "src/lib/process.mjs",
+      "names": []
+    },
+    {
+      "from": "src/ui/server.mjs",
+      "to": "src/lib/semgrep.mjs",
+      "names": []
+    },
+    {
+      "from": "src/lib/install.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "src/lib/process.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "src/lib/semgrep.mjs",
+      "to": "src/lib/config.mjs",
       "names": []
     }
   ],
   "stats": {
-    "totalFiles": 6,
-    "totalEdges": 1,
-    "resolvedImports": 1,
-    "unresolvedImports": 48
+    "totalFiles": 16,
+    "totalEdges": 18,
+    "resolvedImports": 18,
+    "unresolvedImports": 70
   }
 }

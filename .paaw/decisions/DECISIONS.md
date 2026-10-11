@@ -16,3 +16,10 @@
 - **決定**: RR-20260918-1242-bd43 複審後，gates 由 waived 改判 fail：diff（working tree vs HEAD）證實 src/server.mjs 的 F-01/F-02 安全修復（~180 行）與驗證它的 tests/e2e/gateway-restart-rbac.test.mjs 均未納入版控。tag 現在的 db2671c 會發佈不含 QA 已驗證修復的 0.2.1（即 TASK-007 曾判 NO-GO 的 1 blocker + 2 major 未修版本）。放行條件：人工 commit 修復與測試檔及 .paaw 證據 → RR target 前進至新 commit → gates 重驗（樹內容與被測/被掃對象一致，52/52 與 ERROR 0 證據隨即有效）→ tag 0.2.1。其餘三項建議：tests=pass（附錯位揭露）、qa-records=pass（掛 commit 條件）、risk=waived（auto=fail 三訊號經查證為靜態分析盲區/快照體積/同批 e2e 覆蓋，且有 DEPLOY.md 回滾程序）。
 - **後果**: 人類最終決定。放行條件由「commit 證據檔」加嚴為「commit 修復本體 + target 更新 + gates 重驗」；測試 52/52 與掃描 ERROR 0 無需重跑（樹內容不變），但 tag 前建議重掃一次使掃描時間戳晚於最終 commit。若人類仍選擇直接 tag db2671c，等於 knowingly 發佈含 TASK-007 已知 blocker 的版本 — 建議明確拒絕此路徑。
 
+## ADR-003: ADR-003: gateway.mjs / server.mjs 模組化重構（模組層拆分，入口檔名保留）
+- **日期**: 2026-10-11
+- **狀態**: Proposed
+- **背景**: 現況兩個 source file 各自承擔多重職責：gateway.mjs（~1166 行）含 CLI 入口、套包安裝、進程管理、semgrep、內嵌 UI server；src/server.mjs（~1015 行，含 ~300 行已註解死碼）含 HTTP server、認證、進程生命週期、備份、升級、事件稽核。可維護性與可測試性差，模組邊界不清。使用者要求「適當拆一拆，不要全擠在一團」，並指定模組層顆粒度、開 TASK 給 Developer (Priya)。
+- **決定**: 採模組層拆分，共 12 檔：gateway.mjs → 薄入口 + src/gateway/{config,install,process,semgrep,ui-server}.mjs；src/server.mjs → 薄入口 + src/server/{config,events,auth,paaw-control,backup}.mjs，並刪除 server.mjs 698–1016 已註解死碼（buildFallbackUI）。關鍵約束：(1) 入口檔名 gateway.mjs / src/server.mjs 一律保留（package.json bin + 3 個 e2e spawn target 綁定）；(2) 依賴嚴格單向（config 為 leaf，ui-server 依賴其餘 gateway 模組，backup → paaw-control）；(3) 共享可變狀態收斂到單一 owner 並以 getter 跨模組存取；(4) installSemgrep/runCapture 的 jobLog 以參數注入，切斷 semgrep↔ui 循環依賴；(5) 性質為 refactor-only，不改行為/API/CLI。分三期（P1 server、P2 gateway 核心、P3 gateway 周邊），每期以 npm test 52 案全綠為門檻。
+- **後果**: 正面：模組邊界明確、可單獨測試、降低認知負載、消除 300 行死碼。負面/成本：跨模組重構期間若共享狀態 owner 收斂錯誤，會造成 3 個 e2e 全紅；需逐步驗證、每期跑測試。風險緩解見 ARCHITECTURE.md §8。實作由 Developer (Priya) 執行，Architect 提供施工圖與驗收條件。
+
