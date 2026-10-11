@@ -7,6 +7,9 @@
 ### changed
 - refactor(gateway): ADR-003 P2 — 將 gateway.mjs 核心職責拆出為 src/lib/{config,install,process}.mjs 三個模組；gateway.mjs 保留原檔名與 CLI 行為（package.json bin），純重構不改外部行為
 
+### changed
+- refactor(gateway): ADR-003 P3（最後一期）— 將 gateway.mjs 周邊職責拆出：`src/lib/semgrep.mjs`（semgrep 偵測／一鍵安裝，jobLog 以參數注入切斷循環依賴）與 `src/ui/server.mjs`（本機控制台 HTTP server，CSRF/Host gate + 靜態 UI + job 執行）。gateway.mjs 由 721 行瘦身為 181 行純 CLI 入口（argv 分派 + cmdStatus/cmdStart/cmdUpdate/safeUpdate）；純重構不改行為／CLI／API，npm test 65/65 全綠。
+
 ## 2026-09-19
 ### fixed
 - 品質補強（TASK-008/009，F20260918-002）：src/server.mjs F-01 restart race（blocker，exit-confirmed stop 序列）+ F-02 備份端點 admin check 修復，QA 複審 NO-GO 解除；新增 gateway-restart-rbac e2e 10 案，全套 52/52（RUN-20260919-002）；兩 feature docs 與 mapping 更新（restore 端點補齊，實為 14 端點）
