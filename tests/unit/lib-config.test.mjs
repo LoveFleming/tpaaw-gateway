@@ -17,16 +17,33 @@ import { join, resolve } from "node:path";
 
 const CONFIG_URL = new URL("../../src/lib/config.mjs", import.meta.url).href;
 
+// 原始 cwd：chdir 案例若中途 assert 失敗，靠 afterEach 保底還原，避免 cwd 競態外洩到其他測試。
+// 注意：本檔依賴 node:test 的序列執行（預設）。若未來改用 --test-concurrency
+// 或平行 describe，chdir 型案例會互踩，需要改成可注入 baseDir 的介面。
+const ORIG_CWD = process.cwd();
+
 let tmp;
 beforeEach(() => {
   tmp = mkdtempSync(join(tmpdir(), "gw-libcfg-"));
 });
 afterEach(() => {
+  // 保底：任何 chdir 型案例未在 finally 還原時（例如斷言先爆）仍在這裡導回原始 cwd
+  if (process.cwd() !== ORIG_CWD) process.chdir(ORIG_CWD);
   rmSync(tmp, { recursive: true, force: true });
   delete process.env.PAAW_HOME;
+  delete process.env.PAAW_PACKAGE_URL;
 });
 
-// 每次以 cache-busting query 重新載入，讓 top-level 的 env 讀取生效
+// 路徑等價比較：macOS tmpdir 的 /var 是 /private/var 軟鏈，實作端若走 resolve/realpath 會產生
+// 不同字串表示。比較前對兩邊 realpath 正規化（呼叫前須確保路徑已存在，否則 realpathSync 會 throw）。
+function samePath(actual, expected) {
+  return realpathSync(actual) === realpathSync(expected);
+}
+
+// 每次以 cache-busting query 重新載入，讓 top-level 的 env 讀取生效。
+// 取捨：每個 case 會在 ESM cache 累積一份新 module 實例（含其 top-level 狀態），
+// 長期造成記憶體累積且無法重置 config 副作用。根治解法是將 config 抽成可重設 factory，
+// 但屬 production 介面變更，此處以註解明示現行隔離策略的邊界。
 async function reload(caseId) {
   return import(`${CONFIG_URL}?case=${caseId}`);
 }
@@ -86,7 +103,8 @@ describe("src/lib/config.mjs — applyHome / getters", () => {
   test("PAAW_HOME 優先於 gateway.json，衍生 versions/data/current/logs 路徑", async () => {
     process.env.PAAW_HOME = tmp;
     const m = await reload("home-1");
-    assert.equal(m.getHome(), tmp);
+    // getHome() 走 resolve() 不解軟鏈；macOS /var ↔ /private/var 需 realpath 正規化後比對
+    assert.equal(samePath(m.getHome(), tmp), true);
     assert.equal(m.getVersionsDir(), join(tmp, "versions"));
     assert.equal(m.getDataDir(), join(tmp, "data"));
     assert.equal(m.getCurrentFile(), join(tmp, "current.json"));
@@ -100,7 +118,7 @@ describe("src/lib/config.mjs — applyHome / getters", () => {
     try {
       process.chdir(cwdTmp);
       const m = await reload("home-2");
-      assert.equal(m.getHome(), realpathSync(cwdTmp));
+      assert.equal(samePath(m.getHome(), cwdTmp), true);
     } finally {
       process.chdir(orig);
       rmSync(cwdTmp, { recursive: true, force: true });
@@ -116,7 +134,7 @@ describe("src/lib/config.mjs — applyHome / getters", () => {
       process.chdir(cwdTmp);
       writeFileSync(join(cwdTmp, "gateway.json"), JSON.stringify({ paawHome }));
       const m = await reload("home-2b");
-      assert.equal(m.getHome(), paawHome);
+      assert.equal(samePath(m.getHome(), paawHome), true);
     } finally {
       process.chdir(orig);
       rmSync(cwdTmp, { recursive: true, force: true });
@@ -127,12 +145,12 @@ describe("src/lib/config.mjs — applyHome / getters", () => {
   test("applyHome 可重算：改 PAAW_HOME 後再呼叫即時生效", async () => {
     process.env.PAAW_HOME = tmp;
     const m = await reload("home-3");
-    assert.equal(m.getHome(), tmp);
+    assert.equal(samePath(m.getHome(), tmp), true);
     const tmp2 = mkdtempSync(join(tmpdir(), "gw-libcfg2-"));
     try {
       process.env.PAAW_HOME = tmp2;
       m.applyHome();
-      assert.equal(m.getHome(), tmp2);
+      assert.equal(samePath(m.getHome(), tmp2), true);
       assert.equal(m.getVersionsDir(), join(tmp2, "versions"));
     } finally {
       rmSync(tmp2, { recursive: true, force: true });
