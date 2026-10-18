@@ -10,7 +10,7 @@
  *    兩者共用同一 module 實例，故只需設定 PAAW_HOME env 並 reload config。
  */
 
-import { test, describe, beforeEach, afterEach } from "node:test";
+import { test, describe, beforeEach, afterEach, after } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -18,8 +18,22 @@ import { join } from "node:path";
 import { zipSync, strToU8 } from "fflate";
 
 // install.mjs 靜態依賴 config.mjs 的模組層狀態（PAAW_HOME 在 import 時讀）。
-// 因兩模組共用實例，測試啟動前先設好 PAAW_HOME 即可一致。
-process.env.PAAW_HOME = mkdtempSync(join(tmpdir(), "gw-install-host-"));
+// 因兩模組共用實例，測試載入前先設好 PAAW_HOME 即可一致。
+// 記錄原始值：可能本來就沒設（undefined）→ after() 必須 delete，不能還原成字串 "undefined"。
+const originalPaawHome = process.env.PAAW_HOME;
+const hostDir = mkdtempSync(join(tmpdir(), "gw-install-host-"));
+process.env.PAAW_HOME = hostDir;
+
+// module 級清理：整檔跑完後移除 top-level 建立的 host temp dir，並把 PAAW_HOME 還原為原始值
+// （原始不存在就 delete），避免污染同一 process 內後續載入的其他測試檔。
+after(() => {
+  rmSync(hostDir, { recursive: true, force: true });
+  if (originalPaawHome === undefined) {
+    delete process.env.PAAW_HOME;
+  } else {
+    process.env.PAAW_HOME = originalPaawHome;
+  }
+});
 
 const { extractZip, verifySkeleton, readZipManifest, installUploadedZip } = await import("../../src/lib/install.mjs");
 const { getHome, getVersionsDir, getLogsDir } = await import("../../src/lib/config.mjs");
@@ -171,6 +185,8 @@ describe("src/lib/install.mjs — installUploadedZip 版本判定與拒絕", () 
     await assert.rejects(() => installUploadedZip(buf, "paaw-1.2.3.zip"));
     // 應已在 versions/1.2.3.tmp 放過東西，但最終仍 abort（不產生 versions/1.2.3 定版）
     assert.equal(existsSync(join(getVersionsDir(), "1.2.3")), false);
+    // 骨架驗證失敗發生在 rename 之前 → 半成品留在 staging 目錄 .tmp（未清），據此斷言實際狀態
+    assert.equal(existsSync(join(getVersionsDir(), "1.2.3.tmp")), true);
   });
 
   test("合法 zip（manifest + 完整骨架 + skip npm）→ 安裝成功並切 current", async () => {
