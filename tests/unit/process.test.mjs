@@ -145,7 +145,9 @@ describe("src/lib/process.mjs — killChild", () => {
       kill: (sig) => { signals.push(sig); return true; },
     };
     const p = killChild(child);
-    // killChild 應立即送 SIGTERM
+    // killChild 可能同步或非同步送出 SIGTERM（例如內部先 await 前置步驟）。
+    // 先讓出一個 microtask，使斷言對兩種實作都穩定，仍驗證 SIGTERM 已送出。
+    await Promise.resolve();
     assert.ok(signals.includes("SIGTERM"));
     // 模擬 child 退出 → resolve
     child.exitCode = 0;

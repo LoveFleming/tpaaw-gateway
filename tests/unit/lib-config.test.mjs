@@ -41,9 +41,11 @@ function samePath(actual, expected) {
 }
 
 // 每次以 cache-busting query 重新載入，讓 top-level 的 env 讀取生效。
-// 取捨：每個 case 會在 ESM cache 累積一份新 module 實例（含其 top-level 狀態），
+// 為何用 query 重載：config.mjs 在 import 當下就讀 env / gateway.json（module top-level 副作用），
+// 要讓不同 env 的案例生效，唯一不碰 production code 的方式就是每個 case 換一個 URL 重新 import。
+// 已知成本：每個 case 會在 ESM cache 累積一份新 module 實例（含其 top-level 狀態），
 // 長期造成記憶體累積且無法重置 config 副作用。根治解法是將 config 抽成可重設 factory，
-// 但屬 production 介面變更，此處以註解明示現行隔離策略的邊界。
+// 但屬 production 介面變更、超出本次 review 範圍，故僅以註解明示現行隔離策略的邊界。
 async function reload(caseId) {
   return import(`${CONFIG_URL}?case=${caseId}`);
 }
@@ -174,6 +176,10 @@ describe("src/lib/config.mjs — setCfgField / deleteCfgField / getCfg", () => {
 });
 
 describe("src/lib/config.mjs — saveGatewayCfg", () => {
+  // 依賴 node:test 預設的序列執行：此案例以 process.chdir 切換全域 cwd，
+  // 若同檔其他案例並行（如啟用 --test-concurrency 或平行 describe）會發生 cwd 競態。
+  // 根治解法是讓 saveGatewayCfg 接受可注入的 baseDir/cwd 介面；屬 production 介面變更，
+  // 現階段以序列執行為前提，並靠 afterEach 保底還原 cwd。
   test("原子寫入 gateway.json（tmp + rename），內容為格式化 JSON", async () => {
     // saveGatewayCfg 固定寫 process.cwd()/gateway.json；用一個乾淨的 cwd 隔離
     const cwdTmp = mkdtempSync(join(tmpdir(), "gw-cwd-"));
@@ -199,10 +205,16 @@ describe("src/lib/config.mjs — saveGatewayCfg", () => {
 
 describe("src/lib/config.mjs — loadPackageServerUrl", () => {
   test("PAAW_PACKAGE_URL env 優先，且去除結尾斜線", async () => {
+    // 用 try/finally 而非只靠 afterEach：若 reload 或 assert 中途失敗，
+    // 這裡的 env 不會外洩到下一個案例（afterEach 仍為保底，但此變數在案例內設值，
+    // 提早還原可避免任何 assert 失敗路徑殘留）。
     process.env.PAAW_PACKAGE_URL = "http://pkg.test:9000/";
-    const m = await reload("pkg-1");
-    assert.equal(await m.loadPackageServerUrl(), "http://pkg.test:9000");
-    delete process.env.PAAW_PACKAGE_URL;
+    try {
+      const m = await reload("pkg-1");
+      assert.equal(await m.loadPackageServerUrl(), "http://pkg.test:9000");
+    } finally {
+      delete process.env.PAAW_PACKAGE_URL;
+    }
   });
 
   test("無 env / 無 gateway.json 時回預設 localhost:4180", async () => {
