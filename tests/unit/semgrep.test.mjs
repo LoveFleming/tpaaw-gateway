@@ -8,11 +8,30 @@
  *  - 不測 installSemgrep / checkSemgrep（需真的 spawn semgrep + 網路）— 屬 e2e 範疇。
  */
 
-import { test, describe, beforeEach, afterEach } from "node:test";
+import { test, describe, beforeEach, afterEach, after } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { delimiter, join } from "node:path";
+
+// ── Env 快照 / 還原（測試衛生）─────────────────────────────────────────────
+// 這些測試會覆寫 process.env 的 HOME / PATH / SEMGREP_PATH / PIPX_HOME，並在
+// module top-level 就動 HOME 與 SEMGREP_PATH。若跑在共用 process（--test 或自訂
+// runner），不還原會污染同 process 的其他測試檔。故在動任何 env 之前先記下原值，
+// 全套跑完（after）還原；_setEnv 記錄「原本不存在」的情形，還原時用 delete。
+//
+// 被覆寫的 env 白名單（after 一律還原）：
+const MANAGED_ENV = ["HOME", "PATH", "SEMGREP_PATH", "PIPX_HOME", "PAAW_PACKAGE_URL"];
+const _envSnapshot = new Map();
+for (const k of MANAGED_ENV) {
+  _envSnapshot.set(k, Object.prototype.hasOwnProperty.call(process.env, k) ? process.env[k] : undefined);
+}
+function restoreManagedEnv() {
+  for (const [k, original] of _envSnapshot) {
+    if (original === undefined) delete process.env[k];
+    else process.env[k] = original;
+  }
+}
 
 // 先設好 HOME（semgrepPresence 讀 process.env.HOME）再 import
 let tmpHome = mkdtempSync(join(tmpdir(), "gw-semgrep-home-"));
@@ -23,6 +42,15 @@ const { semgrepPresence, getDetectedPath, getCheckState } = await import("../../
 
 const EXE = process.platform === "win32" ? "semgrep.exe" : "semgrep";
 
+// PATH 覆寫時至少保留系統可執行路徑，否則同 process 內後續 execFile/spawn（如 node）
+// 會找不到執行檔。POSIX 用 /usr/bin:/bin；Windows 用 SystemRoot\System32。
+const SYSTEM_PATH = process.platform === "win32"
+  ? join(process.env.SystemRoot || "C:\\Windows", "System32")
+  : ["/usr/bin", "/bin"].join(delimiter);
+function emptyPathUnder(dir) {
+  return join(dir, "empty-bin") + delimiter + SYSTEM_PATH;
+}
+
 let tmp;
 beforeEach(() => {
   tmp = mkdtempSync(join(tmpdir(), "gw-semgrep-"));
@@ -30,10 +58,22 @@ beforeEach(() => {
   process.env.HOME = tmp;
   delete process.env.SEMGREP_PATH;
   delete process.env.PIPX_HOME;
-  process.env.PATH = join(tmp, "empty-bin");
+  delete process.env.PAAW_PACKAGE_URL;
+  process.env.PATH = emptyPathUnder(tmp);
 });
 afterEach(() => {
   rmSync(tmp, { recursive: true, force: true });
+});
+
+// 全套跑完：清掉 top-level tmpHome、還原所有被覆寫的 env，並自我驗證已還原。
+after(() => {
+  rmSync(tmpHome, { recursive: true, force: true });
+  restoreManagedEnv();
+  for (const k of MANAGED_ENV) {
+    const original = _envSnapshot.get(k);
+    if (original === undefined) assert.equal(Object.prototype.hasOwnProperty.call(process.env, k), false, `${k} 應還原為不存在`);
+    else assert.equal(process.env[k], original, `${k} 應還原為原值`);
+  }
 });
 
 function makeExecutable(path) {
@@ -94,7 +134,8 @@ describe("src/lib/semgrep.mjs — semgrepPresence（PATH 掃描）", () => {
   test("PATH 目錄內有 semgrep → 偵測到，source 提到 PATH", () => {
     const bindir = join(tmp, "toolbin");
     const bin = makeExecutable(join(bindir, EXE));
-    process.env.PATH = bindir;
+    // 隔離到 toolbin，但保留系統路徑以免同 process 的 subprocess 找不到 node
+    process.env.PATH = bindir + delimiter + SYSTEM_PATH;
     const r = semgrepPresence();
     assert.equal(r.installed, true);
     assert.equal(r.path, bin);
@@ -103,7 +144,7 @@ describe("src/lib/semgrep.mjs — semgrepPresence（PATH 掃描）", () => {
 
   test("PATH 目錄存在但該檔不存在 → 不誤判", () => {
     mkdirSync(join(tmp, "toolbin"), { recursive: true });
-    process.env.PATH = join(tmp, "toolbin");
+    process.env.PATH = join(tmp, "toolbin") + delimiter + SYSTEM_PATH;
     assert.equal(semgrepPresence().installed, false);
   });
 });
