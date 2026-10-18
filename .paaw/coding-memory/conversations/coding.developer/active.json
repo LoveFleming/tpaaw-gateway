@@ -1,8 +1,8 @@
 {
   "_meta": {
     "crewId": "coding.developer",
-    "lastUpdated": "2026-10-11T09:41:30.643Z",
-    "messageCount": 8
+    "lastUpdated": "2026-10-18T03:44:30.279Z",
+    "messageCount": 9
   },
   "messages": [
     {
@@ -633,6 +633,148 @@
       "role": "user",
       "content": "ok",
       "ts": "2026-10-11T09:41:28.601Z"
+    },
+    {
+      "role": "assistant",
+      "content": "完成。已 commit（`ec100dc`，未 push）。\n\n## 做了什麼\n\n| 項目 | 結果 |\n|---|---|\n| `config.example.json` | ✅ 新增進版控，`passwordHash` 為安全佔位符 `CHANGE_ME`、無任何真實憑證 |\n| `config.json` | ✅ 脫離版控（`git rm --cached`，**本地實體檔保留**）→ git 識別為 rename |\n| `.gitignore` | ✅ 加入 `config.json`，附首次使用說明註解 |\n| 文件 | ✅ `README.md` / `docs/api.md` / `DEPLOY.md` 改為「複製範本 → 再改密碼」，補 `PAAW_GATEWAY_HOST`、憑證 env 注入說明，移除過時的「明文比對」警告 |\n| TASK-020 | ✅ 已結案 |\n\n**安全性確認**：`CHANGE_ME` 經 `isWeakDefaultPassword` 判為 weak default → 啟動 fail-closed，佔位符不會被誤用成真密碼。`npm test` **91 pass / 0 fail**。\n\n```\n📋 Work Summary\n├─ 改了什麼：\n│  ├─ config.example.json (新) — 無憑證範本，passwordHash=CHANGE_ME、sessionSecret=佔位符\n│  ├─ .gitignore — 排除 config.json + 使用說明註解\n│  ├─ config.json — git rm --cached 脫離版控（本地檔保留）\n│  ├─ README.md — config 段落改複製範本 + env 注入；安全注意事項更新\n│  ├─ docs/api.md — config 設定段落補 host 欄、範本說明；移除過時明文比對警告\n│  └─ DEPLOY.md — 新增首次設定 config.json 步驟\n├─ 為什麼改：config.json 為 tracked 檔且未被 ignore → 真實 bcrypt 憑證有進版控風險（TASK-018 收尾已還原一次）\n├─ 怎麼測試：\n│  1. git ls-files | grep config → 不含 config.json、含 config.example.json\n│  2. ls config.json → 本地實體檔仍在\n│  3. npm test → 預期 91 pass / 0 fail\n│  4. 照 README 步驟 cp config.example.json config.json → 能以 env 注入憑證啟動 :4199\n└─ 風險注意：日後 clone 需手動 cp 範本（已寫入文件）；config.json 為 rename、非純刪除。無功能影響\n```",
+      "ts": "2026-10-11T09:42:42.129Z",
+      "_toolCalls": [
+        {
+          "name": "task_create",
+          "args": "{\"title\":\"config.json 版控策略：改採 config.example.json（真實憑證不進版控）\",\"featureId\":\"F20261009-002\",\"type\":\"dev\",\"description\":\"來源：TASK-018/019 收尾發現。config.json 為 tracked 檔且不在 .gitignore，導致本機真實 bcrypt 憑證有被 commit 進版控的風險（TASK-018 已還原一次）。\\n\\n目標：\\n1. 新增 config.example.json（進版控）— 結構同 config.json，passwordHash 用明文佔位符 CHANGE_ME。\\n2. config.json 加入 .gitignore。\\n3. git rm --cached config.json（保留本地實體檔）。\\n4. 更新 DEPLOY.md/README 啟動說明：複製 config.example.json → config.json 再改密碼。\\n\\n驗收：\\n- git ls-files 不含 config.json，含 config.example.json。\\n- 本地 config.json 檔案仍存在且服務可用（env 注入憑證）。\\n- npm test 全綠。\\n- 文件說明可照做。\",\"priority\":\"medium\",\"source\":\"manual\"}",
+          "result": "✅ Task created: TASK-020 \"config.json 版控策略：改採 config.example.json（真實憑證不進版控）\"\nFeature: F20261009-002 | Type: dev | Priority: medium | Status: open"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\"config.json\"}",
+          "result": "{\n  \"port\": 4199,\n  \"paawRoot\": \"../tPAAW\",\n  \"paawServerCmd\": \"node packages/server/src/index.mjs\",\n  \"paawServerPort\": 4097,\n  \"backupDir\": \"../tPAAW/backups\",\n  \"backupSchedule\": \"0 3 * * *\",\n  \"maxBackups\": 7,\n  \"autoStartPaaw\": false,\n  \"users\": [\n    { \"id\": \"admin\", \"name\": \"Fleming\", \"role\": \"admin\", \"passwordHash\": \"changeme\" }\n  ],\n  \"sessionSecret\": \"paaw-gateway-secret-change-me\",\n  \"sessionMaxAge\": 86400000\n}\n"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\"src/server/config.mjs\"}",
+          "result": "/**\n * PAAW Gateway — Config module (leaf)\n *\n * Owns config.json loading/saving and the env-derived paths that the rest of\n * the Gateway server depends on.\n *\n * IMPORTANT (test contract): the unit test re-imports the entry module with a\n * cache-busting query string (`src/server.mjs?case=N`) to make fresh env\n * (PAAW_ROOT / PAAW_BACKUP_DIR / PAAW_EVENT_LOG / PAAW_MAX_BACKUPS) take\n * effect. Static sub-module imports are NOT cache-busted, so this module MUST\n * NOT compute env-derived state at module top level — instead `createConfig()`\n * recomputes everything on every call, invoked by the entry at load time.\n *\n * All relative paths are resolved against `baseDir` (the entry's own\n * directory, i.e. `<root>/src`) so that moving this file one level deeper\n * (src/ -> src/server/) does not shift path depth.\n */\n\nimport { readFileSync, writeFileSync } from \"fs\";\nimport { join, resolve } from \"path\";\n\nimport { applyPasswordOverride, isWeakDefaultPassword } from \"./password.mjs\";\n\n/** Default bind host — loopback only, so :4199 is never exposed to the network. */\nexport const DEFAULT_HOST = \"127.0.0.1\";\n\n/**\n * Load config.json; fall back to sane defaults when missing/unparseable.\n *\n * Security note (TASK-018): the fallback deliberately ships NO default user /\n * credential. Previously it defaulted to `admin` / `change_me`, which meant a\n * mis-configured install was trivially taken over. Now an install with no\n * configured credential fails the startup check in `validateAuthConfig`.\n *\n * @param {string} configPath absolute path to config.json\n * @returns {object} parsed config\n */\nexport function loadConfig(configPath, baseDir) {\n  try {\n    return JSON.parse(readFileSync(configPath, \"utf-8\"));\n  } catch {\n    return {\n      host: DEFAULT_HOST,\n      port: 4199,\n      paawRoot: resolve(baseDir, \"..\", \"..\", \"..\"),\n      paawServerCmd: \"node packages/server/src/index.mjs\",\n      paawServerPort: 4097,\n      backupDir: resolve(baseDir, \"..\", \"..\", \"..\", \"backups\"),\n "
+        },
+        {
+          "name": "grep",
+          "args": "{\"pattern\":\"config\\\\.json|config\\\\.example\",\"include\":\"*.md\"}",
+          "result": "README.md:125:`src/server.mjs` 是**獨立於 bootloader 的 DevOps 管理平台**，管理的是「開發實例」（git repo 形態的 PAAW，即 `config.json` 的 `paawRoot`），與 bootloader 的 zip 安裝流程是兩條不同的路。\nREADME.md:137:- **登入認證** — 帳號在 `config.json` 的 `users[]`，登入換 Bearer token（24h 效期，記憶體 session）\nREADME.md:152:### config.json\nREADME.md:187:- `config.json` 目前**未進版控**（.gitignore 已排除），但仍請確認 repo 內不含真實密碼\ndocs/api.md:19:| **Gateway Admin** | `src/server.mjs` | `config.json` 的 `port`（預設 4199） | PAAW 開發實例的 DevOps 管理平台（進程、升級、備份、事件） | Bearer token（登入取得） |\ndocs/api.md:104:獨立管理平台（守護者角色），**不依賴 PAAW Server 運行**。設定來源為 repo 根目錄 `config.json`（可用 `PAAW_CONFIG` 覆蓋路徑）。\ndocs/api.md:131:> ⚠️ 帳號密碼定義在 `config.json` 的 `users[]`。目前為明文比對，部署前請改用 hash —— 見 README「安全注意事項」。\ndocs/api.md:229:## 3. config.json（Admin server 設定）\ndocs/api.md:231:路徑：repo 根目錄 `config.json`（`PAAW_CONFIG` 可覆蓋）。不存在時使用內建預設值。"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\"README.md\",\"offset\":145,\"limit\":60}",
+          "result": "\n- **備份內容**：`paawRoot` 下的 `data/` 與 `.paaw/` 兩個目錄，`tar czf` 打包\n- **檔名固定格式**：`paaw-backup-YYYY-MM-DD-HH.tar.gz`（regex 驗證，防 path traversal）\n- **排程**：`backupSchedule`（cron 語法，預設每天 03:00）；dashboard 也可手動建立\n- **輪替**：保留 `maxBackups` 份（預設 7），超過自動刪最舊\n- **還原**：停止 PAAW → **先自動建一份 safety 備份** → 解開 tar → 重啟 PAAW\n\n### config.json\n\n```json\n{\n  \"port\": 4199,\n  \"paawRoot\": \"../tPAAW\",\n  \"paawServerCmd\": \"node packages/server/src/index.mjs\",\n  \"paawServerPort\": 4097,\n  \"backupDir\": \"../tPAAW/backups\",\n  \"backupSchedule\": \"0 3 * * *\",\n  \"maxBackups\": 7,\n  \"autoStartPaaw\": false,\n  \"users\": [{ \"id\": \"admin\", \"name\": \"Fleming\", \"role\": \"admin\", \"passwordHash\": \"changeme\" }],\n  \"sessionSecret\": \"paaw-gateway-secret-change-me\",\n  \"sessionMaxAge\": 86400000\n}\n```\n\n環境變數 `PAAW_CONFIG` / `PAAW_ROOT` / `PAAW_BACKUP_DIR` / `PAAW_EVENT_LOG` / `PAAW_MAX_BACKUPS` 可覆蓋（主要供測試隔離用）。完整欄位說明見 [`docs/api.md`](docs/api.md#3-configjson-admin-server-設定)。\n\n## 測試\n\n```bash\nnpm test    # node --test tests/**/*.test.mjs\n```\n\n| 類型 | 檔案 | 涵蓋 |\n|---|---|---|\n| Unit | `tests/unit/backup.test.mjs` | 備份建立 / 輪替 / 還原 / 檔名 regex 驗證 |\n| E2E | `tests/e2e/gateway-backup-auth.test.mjs` | 登入認證流程、backup API、401 未授權防護 |\n\n測試以 temp dir + 隨機 port 隔離，不會碰到開發者本機正在跑的 gateway（:4199）或 PAAW（:4097）。\n\n## 安全注意事項\n\n- `config.json` 目前**未進版控**（.gitignore 已排除），但仍請確認 repo 內不含真實密碼\n- `users[].passwordHash` 欄位目前為**明文比對**（login 直接 `===` 比對）—— 若要對外開放 port，應先改為 hash + salt（已知技術債，見 issue tracker）\n- Admin server 預設只聽本機；`sessionSecret` 部署前請換掉預設值\n"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\"DEPLOY.md\"}",
+          "result": "# DEPLOY — tpaaw-gateway 部署與回滾\n\n> 維運文檔（Release Request `ops` 項證據）｜ 2026-09-18 起草\n\n## 元件與埠\n\n- **Bootloader**（`gateway.mjs`）— port **4290**：安裝/更新/啟停 PAAW app\n- **Gateway Admin**（`src/server.mjs`）— port **4199**：DevOps 管理平台（進程/git/備份/日誌）\n\n## 部署方式（二選一）\n\n### A. 手動 zip 上傳（2026-09-07 起，不需要 package server）\n\n```bash\n# 在 gateway 執行目錄（有 current.json 的目錄）\nnpm run upload -- paaw-x.y.z.zip   # zip 內 paaw-manifest.json 帶版本\n```\n\n### B. Package server 下載\n\n```bash\nPAAW_PACKAGE_URL=http://<package-server>:4180 npm run update\n```\n\n## 更新流程（內建防護）\n\n1. 下載 → 串流算 sha256 驗證 → 解壓到 `versions/<v>.tmp` → 驗證後轉正\n2. `data/` 播種只在首次，更新**永不覆蓋**使用者資料\n3. `current.json` 原子寫入 — 只有新版本**健康檢查通過**才切換（啟動成功才寫）\n4. ISS-001（2026-09-18）：啟動前偵測 port 佔用（防 EADDRINUSE 誤報上線）+ 通過健康檢查後 2.5s 夭折期複查\n\n## 回滾（Rollback）\n\n**舊版天然保留在 `versions/` — 回滾 = 改 current.json 指回舊版：**\n\n```bash\n# 1. 停掉目前 PAAW（gateway 管）\n# 2. 把 current.json 的 version 指回上一版，例如：\n#    { \"version\": \"0.1.0\", \"switchedAt\": \"<now>\" }\n# 3. 重新 npm start — 舊版目錄還在，不用重下載\n```\n\n**資料回滾**（更新弄壞資料時）：Gateway Admin（4199）→ 備份頁 → 選備份還原\n（restore 前自動建立 pre-restore 安全備份；API 見 `docs/api.md`）\n\n## 緊急停機\n\n```bash\n# bootloader 管的 child：kill gateway 主進程即可（child 一併收）\n# 完整停：停 gateway.mjs（4290）+ src/server.mjs（4199）兩個進程\n```\n\n## 健康檢查\n\n- Bootloader 啟動驗證：`http://127.0.0.1:<PAAW_PORT>/` 健康回應 + child 存活\n- Admin：`GET :4199/`（登入頁回應即活）\n\n## 已知安全債（未修前列管）\n\n- 6 個 semgrep WARNING（CWE-22 path traversal 類 audit）— 列管於 TASK-001 / TASK-002\n  （人工 code review + F1/F10 版本驗證 + F7 CSRF 修復）\n"
+        },
+        {
+          "name": "write_file",
+          "args": "{\"path\":\"config.example.json\",\"content\":\"{\\n  \\\"host\\\": \\\"127.0.0.1\\\",\\n  \\\"port\\\": 4199,\\n  \\\"paawRoot\\\": \\\"../tPAAW\\\",\\n  \\\"paawServerCmd\\\": \\\"node packages/server/src/index.mjs\\\",\\n  \\\"paawServerPort\\\": 4097,\\n  \\\"backupDir\\\": \\\"../tPAAW/backups\\\",\\n  \\\"backupSchedule\\\": \\\"0 3 * * *\\\",\\n  \\\"maxBackups\\\": 7,\\n  \\\"autoStartPaaw\\\": false,\\n  \\\"users\\\": [\\n    { \\\"id\\\": \\\"admin\\\", \\\"name\\\": \\\"Admin\\\", \\\"role\\\": \\\"admin\\\", \\\"passwordHash\\\": \\\"CHANGE_ME\\\" }\\n  ],\\n  \\\"sessionSecret\\\": \\\"change-me-to-a-random-secret\\\",\\n  \\\"sessionMaxAge\\\": 86400000\\n}\\n\"}",
+          "result": "Successfully wrote 447 bytes to config.example.json [NEW FILE]"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\".gitignore\"}",
+          "result": "node_modules/\nversions/\nstate.json\n*.log\n.DS_Store\ncurrent.json\ngateway.json\ndata/\n# Gateway runtime audit trail（含真實登入事件；機器自己產生的 runtime 資產，不進版控）\nevents.jsonl\n# Release unit 資產（2026-09-06：.paaw 100% 進版控 — runtime log 在 PAAW log/ 中央目錄）\n# versions/ = 更新備份 legacy 位置（寫入者未定案前先留著 ignore）\n# .paaw/tmp/ = agent 暫存腳本（runtime 垃圾，不進版控；正式暫存用 $PAAW_TMP）\n.paaw/tmp/\n\n# ── PAAW runtime 層不進版控（2026-09-19 平台管理：資產進版控，runtime 機器自己消化；證據摘要內嵌 RR）──\n.paaw/sessions/\n.paaw/test-runs/\n.paaw/changes/\n.paaw/security/\n.paaw/cu-status.json\n.paaw/scan.json\n.paaw/gates.json\n.paaw/verify-last.json\n.paaw/features/backups/\n.paaw/coding-memory/dispatch-outputs/\n.paaw/auto-dispatch/\n.paaw/staged-changes.json\n# ── PAAW runtime 層結束 ──\n"
+        },
+        {
+          "name": "edit_file",
+          "args": "{\"path\":\".gitignore\",\"old_text\":\"# Gateway runtime audit trail（含真實登入事件；機器自己產生的 runtime 資產，不進版控）\\nevents.jsonl\",\"new_text\":\"# Gateway runtime audit trail（含真實登入事件；機器自己產生的 runtime 資產，不進版控）\\nevents.jsonl\\n# Gateway 本地設定（含真實憑證雜湊 / sessionSecret）—— 版控改追 config.example.json\\n# 首次使用：cp config.example.json config.json 再改密碼（或用 PAAW_GATEWAY_PASSWORD 注入）\\nconfig.json\"}",
+          "result": "Successfully edited .gitignore (1 replacement)"
+        },
+        {
+          "name": "bash",
+          "args": "{\"command\":\"cd /Users/steward/App/tpaaw-gateway && git rm --cached config.json && echo \\\"--- config.json 本地仍在？ ---\\\" && ls -la config.json && echo \\\"--- git ls-files config ---\\\" && git ls-files | grep -i \\\"config\\\"\"}",
+          "result": "rm 'config.json'\n--- config.json 本地仍在？ ---\n-rw-------@ 1 steward  staff  426 Oct 11 17:39 config.json\n--- git ls-files config ---\n.paaw/agents/_config.json\n.paaw/em/config.json\n.paaw/skills/playwright-expert/references/configuration.md\n.paaw/skills/typescript-pro/references/configuration.md\nsrc/lib/config.mjs\nsrc/server/config.mjs\n"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\"docs/api.md\",\"offset\":225,\"limit\":60}",
+          "result": "（不回傳密碼欄位）\n\n---\n\n## 3. config.json（Admin server 設定）\n\n路徑：repo 根目錄 `config.json`（`PAAW_CONFIG` 可覆蓋）。不存在時使用內建預設值。\n\n| 欄位 | 預設 | 說明 |\n|---|---|---|\n| `port` | `4199` | Admin server port |\n| `paawRoot` | `../../../`（相對 src/） | PAAW repo 根目錄（開發實例） |\n| `paawServerCmd` | `node packages/server/src/index.mjs` | PAAW 啟動指令 |\n| `paawServerPort` | `4097` | PAAW Server port（health check 用） |\n| `backupDir` | `<paawRoot>/backups` | 備份檔目錄 |\n| `backupSchedule` | `0 3 * * *` | 排程備份（cron 語法，每天 03:00） |\n| `maxBackups` | `7` | 保留份數，超過刪最舊 |\n| `autoStartPaaw` | `false` | gateway 啟動時自動帶起 PAAW |\n| `users[]` | 見下 | `{ id, name, role, passwordHash }` |\n| `sessionSecret` | — | session 簽章 |\n| `sessionMaxAge` | `86400000` | token 效期（ms） |\n\n### 環境變數（測試隔離用）\n\n| 變數 | 覆蓋目標 |\n|---|---|\n| `PAAW_CONFIG` | config 檔路徑 |\n| `PAAW_ROOT` | PAAW 根目錄 |\n| `PAAW_BACKUP_DIR` | 備份目錄 |\n| `PAAW_EVENT_LOG` | 事件日誌檔路徑 |\n| `PAAW_MAX_BACKUPS` | 最大保留份數 |\n\n> 這些 knob 主要供單元/e2e 測試指向 temp dir，避免污染開發者本機正在跑的 gateway（見 `tests/`）。\n\n---\n\n## 4. 測試\n\n```bash\nnpm test    # = node --test tests/**/*.test.mjs\n```\n\n| 測試 | 檔案 | 重點 |\n|---|---|---|\n| Unit | `tests/unit/backup.test.mjs` | backup 建立/輪替/還原、regex 驗證（mkdtemp 隔離 + ESM cache-bust import） |\n| E2E | `tests/e2e/gateway-backup-auth.test.mjs` | spawn 真 server 子進程：login/auth flow、backup API、孤兒進程防護（隨機 port，不碰 :4199） |\n"
+        },
+        {
+          "name": "edit_file",
+          "args": "{\"path\":\"README.md\",\"old_text\":\"### config.json\\n\\n```json\\n{\\n  \\\"port\\\": 4199,\\n  \\\"paawRoot\\\": \\\"../tPAAW\\\",\\n  \\\"paawServerCmd\\\": \\\"node packages/server/src/index.mjs\\\",\\n  \\\"paawServerPort\\\": 4097,\\n  \\\"backupDir\\\": \\\"../tPAAW/backups\\\",\\n  \\\"backupSchedule\\\": \\\"0 3 * * *\\\",\\n  \\\"maxBackups\\\": 7,\\n  \\\"autoStartPaaw\\\": false,\\n  \\\"users\\\": [{ \\\"id\\\": \\\"admin\\\", \\\"name\\\": \\\"Fleming\\\", \\\"role\\\": \\\"admin\\\", \\\"passwordHash\\\": \\\"changeme\\\" }],\\n  \\\"sessionSecret\\\": \\\"paaw-gateway-secret-change-me\\\",\\n  \\\"sessionMaxAge\\\": 86400000\\n}\\n```\\n\\n環境變數 `PAAW_CONFIG` / `PAAW_ROOT` / `PAAW_BACKUP_DIR` / `PAAW_EVENT_LOG` / `PAAW_MAX_BACKUPS` 可覆蓋（主要供測試隔離用）。完整欄位說明見 [`docs/api.md`](docs/api.md#3-configjson-admin-server-設定)。\",\"new_text\":\"### config.json\\n\\n**`config.json` 不進版控**（含真實憑證；`.gitignore` 已排除）。版控中的範本是\\n`config.example.json`。首次使用請複製範本再改：\\n\\n```bash\\ncp config.example.json config.json\\n# 編輯 config.json，把 users[].passwordHash 換成 bcrypt 雜湊、sessionSecret 換成隨機值\\n# 或改用環境變數注入（見下方），不改檔案\\n```\\n\\n範本 `config.example.json` 內容（`passwordHash` 為佔位符 `CHANGE_ME`，**啟動時會 fail-closed**，\\n不會被誤用成真密碼）：\\n\\n```json\\n{\\n  \\\"host\\\": \\\"127.0.0.1\\\",\\n  \\\"port\\\": 4199,\\n  \\\"paawRoot\\\": \\\"../tPAAW\\\",\\n  \\\"paawServerCmd\\\": \\\"node packages/server/src/index.mjs\\\",\\n  \\\"paawServerPort\\\": 4097,\\n  \\\"backupDir\\\": \\\"../tPAAW/backups\\\",\\n  \\\"backupSchedule\\\": \\\"0 3 * * *\\\",\\n  \\\"maxBackups\\\": 7,\\n  \\\"autoStartPaaw\\\": false,\\n  \\\"users\\\": [{ \\\"id\\\": \\\"admin\\\", \\\"name\\\": \\\"Admin\\\", \\\"role\\\": \\\"admin\\\", \\\"passwordHash\\\": \\\"CHANGE_ME\\\" }],\\n  \\\"sessionSecret\\\": \\\"change-me-to-a-random-secret\\\",\\n  \\\"sessionMaxAge\\\": 86400000\\n}\\n```\\n\\n**憑證快速設定（不改檔案）**：設定環境變數 `PAAW_GATEWAY_PASSWORD=<強密碼>`，\\n啟動時會自動雜湊並覆寫 `admin` 的 `passwordHash`。`PAAW_GATEWAY_HOST` 可覆蓋綁定 host。\\n\\n環境變數 `PAAW_CONFIG` / `PAAW_ROOT` / `PAAW_BACKUP_DIR` / `PAAW_EVENT_LOG` / `PAAW_MAX_BACKUPS` 可覆蓋（主要供測試隔離用）。完整欄位說明見 [`docs/api.md`](docs/api.md#3-configjson-admin-server-設定)。\"}",
+          "result": "Successfully edited README.md (1 replacement)"
+        },
+        {
+          "name": "edit_file",
+          "args": "{\"path\":\"README.md\",\"old_text\":\"## 安全注意事項\\n\\n- `config.json` 目前**未進版控**（.gitignore 已排除），但仍請確認 repo 內不含真實密碼\\n- `users[].passwordHash` 欄位目前為**明文比對**（login 直接 `===` 比對）—— 若要對外開放 port，應先改為 hash + salt（已知技術債，見 issue tracker）\\n- Admin server 預設只聽本機；`sessionSecret` 部署前請換掉預設值\",\"new_text\":\"## 安全注意事項\\n\\n- `config.json` **不進版控**（`.gitignore` 已排除，含真實憑證）；版控追的是無憑證的 `config.example.json`\\n- `users[].passwordHash` 為 **bcrypt 雜湊**（TASK-018 起；plaintext 舊值登入時會自動就地升級）\\n- 登入有 **per-user / per-IP rate limit + 鎖定**，失敗一律回相同 401（不洩漏帳號是否存在）\\n- 啟動時 **fail-closed**：無憑證或仍是預設密碼（如 `CHANGE_ME`）會拒絕啟動\\n- Admin server **預設只綁 `127.0.0.1`**（TASK-019）；`sessionSecret` 部署前請換掉預設值\"}",
+          "result": "Successfully edited README.md (1 replacement)"
+        },
+        {
+          "name": "edit_file",
+          "args": "{\"new_text\":\"## 3. config.json（Admin server 設定）\\n\\n路徑：repo 根目錄 `config.json`（`PAAW_CONFIG` 可覆蓋）。**此檔不進版控**（含真實憑證）；\\n版控中的範本是 `config.example.json`：\\n\\n```bash\\ncp config.example.json config.json   # 首次使用；再改 passwordHash / sessionSecret\\n```\\n\\n不存在時使用內建預設值（**無預設帳號**，啟動時 fail-closed）。\\n\\n| 欄位 | 預設 | 說明 |\\n|---|---|---|\\n| `host` | `127.0.0.1` | Admin server 綁定 host（僅 loopback；`PAAW_GATEWAY_HOST` 可覆蓋） |\\n| `port` | `4199` | Admin server port |\",\"old_text\":\"## 3. config.json（Admin server 設定）\\n\\n路徑：repo 根目錄 `config.json`（`PAAW_CONFIG` 可覆蓋）。不存在時使用內建預設值。\\n\\n| 欄位 | 預設 | 說明 |\\n|---|---|---|\\n| `port` | `4199` | Admin server port |\",\"path\":\"docs/api.md\"}",
+          "result": "Successfully edited docs/api.md (1 replacement)"
+        },
+        {
+          "name": "edit_file",
+          "args": "{\"new_text\":\"> ⚠️ 帳號密碼為 **bcrypt 雜湊**（`users[].passwordHash`，TASK-018 起）；登入有 rate limit。\\n> 明文舊值於登入時自動就地升級。首次設定憑證見 README「config.json」。\",\"old_text\":\"> ⚠️ 帳號密碼定義在 `config.json` 的 `users[]`。目前為明文比對，部署前請改用 hash —— 見 README「安全注意事項」。\",\"path\":\"docs/api.md\"}",
+          "result": "Successfully edited docs/api.md (1 replacement)"
+        },
+        {
+          "name": "edit_file",
+          "args": "{\"new_text\":\"## 部署方式（二選一）\\n\\n### 首次設定 config.json（Gateway Admin）\\n\\n`config.json` 不進版控（含真實憑證）。首次部署請從範本建立：\\n\\n```bash\\ncp config.example.json config.json\\n# 編輯 config.json：users[].passwordHash 換成 bcrypt 雜湊、sessionSecret 換成隨機值\\n# 或：PAAW_GATEWAY_PASSWORD='<強密碼>' node src/server.mjs（啟動時自動雜湊注入 admin）\\n```\\n\\n啟動時 fail-closed：無憑證或仍是預設佔位符（`CHANGE_ME`）會拒絕啟動。Admin 預設綁\\n`127.0.0.1:4199`（`PAAW_GATEWAY_HOST` 可覆蓋，明確設定才會對外）。\\n\\n### A. 手動 zip 上傳（2026-09-07 起，不需要 package server）\",\"old_text\":\"## 部署方式（二選一）\\n\\n### A. 手動 zip 上傳（2026-09-07 起，不需要 package server）\",\"path\":\"DEPLOY.md\"}",
+          "result": "Successfully edited DEPLOY.md (1 replacement)"
+        },
+        {
+          "name": "bash",
+          "args": "{\"command\":\"cd /Users/steward/App/tpaaw-gateway && node -e '\\nimport(\\\"./src/server/password.mjs\\\").then(m => {\\n  console.log(\\\"CHANGE_ME isWeakDefaultPassword:\\\", m.isWeakDefaultPassword(\\\"CHANGE_ME\\\"));\\n  console.log(\\\"CHANGE_ME looks hashed:\\\", m.isHashedPassword ? m.isHashedPassword(\\\"CHANGE_ME\\\") : \\\"(no export)\\\");\\n});\\n'\"}",
+          "result": "CHANGE_ME isWeakDefaultPassword: true\nCHANGE_ME looks hashed: (no export)\n"
+        },
+        {
+          "name": "bash",
+          "args": "{\"command\":\"cd /Users/steward/App/tpaaw-gateway && npm test 2>&1 | tail -12\"}",
+          "result": "  duration_ms: 219.757708\n  type: 'test'\n  ...\n1..54\n# tests 91\n# suites 10\n# pass 91\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 13507.854708\n"
+        },
+        {
+          "name": "read_file",
+          "args": "{\"path\":\"src/server/password.mjs\"}",
+          "result": "/**\n * PAAW Gateway — Password module (leaf)\n *\n * Owns password hashing / verification for the admin platform. Uses bcrypt\n * (via the pure-JS `bcryptjs` package so it runs everywhere without native\n * build tooling). Depends only on Node built-ins + bcryptjs — no other Gateway\n * module — so it can be imported by the entry, config and tests alike.\n *\n * Threat model (ISS-002 / TASK-018):\n *  - Stored credentials MUST NOT be plaintext, and login MUST NOT leak whether\n *    an account exists (uniform 401 + constant-time work on both paths).\n *  - Legacy plaintext credentials written by older versions are still accepted\n *    (backward compatibility) but the caller is told to re-hash them on a\n *    successful login (`needsRehash` → lazy upgrade), so existing installs\n *    migrate to bcrypt without an admin-side migration step.\n */\n\nimport bcrypt from \"bcryptjs\";\nimport { createHash, timingSafeEqual } from \"crypto\";\n\n/** bcrypt cost factor. 12 ≈ 200ms on a modern laptop — a sane online-login cost. */\nexport const BCRYPT_ROUNDS = 12;\n\n/** Matches `$2a$` / `$2b$` / `$2y$` bcrypt strings with a 2-digit cost. */\nconst BCRYPT_RE = /^\\$2[aby]?\\$\\d{2}\\$/;\n\n/**\n * A fixed bcrypt hash of a random, unknowable string. Used to spend the same\n * CPU on \"user not found\" as on a real verify, so response timing cannot be\n * used to enumerate accounts. It is NOT a credential — nobody knows its\n * pre-image, so it can never authenticate.\n */\nconst DUMMY_HASH = \"$2b$12$r7PoHG3R5pskdUBuwcH0H.6/03UQGjhBTKaEPACo8sOtqtECSU8fG\";\n\n/**\n * Obvious shipped/default passwords that must never authenticate. `change_me`\n * is the literal default the code used to ship; the rest are the usual\n * copy-paste defaults. Blocking these enforces \"remove the default password\"\n * without requiring an admin-side migration.\n */\nconst WEAK_DEFAULT_PASSWORDS = new Set([\n  \"change_me\",\n  \"changeme\",\n  \"change-me\",\n  \"password\",\n  \"admin\",\n  \"paaw\",\n]);\n\n/** Is `stored` already a bcrypt hash (vs. a legacy plaintex"
+        },
+        {
+          "name": "grep",
+          "args": "{\"path\":\"src/server\",\"pattern\":\"PAAW_GATEWAY_HOST|PAAW_GATEWAY_PASSWORD|PAAW_GATEWAY_ADMIN_ID\"}",
+          "result": "src/server/config.mjs:125:// bind via config.host or PAAW_GATEWAY_HOST. Empty string would let Node bind\nsrc/server/config.mjs:127:config.host = process.env.PAAW_GATEWAY_HOST || config.host || DEFAULT_HOST;\nsrc/server/password.mjs:135:*   PAAW_GATEWAY_PASSWORD_HASH  (a ready-made bcrypt hash)\nsrc/server/password.mjs:136:*   PAAW_GATEWAY_PASSWORD       (plaintext, hashed here at boot)\nsrc/server/password.mjs:137:* The target user id is PAAW_GATEWAY_ADMIN_ID, else the first configured user,\nsrc/server/password.mjs:144:const hash = env.PAAW_GATEWAY_PASSWORD_HASH;\nsrc/server/password.mjs:145:const plain = env.PAAW_GATEWAY_PASSWORD;\nsrc/server/password.mjs:148:throw new Error(\"PAAW_GATEWAY_PASSWORD_HASH must be a bcrypt hash\");\nsrc/server/password.mjs:153:const adminId = env.PAAW_GATEWAY_ADMIN_ID || config.users[0]?.id || \"admin\";"
+        },
+        {
+          "name": "git",
+          "args": "{\"command\":\"status --short\"}",
+          "result": " M .gitignore\n M .paaw/coding-memory/actions.jsonl\n M .paaw/coding-memory/conversations/coding.developer/active.json\n M .paaw/coding-memory/conversations/coding.em/active.json\n M .paaw/coding-memory/conversations/coding.qa/active.json\n M .paaw/coding-memory/conversations/coding.rm-side/active.json\n M .paaw/coding-memory/dispatch-log.jsonl\n M .paaw/coding-memory/qa-results.jsonl\n M .paaw/features/FEATURES.json\n M .paaw/issues/ISSUES.json\n M .paaw/tasks/TASKS.json\n M DEPLOY.md\n M README.md\nD  config.json\n M docs/api.md\n?? .paaw/coding-memory/conversations/coding.developer/s-2026-10-11T08-03-48-488.json\n?? .paaw/coding-memory/conversations/coding.qa/s-2026-10-11T07-34-07-048.json\n?? config.example.json\n"
+        },
+        {
+          "name": "bash",
+          "args": "{\"command\":\"cd /Users/steward/App/tpaaw-gateway && git add .gitignore DEPLOY.md README.md docs/api.md config.example.json .paaw/ && git status --short | head -25\"}",
+          "result": "M  .gitignore\nM  .paaw/coding-memory/actions.jsonl\nM  .paaw/coding-memory/conversations/coding.developer/active.json\nA  .paaw/coding-memory/conversations/coding.developer/s-2026-10-11T08-03-48-488.json\nM  .paaw/coding-memory/conversations/coding.em/active.json\nM  .paaw/coding-memory/conversations/coding.qa/active.json\nA  .paaw/coding-memory/conversations/coding.qa/s-2026-10-11T07-34-07-048.json\nM  .paaw/coding-memory/conversations/coding.rm-side/active.json\nM  .paaw/coding-memory/dispatch-log.jsonl\nM  .paaw/coding-memory/qa-results.jsonl\nM  .paaw/features/FEATURES.json\nM  .paaw/issues/ISSUES.json\nM  .paaw/tasks/TASKS.json\nM  DEPLOY.md\nM  README.md\nR  config.json -> config.example.json\nM  docs/api.md\n"
+        },
+        {
+          "name": "git",
+          "args": "{\"command\":\"diff --cached --stat\"}",
+          "result": " .gitignore                                         |   3 +\n .paaw/coding-memory/actions.jsonl                  |   3 +\n .../conversations/coding.developer/active.json     | 626 ++++++++++++++++++++-\n .../s-2026-10-11T08-03-48-488.json                 |  59 ++\n .../conversations/coding.em/active.json            |   2 +-\n .../conversations/coding.qa/active.json            | 339 +++++++++--\n .../coding.qa/s-2026-10-11T07-34-07-048.json       | 111 ++++\n .../conversations/coding.rm-side/active.json       |   2 +-\n .paaw/coding-memory/dispatch-log.jsonl             | 375 ++++++++++++\n .paaw/coding-memory/qa-results.jsonl               |   1 +\n .paaw/features/FEATURES.json                       |   4 +-\n .paaw/issues/ISSUES.json                           | 135 ++++-\n .paaw/tasks/TASKS.json                             |  89 ++-\n DEPLOY.md                                          |  13 +\n README.md                                          |  28 +-\n config.json => config.example.json                 |   5 +-\n docs/api.md                                        |  13 +-\n 17 files changed, 1716 insertions(+), 92 deletions(-)\n"
+        },
+        {
+          "name": "staged_summary",
+          "args": "{\"task\":\"長期建議：config.json 版控策略改採 config.example.json（真實憑證不進版控）\",\"summary\":\"## config.json 版控策略調整（TASK-020）\\n\\n問題：config.json 為 tracked 檔且不在 .gitignore，導致本機真實 bcrypt 憑證有被 commit 進版控的風險（TASK-018 收尾前已還原過一次真實雜湊）。改為「範本進版控、真實設定不進版控」。\\n\\n改了什麼：\\n1. 新增 config.example.json（進版控）— 結構同 config.json，passwordHash 用安全佔位符 CHANGE_ME（啟動時 fail-closed）、sessionSecret 用 change-me 佔位，不含任何真實憑證。\\n2. .gitignore 加入 config.json（附首次使用說明註解）。\\n3. git rm --cached config.json（本地實體檔保留不動）→ git 識別為 rename(56%) config.json -> config.example.json。\\n4. 更新 README.md / docs/api.md / DEPLOY.md：config.json 段落改為「複製 config.example.json → config.json 再改密碼」、補 PAAW_GATEWAY_HOST、憑證改 env 注入說明；移除過時的「明文比對」警告（TASK-018 已改 bcrypt）。\\n\\n驗證：npm test 91 pass / 0 fail；CHANGE_ME 經 isWeakDefaultPassword 判為 weak default → 啟動 fail-closed，佔位符不會被誤用。\",\"files\":[{\"path\":\"config.example.json\",\"reason\":\"新增無憑證範本檔（密碼欄為 CHANGE_ME 佔位符），供版控\"},{\"path\":\".gitignore\",\"reason\":\"排除 config.json（含真實憑證），附首次使用說明\"},{\"path\":\"config.json\",\"reason\":\"git rm --cached 脫離版控（本地實體檔保留）\"},{\"path\":\"README.md\",\"reason\":\"config.json 段落改為複製範本 + env 注入說明；更新安全注意事項\"},{\"path\":\"docs/api.md\",\"reason\":\"config 設定段落補 host 欄與範本說明；移除過時的明文比對警告\"},{\"path\":\"DEPLOY.md\",\"reason\":\"新增首次設定 config.json 的部署步驟\"}],\"howToTest\":\"1. git ls-files | grep config → 應不含 config.json、含 config.example.json\\n2. ls config.json → 本地實體檔仍在\\n3. cp config.example.json /tmp/t.json 觀察 → 內容無真實憑證，passwordHash=CHANGE_ME\\n4. npm test → 預期 91 pass / 0 fail\\n5. 照 README「config.json」段落操作 → 能成功以 env 注入憑證啟動 :4199\",\"risk\":\"本地 config.json 已被 .gitignore 排除，日後 clone 的人需手動 cp config.example.json config.json（已寫入 README/DEPLOY）。config.json 為 rename 而非純刪除，若有人以為它還在版控會找不到 —— 此為預期行為。無其他功能影響。\"}",
+          "result": "✅ Staged summary saved. 6 files recorded.\nHuman will see this in Git tab."
+        },
+        {
+          "name": "git",
+          "args": "{\"command\":\"commit -m \\\"chore(config): move config.json out of VCS, add config.example.json template\\\"\"}",
+          "result": "[main ec100dc] chore(config): move config.json out of VCS, add config.example.json template\n 17 files changed, 1716 insertions(+), 92 deletions(-)\n create mode 100644 .paaw/coding-memory/conversations/coding.developer/s-2026-10-11T08-03-48-488.json\n create mode 100644 .paaw/coding-memory/conversations/coding.qa/s-2026-10-11T07-34-07-048.json\n rename config.json => config.example.json (64%)\n"
+        },
+        {
+          "name": "task_update",
+          "args": "{\"action\":\"update\",\"id\":\"TASK-020\",\"status\":\"close\",\"result\":\"config.json 脫離版控、新增 config.example.json 範本、更新 README/docs/api.md/DEPLOY.md；npm test 91 pass。commit ec100dc\"}",
+          "result": "✅ Task TASK-020 updated (update). Status: close | Feature: F20261009-002"
+        },
+        {
+          "name": "action_log_add",
+          "args": "{\"action\":\"fix\",\"result\":\"fixed\",\"summary\":\"TASK-020：config.json 改為不進版控，新增 config.example.json 範本（無真實憑證），更新文件\",\"affectedFiles\":[\"config.example.json\",\".gitignore\",\"config.json\",\"README.md\",\"docs/api.md\",\"DEPLOY.md\"],\"priority\":\"medium\"}",
+          "result": "✅ Action logged: developer/fix: TASK-020：config.json 改為不進版控，新增 config.example.json 範本（無真實憑證），更新文件"
+        }
+      ]
     }
   ]
 }

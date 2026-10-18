@@ -1,22 +1,61 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-09T01:19:55.370Z",
+  "generatedAt": "2026-10-18T09:36:03.666Z",
   "initialized": true,
   "currentState": {
     "branch": "main",
-    "headSha": "05eb862",
-    "dirtyCount": 0,
-    "dirtyFiles": [],
-    "unpushedCount": 0,
-    "unpushedCommits": []
+    "headSha": "9f71bc9",
+    "dirtyCount": 28,
+    "dirtyFiles": [
+      "M .paaw/c4-model.json",
+      " M .paaw/changelog/CHANGELOG.md",
+      " M .paaw/code-intelligence/call-graph.json",
+      " M .paaw/code-intelligence/dependency-graph.json",
+      " M .paaw/code-intelligence/file-map.json",
+      " M .paaw/code-intelligence/summary.json",
+      " M .paaw/code-intelligence/symbol-index.json",
+      " M .paaw/code-intelligence/test-code-map.json",
+      " M .paaw/code-intelligence/test-intelligence.json",
+      " M .paaw/coding-memory/actions.jsonl",
+      " M .paaw/coding-memory/conversations/coding.developer/active.json",
+      " M .paaw/coding-memory/conversations/coding.em/active.json",
+      " M .paaw/coding-memory/conversations/coding.rm-side/active.json",
+      " M .paaw/coding-memory/dispatch-log.jsonl",
+      " M .paaw/coding-memory/qa-results.jsonl",
+      " M .paaw/em/config.json",
+      " M .paaw/error-codes.json",
+      " M .paaw/features/FEATURE-MAP-META.json",
+      " M .paaw/features/FEATURES.json",
+      " M .paaw/features/FILE-FEATURES.json",
+      " M .paaw/features/tree-sitter-analysis.txt",
+      " M .paaw/issues/ISSUES.json",
+      " M .paaw/project/PROJECT.md",
+      " M .paaw/release-unit-model.json",
+      " M .paaw/tasks/TASKS.json",
+      "?? .paaw/coding-memory/conversations/coding.em/s-2026-10-18T03-23-22-624.json",
+      "?? .paaw/coding-memory/conversations/coding.tester/active.json",
+      "?? .paaw/review-board/20261018-114641-HEAD_1..HEAD.md"
+    ],
+    "unpushedCount": 9,
+    "unpushedCommits": [
+      "9f71bc9 test(e2e): add gateway CLI coverage for F20261009-001",
+      "5e214d4 test(unit): address remaining review-board minor findings",
+      "e2a1144 test(paaw-control): 以跨平台 node script 取代外部 sleep 指令",
+      "8980569 test(semgrep): snapshot and restore overridden env vars in unit tests",
+      "2771c40 test(lib-config): realpath-normalize getHome assertions, restore cwd in afterEach",
+      "670b14f test(unit): isolate PAAW_HOME env and assert .tmp cleanup in install test",
+      "de7b7ce test(unit): add unit tests for lib and server config/install/process/semgrep/events/paaw-control",
+      "ec100dc chore(config): move config.json out of VCS, add config.example.json template",
+      "4fc5e58 fix(security): harden gateway auth (bcrypt, rate limit, loopback bind)"
+    ]
   },
   "workingPlan": {
     "activeTasks": [
       {
-        "id": "TASK-012",
-        "title": "更新 F20260918-002 文件：backupPath 防護重構後的 feature docs + mapping + runbook",
-        "status": "pending",
-        "priority": "low",
+        "id": "TASK-023",
+        "title": "補 F20261009-001 啟動器 CLI 測試覆蓋（0 測試缺口）",
+        "status": "open",
+        "priority": "high",
         "phase": "spec",
         "phaseStatus": "pending",
         "next": "run spec"
@@ -27,54 +66,54 @@
   "changes": {
     "recentCommits": [
       {
-        "hash": "05eb862",
-        "date": "2026-10-09T09:13:33+08:00",
-        "subject": "release unit data"
+        "hash": "9f71bc9",
+        "date": "2026-10-18T17:35:14+08:00",
+        "subject": "test(e2e): add gateway CLI coverage for F20261009-001"
       },
       {
-        "hash": "26f996d",
-        "date": "2026-10-08T16:12:00+08:00",
-        "subject": "feat(ui): 全螢幕雙欄各半 — 左右各 50%，右欄活動記錄/server log 上下各半併滿視窗高"
+        "hash": "5e214d4",
+        "date": "2026-10-18T17:34:24+08:00",
+        "subject": "test(unit): address remaining review-board minor findings"
       },
       {
-        "hash": "5482d71",
-        "date": "2026-10-08T15:55:11+08:00",
-        "subject": "feat(ui): 雙欄布局 — 活動記錄/PAAW log 移右側常駐側欄（sticky），操作不捲動就能看執行狀況"
+        "hash": "e2a1144",
+        "date": "2026-10-18T11:56:04+08:00",
+        "subject": "test(paaw-control): 以跨平台 node script 取代外部 sleep 指令"
       },
       {
-        "hash": "78ffe41",
-        "date": "2026-10-08T15:13:48+08:00",
-        "subject": "feat(semgrep): 偵測改存在檢查（瞬回）— 路徑有 semgrep 即綠燈，版本/實跑驗證背景補"
+        "hash": "8980569",
+        "date": "2026-10-18T11:55:17+08:00",
+        "subject": "test(semgrep): snapshot and restore overridden env vars in unit tests"
       },
       {
-        "hash": "1d7fa51",
-        "date": "2026-10-08T15:06:36+08:00",
-        "subject": "perf(semgrep): 偵測改背景執行 + UI 輪詢 — API 立即回 checking，慢機不再卡「檢查中」凍結整卡"
+        "hash": "2771c40",
+        "date": "2026-10-18T11:54:14+08:00",
+        "subject": "test(lib-config): realpath-normalize getHome assertions, restore cwd in afterEach"
       },
       {
-        "hash": "876a8d8",
-        "date": "2026-10-08T14:57:29+08:00",
-        "subject": "perf(semgrep): 偵測不再卡線上版本檢查 — --disable-version-check 快取版 + 10 分鐘結果快取"
+        "hash": "670b14f",
+        "date": "2026-10-18T11:53:06+08:00",
+        "subject": "test(unit): isolate PAAW_HOME env and assert .tmp cleanup in install test"
       },
       {
-        "hash": "163b367",
-        "date": "2026-10-08T14:44:30+08:00",
-        "subject": "fix(diag): semgrep 偵測失敗回應附 gateway process HOME/PATH — nohup/systemd 啟動環境不一致直接現形"
+        "hash": "de7b7ce",
+        "date": "2026-10-11T18:37:38+08:00",
+        "subject": "test(unit): add unit tests for lib and server config/install/process/semgrep/events/paaw-control"
       },
       {
-        "hash": "8ec043f",
-        "date": "2026-10-08T14:29:59+08:00",
-        "subject": "feat(semgrep): pipx venv 直擊候選（~/.local/pipx/venvs/semgrep/bin）+ 偵測結果快取注入 PAAW"
+        "hash": "ec100dc",
+        "date": "2026-10-11T17:42:35+08:00",
+        "subject": "chore(config): move config.json out of VCS, add config.example.json template"
       },
       {
-        "hash": "b739bbf",
-        "date": "2026-10-08T13:56:59+08:00",
-        "subject": "fix(diag): semgrep 偵測失敗必須帶原因 — diagnostics 逐候選交代（找不到/exit code+stderr tail/timeout）"
+        "hash": "4fc5e58",
+        "date": "2026-10-11T17:40:16+08:00",
+        "subject": "fix(security): harden gateway auth (bcrypt, rate limit, loopback bind)"
       },
       {
-        "hash": "1d209de",
-        "date": "2026-10-08T13:37:41+08:00",
-        "subject": "fix(root-cause): 啟動改純 node 直跑 paaw-server.mjs — tsx 在 devDependencies，--omit=dev 裝不到導致 Cannot find module .bin/tsx"
+        "hash": "ea44ce8",
+        "date": "2026-10-11T15:33:49+08:00",
+        "subject": "paaw data"
       }
     ]
   },
@@ -84,8 +123,14 @@
     "recent": []
   },
   "nextAction": {
-    "step": "dispatch-phase",
-    "reason": "TASK-012 下一階段：spec",
-    "detail": "更新 F20260918-002 文件：backupPath 防護重構後的 feature docs + mapping + runbook"
+    "step": "commit",
+    "reason": "28 個未提交檔案",
+    "detail": [
+      "M .paaw/c4-model.json",
+      " M .paaw/changelog/CHANGELOG.md",
+      " M .paaw/code-intelligence/call-graph.json",
+      " M .paaw/code-intelligence/dependency-graph.json",
+      " M .paaw/code-intelligence/file-map.json"
+    ]
   }
 }

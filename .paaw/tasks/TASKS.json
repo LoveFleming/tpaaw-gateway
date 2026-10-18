@@ -768,17 +768,89 @@
       "featureId": "F20261009-002",
       "title": "config.json 版控策略：改採 config.example.json（真實憑證不進版控）",
       "type": "dev",
-      "status": "open",
+      "status": "close",
       "priority": "medium",
       "parentId": null,
       "description": "來源：TASK-018/019 收尾發現。config.json 為 tracked 檔且不在 .gitignore，導致本機真實 bcrypt 憑證有被 commit 進版控的風險（TASK-018 已還原一次）。\n\n目標：\n1. 新增 config.example.json（進版控）— 結構同 config.json，passwordHash 用明文佔位符 CHANGE_ME。\n2. config.json 加入 .gitignore。\n3. git rm --cached config.json（保留本地實體檔）。\n4. 更新 DEPLOY.md/README 啟動說明：複製 config.example.json → config.json 再改密碼。\n\n驗收：\n- git ls-files 不含 config.json，含 config.example.json。\n- 本地 config.json 檔案仍存在且服務可用（env 注入憑證）。\n- npm test 全綠。\n- 文件說明可照做。",
       "labels": [],
       "assignee": null,
       "createdAt": "2026-10-11T09:41:31.622Z",
-      "updatedAt": "2026-10-11T09:41:31.622Z",
+      "updatedAt": "2026-10-11T09:42:38.101Z",
       "createdBy": "agent",
       "source": {
         "type": "manual"
+      },
+      "notes": [],
+      "result": "config.json 脫離版控、新增 config.example.json 範本、更新 README/docs/api.md/DEPLOY.md；npm test 91 pass。commit ec100dc",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-11T09:42:38.101Z"
+    },
+    {
+      "id": "TASK-021",
+      "featureId": "F20261011-002",
+      "title": "修復 review board 對 TASK-021 測試檔的 4 major + 2 minor 問題",
+      "type": "test",
+      "status": "close",
+      "priority": "high",
+      "parentId": null,
+      "description": "來源：.paaw/review-board/20261018-114641-HEAD_1..HEAD.md（commit de7b7ce，TASK-021 新增 7 檔測試）\n問題（測試衛生，非 production code 邏輯）：\n- MAJOR-1 install.test.mjs:22 top-level 建 temp dir + 設 PAAW_HOME 無 cleanup → temp 殘留 + env 污染\n- MAJOR-2 lib-config.test.mjs:109 getHome() 斷言未 realpath 正規化 → macOS /var↔/private/var 軟鏈 flake\n- MAJOR-3 semgrep.test.mjs:24 top-level 永久覆寫 HOME，PATH 換成不存在目錄且永不還原\n- MAJOR-4 semgrep.test.mjs:31 HOME/PATH/SEMGREP_PATH/PIPX_HOME 全覆寫但 afterEach 只刪 tmp 未還原 env\n- MINOR install.test.mjs:176 .tmp 清理未真正斷言\n- MINOR paaw-control.test.mjs:31 sleep 300 跨平台 flake\n範圍僅測試檔，不改 production code；每個測試檔修完跑對應 unit test 確認綠。",
+      "labels": [],
+      "assignee": null,
+      "createdAt": "2026-10-18T03:52:05.267Z",
+      "updatedAt": "2026-10-18T09:33:10.189Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [],
+      "result": "重複任務（與 TASK-022 同內容）。工作已由 TASK-033~036 完成：commit 670b14f 等，測試 RUN-20261018-002 87✓/0✗ 全綠。此項為重複建立而殘留，無實質工作，關閉。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-18T09:33:10.189Z"
+    },
+    {
+      "id": "TASK-022",
+      "featureId": "F20261011-002",
+      "title": "修復 review board 對測試檔的 4 major + 2 minor 問題（de7b7ce）",
+      "type": "test",
+      "status": "close",
+      "priority": "high",
+      "parentId": null,
+      "description": "來源：.paaw/review-board/20261018-114641-HEAD_1..HEAD.md（commit de7b7ce，TASK-021 新增 7 檔測試）\n問題（測試衛生，非 production code 邏輯）：\n- MAJOR-1 install.test.mjs:22 top-level 建 temp dir + 設 PAAW_HOME 無 cleanup → temp 殘留 + env 污染\n- MAJOR-2 lib-config.test.mjs:109 getHome() 斷言未 realpath 正規化 → macOS /var↔/private/var 軟鏈 flake\n- MAJOR-3 semgrep.test.mjs:24 top-level 永久覆寫 HOME，PATH 換成不存在目錄且永不還原\n- MAJOR-4 semgrep.test.mjs:31 HOME/PATH/SEMGREP_PATH/PIPX_HOME 全覆寫但 afterEach 只刪 tmp 未還原 env\n- MINOR install.test.mjs:176 .tmp 清理未真正斷言\n- MINOR paaw-control.test.mjs:31 sleep 300 跨平台 flake\n範圍僅測試檔，不改 production code；每個測試檔修完跑對應 unit test 確認綠。",
+      "labels": [],
+      "assignee": null,
+      "createdAt": "2026-10-18T03:52:07.829Z",
+      "updatedAt": "2026-10-18T03:56:29.768Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "manual"
+      },
+      "notes": [],
+      "result": "4 子任務全數完成（TASK-033~036），全套測試 RUN-20261018-002 87✓/0✗ 全綠。修正 review board 對 de7b7ce 的 4 major + 2 minor 測試衛生問題。",
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": "2026-10-18T03:56:29.768Z"
+    },
+    {
+      "id": "TASK-023",
+      "featureId": "F20261009-001",
+      "title": "補 F20261009-001 啟動器 CLI 測試覆蓋（0 測試缺口）",
+      "type": "test",
+      "status": "open",
+      "priority": "high",
+      "parentId": null,
+      "description": "來源：release prep 盤點顯示 3 features 中 F20261009-001（PAAW Gateway 啟動器 CLI）Unit/E2E 皆無測試，為唯一 0 測試覆蓋的 feature，S0。\n\n目標：為 gateway.mjs（薄入口，CLI 指令 status/update/upload/start/ui）的核心可測邏輯建立測試。注意 gateway.mjs 是 composition root + CLI 入口，屬 e2e 性質；TASK-022 已有 e2e（gateway-ui-csrf.test.mjs 以 spawn 真 gateway 覆蓋），但 CLI 分派/參數解析等仍缺。\n\n驗收：\n1. 為 CLI 參數分派與可抽離的純邏輯建立 unit test（不 spawn server）；若需 spawn 則歸 e2e。\n2. 新增測試檔需與現有 52 案風格一致（node:test）。\n3. 記錄 `npm test` 結果與新增案數。\n\n限制：不得改動 production code 行為（若發現難以測試的設計，回報並建議，不自行重構）。",
+      "labels": [
+        "test-gap",
+        "release-prep"
+      ],
+      "assignee": null,
+      "createdAt": "2026-10-18T09:34:35.922Z",
+      "updatedAt": "2026-10-18T09:34:35.922Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "pm"
       },
       "notes": [],
       "result": null,
@@ -787,5 +859,5 @@
       "resolvedAt": null
     }
   ],
-  "updatedAt": "2026-10-11T09:41:31.622Z"
+  "updatedAt": "2026-10-18T09:34:35.922Z"
 }

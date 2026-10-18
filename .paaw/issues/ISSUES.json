@@ -162,7 +162,21 @@
       "featureId": null,
       "createdAt": "2026-10-11T07:36:31.216Z",
       "notes": []
+    },
+    {
+      "id": "ISS-014",
+      "title": "TASK-021 殘留狀態：工作已由 TASK-022/TASK-033~036 完成，應關閉",
+      "priority": "low",
+      "status": "open",
+      "labels": [
+        "housekeeping",
+        "task-hygiene"
+      ],
+      "description": "TASK-021（open）與 TASK-022（close）為同內容重複建立的任務。TASK-022 已由 TASK-033~036 完成：commit 670b14f 等，全套測試 RUN-20261018-002 87✓/0✗ 全綠（2026-10-18T03:56）。TASK-021 為殘留未關閉項，無實質工作待辦。",
+      "featureId": null,
+      "createdAt": "2026-10-18T09:33:10.187Z",
+      "notes": []
     }
   ],
-  "nextId": 14
+  "nextId": 15
 }

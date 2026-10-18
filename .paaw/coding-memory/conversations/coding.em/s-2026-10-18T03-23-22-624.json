@@ -1,0 +1,27 @@
+{
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "🎖️ 新對話已開啟。告訴我你想做什麼！",
+      "ts": "2026-10-11T07:27:40.574Z"
+    },
+    {
+      "role": "user",
+      "content": "這release unit 要release 了先幫我開 code review 委員會",
+      "ts": "2026-10-11T07:28:27.552Z"
+    },
+    {
+      "role": "assistant",
+      "content": "## 🎖️ Code Review 委員會 — 已完成\n\n**目標**：Release 前開 code review 委員會\n**範圍**：本次 release 的 6 個 commit（`HEAD~6..HEAD`，33 檔）— ADR-003 模組化重構 P1/P2/P3 + semgrep 修正 + 文件同步\n**裁決**：🟠 **review-notes** — critical 0 / major 10 / minor 4\n\n📄 完整報告：`.paaw/review-board/20261011-152931-HEAD_6..HEAD.md`\n\n### 🔴 需優先處理的 major（10 條）\n| # | 位置 | 問題 | 性質 |\n|---|---|---|---|\n| 1 | `src/lib/process.mjs` | 共享可變狀態用 getter/setter 跨模組暴露，**競態風險** | ⚠️ 真風險 |\n| 2 | `src/server/paaw-control.mjs` | `finish()` 的 `logEvent` callee 疑似拆分後**遺漏** — 事件記錄行為變更 | ⚠️ 可能真 bug（重構走味） |\n| 3 | `src/lib/semgrep.mjs` | `runCapture` 預設 `timeoutMs=600000` 消失，呼叫端未傳會**改變逾時行為** | ⚠️ 相容風險 |\n| 4 | `gateway.mjs` | 舊版 `bye`（paawRunning/killChild/exit）在 CLI 入口消失 — 需確認 SIGINT 收尾 | ⚠️ 待驗 |\n| 5 | `src/server/backup.mjs` | `userId=\"system\"` 預設，路由未覆寫恐**審計失真/繞權** | 🔍 需確認路由 |\n| 6 | `src/server/auth.mjs` | session 無 TTL/清理，長時間執行記憶體成長 | 🔍 既有設計問題 |\n| 7 | `src/ui/server.mjs` | `bye()` 直接 `process.exit`，難測試重用 | 結構 |\n| 8-10 | `.paaw/code-intelligence/*` | 索引歸屬/DAG 邊/call-graph 錯誤（CU 產物），`src/lib/*` 新模組無單元測試 | 工具/覆蓋率 |\n\n### 我的判讀（EM）\n- **0 critical**，重構沒有致命傷，但有 3–4 條像「重構時走味」的真候選：`paaw-control.finish` 的 logEvent、`semgrep.runCapture` 逾時預設、gateway CLI 的 SIGINT 收尾 — 這幾個是**行為等價性**問題，重構最怕這個，建議逐一驗證。\n- 其餘多半是**索引/CU 產物**與**測試覆蓋**缺口（`src/lib/*`、`src/server/*` 新模組沒有對應單元測試），不是 code 本身錯。\n\n### 遺留 / 待處理\n- ⚠️ 尚未處理 **17 個未 commit 檔 + 6 個未推 commit**（release_prep_status 顯示）— 委員會審的是已 commit 內容，working tree 還有 CU 產物待收。\n- 委員會 verdict 是**建議**，最終 release 決定仍在你。\n\n### 下一步建議\n要的話我可以把 **major #2/#3/#4（行為等價性）** 拆成 3 張具體子任務派給 Priya 逐一驗證修正，並請 Divya 補 `src/lib/*`、`src/server/*` 的單元測試。**要我開單派工嗎？** 還是你先看報告再決定範圍？",
+      "ts": "2026-10-11T07:29:39.138Z"
+    }
+  ],
+  "_meta": {
+    "crewId": "coding.em",
+    "lastUpdated": "2026-10-18T03:20:47.383Z",
+    "messageCount": 3,
+    "archivedAt": "2026-10-18T03:23:22.624Z",
+    "title": "這release unit 要release 了先幫我開 code review 委員會",
+    "sessionId": "s-2026-10-18T03-23-22-624"
+  }
+}

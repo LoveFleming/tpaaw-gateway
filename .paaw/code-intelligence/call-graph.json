@@ -33,6 +33,14 @@
       "async": true
     },
     {
+      "id": "tests/unit/auth.test.mjs:makeConfig",
+      "name": "makeConfig",
+      "file": "tests/unit/auth.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
       "id": "tests/unit/backup.test.mjs:loadServer",
       "name": "loadServer",
       "file": "tests/unit/backup.test.mjs",
@@ -60,6 +68,78 @@
       "id": "tests/unit/backup.test.mjs:makeRealBackupArchive",
       "name": "makeRealBackupArchive",
       "file": "tests/unit/backup.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install.test.mjs:makeZipInMemory",
+      "name": "makeZipInMemory",
+      "file": "tests/unit/install.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install.test.mjs:makeZip",
+      "name": "makeZip",
+      "file": "tests/unit/install.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install.test.mjs:validSkeletonFiles",
+      "name": "validSkeletonFiles",
+      "file": "tests/unit/install.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/lib-config.test.mjs:samePath",
+      "name": "samePath",
+      "file": "tests/unit/lib-config.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/lib-config.test.mjs:reload",
+      "name": "reload",
+      "file": "tests/unit/lib-config.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/unit/paaw-control.test.mjs:makeControl",
+      "name": "makeControl",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/semgrep.test.mjs:restoreManagedEnv",
+      "name": "restoreManagedEnv",
+      "file": "tests/unit/semgrep.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/semgrep.test.mjs:emptyPathUnder",
+      "name": "emptyPathUnder",
+      "file": "tests/unit/semgrep.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/semgrep.test.mjs:makeExecutable",
+      "name": "makeExecutable",
+      "file": "tests/unit/semgrep.test.mjs",
       "line": 0,
       "kind": "function",
       "async": false
@@ -116,6 +196,54 @@
       "id": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
       "name": "restoreEventsInLog",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:getFreePort",
+      "name": "getFreePort",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:jsonReq",
+      "name": "jsonReq",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:startGateway",
+      "name": "startGateway",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:stopGateway",
+      "name": "stopGateway",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:canConnect",
+      "name": "canConnect",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:done",
+      "name": "done",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "line": 0,
       "kind": "arrow",
       "async": false
@@ -297,6 +425,22 @@
       "async": true
     },
     {
+      "id": "src/server/auth.mjs:createRateLimiter",
+      "name": "createRateLimiter",
+      "file": "src/server/auth.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/auth.mjs:prune",
+      "name": "prune",
+      "file": "src/server/auth.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
       "id": "src/server/auth.mjs:createAuth",
       "name": "createAuth",
       "file": "src/server/auth.mjs",
@@ -319,6 +463,14 @@
       "line": 0,
       "kind": "function",
       "async": false
+    },
+    {
+      "id": "src/server/auth.mjs:login",
+      "name": "login",
+      "file": "src/server/auth.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
     },
     {
       "id": "src/server/backup.mjs:createBackupManager",
@@ -363,6 +515,14 @@
     {
       "id": "src/server/config.mjs:loadConfig",
       "name": "loadConfig",
+      "file": "src/server/config.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/config.mjs:validateAuthConfig",
+      "name": "validateAuthConfig",
       "file": "src/server/config.mjs",
       "line": 0,
       "kind": "function",
@@ -508,6 +668,78 @@
       "id": "src/server/paaw-control.mjs:isRunning",
       "name": "isRunning",
       "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/password.mjs:isHashed",
+      "name": "isHashed",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/password.mjs:needsRehash",
+      "name": "needsRehash",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/password.mjs:isWeakDefaultPassword",
+      "name": "isWeakDefaultPassword",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/password.mjs:hashPassword",
+      "name": "hashPassword",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server/password.mjs:hashPasswordSync",
+      "name": "hashPasswordSync",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/password.mjs:constantTimeEqual",
+      "name": "constantTimeEqual",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/password.mjs:verifyPassword",
+      "name": "verifyPassword",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server/password.mjs:consumeDummyVerify",
+      "name": "consumeDummyVerify",
+      "file": "src/server/password.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server/password.mjs:applyPasswordOverride",
+      "name": "applyPasswordOverride",
+      "file": "src/server/password.mjs",
       "line": 0,
       "kind": "function",
       "async": false
@@ -1025,6 +1257,18 @@
       "resolved": false
     },
     {
+      "caller": "tests/e2e/gateway-login-hardening.test.mjs:done",
+      "callee": "socket.destroy",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-login-hardening.test.mjs:done",
+      "callee": "resolve",
+      "type": "direct",
+      "resolved": false
+    },
+    {
       "caller": "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive",
       "callee": "process.kill",
       "type": "method",
@@ -1307,6 +1551,15 @@
     "l.includes": [
       "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
     ],
+    "socket.destroy": [
+      "tests/e2e/gateway-login-hardening.test.mjs:done"
+    ],
+    "resolve": [
+      "tests/e2e/gateway-login-hardening.test.mjs:done",
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server/paaw-control.mjs:finish"
+    ],
     "process.kill": [
       "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive"
     ],
@@ -1325,11 +1578,6 @@
     "req.on": [
       "src/server.mjs:readBody",
       "src/server.mjs:readBody"
-    ],
-    "resolve": [
-      "src/server.mjs:readBody",
-      "src/server.mjs:readBody",
-      "src/server/paaw-control.mjs:finish"
     ],
     "JSON.parse": [
       "src/server.mjs:readBody"
@@ -1428,6 +1676,10 @@
       "readFileSync",
       "l.includes"
     ],
+    "tests/e2e/gateway-login-hardening.test.mjs:done": [
+      "socket.destroy",
+      "resolve"
+    ],
     "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive": [
       "process.kill"
     ],
@@ -1503,9 +1755,9 @@
     ]
   },
   "stats": {
-    "totalFunctions": 121,
-    "totalCalls": 52,
+    "totalFunctions": 150,
+    "totalCalls": 54,
     "resolvedCalls": 3,
-    "unresolvedCalls": 49
+    "unresolvedCalls": 51
   }
 }

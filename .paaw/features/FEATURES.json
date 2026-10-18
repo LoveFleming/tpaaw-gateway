@@ -1,132 +1,18 @@
 {
   "features": [
     {
-      "name": "PAAW 套包安裝更新與本機啟動控制台",
-      "description": "這個 feature 是使用者機器上的 PAAW bootloader 與本機操作控制台（gateway.mjs）：負責從 package server 下載或手動上傳 PAAW 套包做 staged 安裝、以多版本目錄保留現場達成回滾，並透過本機 dashboard（index.html + REST API）查看狀態/活動記錄/PAAW console log，執行更新、上傳安裝、啟動、停止、重啟等生命周期操作。同時內建 semgrep 環境偵測、一鍵安裝與 SEMGREP_PATH 注入，確保 PAAW 啟動時掃描工具可用。",
-      "bizLogic": "更新採用 staged install 鏈：先 GET stable.json 取得 manifest（version/sha256/size），串流下載邊算 sha256 驗證，解壓（zip-slip 防護、反斜線 entry 正規化後檢查）後驗證關鍵檔骨架（paaw-server.mjs、ui dist、package.json、data-seed），rename 定版到 versions/<x.y.z>/ 再跑 npm install（失敗 retry --omit=optional），啟動後以 GET / 200 健康檢查加 2.5 秒穩定窗口確認存活，全部通過才寫 current.json；任何一步失敗 current.json 不動並自動回滾到上次驗證過的版本，壞版目錄保留現場供除錯。版本字串一律先過 ^\\d+\\.\\d+\\.\\d+$ fail-closed 驗證，擋遠端 manifest 或 zip 檔名的路徑注入，且永不降級（stable 不比 current 新時拒絕安裝）。data/ 只在首次由 data-seed 播種，更新永不覆蓋，PAAW log 固定寫 dat",
-      "status": "active",
-      "codeFiles": [
-        "gateway.mjs"
-      ],
-      "apis": [
-        {
-          "method": "GET",
-          "path": "/api/log",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "GET",
-          "path": "/api/paaw-log",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/restart",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/semgrep/install",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "GET",
-          "path": "/api/settings",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/settings",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/start",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "GET",
-          "path": "/api/status",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/stop",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/update",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/upload",
-          "file": "gateway.mjs"
-        },
-        {
-          "method": "GET",
-          "path": "/index.html",
-          "file": "gateway.mjs"
-        }
-      ],
-      "tests": [],
-      "runbooks": [],
-      "tags": [
-        "paaw-bootloader",
-        "staged-install",
-        "version-rollback",
-        "local-console",
-        "semgrep-setup"
-      ],
-      "grade": "deterministic",
-      "evidence": {
-        "kinds": {
-          "http": 12
-        },
-        "entryCount": 12,
-        "reachFiles": 1,
-        "method": "entry-reach-jaccard",
-        "enrichedBy": "agent-loop"
-      },
-      "issues": [],
-      "aiUnderstanding": "",
-      "aiUnderstandingAt": null,
-      "documentation": "",
-      "docsUpdatedAt": null,
-      "createdAt": "2026-10-09T00:56:37.765Z",
-      "updatedAt": "2026-10-11T04:50:27.343Z",
-      "id": "F20261009-001",
-      "riskProfile": {
-        "dataTouch": [],
-        "apiSurface": [],
-        "externalCalls": [],
-        "mutatingOutbound": true,
-        "migration": false,
-        "fileCount": 1,
-        "computedSeverity": "S1",
-        "computedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用"
-      },
-      "riskProfileScannedAt": "2026-10-11T07:05:19.593Z",
-      "severityComputed": "S1",
-      "severitySuggested": "S1",
-      "severitySuggestedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用",
-      "severitySuggestedNotes": "",
-      "severitySuggestedBy": "scan",
-      "severitySuggestedAt": "2026-10-11T07:05:19.593Z"
-    },
-    {
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
-      "description": "獨立在 :4199 的 PAAW 守護管理平台（不依賴 PAAW Server :4097 運行），由單一 src/server.mjs 承載全部後端：用戶認證與角色權限、PAAW Server 進程生命週期管理、資料備份/還原、版本升級、健康監控與事件稽核，並供應前端 UI 靜態檔。",
-      "bizLogic": "認證：users 定義於 config.json（id/name/role/passwordHash），POST /api/auth/login 對比 userId+passwordHash 成功才發 randomUUID 的 session token（記憶體 Map，sessionMaxAge 預設 24h 過期）；Authorization 必須帶 'Bearer ' 前綴，除 public 路由（/api/auth/login、/api/health、/ 與 /assets、/__ 前綴）外一律 401。RBAC：upgrade、server start/stop/restart、backups/create、restore、users 皆僅限 admin，非 admin 得 403。進程守護採 fail-closed（F-01）：stopPaaw 要等 exit event 真正確認 PID 回收才 resolve，SIGTERM 5 秒後升 SIGKILL、10 秒仍無 exit 則誠實回報失敗；restart/upgrade/restore 都先完整 stop 成功才繼續",
+      "description": "獨立的 PAAW 管理主控台，運行於 :4199，不依賴 PAAW Server（:4097）即可運作，角色如同 PAAW Server 的守護者。由薄入口 src/server.mjs 做 HTTP 路由分派與 auth guard，其餘職責委派給五個模組：config（設定與 env 衍生路徑）、events（稽核事件）、auth+password（登入與 bcrypt 憑證）、paaw-control（PAAW 子行程生命週期與版本升級）、backup（備份建立/列表/還原）。提供登入、儀表板、健康檢查、版本、進程啟停/重啟、升級、備份管理、事件查詢與使用者列表等 API。",
+      "bizLogic": "認證採 session token（Bearer，隨機 UUID，sessionMaxAge 預設 24h）；登入用 bcrypt 驗證、對未知帳號與弱預設密碼（change_me 等）執行等量 dummy verify 以避免帳號列舉，並以「每使用者＋每 IP」固定視窗限流（5 次失敗 / 15 分鐘）鎖定回 429 帶 Retry-After，失敗一律回統一 401。啟動時 fail-closed：validateAuthConfig 若無使用者、無憑證或仍用預設密碼即拒絕啟動，並預設只綁 127.0.0.1；憑證可由 config.json 或 env（PAAW_GATEWAY_PASSWORD_HASH / PAAW_GATEWAY_PASSWORD）注入，舊明文憑證登入成功後會自動 re-hash 升級。進程守護：startPaaw 以 spawn 啟動設定的 paawServerCmd，stopPaaw 只在 exit 事件確認 PID 已回收後才 resolve（SIGTERM→5s 後 SIGKILL→10s failsafe 誠實回報失敗），restart/upgra",
       "status": "active",
       "codeFiles": [
         "src/server.mjs",
+        "src/server/auth.mjs",
+        "src/server/backup.mjs",
         "src/server/config.mjs",
         "src/server/events.mjs",
-        "src/server/auth.mjs",
         "src/server/paaw-control.mjs",
-        "src/server/backup.mjs"
+        "src/server/password.mjs"
       ],
       "apis": [
         {
@@ -147,11 +33,6 @@
         {
           "method": "GET",
           "path": "/api/backups",
-          "file": "src/server.mjs"
-        },
-        {
-          "method": "POST",
-          "path": "/api/backups/restore/<filename>",
           "file": "src/server.mjs"
         },
         {
@@ -202,18 +83,22 @@
       ],
       "tests": [
         "tests/e2e/gateway-backup-auth.test.mjs",
-        "tests/unit/backup.test.mjs"
+        "tests/e2e/gateway-login-hardening.test.mjs",
+        "tests/unit/auth.test.mjs",
+        "tests/unit/backup.test.mjs",
+        "tests/unit/password.test.mjs",
+        "tests/e2e/gateway-restart-rbac.test.mjs"
       ],
       "runbooks": [
         ".paaw/runbook/backup-path-protection.md"
       ],
       "tags": [
         "gateway",
-        "admin-platform",
+        "admin-console",
         "auth",
-        "rbac",
-        "backup",
-        "restore"
+        "bcrypt",
+        "session",
+        "process-control"
       ],
       "grade": "deterministic",
       "evidence": {
@@ -221,7 +106,7 @@
           "http": 13
         },
         "entryCount": 13,
-        "reachFiles": 1,
+        "reachFiles": 7,
         "method": "entry-reach-jaccard",
         "enrichedBy": "agent-loop"
       },
@@ -231,8 +116,13 @@
       "documentation": "## 備份檔名路徑防護（backupPath，CWE-22 縱深防禦）\n\n**動機**：安全掃描曾報 6 筆 CWE-22 path-traversal（confidence LOW、需登入後、多為誤報）。決策是**以縱深防禦重構取代 nosemgrep 降噪**——建立唯一安全出口，讓所有備份檔名在進入 fs 呼叫前必經白名單 + containment 檢查，而非單純把告警壓掉。\n\n### backupPath(name) — 唯一安全出口\n- **位置**：`src/server/backup.mjs`（`createBackupManager(deps)` factory 內，BACKUP_DIR 由 deps 注入）；`src/server.mjs` 僅 re-export（:68-69）。\n- **語義**（fail-closed，不 throw）：\n  1. **白名單**：`name` 非字串或不符合 `BACKUP_REGEX`（`^paaw-backup-\\d{4}-\\d{2}-\\d{2}-\\d{2}\\.tar\\.gz$`，YYYY-MM-DD-HH）→ 回 `null`\n  2. **Containment**：`resolve(BACKUP_DIR, name)` 後檢查 `p.startsWith(resolve(BACKUP_DIR) + sep)` → 逃出 BACKUP_DIR 回 `null`\n- **收斂**：`listBackups` / `createBackup` / `restoreBackup` 的 statSync / unlinkSync / tar 路徑全數走 `backupPath`；非法名稱在 list 被靜默 skip，在 create/restore 被原錯誤訊息拒絕。API 回應結構與錯誤訊息不變。\n\n### 測試\n- `tests/unit/backup.test.mjs`（22 案，含 backupPath 攻擊案例：traversal payload、絕對路徑注入、非字串輸入、BACKUP_REGEX 格式違規、trailing-sep / mixed-case BACKUP_DIR 一致性）\n- `tests/e2e/gateway-backup-auth.test.mjs`（restore 路由攻擊 e2e：percent-encoded / 絕對路徑 / 格式非法 → 200 {ok:false}；literal ../ → 404；攻擊階段零副作用；合法 restore 不回歸）\n\n### 修復脈絡與歸零記錄\nTASK-010 縱深防禦重構（commit 114bfb2）→ TASK-011 攻擊測試 unit +8 / e2e +4（commit 599b8d5）→ TASK-013 殘留 4 筆誤報 nosemgrep 行級標註（commit 742c7c4，帶 rule id + 理由）。重掃結果：findings 空陣列，ERROR 0 / WARNING 0 / INFO 0（`.paaw/security/scan-results.json`，`scannedAt` 2026-09-19T10:41:13.970Z）。\n\n### 相關\n- Runbook：`.paaw/runbook/backup-path-protection.md`（攻擊 payload 的實際回應行為對照表）\n- 註：feature 識別碼前身為 F20260918-002，2026-10-09 feature map 重生成後為 F20261009-002。",
       "docsUpdatedAt": "2026-10-11T06:17:43.544Z",
       "createdAt": "2026-10-09T00:56:37.765Z",
-      "updatedAt": "2026-10-11T09:41:31.622Z",
-      "id": "F20261009-002",
+      "updatedAt": "2026-10-11T09:53:54.031Z",
+      "severitySuggested": "S1",
+      "severitySuggestedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用",
+      "severitySuggestedNotes": "",
+      "severitySuggestedBy": "scan",
+      "severitySuggestedAt": "2026-10-18T03:20:48.043Z",
+      "severityComputed": "S1",
       "riskProfile": {
         "dataTouch": [],
         "apiSurface": [
@@ -254,18 +144,228 @@
         "externalCalls": [],
         "mutatingOutbound": true,
         "migration": false,
-        "fileCount": 6,
+        "fileCount": 7,
         "computedSeverity": "S1",
         "computedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用"
       },
-      "riskProfileScannedAt": "2026-10-11T07:05:19.593Z",
+      "id": "F20261009-002",
+      "riskProfileScannedAt": "2026-10-18T03:20:48.043Z",
+      "severityDecisions": [
+        {
+          "id": "sd-mv3nbm27-3ezr",
+          "by": "human",
+          "at": "2026-10-11T09:53:54.031Z",
+          "severity": "S0",
+          "remark": ""
+        }
+      ]
+    },
+    {
+      "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+      "description": "在使用者本機 :4290（PAAW_GW_PORT）提供的 PAAW 控制台 HTTP server（src/ui/server.mjs 為入口），前端為靜態 ui/index.html。由五個模組組成：config（佈局路徑/gateway.json/semver 的 leaf）、install（下載驗證/解壓/版本安裝與更新決策）、process（PAAW 子進程生命週期與健康檢查）、semgrep（偵測與一鍵安裝），彼此單向依賴、無循環。對外提供 /api/* 一組控制與查詢端點。",
+      "bizLogic": "它管「把 PAAW 裝起來、跑起來、看得見」這件事。安裝路徑：更新走 GET package server 的 stable.json → 用 VERSION_RE 對遠端不可信 version 做 fail-closed 驗證 → 串流下載邊算 sha256 驗證 → zip-slip-safe 解壓到 versions/<v>.tmp → 驗關鍵檔骨架 → rename 定版 → npm install（失敗 retry --omit=optional）→ 成功才寫 current.json 切版；手動上傳容許 raw zip（≤600MB），版本從 zip 內 paaw-manifest.json 或檔名 paaw-x.y.z.zip 判定。啟停由 process.mjs 負責：spawn 前先偵測 port 是否被外部佔用（避免被別人 200 騙過），啟動後以 GET / 健康檢查 + 2.5 秒穩定窗口確認真的上線，失敗保留 child 輸出尾巴作為死因；啟動時會把 gateway.json 的 semgrepPath / SEMGREP_PATH / 偵測到的路徑注入子進程",
+      "status": "active",
+      "codeFiles": [
+        "src/lib/config.mjs",
+        "src/lib/install.mjs",
+        "src/lib/process.mjs",
+        "src/lib/semgrep.mjs",
+        "src/ui/server.mjs"
+      ],
+      "apis": [
+        {
+          "method": "GET",
+          "path": "/api/log",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/paaw-log",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/restart",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/semgrep/install",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/settings",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/settings",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/start",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/api/status",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/stop",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/update",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "POST",
+          "path": "/api/upload",
+          "file": "src/ui/server.mjs"
+        },
+        {
+          "method": "GET",
+          "path": "/index.html",
+          "file": "src/ui/server.mjs"
+        }
+      ],
+      "tests": [],
+      "runbooks": [],
+      "tags": [
+        "paaw-gateway",
+        "local-console",
+        "version-install",
+        "process-lifecycle",
+        "semgrep",
+        "settings"
+      ],
+      "grade": "deterministic",
+      "evidence": {
+        "kinds": {
+          "http": 12
+        },
+        "entryCount": 12,
+        "reachFiles": 5,
+        "method": "entry-reach-jaccard",
+        "enrichedBy": "agent-loop"
+      },
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-10-11T09:51:28.750Z",
+      "updatedAt": "2026-10-18T09:33:10.189Z",
+      "id": "F20261011-002",
+      "riskProfile": {
+        "dataTouch": [],
+        "apiSurface": [
+          "/api/settings",
+          "/api/semgrep/install",
+          "/api/status",
+          "/api/log",
+          "/api/paaw-log",
+          "/api/update",
+          "/api/upload",
+          "/api/start",
+          "/api/stop",
+          "/api/restart"
+        ],
+        "externalCalls": [],
+        "mutatingOutbound": true,
+        "migration": false,
+        "fileCount": 5,
+        "computedSeverity": "S1",
+        "computedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用"
+      },
+      "riskProfileScannedAt": "2026-10-18T03:20:48.043Z",
       "severityComputed": "S1",
       "severitySuggested": "S1",
       "severitySuggestedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用",
       "severitySuggestedNotes": "",
       "severitySuggestedBy": "scan",
-      "severitySuggestedAt": "2026-10-11T07:05:19.593Z"
+      "severitySuggestedAt": "2026-10-18T03:20:48.043Z",
+      "severityDecisions": [
+        {
+          "id": "sd-mv3nbogk-slna",
+          "by": "human",
+          "at": "2026-10-11T09:53:57.140Z",
+          "severity": "S0",
+          "remark": ""
+        }
+      ]
+    },
+    {
+      "name": "PAAW Gateway 啟動器 CLI（安裝・更新・啟動）",
+      "description": "使用者機器上的 PAAW 自舉入口程式（bootloader）：提供 status / update / upload / start / ui 等 CLI 指令，負責檢查並安裝 PAAW 版本、啟動或回滾 PAAW Server 子進程，並以組合根（composition root）身份把 config / install / process / semgrep / ui 等模組接線起來。它管理 process.cwd() 下的 versions/、data/、current.json、logs/ 佈局，與 F20261009-002 的獨立管理平台（src/server.mjs，:4199",
+      "bizLogic": "以指令驅動：start 預設只跑 current.json 指向的版本、不碰套件伺服器（自動更新預設關，需 PAAW_AUTO_UPDATE=1 或 gateway.json autoUpdate 才開）；update 走 updateLogic 向 package server 取 stable.json，以 semver 比對決定是否升級（不降級）。安裝採 staged 流程：串流下載邊算 sha256 → 驗證通過才解壓（含 zip-slip 防護）→ 檢查關鍵檔骨架存在 → rename 為 versions/<v> 定版 → npm install（失敗 retry --omit=optional）；現行版本驗證成功後才原子寫入 current.json。啟動經 startAndVerify（先偵測 port 佔用、spawn PAAW、GET / 健康檢查、再過 2.5 秒穩定窗口），啟動失敗會回滾到 current.json 上一次「驗證過」的版本並保留壞版本現場；data/ 僅首次由 data-seed 播種，更新永不覆蓋。upload 指令支援不依賴 package ",
+      "status": "active",
+      "codeFiles": [
+        "gateway.mjs"
+      ],
+      "apis": [],
+      "tests": [
+        "tests/e2e/gateway-ui-csrf.test.mjs"
+      ],
+      "runbooks": [],
+      "tags": [
+        "paaw-gateway",
+        "cli",
+        "bootloader",
+        "install-update",
+        "process-lifecycle",
+        "rollback"
+      ],
+      "grade": "utility",
+      "evidence": {
+        "kinds": {
+          "orphan": 1
+        },
+        "entryCount": 0,
+        "reachFiles": 0,
+        "method": "llm-grouping",
+        "enrichedBy": "agent-loop"
+      },
+      "issues": [],
+      "aiUnderstanding": "",
+      "aiUnderstandingAt": null,
+      "documentation": "",
+      "docsUpdatedAt": null,
+      "createdAt": "2026-10-09T00:56:37.765Z",
+      "updatedAt": "2026-10-18T09:34:35.922Z",
+      "severitySuggested": "S1",
+      "severitySuggestedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用",
+      "severitySuggestedNotes": "",
+      "severitySuggestedBy": "scan",
+      "severitySuggestedAt": "2026-10-18T03:20:48.043Z",
+      "severityComputed": "S1",
+      "riskProfile": {
+        "dataTouch": [],
+        "apiSurface": [],
+        "externalCalls": [],
+        "mutatingOutbound": true,
+        "migration": false,
+        "fileCount": 1,
+        "computedSeverity": "S1",
+        "computedReason": "含對外 mutating 呼叫（POST/PUT/PATCH/DELETE）— 外部副作用"
+      },
+      "id": "F20261009-001",
+      "riskProfileScannedAt": "2026-10-18T03:20:48.043Z",
+      "severityDecisions": [
+        {
+          "id": "sd-mv3nbpzi-2ntp",
+          "by": "human",
+          "at": "2026-10-11T09:53:59.118Z",
+          "severity": "S0",
+          "remark": ""
+        }
+      ]
     }
   ],
-  "updatedAt": "2026-10-11T09:41:31.626Z"
+  "updatedAt": "2026-10-18T09:34:35.927Z"
 }

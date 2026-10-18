@@ -77,6 +77,42 @@
       "components": []
     },
     {
+      "file": "tests/unit/auth.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "../../src/server/auth.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/password.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeConfig",
+          "kind": "function",
+          "async": false,
+          "params": "(users)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
       "file": "tests/unit/backup.test.mjs",
       "language": "javascript",
       "exports": [],
@@ -140,6 +176,330 @@
           "calls": []
         }
       ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/events.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "../../src/server/events.mjs",
+          "names": []
+        }
+      ],
+      "functions": [],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/install.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "fflate",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeZipInMemory",
+          "kind": "function",
+          "async": false,
+          "params": "(entries)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "makeZip",
+          "kind": "function",
+          "async": false,
+          "params": "(path, entries)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "validSkeletonFiles",
+          "kind": "function",
+          "async": false,
+          "params": "(extra = {})",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/lib-config.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "samePath",
+          "kind": "function",
+          "async": false,
+          "params": "(actual, expected)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "reload",
+          "kind": "function",
+          "async": true,
+          "params": "(caseId)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/paaw-control.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "../../src/server/paaw-control.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeControl",
+          "kind": "function",
+          "async": false,
+          "params": "(overrides = {})",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/password.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "../../src/server/password.mjs",
+          "names": []
+        }
+      ],
+      "functions": [],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/process.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/process.mjs",
+          "names": []
+        }
+      ],
+      "functions": [],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/semgrep.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "restoreManagedEnv",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "emptyPathUnder",
+          "kind": "function",
+          "async": false,
+          "params": "(dir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "makeExecutable",
+          "kind": "function",
+          "async": false,
+          "params": "(path)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/server-config.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "names": []
+        }
+      ],
+      "functions": [],
       "classes": [],
       "routes": [],
       "components": []
@@ -253,6 +613,109 @@
             "existsSync",
             "readFileSync",
             "l.includes"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:net",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/server/password.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "getFreePort",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "jsonReq",
+          "kind": "function",
+          "async": true,
+          "params": "(base, path, { method = \"GET\", body, token } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "startGateway",
+          "kind": "function",
+          "async": true,
+          "params": "(configOverrides = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stopGateway",
+          "kind": "function",
+          "async": true,
+          "params": "(g)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "canConnect",
+          "kind": "function",
+          "async": false,
+          "params": "(host, port, timeoutMs = 1500)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "done",
+          "kind": "arrow",
+          "async": false,
+          "params": "(ok)",
+          "callCount": 2,
+          "calls": [
+            "socket.destroy",
+            "resolve"
           ]
         }
       ],
@@ -844,6 +1307,16 @@
       "language": "javascript",
       "exports": [
         {
+          "kind": "variable",
+          "name": "LOGIN_MAX_FAILURES",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "LOGIN_WINDOW_MS",
+          "isDefault": false
+        },
+        {
           "kind": "function",
           "name": "createAuth",
           "isDefault": false
@@ -853,9 +1326,29 @@
         {
           "source": "crypto",
           "names": []
+        },
+        {
+          "source": "./password.mjs",
+          "names": []
         }
       ],
       "functions": [
+        {
+          "name": "createRateLimiter",
+          "kind": "function",
+          "async": false,
+          "params": "({ limit, windowMs })",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "prune",
+          "kind": "function",
+          "async": false,
+          "params": "(now)",
+          "callCount": 0,
+          "calls": []
+        },
         {
           "name": "createAuth",
           "kind": "function",
@@ -877,6 +1370,14 @@
           "kind": "function",
           "async": false,
           "params": "(token)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "login",
+          "kind": "function",
+          "async": true,
+          "params": "(userId, password, ip = \"unknown\")",
           "callCount": 0,
           "calls": []
         }
@@ -970,8 +1471,18 @@
       "language": "javascript",
       "exports": [
         {
+          "kind": "variable",
+          "name": "DEFAULT_HOST",
+          "isDefault": false
+        },
+        {
           "kind": "function",
           "name": "loadConfig",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "validateAuthConfig",
           "isDefault": false
         },
         {
@@ -993,6 +1504,10 @@
         {
           "source": "path",
           "names": []
+        },
+        {
+          "source": "./password.mjs",
+          "names": []
         }
       ],
       "functions": [
@@ -1001,6 +1516,14 @@
           "kind": "function",
           "async": false,
           "params": "(configPath, baseDir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "validateAuthConfig",
+          "kind": "function",
+          "async": false,
+          "params": "(config)",
           "callCount": 0,
           "calls": []
         },
@@ -1208,6 +1731,144 @@
           "kind": "function",
           "async": false,
           "params": "()",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "src/server/password.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "variable",
+          "name": "BCRYPT_ROUNDS",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "isHashed",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "needsRehash",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "isWeakDefaultPassword",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "hashPassword",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "hashPasswordSync",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "verifyPassword",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "consumeDummyVerify",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "applyPasswordOverride",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "bcryptjs",
+          "names": []
+        },
+        {
+          "source": "crypto",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "isHashed",
+          "kind": "function",
+          "async": false,
+          "params": "(stored)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "needsRehash",
+          "kind": "function",
+          "async": false,
+          "params": "(stored)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "isWeakDefaultPassword",
+          "kind": "function",
+          "async": false,
+          "params": "(stored)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "hashPassword",
+          "kind": "function",
+          "async": true,
+          "params": "(plain)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "hashPasswordSync",
+          "kind": "function",
+          "async": false,
+          "params": "(plain)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "constantTimeEqual",
+          "kind": "function",
+          "async": false,
+          "params": "(a, b)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "verifyPassword",
+          "kind": "function",
+          "async": true,
+          "params": "(plain, stored)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "consumeDummyVerify",
+          "kind": "function",
+          "async": true,
+          "params": "(plain)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "applyPasswordOverride",
+          "kind": "function",
+          "async": false,
+          "params": "(config, env = process.env)",
           "callCount": 0,
           "calls": []
         }
@@ -2098,11 +2759,11 @@
     }
   ],
   "stats": {
-    "totalFiles": 16,
-    "parsedFiles": 16,
+    "totalFiles": 27,
+    "parsedFiles": 27,
     "errors": 0,
     "languages": {
-      "javascript": 16
+      "javascript": 27
     }
   }
 }

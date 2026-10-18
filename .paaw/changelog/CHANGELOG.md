@@ -1,5 +1,46 @@
 # Changelog
 
+## 2026-10-18
+### fixed
+- 【目標】修復 tests/unit/install.test.mjs 的 env 污染 / temp 殘留 / 清理斷言不足問題。
+【背景】來源 review  (1 modified)
+
+
+
+### changed
+- +4814 −776 lines across 23 files
+
+### fixed
+- 【目標】修復 tests/unit/lib-config.test.mjs 的 realpath 正規化、ESM cache 累積、process.chdir  (1 modified)
+
+### changed
+- +4825 −776 lines across 24 files
+
+### fixed
+- 【目標】修復 tests/unit/semgrep.test.mjs 的 HOME/PATH/SEMGREP_PATH/PIPX_HOME env 覆寫不還原問 (1 modified)
+
+### changed
+- +4833 −776 lines across 24 files
+
+### fixed
+- 【目標】修復 tests/unit/paaw-control.test.mjs 的 sleep 300 跨平台 flake 問題。
+【背景】來源 review  (1 modified)
+
+### changed
+- +4840 −776 lines across 24 files
+
+### added
+- 【目標】修掉 review board 報告 `.paaw/review-board/20261018-114641-HEAD_1..HEAD.md` 中「尚未 (2 modified)
+
+### changed
+- +5085 −783 lines across 25 files
+
+### changed
+- 【目標】補 F20261009-001（PAAW Gateway 啟動器 CLI，gateway.mjs）的測試覆蓋 — 目前 3 個 features 中唯一 (1 new file)
+
+### changed
+- +5117 −781 lines across 25 files
+
 ## 2026-10-11
 ### changed
 - refactor(server): split `src/server.mjs` into thin entry + 5 modules（ADR-003 P1）— 抽出 `src/server/{auth,backup,config,events,paaw-control}.mjs`，`server.mjs` 由 841 行瘦身為薄入口；行為與 API 不變，測試全綠（+734 −792，7 檔）。

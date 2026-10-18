@@ -8,11 +8,60 @@
       "testCount": 4
     },
     {
+      "testFile": "tests/unit/auth.test.mjs",
+      "productionFile": "src/server/auth.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 1
+    },
+    {
+      "testFile": "tests/unit/events.test.mjs",
+      "productionFile": "src/server/events.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 0
+    },
+    {
+      "testFile": "tests/unit/paaw-control.test.mjs",
+      "productionFile": "src/server/paaw-control.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 1
+    },
+    {
+      "testFile": "tests/unit/password.test.mjs",
+      "productionFile": "src/server/password.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 0
+    },
+    {
+      "testFile": "tests/unit/process.test.mjs",
+      "productionFile": "src/lib/process.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 0
+    },
+    {
+      "testFile": "tests/unit/server-config.test.mjs",
+      "productionFile": "src/server/config.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 0
+    },
+    {
       "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
       "productionFile": "src/server.mjs",
       "matchType": "import",
       "testedFunctions": [],
       "testCount": 7
+    },
+    {
+      "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
+      "productionFile": "src/server/password.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 6
     },
     {
       "testFile": "src/server.mjs",
@@ -27,6 +76,20 @@
       "matchType": "import",
       "testedFunctions": [],
       "testCount": 12
+    },
+    {
+      "testFile": "src/server/auth.mjs",
+      "productionFile": "src/server/password.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 6
+    },
+    {
+      "testFile": "src/server/config.mjs",
+      "productionFile": "src/server/password.mjs",
+      "matchType": "import",
+      "testedFunctions": [],
+      "testCount": 4
     },
     {
       "testFile": "src/lib/install.mjs",
@@ -51,8 +114,8 @@
     }
   ],
   "stats": {
-    "totalTestFiles": 4,
-    "matchedTests": 7,
+    "totalTestFiles": 14,
+    "matchedTests": 16,
     "totalTestedFunctions": 0
   }
 }

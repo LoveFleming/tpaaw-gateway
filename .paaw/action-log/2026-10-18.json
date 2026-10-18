@@ -1,0 +1,21 @@
+[
+  {
+    "agent": "qa",
+    "title": "Release QA review @ 9f71bc9 — ADR-003 重構 + 認證硬化/CWE-22 + 測試補強",
+    "type": "test",
+    "description": "Release 準備中的 HEAD 9f71bc9 QA review（review-only，未改 production code）。結論 CONDITIONAL PASS（warn）。詳見 qa_record_save 記錄。",
+    "files": [
+      "src/server.mjs",
+      "src/server/auth.mjs",
+      "src/server/password.mjs",
+      "src/server/config.mjs",
+      "src/server/backup.mjs",
+      "src/server/paaw-control.mjs",
+      "src/lib/semgrep.mjs",
+      "tests/e2e/gateway-cli.test.mjs"
+    ],
+    "impact": "僅新增 QA 記錄與審查結論，無 production code 變更。",
+    "testsRan": "",
+    "timestamp": "2026-10-18T09:38:24.923Z"
+  }
+]

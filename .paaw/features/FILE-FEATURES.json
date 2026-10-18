@@ -1,29 +1,100 @@
 {
   "files": {
-    "gateway.mjs": [
-      {
-        "id": "F20261009-001",
-        "name": "PAAW 套包安裝更新與本機啟動控制台",
-        "tags": [
-          "paaw-bootloader",
-          "staged-install",
-          "version-rollback",
-          "local-console",
-          "semgrep-setup"
-        ]
-      }
-    ],
     "src/server.mjs": [
       {
         "id": "F20261009-002",
         "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
         "tags": [
           "gateway",
-          "admin-platform",
+          "admin-console",
           "auth",
-          "rbac",
-          "backup",
-          "restore"
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/server/auth.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/server/backup.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/server/config.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/server/events.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/server/paaw-control.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/server/password.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
         ]
       }
     ],
@@ -33,14 +104,168 @@
         "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
         "tags": [
           "gateway",
-          "admin-platform",
+          "admin-console",
           "auth",
-          "rbac",
-          "backup",
-          "restore"
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "tests/e2e/gateway-login-hardening.test.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "tests/unit/auth.test.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "tests/unit/backup.test.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "tests/unit/password.test.mjs": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    ".paaw/runbook/backup-path-protection.md": [
+      {
+        "id": "F20261009-002",
+        "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
+        "tags": [
+          "gateway",
+          "admin-console",
+          "auth",
+          "bcrypt",
+          "session",
+          "process-control"
+        ]
+      }
+    ],
+    "src/lib/config.mjs": [
+      {
+        "id": "F20261011-002",
+        "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+        "tags": [
+          "paaw-gateway",
+          "local-console",
+          "version-install",
+          "process-lifecycle",
+          "semgrep",
+          "settings"
+        ]
+      }
+    ],
+    "src/lib/install.mjs": [
+      {
+        "id": "F20261011-002",
+        "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+        "tags": [
+          "paaw-gateway",
+          "local-console",
+          "version-install",
+          "process-lifecycle",
+          "semgrep",
+          "settings"
+        ]
+      }
+    ],
+    "src/lib/process.mjs": [
+      {
+        "id": "F20261011-002",
+        "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+        "tags": [
+          "paaw-gateway",
+          "local-console",
+          "version-install",
+          "process-lifecycle",
+          "semgrep",
+          "settings"
+        ]
+      }
+    ],
+    "src/lib/semgrep.mjs": [
+      {
+        "id": "F20261011-002",
+        "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+        "tags": [
+          "paaw-gateway",
+          "local-console",
+          "version-install",
+          "process-lifecycle",
+          "semgrep",
+          "settings"
+        ]
+      }
+    ],
+    "src/ui/server.mjs": [
+      {
+        "id": "F20261011-002",
+        "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+        "tags": [
+          "paaw-gateway",
+          "local-console",
+          "version-install",
+          "process-lifecycle",
+          "semgrep",
+          "settings"
+        ]
+      }
+    ],
+    "gateway.mjs": [
+      {
+        "id": "F20261009-001",
+        "name": "PAAW Gateway 啟動器 CLI（安裝・更新・啟動）",
+        "tags": [
+          "paaw-gateway",
+          "cli",
+          "bootloader",
+          "install-update",
+          "process-lifecycle",
+          "rollback"
         ]
       }
     ]
   },
-  "updatedAt": "2026-10-10T14:38:19.689Z"
+  "updatedAt": "2026-10-11T09:51:28.749Z"
 }

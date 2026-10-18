@@ -1,66 +1,46 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-11T07:05:19.655Z",
-  "headSha": "460fc6c",
+  "generatedAt": "2026-10-18T09:33:11.745Z",
+  "headSha": "e2a1144",
   "tableHashes": {
-    "features": "705115326a378cc9",
-    "apis": "a10f3411c6bf82f8",
-    "tests": "bc9c8611d5f9d32b",
-    "changes": "b87503aaedb294ea",
-    "knowledgeGaps": "ca24eab71971439e"
+    "features": "1948593c6572e5de",
+    "apis": "de972bba78ed2fa9",
+    "tests": "2fab461313ea6efd",
+    "changes": "48bb7ef57a26b702",
+    "knowledgeGaps": "27afef1aefccef42"
   },
   "root": null,
   "summary": {
-    "features": 2,
+    "features": 3,
     "apis": 25,
-    "apisWithFeature": 13,
-    "files": 16,
-    "filesMapped": 8,
-    "tests": 7,
-    "commits": 74,
+    "apisWithFeature": 25,
+    "files": 27,
+    "filesMapped": 18,
+    "tests": 16,
+    "commits": 82,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-10-11T07:05:19.595Z"
+    "featuresUpdatedAt": "2026-10-18T09:33:10.192Z"
   },
   "features": [
-    {
-      "id": "F20261009-001",
-      "name": "PAAW 套包安裝更新與本機啟動控制台",
-      "status": "active",
-      "description": "這個 feature 是使用者機器上的 PAAW bootloader 與本機操作控制台（gateway.mjs）：負責從 package server 下載或手動上傳 PAAW 套包做 staged 安裝、以多版本目錄保留現場達成回滾，並透過本機 dashboard（index.html + REST API）查看狀態/活動記錄/PAAW console log，執行更新、上傳安裝、啟動、停止、重啟等生命周期操作。同時內建 semgrep 環境偵測、一鍵安裝與 SEMGREP_PATH 注入，確保 PAAW 啟動時掃描工具可用。",
-      "fileCount": 1,
-      "files": [
-        "gateway.mjs"
-      ],
-      "apis": [],
-      "apiCount": 0,
-      "tests": [],
-      "testCount": 0,
-      "changeCount": 24,
-      "lastChangeAt": "2026-10-11T11:49:00+08:00",
-      "knowledgeGaps": [
-        "no-tests",
-        "no-runbook"
-      ],
-      "_h": "94c48b08a1e1bfc9"
-    },
     {
       "id": "F20261009-002",
       "name": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "status": "active",
-      "description": "獨立在 :4199 的 PAAW 守護管理平台（不依賴 PAAW Server :4097 運行），由單一 src/server.mjs 承載全部後端：用戶認證與角色權限、PAAW Server 進程生命週期管理、資料備份/還原、版本升級、健康監控與事件稽核，並供應前端 UI 靜態檔。",
-      "fileCount": 6,
+      "description": "獨立的 PAAW 管理主控台，運行於 :4199，不依賴 PAAW Server（:4097）即可運作，角色如同 PAAW Server 的守護者。由薄入口 src/server.mjs 做 HTTP 路由分派與 auth guard，其餘職責委派給五個模組：config（設定與 env 衍生路徑）、events（稽核事件）、auth+password（登入與 bcrypt 憑證）、paaw-control（PAAW 子行程生命週期與版本升級）、backup（備份建立/列表/還原）。提供登入、儀表板、健康檢查、版本、進程啟停/重啟、升級、備份管理、事件查詢與使用者列表等 API。",
+      "fileCount": 7,
       "files": [
         "src/server.mjs",
+        "src/server/auth.mjs",
+        "src/server/backup.mjs",
         "src/server/config.mjs",
         "src/server/events.mjs",
-        "src/server/auth.mjs",
         "src/server/paaw-control.mjs",
-        "src/server/backup.mjs"
+        "src/server/password.mjs"
       ],
       "apis": [
         "POST /api/auth/login",
@@ -84,15 +64,131 @@
           "kind": null
         },
         {
+          "file": "src/server/auth.mjs",
+          "kind": null
+        },
+        {
+          "file": "src/server/config.mjs",
+          "kind": null
+        },
+        {
           "file": "tests/e2e/gateway-backup-auth.test.mjs",
           "kind": "e2e"
+        },
+        {
+          "file": "tests/e2e/gateway-login-hardening.test.mjs",
+          "kind": "e2e"
+        },
+        {
+          "file": "tests/unit/auth.test.mjs",
+          "kind": "unit"
+        },
+        {
+          "file": "tests/unit/events.test.mjs",
+          "kind": "unit"
+        },
+        {
+          "file": "tests/unit/paaw-control.test.mjs",
+          "kind": "unit"
+        },
+        {
+          "file": "tests/unit/password.test.mjs",
+          "kind": "unit"
+        },
+        {
+          "file": "tests/unit/server-config.test.mjs",
+          "kind": "unit"
         }
       ],
-      "testCount": 9,
-      "changeCount": 10,
-      "lastChangeAt": "2026-10-11T10:33:07+08:00",
+      "testCount": 27,
+      "changeCount": 13,
+      "lastChangeAt": "2026-10-11T17:40:16+08:00",
       "knowledgeGaps": [],
-      "_h": "dec0e7fcdba6a3a9"
+      "_h": "5f36d1a26538afd4"
+    },
+    {
+      "id": "F20261011-002",
+      "name": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+      "status": "active",
+      "description": "在使用者本機 :4290（PAAW_GW_PORT）提供的 PAAW 控制台 HTTP server（src/ui/server.mjs 為入口），前端為靜態 ui/index.html。由五個模組組成：config（佈局路徑/gateway.json/semver 的 leaf）、install（下載驗證/解壓/版本安裝與更新決策）、process（PAAW 子進程生命週期與健康檢查）、semgrep（偵測與一鍵安裝），彼此單向依賴、無循環。對外提供 /api/* 一組控制與查詢端點。",
+      "fileCount": 5,
+      "files": [
+        "src/lib/config.mjs",
+        "src/lib/install.mjs",
+        "src/lib/process.mjs",
+        "src/lib/semgrep.mjs",
+        "src/ui/server.mjs"
+      ],
+      "apis": [
+        "GET /api/log",
+        "GET /api/paaw-log",
+        "POST /api/restart",
+        "POST /api/semgrep/install",
+        "GET /api/settings",
+        "POST /api/settings",
+        "POST /api/start",
+        "GET /api/status",
+        "POST /api/stop",
+        "POST /api/update",
+        "POST /api/upload",
+        "GET /index.html"
+      ],
+      "apiCount": 12,
+      "tests": [
+        {
+          "file": "gateway.mjs",
+          "kind": null
+        },
+        {
+          "file": "src/lib/install.mjs",
+          "kind": null
+        },
+        {
+          "file": "src/lib/process.mjs",
+          "kind": null
+        },
+        {
+          "file": "src/lib/semgrep.mjs",
+          "kind": null
+        },
+        {
+          "file": "src/ui/server.mjs",
+          "kind": null
+        },
+        {
+          "file": "tests/unit/process.test.mjs",
+          "kind": "unit"
+        }
+      ],
+      "testCount": 57,
+      "changeCount": 3,
+      "lastChangeAt": "2026-10-11T12:50:41+08:00",
+      "knowledgeGaps": [
+        "no-runbook"
+      ],
+      "_h": "5e0580c4a168aa38"
+    },
+    {
+      "id": "F20261009-001",
+      "name": "PAAW Gateway 啟動器 CLI（安裝・更新・啟動）",
+      "status": "active",
+      "description": "使用者機器上的 PAAW 自舉入口程式（bootloader）：提供 status / update / upload / start / ui 等 CLI 指令，負責檢查並安裝 PAAW 版本、啟動或回滾 PAAW Server 子進程，並以組合根（composition root）身份把 config / install / process / semgrep / ui 等模組接線起來。它管理 process.cwd() 下的 versions/、data/、current.json、logs/ 佈局，與 F20261009-002 的獨立管理平台（src/server.mjs，:4199",
+      "fileCount": 1,
+      "files": [
+        "gateway.mjs"
+      ],
+      "apis": [],
+      "apiCount": 0,
+      "tests": [],
+      "testCount": 0,
+      "changeCount": 24,
+      "lastChangeAt": "2026-10-11T11:49:00+08:00",
+      "knowledgeGaps": [
+        "no-tests",
+        "no-api-mapped",
+        "no-runbook"
+      ],
+      "_h": "fbb796e394af08e4"
     }
   ],
   "apis": [
@@ -171,32 +267,40 @@
       "path": "/api/log",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "51e26fc0a1b5647a"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "6970f5b59ea1a821"
     },
     {
       "method": "GET",
       "path": "/api/paaw-log",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "e41f855b404931a2"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "a46a6abb8c51ac25"
     },
     {
       "method": "POST",
       "path": "/api/restart",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "b79f331a73f462a1"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "6732c3ab5c00da6d"
     },
     {
       "method": "POST",
       "path": "/api/semgrep/install",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "af22bebeb2097dd6"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "0ecf32c32bc5341f"
     },
     {
       "method": "POST",
@@ -233,48 +337,60 @@
       "path": "/api/settings",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "32ce087072b2dd24"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "a6d1d308d06f6a7c"
     },
     {
       "method": "POST",
       "path": "/api/settings",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "ecee8ddaf6da25bf"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "fd5117f6d7e019bf"
     },
     {
       "method": "POST",
       "path": "/api/start",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "f83d2a807db6c688"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "4ab7fed1b83cf20c"
     },
     {
       "method": "GET",
       "path": "/api/status",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "329bfe3e8ea655ca"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "ca54093a60c63f26"
     },
     {
       "method": "POST",
       "path": "/api/stop",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "cef4e37e29d618d2"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "0453dd84dcda3b3c"
     },
     {
       "method": "POST",
       "path": "/api/update",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "70de832bf0bb6ff0"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "a575d321a68e55f2"
     },
     {
       "method": "POST",
@@ -291,8 +407,10 @@
       "path": "/api/upload",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "9d711c7139f419b2"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "f81d119210853134"
     },
     {
       "method": "GET",
@@ -319,8 +437,10 @@
       "path": "/index.html",
       "file": "src/ui/server.mjs",
       "handler": "jsonOut",
-      "featureIds": [],
-      "_h": "7be4f8a2fc369f42"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "3317ce577fbac1ac"
     }
   ],
   "tests": [
@@ -329,32 +449,40 @@
       "productionFile": "src/lib/config.mjs",
       "testCount": 4,
       "kind": null,
-      "featureIds": [],
-      "_h": "87181273e9b267fe"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "255dd927ba58bc6c"
     },
     {
       "testFile": "src/lib/install.mjs",
       "productionFile": "src/lib/config.mjs",
       "testCount": 11,
       "kind": null,
-      "featureIds": [],
-      "_h": "179ffd5a376c7ab8"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "f2af6c779a1ce6a8"
     },
     {
       "testFile": "src/lib/process.mjs",
       "productionFile": "src/lib/config.mjs",
       "testCount": 19,
       "kind": null,
-      "featureIds": [],
-      "_h": "f7131789db499d10"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "6807517aa17be7dc"
     },
     {
       "testFile": "src/lib/semgrep.mjs",
       "productionFile": "src/lib/config.mjs",
       "testCount": 11,
       "kind": null,
-      "featureIds": [],
-      "_h": "be045fad988a424c"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "3948a7280fa35ca2"
     },
     {
       "testFile": "src/server.mjs",
@@ -367,12 +495,34 @@
       "_h": "f8202d9f514e56eb"
     },
     {
+      "testFile": "src/server/auth.mjs",
+      "productionFile": "src/server/password.mjs",
+      "testCount": 6,
+      "kind": null,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "32b6771566c52fc1"
+    },
+    {
+      "testFile": "src/server/config.mjs",
+      "productionFile": "src/server/password.mjs",
+      "testCount": 4,
+      "kind": null,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "66bcd5b5b057d754"
+    },
+    {
       "testFile": "src/ui/server.mjs",
       "productionFile": "src/lib/config.mjs",
       "testCount": 12,
       "kind": null,
-      "featureIds": [],
-      "_h": "cfeebcfba71d0e19"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "e7def0a2b26069f2"
     },
     {
       "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
@@ -383,17 +533,163 @@
         "F20261009-002"
       ],
       "_h": "ec828f1159f3c616"
+    },
+    {
+      "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
+      "productionFile": "src/server/password.mjs",
+      "testCount": 6,
+      "kind": "e2e",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "97df8ccf28c1c52f"
+    },
+    {
+      "testFile": "tests/unit/auth.test.mjs",
+      "productionFile": "src/server/auth.mjs",
+      "testCount": 1,
+      "kind": "unit",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "bd4fbb8256db624f"
+    },
+    {
+      "testFile": "tests/unit/events.test.mjs",
+      "productionFile": "src/server/events.mjs",
+      "testCount": 0,
+      "kind": "unit",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "a5c67851b0e4266f"
+    },
+    {
+      "testFile": "tests/unit/paaw-control.test.mjs",
+      "productionFile": "src/server/paaw-control.mjs",
+      "testCount": 1,
+      "kind": "unit",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "e120c43e34a71a7f"
+    },
+    {
+      "testFile": "tests/unit/password.test.mjs",
+      "productionFile": "src/server/password.mjs",
+      "testCount": 0,
+      "kind": "unit",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "f9693a65df307ae8"
+    },
+    {
+      "testFile": "tests/unit/process.test.mjs",
+      "productionFile": "src/lib/process.mjs",
+      "testCount": 0,
+      "kind": "unit",
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "7ddcd25faaf6ea9c"
+    },
+    {
+      "testFile": "tests/unit/server-config.test.mjs",
+      "productionFile": "src/server/config.mjs",
+      "testCount": 0,
+      "kind": "unit",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "ca3cb27561111d0e"
     }
   ],
   "changes": [
+    {
+      "hash": "e2a1144",
+      "date": "2026-10-18T11:56:04+08:00",
+      "subject": "test(paaw-control): 以跨平台 node script 取代外部 sleep 指令",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "cc62f89cb027c696"
+    },
+    {
+      "hash": "8980569",
+      "date": "2026-10-18T11:55:17+08:00",
+      "subject": "test(semgrep): snapshot and restore overridden env vars in unit tests",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "ba899b7e652f5bcd"
+    },
+    {
+      "hash": "2771c40",
+      "date": "2026-10-18T11:54:14+08:00",
+      "subject": "test(lib-config): realpath-normalize getHome assertions, restore cwd in afterEach",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "fc48bc1d8e145b70"
+    },
+    {
+      "hash": "670b14f",
+      "date": "2026-10-18T11:53:06+08:00",
+      "subject": "test(unit): isolate PAAW_HOME env and assert .tmp cleanup in install test",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "40a9bc15420ef746"
+    },
+    {
+      "hash": "de7b7ce",
+      "date": "2026-10-11T18:37:38+08:00",
+      "subject": "test(unit): add unit tests for lib and server config/install/process/semgrep/events/paaw-control",
+      "kind": "chore",
+      "files": 7,
+      "featureIds": [],
+      "_h": "b09d8eeda2507ac1"
+    },
+    {
+      "hash": "ec100dc",
+      "date": "2026-10-11T17:42:35+08:00",
+      "subject": "chore(config): move config.json out of VCS, add config.example.json template",
+      "kind": "chore",
+      "files": 17,
+      "featureIds": [],
+      "_h": "8bc6ea1950dd213f"
+    },
+    {
+      "hash": "4fc5e58",
+      "date": "2026-10-11T17:40:16+08:00",
+      "subject": "fix(security): harden gateway auth (bcrypt, rate limit, loopback bind)",
+      "kind": "fix",
+      "files": 10,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "4c24332be5fa31f3"
+    },
+    {
+      "hash": "ea44ce8",
+      "date": "2026-10-11T15:33:49+08:00",
+      "subject": "paaw data",
+      "kind": "other",
+      "files": 19,
+      "featureIds": [],
+      "_h": "1a58141fc1ebc1df"
+    },
     {
       "hash": "460fc6c",
       "date": "2026-10-11T14:19:06+08:00",
       "subject": "docs(paaw): sync CWE-22 backupPath docs to ADR-003 module split (TASK-012)",
       "kind": "chore",
       "files": 6,
-      "featureIds": [],
-      "_h": "e1023e702ae64761"
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "18bdce675d4d6bdd"
     },
     {
       "hash": "bed7571",
@@ -401,8 +697,10 @@
       "subject": "fix(semgrep): pass timeoutMs/extraArgs to semgrepVersion so fast path works",
       "kind": "fix",
       "files": 1,
-      "featureIds": [],
-      "_h": "dd4aa743cab0257d"
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "b2b6127fa614abf3"
     },
     {
       "hash": "82fac64",
@@ -420,9 +718,10 @@
       "kind": "refactor",
       "files": 4,
       "featureIds": [
-        "F20261009-001"
+        "F20261009-001",
+        "F20261011-002"
       ],
-      "_h": "775f0be3875e8d41"
+      "_h": "4b14f310be32af54"
     },
     {
       "hash": "a5ae75d",
@@ -431,9 +730,10 @@
       "kind": "refactor",
       "files": 5,
       "featureIds": [
-        "F20261009-001"
+        "F20261009-001",
+        "F20261011-002"
       ],
-      "_h": "e8e2b95446f68a58"
+      "_h": "57f1b600a37b782c"
     },
     {
       "hash": "128fbdf",
@@ -663,8 +963,10 @@
       "subject": "docs(security): record CWE-22 defense docs and clean changelog pollution",
       "kind": "chore",
       "files": 10,
-      "featureIds": [],
-      "_h": "4c1b0cc3dd2ab9dc"
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "bc7769c724f259bb"
     },
     {
       "hash": "742c7c4",
@@ -1126,23 +1428,11 @@
       "F20261009-001"
     ],
     "featuresWithoutRunbooks": [
+      "F20261011-002",
       "F20261009-001"
     ],
-    "apisWithoutFeature": [
-      "GET /api/log (src/ui/server.mjs)",
-      "GET /api/paaw-log (src/ui/server.mjs)",
-      "POST /api/restart (src/ui/server.mjs)",
-      "POST /api/semgrep/install (src/ui/server.mjs)",
-      "GET /api/settings (src/ui/server.mjs)",
-      "POST /api/settings (src/ui/server.mjs)",
-      "POST /api/start (src/ui/server.mjs)",
-      "GET /api/status (src/ui/server.mjs)",
-      "POST /api/stop (src/ui/server.mjs)",
-      "POST /api/update (src/ui/server.mjs)",
-      "POST /api/upload (src/ui/server.mjs)",
-      "GET /index.html (src/ui/server.mjs)"
-    ],
-    "filesWithoutFeature": 8,
+    "apisWithoutFeature": [],
+    "filesWithoutFeature": 9,
     "hotUnmappedFiles": [
       {
         "file": "ui/index.html",
@@ -1150,58 +1440,58 @@
       },
       {
         "file": ".gitignore",
-        "commits": 11
+        "commits": 13
       },
       {
         "file": "README.md",
-        "commits": 8
+        "commits": 9
       },
       {
         "file": "package.json",
-        "commits": 6
+        "commits": 7
+      },
+      {
+        "file": "DEPLOY.md",
+        "commits": 2
+      },
+      {
+        "file": "docs/api.md",
+        "commits": 2
+      },
+      {
+        "file": "package-lock.json",
+        "commits": 2
       },
       {
         "file": "public/index.html",
         "commits": 2
       },
       {
-        "file": "src/lib/semgrep.mjs",
+        "file": "tests/unit/install.test.mjs",
         "commits": 2
       },
       {
-        "file": "tests/unit/backup.test.mjs",
+        "file": "tests/unit/lib-config.test.mjs",
         "commits": 2
+      },
+      {
+        "file": "tests/unit/paaw-control.test.mjs",
+        "commits": 2
+      },
+      {
+        "file": "tests/unit/semgrep.test.mjs",
+        "commits": 2
+      },
+      {
+        "file": "config.example.json",
+        "commits": 1
       },
       {
         "file": "config.json",
         "commits": 1
       },
       {
-        "file": "DEPLOY.md",
-        "commits": 1
-      },
-      {
-        "file": "docs/api.md",
-        "commits": 1
-      },
-      {
-        "file": "package-lock.json",
-        "commits": 1
-      },
-      {
-        "file": "src/lib/config.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/lib/install.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/lib/process.mjs",
-        "commits": 1
-      },
-      {
-        "file": "src/ui/server.mjs",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
         "commits": 1
       }
     ]

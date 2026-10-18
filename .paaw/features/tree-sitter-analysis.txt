@@ -1,88 +1,31 @@
 # Project Source Analysis (Tree-sitter)
-Parsed 6 of 6 source files
-Languages: javascript(6)
+Parsed 20 of 20 source files
+Languages: javascript(20)
 
 ## gateway.mjs [javascript]
   Imports:
-    * ← node:http
-    * ← node:crypto
-    * ← node:fs
     * ← node:fs/promises
     * ← node:fs
-    * ← node:child_process
     * ← node:path
-    * ← node:url
-    * ← fflate
+    * ← ./src/lib/config.mjs
+    * ← ./src/lib/install.mjs
+    * ← ./src/lib/process.mjs
+    * ← ./src/lib/semgrep.mjs
+    * ← ./src/ui/server.mjs
   Functions:
-    function applyHome()
-    async function saveGatewayCfg()
-    function logFile(line)
-    function semverGt(a, b)
-    async function loadPackageServerUrl()
-    async function readCurrent()
-    async function writeCurrentAtomic(version)
-    async function listInstalledVersions()
-    async function downloadVerified(url, sha256Expected, destPath, sizeExpected)
-    async function extractZip(zipPath, destDir)
-    async function verifySkeleton(dir)
-    function run(cmd, args, cwd)
-    async function installDeps(versionDir)
-    async function ensureData(versionDir)
-    function startPaaw(versionDir)
-    arrow pump(stream, mirror)
-    function childFailReason(child)
-    async function waitForHealthy(timeoutMs = 90000)
-    function killChild(child)
-    async function isPortOccupied()
-    async function startAndVerify(versionDir, version)
-    async function stageInstall(zipPath, v)
-    async function installVersion(manifest, server)
-    function readZipManifest(buf)
-    async function installUploadedZip(zipBuf, label)
     async function cmdStatus()
-    async function updateLogic()
     async function cmdUpdate()
     async function safeUpdate()
     async function cmdStart()
-    function hangAround(child)
-    arrow bye()
-    function jobLog(line)
-    function paawRunning()
-    function openBrowserTab(url)
-    async function uiStart()
-    async function uiStop()
-    async function uiUpdate()
-    async function runJob(kind, fn)
-    async function uiStatus()
-    function augmentedPath(prependDir, basePath)
-    function semgrepVersion(bin, env)
-    arrow done(r)
-    function semgrepPresence()
-    async function checkSemgrep(force = false)
-    function semgrepCheckKick(force = false)
-    function runCapture(cmdLine, timeoutMs = 600000)
-    arrow done(code, err)
-    arrow pump(c)
-    async function installSemgrep()
-    async function cmdUI()
-    arrow jsonOut(code, obj)
-    arrow hostOf(h)
-    arrow isTrustedHost(hostHeader)
-    arrow isTrustedOrigin(originHeader)
-    async arrow bye()
-  Routes:
-    GET /index.html
-    GET /api/settings
-    POST /api/settings
-    POST /api/semgrep/install
-    GET /api/status
-    GET /api/log
-    GET /api/paaw-log
-    POST /api/update
-    POST /api/upload
-    POST /api/start
-    POST /api/stop
-    POST /api/restart
+
+## tests/unit/auth.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← ../../src/server/auth.mjs
+    * ← ../../src/server/password.mjs
+  Functions:
+    function makeConfig(users)
 
 ## tests/unit/backup.test.mjs [javascript]
   Imports:
@@ -97,6 +40,12 @@ Languages: javascript(6)
     function makePaawData(dbContent = "db-v1")
     function seedNamedBackup(filename, mtime)
     function makeRealBackupArchive(filename)
+
+## tests/unit/password.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← ../../src/server/password.mjs
 
 ## tests/e2e/gateway-backup-auth.test.mjs [javascript]
   Imports:
@@ -117,6 +66,26 @@ Languages: javascript(6)
     async function stopGateway(g)
     arrow backupFilesOnDisk()
     arrow restoreEventsInLog()
+
+## tests/e2e/gateway-login-hardening.test.mjs [javascript]
+  Imports:
+    * ← node:test
+    * ← node:assert/strict
+    * ← node:fs
+    * ← node:net
+    * ← node:os
+    * ← node:os
+    * ← node:path
+    * ← node:child_process
+    * ← node:url
+    * ← ../../src/server/password.mjs
+  Functions:
+    function getFreePort()
+    async function jsonReq(base, path, { method = "GET", body, token } = {})
+    async function startGateway(configOverrides = {})
+    async function stopGateway(g)
+    function canConnect(host, port, timeoutMs = 1500)
+    arrow done(ok)
 
 ## tests/e2e/gateway-restart-rbac.test.mjs [javascript]
   Imports:
@@ -159,37 +128,20 @@ Languages: javascript(6)
     * ← http
     * ← fs
     * ← path
-    * ← child_process
-    * ← crypto
     * ← url
-    * ← fs
+    * ← ./server/config.mjs
+    * ← ./server/events.mjs
+    * ← ./server/auth.mjs
+    * ← ./server/paaw-control.mjs
+    * ← ./server/backup.mjs
   Exports:
-    variable: BACKUP_REGEX
-    variable: BACKUP_DATE_REGEX
-    function: backupPath
-    function: listBackups
-    function: createBackup
-    function: restoreBackup
+    named: BACKUP_REGEX
+    named: BACKUP_DATE_REGEX
+    named: backupPath
+    named: listBackups
+    named: createBackup
+    named: restoreBackup
   Functions:
-    function loadConfig()
-    function saveConfig()
-    function backupPath(name)
-    function logEvent(type, detail, userId = "system")
-    function startPaaw()
-    function stopPaaw()
-    arrow finish(ok, error)
-    async function restartPaaw()
-    function getCurrentVersion()
-    function getGitInfo()
-    function getLatestVersion()
-    async function upgradePaaw(userId = "system")
-    function listBackups()
-    function createBackup(userId = "system")
-    function restoreBackup(filename, userId = "system")
-    async function healthCheckPaaw()
-    function getSystemHealth()
-    function createSession(userId)
-    function validateSession(token)
     arrow sendJSON(code, data)
     arrow readBody()
   Routes:
@@ -206,3 +158,301 @@ Languages: javascript(6)
     POST /api/backups/create
     GET /api/events
     GET /api/users
+
+## src/ui/server.mjs [javascript]
+  Imports:
+    * ← node:http
+    * ← node:fs/promises
+    * ← node:fs
+    * ← node:path
+    * ← node:url
+    * ← ../lib/config.mjs
+    * ← ../lib/install.mjs
+    * ← ../lib/process.mjs
+    * ← ../lib/semgrep.mjs
+  Exports:
+    function: cmdUI
+  Functions:
+    function jobLog(line)
+    async function uiStart()
+    async function uiStop()
+    async function uiUpdate()
+    async function runJob(kind, fn)
+    async function uiStatus()
+    async function cmdUI()
+    arrow jsonOut(code, obj)
+    arrow hostOf(h)
+    arrow isTrustedHost(hostHeader)
+    arrow isTrustedOrigin(originHeader)
+    async arrow bye()
+  Routes:
+    GET /index.html
+    GET /api/settings
+    POST /api/settings
+    POST /api/semgrep/install
+    GET /api/status
+    GET /api/log
+    GET /api/paaw-log
+    POST /api/update
+    POST /api/upload
+    POST /api/start
+    POST /api/stop
+    POST /api/restart
+
+## src/server/auth.mjs [javascript]
+  Imports:
+    * ← crypto
+    * ← ./password.mjs
+  Exports:
+    variable: LOGIN_MAX_FAILURES
+    variable: LOGIN_WINDOW_MS
+    function: createAuth
+  Functions:
+    function createRateLimiter({ limit, windowMs })
+    function prune(now)
+    function createAuth(config)
+    function createSession(userId)
+    function validateSession(token)
+    async function login(userId, password, ip = "unknown")
+
+## src/server/backup.mjs [javascript]
+  Imports:
+    * ← fs
+    * ← path
+    * ← child_process
+  Exports:
+    variable: BACKUP_REGEX
+    variable: BACKUP_DATE_REGEX
+    function: createBackupManager
+  Functions:
+    function createBackupManager(deps)
+    function backupPath(name)
+    function listBackups()
+    function createBackup(userId = "system")
+    function restoreBackup(filename, userId = "system")
+
+## src/server/config.mjs [javascript]
+  Imports:
+    * ← fs
+    * ← path
+    * ← ./password.mjs
+  Exports:
+    variable: DEFAULT_HOST
+    function: loadConfig
+    function: validateAuthConfig
+    function: saveConfig
+    function: createConfig
+  Functions:
+    function loadConfig(configPath, baseDir)
+    function validateAuthConfig(config)
+    function saveConfig(configPath, config)
+    function createConfig(baseDir)
+
+## src/server/events.mjs [javascript]
+  Imports:
+    * ← fs
+    * ← crypto
+  Exports:
+    function: createEventLog
+  Functions:
+    function createEventLog(eventLogPath)
+    function logEvent(type, detail, userId = "system")
+
+## src/server/paaw-control.mjs [javascript]
+  Imports:
+    * ← fs
+    * ← path
+    * ← child_process
+  Exports:
+    function: createPaawControl
+  Functions:
+    function createPaawControl(deps)
+    function startPaaw()
+    function stopPaaw()
+    arrow finish(ok, error)
+    arrow onExit(code, signal)
+    async function restartPaaw()
+    function getCurrentVersion()
+    function getGitInfo()
+    function getLatestVersion()
+    async function upgradePaaw(userId = "system")
+    async function healthCheckPaaw()
+    function getSystemHealth()
+    function getPaawProcess()
+    function isRunning()
+
+## src/server/password.mjs [javascript]
+  Imports:
+    * ← bcryptjs
+    * ← crypto
+  Exports:
+    variable: BCRYPT_ROUNDS
+    function: isHashed
+    function: needsRehash
+    function: isWeakDefaultPassword
+    function: hashPassword
+    function: hashPasswordSync
+    function: verifyPassword
+    function: consumeDummyVerify
+    function: applyPasswordOverride
+  Functions:
+    function isHashed(stored)
+    function needsRehash(stored)
+    function isWeakDefaultPassword(stored)
+    async function hashPassword(plain)
+    function hashPasswordSync(plain)
+    function constantTimeEqual(a, b)
+    async function verifyPassword(plain, stored)
+    async function consumeDummyVerify(plain)
+    function applyPasswordOverride(config, env = process.env)
+
+## src/lib/config.mjs [javascript]
+  Imports:
+    * ← node:fs/promises
+    * ← node:fs
+    * ← node:path
+  Exports:
+    variable: VERSION_RE
+    function: getCfg
+    function: setCfgField
+    function: deleteCfgField
+    function: applyHome
+    function: getHome
+    function: getVersionsDir
+    function: getDataDir
+    function: getCurrentFile
+    function: getLogsDir
+    function: saveGatewayCfg
+    variable: PORT
+    variable: AUTO_UPDATE
+    variable: EMOJI_OK
+    variable: L
+    function: logFile
+    function: semverGt
+    function: loadPackageServerUrl
+    function: readCurrent
+    function: writeCurrentAtomic
+    function: listInstalledVersions
+    variable: PATH_SEP
+    function: augmentedPath
+  Functions:
+    function getCfg()
+    function setCfgField(key, value)
+    function deleteCfgField(key)
+    function applyHome()
+    function getHome()
+    function getVersionsDir()
+    function getDataDir()
+    function getCurrentFile()
+    function getLogsDir()
+    async function saveGatewayCfg()
+    function logFile(line)
+    function semverGt(a, b)
+    async function loadPackageServerUrl()
+    async function readCurrent()
+    async function writeCurrentAtomic(version)
+    async function listInstalledVersions()
+    function augmentedPath(prependDir, basePath)
+
+## src/lib/install.mjs [javascript]
+  Imports:
+    * ← node:crypto
+    * ← node:fs
+    * ← node:fs/promises
+    * ← node:fs
+    * ← node:child_process
+    * ← node:path
+    * ← fflate
+    * ← ./config.mjs
+  Exports:
+    function: downloadVerified
+    function: extractZip
+    function: verifySkeleton
+    function: installDeps
+    function: ensureData
+    function: stageInstall
+    function: installVersion
+    function: readZipManifest
+    function: installUploadedZip
+    function: updateLogic
+  Functions:
+    async function downloadVerified(url, sha256Expected, destPath, sizeExpected)
+    async function extractZip(zipPath, destDir)
+    async function verifySkeleton(dir)
+    function run(cmd, args, cwd)
+    async function installDeps(versionDir)
+    async function ensureData(versionDir)
+    async function stageInstall(zipPath, v)
+    async function installVersion(manifest, server)
+    function readZipManifest(buf)
+    async function installUploadedZip(zipBuf, label)
+    async function updateLogic()
+
+## src/lib/process.mjs [javascript]
+  Imports:
+    * ← node:child_process
+    * ← node:path
+    * ← ./config.mjs
+  Exports:
+    function: getPaawChild
+    function: setPaawChild
+    function: getPaawChildVersion
+    function: setPaawChildVersion
+    function: getLastStartFail
+    function: setLastStartFail
+    function: paawRunning
+    function: setSemgrepDetectedProvider
+    variable: OPEN_BROWSER
+    function: openBrowserTab
+    function: startPaaw
+    function: childFailReason
+    function: waitForHealthy
+    function: killChild
+    function: isPortOccupied
+    function: startAndVerify
+    function: hangAround
+  Functions:
+    function getPaawChild()
+    function setPaawChild(child)
+    function getPaawChildVersion()
+    function setPaawChildVersion(v)
+    function getLastStartFail()
+    function setLastStartFail(msg)
+    function paawRunning()
+    arrow semgrepDetectedProvider()
+    function setSemgrepDetectedProvider(fn)
+    function openBrowserTab(url)
+    function startPaaw(versionDir)
+    arrow pump(stream, mirror)
+    function childFailReason(child)
+    async function waitForHealthy(timeoutMs = 90000)
+    function killChild(child)
+    async function isPortOccupied()
+    async function startAndVerify(versionDir, version)
+    function hangAround(child)
+    arrow bye()
+
+## src/lib/semgrep.mjs [javascript]
+  Imports:
+    * ← node:child_process
+    * ← node:fs
+    * ← node:path
+    * ← ./config.mjs
+  Exports:
+    function: getDetectedPath
+    function: getCheckState
+    function: semgrepPresence
+    function: semgrepCheckKick
+    function: installSemgrep
+  Functions:
+    function getDetectedPath()
+    function getCheckState()
+    function semgrepVersion(bin, env, timeoutMs = 60000, extraArgs = [])
+    arrow done(r)
+    function semgrepPresence()
+    async function checkSemgrep(force = false)
+    function semgrepCheckKick(force = false)
+    function runCapture(cmdLine, timeoutMs, jobLog)
+    arrow done(code, err)
+    arrow pump(c)
+    async function installSemgrep(jobLog)

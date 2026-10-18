@@ -19,17 +19,29 @@
     "includeActionLog": true
   },
   "model": {
-    "planning": "",
-    "dispatch": ""
+    "planning": "openrouter/deepseek/deepseek-v4.1-flash",
+    "dispatch": "openrouter/deepseek/deepseek-v4.1-flash"
+  },
+  "closedLoop": {
+    "enabled": true,
+    "maxRounds": 30
   },
   "dispatchableAgents": [],
   "blockedAgents": [],
+  "reviewConfig": {
+    "multiAgentReview": true,
+    "reviewModels": [
+      "zai/glm-5.1",
+      "zai/glm-5"
+    ],
+    "autoRework": true
+  },
   "planningScope": {
     "gitChanges": true,
     "openIssues": true,
     "openTasks": true,
     "securityFindings": true,
-    "codeIntelligence": false,
-    "testCoverage": true
+    "testCoverage": true,
+    "codeIntelligence": false
   }
 }

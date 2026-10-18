@@ -1,6 +1,14 @@
 {
   "testFiles": [
     {
+      "file": "tests/unit/auth.test.mjs",
+      "type": "unit",
+      "functionCount": 1,
+      "functionNames": [
+        "makeConfig"
+      ]
+    },
+    {
       "file": "tests/unit/backup.test.mjs",
       "type": "unit",
       "functionCount": 4,
@@ -10,6 +18,67 @@
         "seedNamedBackup",
         "makeRealBackupArchive"
       ]
+    },
+    {
+      "file": "tests/unit/events.test.mjs",
+      "type": "unit",
+      "functionCount": 0,
+      "functionNames": []
+    },
+    {
+      "file": "tests/unit/install.test.mjs",
+      "type": "unit",
+      "functionCount": 3,
+      "functionNames": [
+        "makeZipInMemory",
+        "makeZip",
+        "validSkeletonFiles"
+      ]
+    },
+    {
+      "file": "tests/unit/lib-config.test.mjs",
+      "type": "unit",
+      "functionCount": 2,
+      "functionNames": [
+        "samePath",
+        "reload"
+      ]
+    },
+    {
+      "file": "tests/unit/paaw-control.test.mjs",
+      "type": "unit",
+      "functionCount": 1,
+      "functionNames": [
+        "makeControl"
+      ]
+    },
+    {
+      "file": "tests/unit/password.test.mjs",
+      "type": "unit",
+      "functionCount": 0,
+      "functionNames": []
+    },
+    {
+      "file": "tests/unit/process.test.mjs",
+      "type": "unit",
+      "functionCount": 0,
+      "functionNames": []
+    },
+    {
+      "file": "tests/unit/semgrep.test.mjs",
+      "type": "unit",
+      "functionCount": 3,
+      "functionNames": [
+        "restoreManagedEnv",
+        "emptyPathUnder",
+        "makeExecutable"
+      ]
+    },
+    {
+      "file": "tests/unit/server-config.test.mjs",
+      "type": "unit",
+      "functionCount": 0,
+      "functionNames": []
     },
     {
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
@@ -23,6 +92,19 @@
         "stopGateway",
         "backupFilesOnDisk",
         "restoreEventsInLog"
+      ]
+    },
+    {
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "type": "e2e",
+      "functionCount": 6,
+      "functionNames": [
+        "getFreePort",
+        "jsonReq",
+        "startGateway",
+        "stopGateway",
+        "canConnect",
+        "done"
       ]
     },
     {
@@ -50,6 +132,19 @@
   ],
   "testToCode": [
     {
+      "testFile": "tests/unit/auth.test.mjs",
+      "testType": "unit",
+      "functionCount": 1,
+      "matches": [
+        {
+          "productionFile": "src/server/auth.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
       "testFile": "tests/unit/backup.test.mjs",
       "testType": "unit",
       "functionCount": 4,
@@ -57,6 +152,110 @@
         {
           "productionFile": "src/server/backup.mjs",
           "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/events.test.mjs",
+      "testType": "unit",
+      "functionCount": 0,
+      "matches": [
+        {
+          "productionFile": "src/server/events.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/install.test.mjs",
+      "testType": "unit",
+      "functionCount": 3,
+      "matches": [
+        {
+          "productionFile": "src/lib/install.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/lib-config.test.mjs",
+      "testType": "unit",
+      "functionCount": 2,
+      "matches": [
+        {
+          "productionFile": "src/lib/config.mjs",
+          "matchType": "reference",
+          "testedFunctions": [],
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/paaw-control.test.mjs",
+      "testType": "unit",
+      "functionCount": 1,
+      "matches": [
+        {
+          "productionFile": "src/server/paaw-control.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/password.test.mjs",
+      "testType": "unit",
+      "functionCount": 0,
+      "matches": [
+        {
+          "productionFile": "src/server/password.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/process.test.mjs",
+      "testType": "unit",
+      "functionCount": 0,
+      "matches": [
+        {
+          "productionFile": "src/lib/process.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/semgrep.test.mjs",
+      "testType": "unit",
+      "functionCount": 3,
+      "matches": [
+        {
+          "productionFile": "src/lib/semgrep.mjs",
+          "matchType": "naming",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "testFile": "tests/unit/server-config.test.mjs",
+      "testType": "unit",
+      "functionCount": 0,
+      "matches": [
+        {
+          "productionFile": "src/server/config.mjs",
+          "matchType": "import",
           "testedFunctions": [],
           "confidence": "high"
         }
@@ -76,22 +275,117 @@
       ]
     },
     {
+      "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
+      "testType": "e2e",
+      "functionCount": 6,
+      "matches": [
+        {
+          "productionFile": "src/server/password.mjs",
+          "matchType": "import",
+          "testedFunctions": [],
+          "confidence": "high"
+        }
+      ]
+    },
+    {
       "testFile": "tests/e2e/gateway-restart-rbac.test.mjs",
       "testType": "e2e",
       "functionCount": 2,
-      "matches": []
+      "matches": [
+        {
+          "productionFile": "src/server.mjs",
+          "matchType": "reference",
+          "testedFunctions": [],
+          "confidence": "medium"
+        }
+      ]
     },
     {
       "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
       "testType": "e2e",
       "functionCount": 6,
-      "matches": []
+      "matches": [
+        {
+          "productionFile": "gateway.mjs",
+          "matchType": "reference",
+          "testedFunctions": [],
+          "confidence": "medium"
+        }
+      ]
     }
   ],
   "codeToTest": {
+    "src/server/auth.mjs": [
+      {
+        "testFile": "tests/unit/auth.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
     "src/server/backup.mjs": [
       {
         "testFile": "tests/unit/backup.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/server/events.mjs": [
+      {
+        "testFile": "tests/unit/events.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/lib/install.mjs": [
+      {
+        "testFile": "tests/unit/install.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/lib/config.mjs": [
+      {
+        "testFile": "tests/unit/lib-config.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/server/paaw-control.mjs": [
+      {
+        "testFile": "tests/unit/paaw-control.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/server/password.mjs": [
+      {
+        "testFile": "tests/unit/password.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      },
+      {
+        "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
+        "testType": "e2e",
+        "testedFunctions": []
+      }
+    ],
+    "src/lib/process.mjs": [
+      {
+        "testFile": "tests/unit/process.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/lib/semgrep.mjs": [
+      {
+        "testFile": "tests/unit/semgrep.test.mjs",
+        "testType": "unit",
+        "testedFunctions": []
+      }
+    ],
+    "src/server/config.mjs": [
+      {
+        "testFile": "tests/unit/server-config.test.mjs",
         "testType": "unit",
         "testedFunctions": []
       }
@@ -101,10 +395,29 @@
         "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
         "testType": "e2e",
         "testedFunctions": []
+      },
+      {
+        "testFile": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "testType": "e2e",
+        "testedFunctions": []
+      }
+    ],
+    "gateway.mjs": [
+      {
+        "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "testType": "e2e",
+        "testedFunctions": []
       }
     ]
   },
   "whatToRun": {
+    "src/server/auth.mjs": [
+      {
+        "testFile": "tests/unit/auth.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
     "src/server/backup.mjs": [
       {
         "testFile": "tests/unit/backup.test.mjs",
@@ -112,9 +425,82 @@
         "reason": "Tests this file"
       }
     ],
+    "src/server/events.mjs": [
+      {
+        "testFile": "tests/unit/events.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/lib/install.mjs": [
+      {
+        "testFile": "tests/unit/install.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/lib/config.mjs": [
+      {
+        "testFile": "tests/unit/lib-config.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/server/paaw-control.mjs": [
+      {
+        "testFile": "tests/unit/paaw-control.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/server/password.mjs": [
+      {
+        "testFile": "tests/unit/password.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      },
+      {
+        "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
+        "testType": "e2e",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/lib/process.mjs": [
+      {
+        "testFile": "tests/unit/process.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/lib/semgrep.mjs": [
+      {
+        "testFile": "tests/unit/semgrep.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
+    "src/server/config.mjs": [
+      {
+        "testFile": "tests/unit/server-config.test.mjs",
+        "testType": "unit",
+        "reason": "Tests this file"
+      }
+    ],
     "src/server.mjs": [
       {
         "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
+        "testType": "e2e",
+        "reason": "Tests this file"
+      },
+      {
+        "testFile": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "testType": "e2e",
+        "reason": "Tests this file"
+      }
+    ],
+    "gateway.mjs": [
+      {
+        "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
         "testType": "e2e",
         "reason": "Tests this file"
       }
@@ -122,53 +508,8 @@
   },
   "coverageGaps": [
     {
-      "file": "src/lib/process.mjs",
-      "functionCount": 19,
-      "exportCount": 17
-    },
-    {
-      "file": "src/lib/config.mjs",
-      "functionCount": 17,
-      "exportCount": 23
-    },
-    {
-      "file": "src/server/paaw-control.mjs",
-      "functionCount": 14,
-      "exportCount": 1
-    },
-    {
       "file": "src/ui/server.mjs",
       "functionCount": 12,
-      "exportCount": 1
-    },
-    {
-      "file": "src/lib/install.mjs",
-      "functionCount": 11,
-      "exportCount": 10
-    },
-    {
-      "file": "src/lib/semgrep.mjs",
-      "functionCount": 11,
-      "exportCount": 5
-    },
-    {
-      "file": "gateway.mjs",
-      "functionCount": 4,
-      "exportCount": 0
-    },
-    {
-      "file": "src/server/auth.mjs",
-      "functionCount": 3,
-      "exportCount": 1
-    },
-    {
-      "file": "src/server/config.mjs",
-      "functionCount": 3,
-      "exportCount": 3
-    },
-    {
-      "file": "src/server/events.mjs",
-      "functionCount": 2,
       "exportCount": 1
     }
   ],
@@ -178,28 +519,99 @@
       "featureName": "PAAW Gateway 系統維運管理平台（認證・進程守護・備份・升級）",
       "tests": [
         "tests/e2e/gateway-backup-auth.test.mjs",
-        "tests/unit/backup.test.mjs"
+        "tests/e2e/gateway-restart-rbac.test.mjs",
+        "tests/unit/auth.test.mjs",
+        "tests/unit/backup.test.mjs",
+        "tests/unit/server-config.test.mjs",
+        "tests/unit/events.test.mjs",
+        "tests/unit/paaw-control.test.mjs",
+        "tests/unit/password.test.mjs",
+        "tests/e2e/gateway-login-hardening.test.mjs"
+      ]
+    },
+    {
+      "featureId": "F20261011-002",
+      "featureName": "PAAW 本機控制台（安裝更新・啟停・設定・semgrep・日誌）",
+      "tests": [
+        "tests/unit/lib-config.test.mjs",
+        "tests/unit/install.test.mjs",
+        "tests/unit/process.test.mjs",
+        "tests/unit/semgrep.test.mjs"
+      ]
+    },
+    {
+      "featureId": "F20261009-001",
+      "featureName": "PAAW Gateway 啟動器 CLI（安裝・更新・啟動）",
+      "tests": [
+        "tests/e2e/gateway-ui-csrf.test.mjs"
       ]
     }
   ],
   "testReports": {
-    "found": 0,
-    "reports": [],
+    "found": 1,
+    "reports": [
+      {
+        "runner": "PAAW test-run",
+        "kind": "run",
+        "at": "2026-10-18T03:56:25.900Z",
+        "total": 87,
+        "passed": 87,
+        "failed": 0,
+        "skipped": 0,
+        "totalLinePct": null,
+        "status": "pass",
+        "durationMs": 13743,
+        "id": "RUN-20261018-002",
+        "headSha": "e2a1144",
+        "includeE2e": true,
+        "commands": [
+          "npm test"
+        ]
+      }
+    ],
+    "run": [
+      {
+        "runner": "PAAW test-run",
+        "kind": "run",
+        "at": "2026-10-18T03:56:25.900Z",
+        "status": "pass",
+        "total": 87,
+        "passed": 87,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 13743,
+        "id": "RUN-20261018-002",
+        "headSha": "e2a1144",
+        "includeE2e": true,
+        "byKind": {
+          "mixed": {
+            "passed": 87,
+            "failed": 0,
+            "skipped": 0,
+            "files": 0
+          }
+        },
+        "commands": [
+          "npm test"
+        ]
+      }
+    ],
     "coverage": [],
     "e2e": [],
     "unit": [],
     "_note": "真實工具 report（deterministic 讀取）。啟發式檔案對映為獨立欄位，不冒充真實覆蓋。"
   },
   "stats": {
-    "totalTestFiles": 4,
+    "totalTestFiles": 14,
     "byType": {
-      "unit": 1,
+      "unit": 10,
       "integration": 0,
-      "e2e": 3
+      "contract": 0,
+      "e2e": 4
     },
-    "totalMappings": 2,
-    "coverageGapFiles": 10,
-    "estimatedCoverageRate": "16.7%",
-    "featureTestCoverage": 1
+    "totalMappings": 14,
+    "coverageGapFiles": 1,
+    "estimatedCoverageRate": "92.3%",
+    "featureTestCoverage": 3
   }
 }

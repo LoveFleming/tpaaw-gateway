@@ -38,6 +38,15 @@
     },
     {
       "type": "function",
+      "name": "makeConfig",
+      "file": "tests/unit/auth.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(users)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "loadServer",
       "file": "tests/unit/backup.test.mjs",
       "kind": "function",
@@ -70,6 +79,87 @@
       "kind": "function",
       "async": false,
       "params": "(filename)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "makeZipInMemory",
+      "file": "tests/unit/install.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(entries)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "makeZip",
+      "file": "tests/unit/install.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(path, entries)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "validSkeletonFiles",
+      "file": "tests/unit/install.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(extra = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "samePath",
+      "file": "tests/unit/lib-config.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(actual, expected)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "reload",
+      "file": "tests/unit/lib-config.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(caseId)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "makeControl",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(overrides = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "restoreManagedEnv",
+      "file": "tests/unit/semgrep.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "emptyPathUnder",
+      "file": "tests/unit/semgrep.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(dir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "makeExecutable",
+      "file": "tests/unit/semgrep.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(path)",
       "callCount": 0
     },
     {
@@ -134,6 +224,60 @@
       "async": false,
       "params": "()",
       "callCount": 5
+    },
+    {
+      "type": "function",
+      "name": "getFreePort",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "jsonReq",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(base, path, { method = \"GET\", body, token } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "startGateway",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(configOverrides = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stopGateway",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(g)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "canConnect",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(host, port, timeoutMs = 1500)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "done",
+      "file": "tests/e2e/gateway-login-hardening.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(ok)",
+      "callCount": 2
     },
     {
       "type": "function",
@@ -572,6 +716,24 @@
     },
     {
       "type": "function",
+      "name": "createRateLimiter",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "({ limit, windowMs })",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "prune",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(now)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "createAuth",
       "file": "src/server/auth.mjs",
       "kind": "function",
@@ -596,6 +758,29 @@
       "async": false,
       "params": "(token)",
       "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "login",
+      "file": "src/server/auth.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(userId, password, ip = \"unknown\")",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "LOGIN_MAX_FAILURES",
+      "file": "src/server/auth.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "LOGIN_WINDOW_MS",
+      "file": "src/server/auth.mjs",
+      "kind": "variable",
+      "isDefault": false
     },
     {
       "type": "export",
@@ -681,6 +866,15 @@
     },
     {
       "type": "function",
+      "name": "validateAuthConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(config)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "saveConfig",
       "file": "src/server/config.mjs",
       "kind": "function",
@@ -699,7 +893,21 @@
     },
     {
       "type": "export",
+      "name": "DEFAULT_HOST",
+      "file": "src/server/config.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
       "name": "loadConfig",
+      "file": "src/server/config.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "validateAuthConfig",
       "file": "src/server/config.mjs",
       "kind": "function",
       "isDefault": false
@@ -873,6 +1081,150 @@
       "type": "export",
       "name": "createPaawControl",
       "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "function",
+      "name": "isHashed",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(stored)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "needsRehash",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(stored)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "isWeakDefaultPassword",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(stored)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "hashPassword",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(plain)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "hashPasswordSync",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(plain)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "constantTimeEqual",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(a, b)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "verifyPassword",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(plain, stored)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "consumeDummyVerify",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(plain)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "applyPasswordOverride",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(config, env = process.env)",
+      "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "BCRYPT_ROUNDS",
+      "file": "src/server/password.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "isHashed",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "needsRehash",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "isWeakDefaultPassword",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "hashPassword",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "hashPasswordSync",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "verifyPassword",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "consumeDummyVerify",
+      "file": "src/server/password.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "applyPasswordOverride",
+      "file": "src/server/password.mjs",
       "kind": "function",
       "isDefault": false
     },
@@ -1829,6 +2181,17 @@
         "callCount": 0
       }
     ],
+    "makeConfig": [
+      {
+        "type": "function",
+        "name": "makeConfig",
+        "file": "tests/unit/auth.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(users)",
+        "callCount": 0
+      }
+    ],
     "loadServer": [
       {
         "type": "function",
@@ -1873,11 +2236,119 @@
         "callCount": 0
       }
     ],
+    "makeZipInMemory": [
+      {
+        "type": "function",
+        "name": "makeZipInMemory",
+        "file": "tests/unit/install.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(entries)",
+        "callCount": 0
+      }
+    ],
+    "makeZip": [
+      {
+        "type": "function",
+        "name": "makeZip",
+        "file": "tests/unit/install.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(path, entries)",
+        "callCount": 0
+      }
+    ],
+    "validSkeletonFiles": [
+      {
+        "type": "function",
+        "name": "validSkeletonFiles",
+        "file": "tests/unit/install.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(extra = {})",
+        "callCount": 0
+      }
+    ],
+    "samePath": [
+      {
+        "type": "function",
+        "name": "samePath",
+        "file": "tests/unit/lib-config.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(actual, expected)",
+        "callCount": 0
+      }
+    ],
+    "reload": [
+      {
+        "type": "function",
+        "name": "reload",
+        "file": "tests/unit/lib-config.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(caseId)",
+        "callCount": 0
+      }
+    ],
+    "makeControl": [
+      {
+        "type": "function",
+        "name": "makeControl",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(overrides = {})",
+        "callCount": 0
+      }
+    ],
+    "restoreManagedEnv": [
+      {
+        "type": "function",
+        "name": "restoreManagedEnv",
+        "file": "tests/unit/semgrep.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "emptyPathUnder": [
+      {
+        "type": "function",
+        "name": "emptyPathUnder",
+        "file": "tests/unit/semgrep.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(dir)",
+        "callCount": 0
+      }
+    ],
+    "makeExecutable": [
+      {
+        "type": "function",
+        "name": "makeExecutable",
+        "file": "tests/unit/semgrep.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(path)",
+        "callCount": 0
+      }
+    ],
     "getFreePort": [
       {
         "type": "function",
         "name": "getFreePort",
         "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "getFreePort",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
         "kind": "function",
         "async": false,
         "params": "()",
@@ -1931,6 +2402,15 @@
         "async": true,
         "params": "(base, path, { method = \"GET\", token, body } = {})",
         "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "jsonReq",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(base, path, { method = \"GET\", body, token } = {})",
+        "callCount": 0
       }
     ],
     "startGateway": [
@@ -1942,6 +2422,15 @@
         "async": true,
         "params": "(configOverrides = {})",
         "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "startGateway",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(configOverrides = {})",
+        "callCount": 0
       }
     ],
     "stopGateway": [
@@ -1949,6 +2438,15 @@
         "type": "function",
         "name": "stopGateway",
         "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(g)",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "stopGateway",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
         "kind": "function",
         "async": true,
         "params": "(g)",
@@ -1975,6 +2473,46 @@
         "async": false,
         "params": "()",
         "callCount": 5
+      }
+    ],
+    "canConnect": [
+      {
+        "type": "function",
+        "name": "canConnect",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(host, port, timeoutMs = 1500)",
+        "callCount": 0
+      }
+    ],
+    "done": [
+      {
+        "type": "function",
+        "name": "done",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(ok)",
+        "callCount": 2
+      },
+      {
+        "type": "function",
+        "name": "done",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(r)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "done",
+        "file": "src/lib/semgrep.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(code, err)",
+        "callCount": 1
       }
     ],
     "pidAlive": [
@@ -2546,6 +3084,28 @@
         "path": "/api/restart"
       }
     ],
+    "createRateLimiter": [
+      {
+        "type": "function",
+        "name": "createRateLimiter",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "({ limit, windowMs })",
+        "callCount": 0
+      }
+    ],
+    "prune": [
+      {
+        "type": "function",
+        "name": "prune",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(now)",
+        "callCount": 0
+      }
+    ],
     "createAuth": [
       {
         "type": "function",
@@ -2586,6 +3146,35 @@
         "callCount": 0
       }
     ],
+    "login": [
+      {
+        "type": "function",
+        "name": "login",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(userId, password, ip = \"unknown\")",
+        "callCount": 0
+      }
+    ],
+    "LOGIN_MAX_FAILURES": [
+      {
+        "type": "export",
+        "name": "LOGIN_MAX_FAILURES",
+        "file": "src/server/auth.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "LOGIN_WINDOW_MS": [
+      {
+        "type": "export",
+        "name": "LOGIN_WINDOW_MS",
+        "file": "src/server/auth.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
     "createBackupManager": [
       {
         "type": "function",
@@ -2617,6 +3206,24 @@
       {
         "type": "export",
         "name": "loadConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "validateAuthConfig": [
+      {
+        "type": "function",
+        "name": "validateAuthConfig",
+        "file": "src/server/config.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(config)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "validateAuthConfig",
         "file": "src/server/config.mjs",
         "kind": "function",
         "isDefault": false
@@ -2655,6 +3262,15 @@
         "name": "createConfig",
         "file": "src/server/config.mjs",
         "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "DEFAULT_HOST": [
+      {
+        "type": "export",
+        "name": "DEFAULT_HOST",
+        "file": "src/server/config.mjs",
+        "kind": "variable",
         "isDefault": false
       }
     ],
@@ -2862,6 +3478,170 @@
         "async": false,
         "params": "()",
         "callCount": 0
+      }
+    ],
+    "isHashed": [
+      {
+        "type": "function",
+        "name": "isHashed",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(stored)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "isHashed",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "needsRehash": [
+      {
+        "type": "function",
+        "name": "needsRehash",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(stored)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "needsRehash",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "isWeakDefaultPassword": [
+      {
+        "type": "function",
+        "name": "isWeakDefaultPassword",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(stored)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "isWeakDefaultPassword",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "hashPassword": [
+      {
+        "type": "function",
+        "name": "hashPassword",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(plain)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "hashPassword",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "hashPasswordSync": [
+      {
+        "type": "function",
+        "name": "hashPasswordSync",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(plain)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "hashPasswordSync",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "constantTimeEqual": [
+      {
+        "type": "function",
+        "name": "constantTimeEqual",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(a, b)",
+        "callCount": 0
+      }
+    ],
+    "verifyPassword": [
+      {
+        "type": "function",
+        "name": "verifyPassword",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(plain, stored)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "verifyPassword",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "consumeDummyVerify": [
+      {
+        "type": "function",
+        "name": "consumeDummyVerify",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(plain)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "consumeDummyVerify",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "applyPasswordOverride": [
+      {
+        "type": "function",
+        "name": "applyPasswordOverride",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(config, env = process.env)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "applyPasswordOverride",
+        "file": "src/server/password.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "BCRYPT_ROUNDS": [
+      {
+        "type": "export",
+        "name": "BCRYPT_ROUNDS",
+        "file": "src/server/password.mjs",
+        "kind": "variable",
+        "isDefault": false
       }
     ],
     "getCfg": [
@@ -3772,26 +4552,6 @@
         "callCount": 0
       }
     ],
-    "done": [
-      {
-        "type": "function",
-        "name": "done",
-        "file": "src/lib/semgrep.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(r)",
-        "callCount": 1
-      },
-      {
-        "type": "function",
-        "name": "done",
-        "file": "src/lib/semgrep.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "(code, err)",
-        "callCount": 1
-      }
-    ],
     "semgrepPresence": [
       {
         "type": "function",
@@ -3870,10 +4630,10 @@
     ]
   },
   "stats": {
-    "total": 219,
-    "functions": 122,
+    "total": 261,
+    "functions": 151,
     "classes": 1,
-    "exports": 71,
+    "exports": 84,
     "routes": 25,
     "components": 0
   }
