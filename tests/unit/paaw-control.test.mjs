@@ -3,8 +3,11 @@
  * TASK-021 / framework: node:test
  *
  * 隔離策略：createPaawControl(deps) 以依賴注入建立，所有外部依賴都用 fake：
- *  - config.paawServerCmd 指向一個「絕對不會真的啟動」的無害指令（sleep），
- *    並且只在「真的呼叫 startPaaw」的案例使用，其他案例用 guard / 純邏輯。
+ *  - config.paawServerCmd 指向一個「絕對不會真的啟動」的無害指令：
+ *    以 process.execPath（當前 node）+ `-e "setTimeout(()=>{},300000)"` 組合，
+ *    跨平台（不依賴外部 sleep 指令 / shell），且只在「真的呼叫 startPaaw」
+ *    的案例使用，其他案例用 guard / 純邏輯。
+ *    注意：startPaaw 以 split(" ") 拆解指令，故 -e 的 script 不可含空白。
  *  - 需要避免殘留子行程：呼叫 startPaaw 的案例一定在 afterEach 收掉，
  *    或改用「已 running 的 guard」路徑（不真的 spawn）。
  *  - healthCheckPaaw 依賴 fetch：用 paawStatus 非 running 的早期 return 測，不碰網路。
@@ -26,11 +29,17 @@ afterEach(() => {
   rmSync(tmp, { recursive: true, force: true });
 });
 
-// 建立一個不會真的做事的 control（cmd 指向 sleep，只有在明確啟動時才 spawn）
+// 建立一個不會真的做事的 control（cmd 指向一個跨平台無害的 node 長睡 script，
+// 只有在明確啟動時才 spawn）。
+// 使用 process.execPath + `-e` 而非外部 `sleep` 指令：sleep 在 Windows 不存在，
+// 會造成跨平台 flake；node -e 則跨平台一致。script 不含空白，符合 startPaaw 的
+// split(" ") 拆解方式（cmd=node, args=["-e", "setTimeout(()=>{},300000)"]）。
+const NOOP_SERVER_CMD = `${process.execPath} -e "setTimeout(()=>{},300000)"`;
+
 function makeControl(overrides = {}) {
   const logged = [];
   const deps = {
-    config: { paawServerCmd: "sleep 300", paawServerPort: 4097, ...(overrides.config || {}) },
+    config: { paawServerCmd: NOOP_SERVER_CMD, paawServerPort: 4097, ...(overrides.config || {}) },
     PAAW_ROOT: tmp,
     logEvent: (type, detail, userId) => logged.push({ type, detail, userId }),
     ...overrides,
