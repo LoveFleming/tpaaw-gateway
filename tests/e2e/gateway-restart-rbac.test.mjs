@@ -2,80 +2,56 @@
  * E2E tests — TASK-009：驗證 TASK-008 的 F-01（restart/stop exit-confirmed）
  * 與 F-02（備份/進程端點 admin check）修復（feature F20260918-002）。
  *
- * 隔離策略（與 gateway-backup-auth.test.mjs 同款）：
- *  - spawn 真 src/server.mjs（PAAW_CONFIG knob → throwaway config / 隨機 port）
- *  - PAAW_ROOT / PAAW_BACKUP_DIR / PAAW_EVENT_LOG 全指到 mkdtemp temp dir
- *  - PAAW Server 以「可控 stub child」取代：SIGTERM 行為由 mode file 切換
- *      fast     → 立即 exit（正常路徑）
- *      delayed  → 800ms 後 exit（驗證回應等的是 exit 事件，不是訊號送達）
- *      stubborn → 忽視 SIGTERM（驗證 5s SIGKILL 升級 + 誠實回報）
- *  - stub 註冊 handler 後寫 ready 檔；每個發訊號的斷言前都先等 ready
- *    （probe 實測：不等 ready 會在 stub 註冊 handler 前送 SIGTERM，走 default
- *     disposition 秒退 — 那是測試設計 race，不是產品行為）
+ * ADR-004 (2026-10-19) — de-socketed gateway, in-process:
+ *  本檔不再 spawn `src/server.mjs`、不再 bind 任何 gateway port。改為 import
+ *  production seam `createApp({ cfg })`，以 mock req/res 直接驅動 handler。
+ *
+ *  ⚠️ 唯一仍會 spawn 的是「可控 PAAW stub child」——因為這裡測的是 PAAW
+ *     子進程生命週期（start/stop/restart），不是 gateway 的 listen。stub 由
+ *     config.paawServerCmd 指定，其 SIGTERM 行為由 mode file 切換：
+ *        fast     → 立即 exit（正常路徑）
+ *        delayed  → 800ms 後 exit（驗證回應等的是 exit 事件，不是訊號送達）
+ *        stubborn → 忽視 SIGTERM（驗證 5s SIGKILL 升級 + 誠實回報）
+ *     stub 註冊 handler 後寫 ready 檔；每個發訊號的斷言前都先等 ready。
  *
  * ⚠️ 與 QA review 建議 case 2 的差異（probe 實證 2026-09-19，見 TASK-009 報告）：
- *    QA 期望「stubborn child → 10s failsafe → restart ok:false」，實測不可達 —
+ *    QA 期望「stubborn child → 10s failsafe → restart ok:false」，實測不可達 ——
  *    stopPaaw 在 5s 升級 SIGKILL，SIGKILL 無法被 user-space 忽視 → 必產生 exit
- *    事件 → stop 誠實回 ok:true（~5s）→ restart ok:true。10s failsafe 是
- *    defense-in-depth（僅在 Node 事件迴圈卡死等異常下觸發），E2E 無法到達。
- *    因此本測試改驗「誠實合約」：elapsed ≥ 4.5s（證明等到升級+真退出，不是
- *    謊報）+ 舊 pid 真死 + 新 pid 真活。舊版 fire-and-forget bug（秒回 ok:true
- *    且舊進程還活著）會被本斷言抓到。
+ *    事件 → stop 誠實回 ok:true（~5s）→ restart ok:true。因此本測試改驗「誠實
+ *    合約」：elapsed ≥ 4.5s + 舊 pid 真死 + 新 pid 真活。
  */
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
 import {
   mkdtempSync, rmSync, mkdirSync, writeFileSync, readdirSync, existsSync, readFileSync,
 } from "node:fs";
-import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
-import { spawn } from "node:child_process";
-import { fileURLToPath } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
+import { fileURLToPath } from "node:url";
+
+import { createApp } from "../../src/server.mjs";
+import { createConfig } from "../../src/server/config.mjs";
+import { call } from "../helpers/inject.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SERVER_PATH = join(__dirname, "..", "..", "src", "server.mjs");
+const SRC_DIR = join(__dirname, "..", "..", "src");
 
 const ADMIN = { id: "admin", name: "Admin", role: "admin", passwordHash: "e2e-admin-pw" };
 const VIEWER = { id: "viewer", name: "Viewer", role: "viewer", passwordHash: "e2e-viewer-pw" };
-const HEALTH_TIMEOUT_MS = 10_000;
 
-// ── 孤兒進程保險：不論測試怎麼失敗，退出前把所有子進程斷電 ──
-const ACTIVE_CHILDREN = new Set();
-process.on("exit", () => {
-  for (const child of ACTIVE_CHILDREN) {
-    if (child.exitCode === null) child.kill("SIGKILL");
-  }
-});
-
-/** 向 OS 要一個目前沒人用的 port（bind :0 後馬上釋放） */
-function getFreePort() {
-  return new Promise((resolvePort, reject) => {
-    const srv = createServer();
-    srv.on("error", reject);
-    srv.listen(0, "127.0.0.1", () => {
-      const { port } = srv.address();
-      srv.close(() => resolvePort(port));
-    });
-  });
-}
-
-const pidAlive = pid => {
+const pidAlive = (pid) => {
   if (!pid) return false;
   try { process.kill(pid, 0); return true; } catch (e) { return e.code === "EPERM"; }
 };
 
 /**
- * 測試環境：一個 gateway 子進程 + 一個可控的 PAAW stub child script。
- * stub 的 SIGTERM 行為由 mode file（"fast" / "delayed" / "stubborn"）控制，
- * 並在 handler 註冊完成後寫 stub-ready-<pid> 檔供測試等待。
+ * 測試環境：一個 in-process gateway app（無 listen）+ 一個可控 PAAW stub child。
  */
 class TestEnv {
   constructor() {
     this.tmp = null;
-    this.gateway = null;
-    this.base = null;
+    this.app = null;
     this.tokens = {};
     this.stubPath = null;
     this.modeFile = null;
@@ -85,6 +61,7 @@ class TestEnv {
     this.tmp = mkdtempSync(join(tmpdir(), "task009-gw-"));
     const root = join(this.tmp, "root");
     mkdirSync(join(root, "data"), { recursive: true });
+    mkdirSync(join(root, ".paaw"), { recursive: true });
     this.modeFile = join(this.tmp, "stub-mode");
     writeFileSync(this.modeFile, "fast");
 
@@ -105,44 +82,38 @@ setInterval(() => { if (process.ppid === 1) process.exit(0); }, 500);
 writeFileSync(READY_DIR + "/stub-ready-" + process.pid, "ready");
 `);
 
-    const port = await getFreePort();
-    const configFile = join(this.tmp, "config.json");
-    writeFileSync(configFile, JSON.stringify({
-      port,
+    const backupDir = join(this.tmp, "backups");
+    const configPath = join(this.tmp, "config.json");
+    writeFileSync(configPath, JSON.stringify({
+      host: "127.0.0.1",
+      port: 4199,
       paawRoot: root,
       paawServerCmd: `node ${this.stubPath}`,
       paawServerPort: 4990, // 佔位，stub 不 listen
-      backupDir: join(this.tmp, "backups"),
+      backupDir,
       users: [ADMIN, VIEWER],
       sessionSecret: "task009-e2e",
       sessionMaxAge: 60000,
       autoStartPaaw: false, // 測試自己控制 start/stop/restart
     }, null, 2));
 
-    this.gateway = spawn(process.execPath, [SERVER_PATH], {
-      env: {
-        ...process.env,
-        PAAW_CONFIG: configFile,
-        PAAW_ROOT: root,
-        PAAW_BACKUP_DIR: join(this.tmp, "backups"),
-        PAAW_EVENT_LOG: join(this.tmp, "events.jsonl"),
-        STUB_MODE_FILE: this.modeFile,
-      },
-      stdio: ["ignore", "ignore", "ignore"],
-    });
-    ACTIVE_CHILDREN.add(this.gateway);
-    this.gateway.once("exit", () => ACTIVE_CHILDREN.delete(this.gateway));
-    this.base = `http://127.0.0.1:${port}`;
-
-    // 等 gateway 起來
-    const deadline = Date.now() + HEALTH_TIMEOUT_MS;
-    for (;;) {
-      try {
-        const res = await fetch(`${this.base}/api/health`);
-        if (res.ok) break;
-      } catch { /* not up yet */ }
-      if (Date.now() > deadline) throw new Error("gateway did not become healthy in time");
-      await sleep(100);
+    const saved = new Map();
+    for (const [k, v] of Object.entries({
+      PAAW_CONFIG: configPath,
+      PAAW_ROOT: root,
+      PAAW_BACKUP_DIR: backupDir,
+      PAAW_EVENT_LOG: join(this.tmp, "events.jsonl"),
+    })) {
+      saved.set(k, Object.prototype.hasOwnProperty.call(process.env, k) ? process.env[k] : undefined);
+      process.env[k] = v;
+    }
+    try {
+      this.app = createApp({ cfg: createConfig(SRC_DIR) });
+    } finally {
+      for (const [k, v] of saved) {
+        if (v === undefined) delete process.env[k];
+        else process.env[k] = v;
+      }
     }
 
     for (const u of [ADMIN, VIEWER]) {
@@ -153,16 +124,17 @@ writeFileSync(READY_DIR + "/stub-ready-" + process.pid, "ready");
   }
 
   async api(method, path, body, userId = ADMIN.id) {
-    const res = await fetch(this.base + path, {
+    const r = await call(this.app, {
       method,
-      headers: {
-        "Content-Type": "application/json",
-        ...(this.tokens[userId] ? { Authorization: `Bearer ${this.tokens[userId]}` } : {}),
-      },
+      url: path,
+      headers: body !== undefined ? { "content-type": "application/json" } : {},
       body: body === undefined ? undefined : JSON.stringify(body),
+      token: this.tokens[userId],
     });
-    return { status: res.status, body: await res.json().catch(() => null) };
+    return { status: r.status, body: r.data };
   }
+
+  setStubMode(mode) { writeFileSync(this.modeFile, mode); }
 
   /** 等 stub child（pid）註冊好 SIGTERM handler（ready 檔出現） */
   async waitStubReady(pid, timeoutMs = 10_000) {
@@ -175,20 +147,10 @@ writeFileSync(READY_DIR + "/stub-ready-" + process.pid, "ready");
     return true;
   }
 
-  setStubMode(mode) { writeFileSync(this.modeFile, mode); }
-
   async teardown() {
     // 先把還在跑的 PAAW stub 溫和收掉（走 fast 模式；最長 ~6s 含 SIGKILL 升級）
     this.setStubMode("fast");
-    try { await this.api("POST", "/api/server/stop", undefined); } catch { /* gateway 可能已死 */ }
-
-    if (this.gateway.exitCode === null) {
-      this.gateway.kill("SIGTERM");
-      const deadline = Date.now() + 3000;
-      while (this.gateway.exitCode === null && Date.now() < deadline) await sleep(50);
-      if (this.gateway.exitCode === null) this.gateway.kill("SIGKILL");
-    }
-    ACTIVE_CHILDREN.delete(this.gateway);
+    try { await this.api("POST", "/api/server/stop", undefined); } catch { /* 可能已無 child */ }
     rmSync(this.tmp, { recursive: true, force: true });
   }
 }
@@ -196,7 +158,7 @@ writeFileSync(READY_DIR + "/stub-ready-" + process.pid, "ready");
 // ═══════════════════════════════════════════════════════════════════
 // F-01 — restart / stop 必須 exit-confirmed（TASK-008 修復驗證）
 // ═══════════════════════════════════════════════════════════════════
-describe("F-01 /api/server/* exit-confirmed lifecycle (spawned gateway + controllable stub child)", () => {
+describe("F-01 /api/server/* exit-confirmed lifecycle (in-process gateway + controllable stub child)", () => {
   const env = new TestEnv();
   /** lifecycle 情境有狀態（stop/restart 的是同一個進程），由前一案例接手；
    *  沒接手到（前案失敗）就自己 start 一個，保持可獨立重跑 */
@@ -286,7 +248,7 @@ describe("F-01 /api/server/* exit-confirmed lifecycle (spawned gateway + control
 describe("F-02 RBAC: backup/restore/upgrade/server endpoints are admin-only (case 3)", () => {
   const env = new TestEnv();
   const CRAFTED_BACKUP = "paaw-backup-2026-01-01-00.tar.gz";
-  /** 受保護資料檔：restore 前後內容對比，驗證 403 時完全沒有副作用（before() 中初始化） */
+  /** 受保護資料檔：restore 前後內容對比，驗證 403 時完全沒有副作用 */
   let DB_JSON;
   const MARKER = "restored-by-crafted-backup";
   const CURRENT = "current-data";
