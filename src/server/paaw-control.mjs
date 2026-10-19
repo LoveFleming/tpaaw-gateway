@@ -249,8 +249,9 @@ export function createPaawControl(deps) {
         steps.push({ step: "git stash pop", ok: false, note: "no stash or conflict" });
       }
 
-      // Step 4: npm install
-      const installResult = execSync("npm install --no-audit --no-fund", { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
+      // Step 4: npm install — 正式機只裝 production deps（--omit=dev），
+      // 與 src/lib/install.mjs 的 installDeps 一致，避免升級時把 devDependencies 帶上正式機。
+      const installResult = execSync("npm install --omit=dev --no-audit --no-fund", { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
       steps.push({ step: "npm install", ok: true, output: installResult.trim().split("\n").slice(-3).join(" | ").slice(0, 200) });
 
       // Step 5: Start server again
