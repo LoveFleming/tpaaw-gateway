@@ -13,6 +13,22 @@
  *    fixed-window counter that self-recycles (no unbounded growth).
  *  - Successful login with a legacy / under-cost credential returns
  *    `upgraded:true` so the caller can persist the re-hashed value.
+ *
+ * Lockout separation (login-DoS fix, review board 2026-10-19):
+ *  - The two limiters use INDEPENDENT thresholds: the per-user limit stays
+ *    strict, the per-IP limit is deliberately looser (it only needs to stop a
+ *    real flood, not tolerate shared/NAT egress).
+ *  - The per-IP limit is the ONLY gate that refuses before verification: an IP
+ *    that is spraying is throttled without affecting any other IP.
+ *  - The per-user limit does NOT refuse a correct credential. It only turns a
+ *    FAILED attempt into a `locked` reply. This closes the account-lockout DoS
+ *    where an attacker floods a victim's username from any IP and thereby locks
+ *    the real user out: the victim's correct password still authenticates.
+ *    Brute-force is still bounded because wrong attempts keep counting and are
+ *    refused once the per-user limit is reached.
+ *  - Because both known and unknown usernames accumulate a per-user counter and
+ *    receive the exact same `{ ok:false }` / `{ ok:false, locked:true }` shapes,
+ *    the separation does not re-introduce account enumeration.
  */
 
 import { randomUUID } from "crypto";
@@ -24,9 +40,15 @@ import {
   consumeDummyVerify,
 } from "./password.mjs";
 
-/** Max failures per user (and per IP) before lockout. */
+/** Max failures per user before that user's FAILED attempts are refused. */
 export const LOGIN_MAX_FAILURES = 5;
-/** Lockout / counting window. */
+/**
+ * Max failures per client IP before the whole IP is refused. Deliberately
+ * looser than the per-user limit: one IP may legitimately carry several users
+ * (NAT / shared egress), so it only needs to stop a real flood.
+ */
+export const LOGIN_IP_MAX_FAILURES = 20;
+/** Lockout / counting window (shared by both limiters). */
 export const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 
 /**
@@ -82,7 +104,7 @@ function createRateLimiter({ limit, windowMs }) {
 export function createAuth(config) {
   const sessions = new Map();
   const userLimiter = createRateLimiter({ limit: LOGIN_MAX_FAILURES, windowMs: LOGIN_WINDOW_MS });
-  const ipLimiter = createRateLimiter({ limit: LOGIN_MAX_FAILURES, windowMs: LOGIN_WINDOW_MS });
+  const ipLimiter = createRateLimiter({ limit: LOGIN_IP_MAX_FAILURES, windowMs: LOGIN_WINDOW_MS });
 
   /** Create a session token for a user id. */
   function createSession(userId) {
@@ -114,18 +136,17 @@ export function createAuth(config) {
     const userKey = `u:${String(userId)}`;
     const ipKey = `ip:${String(ip)}`;
 
-    // 1. Lockout check — refuse before doing any hashing work.
-    const userLock = userLimiter.check(userKey, now);
+    // 1. Per-IP gate — the only check that refuses BEFORE verification. A
+    //    spraying IP is throttled here and nothing else is affected, so a
+    //    flood from one IP can never lock out a legitimate user on another.
     const ipLock = ipLimiter.check(ipKey, now);
-    if (userLock.limited || ipLock.limited) {
-      return {
-        ok: false,
-        locked: true,
-        retryAfterMs: Math.max(userLock.retryAfterMs, ipLock.retryAfterMs),
-      };
+    if (ipLock.limited) {
+      return { ok: false, locked: true, retryAfterMs: ipLock.retryAfterMs };
     }
 
-    // 2. Verify — constant work whether or not the user exists.
+    // 2. Verify — constant work whether or not the user exists. Done before the
+    //    per-user lockout check so a correct credential is never refused (the
+    //    account-lockout DoS fix) and so timing stays uniform.
     const user = Array.isArray(config.users)
       ? config.users.find((u) => u && u.id === userId)
       : undefined;
@@ -137,6 +158,14 @@ export function createAuth(config) {
     }
 
     if (!valid) {
+      // Per-user limit turns a FAILED attempt into a lockout reply. Checked
+      // BEFORE counting so the first `LOGIN_MAX_FAILURES` failures are allowed
+      // and only the next one is refused (limit = allowed failures). The same
+      // shape is returned for known and unknown usernames → no enumeration.
+      const userLock = userLimiter.check(userKey, now);
+      if (userLock.limited) {
+        return { ok: false, locked: true, retryAfterMs: userLock.retryAfterMs };
+      }
       userLimiter.fail(userKey, now);
       ipLimiter.fail(ipKey, now);
       return { ok: false };

@@ -9,7 +9,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { createAuth, LOGIN_MAX_FAILURES, LOGIN_WINDOW_MS } from "../../src/server/auth.mjs";
+import { createAuth, LOGIN_MAX_FAILURES, LOGIN_IP_MAX_FAILURES, LOGIN_WINDOW_MS } from "../../src/server/auth.mjs";
 import { hashPassword, isHashed } from "../../src/server/password.mjs";
 
 function makeConfig(users) {
@@ -82,16 +82,45 @@ test("login: per-user lockout after LOGIN_MAX_FAILURES failures", async () => {
     assert.equal(r.ok, false);
     assert.notEqual(r.locked, true, `attempt ${i + 1} must not yet be locked`);
   }
-  // next attempt is refused before any hashing work
-  const locked = await auth.login("admin", "right", "10.0.0.1");
+  // The per-user limit turns further FAILED attempts into a lockout reply.
+  const locked = await auth.login("admin", "wrong", "10.0.0.1");
   assert.equal(locked.ok, false);
   assert.equal(locked.locked, true);
   assert.ok(locked.retryAfterMs > 0 && locked.retryAfterMs <= LOGIN_WINDOW_MS);
 });
 
+test("login: per-user lockout does NOT refuse a correct password (DoS fix)", async () => {
+  const hash = await hashPassword("right");
+  const auth = createAuth(makeConfig([{ id: "admin", name: "A", role: "admin", passwordHash: hash }]));
+
+  // Attacker floods the victim's username with wrong passwords from IP-A.
+  for (let i = 0; i < LOGIN_MAX_FAILURES; i++) {
+    await auth.login("admin", "wrong", "10.0.0.1");
+  }
+  // The real user, from a different IP, must still authenticate with the
+  // correct password — the account must NOT be locked out.
+  const ok = await auth.login("admin", "right", "10.0.0.2");
+  assert.equal(ok.ok, true, "correct credentials must survive a username flood");
+  assert.ok(ok.token);
+});
+
+test("login: an IP flood on one username cannot lock out another IP's user", async () => {
+  const hash = await hashPassword("right");
+  const auth = createAuth(makeConfig([{ id: "admin", name: "A", role: "admin", passwordHash: hash }]));
+
+  // IP-A sprays admin past the strict per-user limit (but below the IP limit).
+  for (let i = 0; i < LOGIN_MAX_FAILURES + 3; i++) {
+    await auth.login("admin", "wrong", "10.0.0.1");
+  }
+  // A fresh IP with the correct password is unaffected.
+  const fromB = await auth.login("admin", "right", "10.0.0.2");
+  assert.equal(fromB.ok, true);
+  assert.equal(fromB.locked, undefined);
+});
+
 test("login: per-IP lockout catches spraying across many usernames", async () => {
   const auth = createAuth(makeConfig([{ id: "admin", name: "A", role: "admin", passwordHash: "x" }]));
-  for (let i = 0; i < LOGIN_MAX_FAILURES; i++) {
+  for (let i = 0; i < LOGIN_IP_MAX_FAILURES; i++) {
     await auth.login(`user-${i}`, "wrong", "203.0.113.9");
   }
   const locked = await auth.login("admin", "wrong", "203.0.113.9");

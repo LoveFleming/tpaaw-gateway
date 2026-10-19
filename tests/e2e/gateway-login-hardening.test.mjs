@@ -121,14 +121,31 @@ describe("E2E · Gateway login lockout (TASK-018, in-process)", () => {
   before(() => { env = makeEnv(); });
   after(() => env.dispose());
 
-  it("repeated failures → 429 with Retry-After, even for the correct password", async () => {
+  it("repeated failures → 429 with Retry-After for further WRONG attempts", async () => {
     for (let i = 0; i < 5; i++) {
       const { status } = await env.login("admin", "wrong");
       assert.equal(status, 401, `failure #${i + 1} should be 401`);
     }
-    const locked = await env.login("admin", PLAIN_PASSWORD);
-    assert.equal(locked.status, 429, "after the limit, login must be refused");
+    const locked = await env.login("admin", "wrong");
+    assert.equal(locked.status, 429, "after the limit, further failures must be refused");
     assert.ok(locked.headers["retry-after"], "a Retry-After header must be set");
     assert.match(locked.data.error, /too many/i);
+  });
+
+  it("a username flood does NOT lock out the correct password (DoS fix)", async () => {
+    // Fresh app so the previous case's counters cannot leak in.
+    const fresh = makeEnv();
+    try {
+      for (let i = 0; i < 5; i++) {
+        await fresh.login("admin", "wrong");
+      }
+      // The legitimate user must still authenticate — the account is not
+      // globally locked by someone else's wrong attempts.
+      const ok = await fresh.login("admin", PLAIN_PASSWORD);
+      assert.equal(ok.status, 200, JSON.stringify(ok.data));
+      assert.ok(ok.data.token, "a token must still be issued");
+    } finally {
+      fresh.dispose();
+    }
   });
 });
