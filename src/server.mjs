@@ -115,7 +115,9 @@ export function createApp(overrides = {}) {
     let settled = false;
     const chunks = [];
     const settle = (result) => { if (!settled) { settled = true; resolve(result); } };
-    const abort = () => {
+    // Over-limit (declared or streamed) → 413. Distinct from a stream error so
+    // the caller never reports a client reset as "Payload Too Large".
+    const overLimit = () => {
       req.removeListener("data", onData);
       req.removeListener("end", onEnd);
       req.removeListener("error", onError);
@@ -126,7 +128,7 @@ export function createApp(overrides = {}) {
       // Defence line 2: count actual streamed bytes (Buffer length), never trust
       // a possibly absent/forged Content-Length header.
       bytes += chunk.length;
-      if (bytes > MAX_BODY_BYTES) return abort();
+      if (bytes > MAX_BODY_BYTES) return overLimit();
       chunks.push(chunk);
     };
     const onEnd = () => {
@@ -134,9 +136,11 @@ export function createApp(overrides = {}) {
       try { parsed = JSON.parse(Buffer.concat(chunks).toString("utf-8")); } catch { parsed = {}; }
       settle({ ok: true, value: parsed });
     };
-    // A stream error (client abort / reset) is surfaced as 413 so the caller
-    // short-circuits instead of hanging; callers must not 500 on it either way.
-    const onError = () => settle({ ok: false, status: 413 });
+    // A stream error (client abort / reset) is NOT an over-limit condition. It is
+    // surfaced as a distinct { aborted:true, status:400 } so the caller can
+    // short-circuit without mislabelling it as "Payload Too Large"; the caller
+    // must not 500 on it either way.
+    const onError = () => settle({ ok: false, aborted: true, status: 400 });
 
     req.on("data", onData);
     req.on("end", onEnd);
@@ -145,7 +149,7 @@ export function createApp(overrides = {}) {
     // Defence line 1: reject early from the declared Content-Length, without
     // reading the stream at all.
     const declared = Number(req.headers["content-length"]);
-    if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) abort();
+    if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) overLimit();
   });
 
   // Auth check (skip login & public routes)
@@ -172,7 +176,15 @@ export function createApp(overrides = {}) {
   // Auth
   if (url.pathname === "/api/auth/login" && method === "POST") {
     const parsed = await readBody();
-    if (!parsed.ok) { sendJSON(parsed.status, { error: "Payload Too Large" }); return; }
+    // Two distinct failure modes from readBody must not be conflated:
+    //   - over-limit body          → 413 "Payload Too Large" (ISS-008 cap)
+    //   - stream error (abort/reset) → 400 "Bad Request"; reporting a client
+    //     reset as "Payload Too Large" would be misleading.
+    if (!parsed.ok) {
+      if (parsed.aborted) { sendJSON(400, { error: "Bad Request" }); return; }
+      sendJSON(parsed.status, { error: "Payload Too Large" });
+      return;
+    }
     const body = parsed.value;
     // Per-IP throttling key: the socket address (no proxy trust configured).
     const clientIp = req.socket?.remoteAddress || "unknown";
