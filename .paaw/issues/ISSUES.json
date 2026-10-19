@@ -79,7 +79,7 @@
       "id": "ISS-008",
       "title": "admin API readBody 無大小上限（DoS）",
       "priority": "medium",
-      "status": "open",
+      "status": "resolved",
       "labels": [
         "security",
         "dos",
@@ -88,7 +88,13 @@
       "description": "src/server.mjs:92 readBody 以 body += chunk 無限累積，無大小上限。對比 UI server 有 MAX_SETTINGS_BODY=1MB 保護，:4199 這支沒有。大 POST 可打爆記憶體。建議加 body 上限並超限即 destroy。",
       "featureId": null,
       "createdAt": "2026-10-11T07:36:28.139Z",
-      "notes": []
+      "notes": [
+        {
+          "text": "已修復：src/server.mjs readBody 加 MAX_BODY_BYTES=64KB，兩道防線（Content-Length 宣告值 + 實際串流 bytes），超限回 413 並 short-circuit。新增 tests/e2e/gateway-body-limit.test.mjs（4 案）。全套 RUN-20261019-002 = 89✓/0✗。QA 複驗通過（qr-20261019-133617-nlkc）。",
+          "at": "2026-10-19T13:36:41.923Z"
+        }
+      ],
+      "updatedAt": "2026-10-19T13:36:41.923Z"
     },
     {
       "id": "ISS-009",
@@ -167,7 +173,7 @@
       "id": "ISS-014",
       "title": "TASK-021 殘留狀態：工作已由 TASK-022/TASK-033~036 完成，應關閉",
       "priority": "low",
-      "status": "open",
+      "status": "closed",
       "labels": [
         "housekeeping",
         "task-hygiene"
@@ -175,7 +181,13 @@
       "description": "TASK-021（open）與 TASK-022（close）為同內容重複建立的任務。TASK-022 已由 TASK-033~036 完成：commit 670b14f 等，全套測試 RUN-20261018-002 87✓/0✗ 全綠（2026-10-18T03:56）。TASK-021 為殘留未關閉項，無實質工作待辦。",
       "featureId": null,
       "createdAt": "2026-10-18T09:33:10.187Z",
-      "notes": []
+      "notes": [
+        {
+          "text": "TASK-021 為 TASK-022/TASK-033~036 之重複殘留，工作已完成，關閉。",
+          "at": "2026-10-19T13:36:41.925Z"
+        }
+      ],
+      "updatedAt": "2026-10-19T13:36:41.925Z"
     }
   ],
   "nextId": 15

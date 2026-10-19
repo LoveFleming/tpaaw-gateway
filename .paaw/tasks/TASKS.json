@@ -857,7 +857,62 @@
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": null
+    },
+    {
+      "id": "TASK-024",
+      "featureId": "F20261009-002",
+      "title": "修 ISS-008：admin API readBody 無大小上限（DoS），加 MAX_BODY 上限 + 補 e2e",
+      "type": "dev",
+      "status": "open",
+      "priority": "high",
+      "parentId": null,
+      "description": "【目標】修復 ISS-008：管理平台（:4199）的 readBody 對 request body 無大小上限，遠端（已登入）可送超大 body 造成記憶體耗盡（DoS）。\n\n【背景】ISS-008（medium, security, F20261009-002）；來源為 release 準備時的 QA 複驗，判定問題仍存在、未關閉。這是本版唯一 security 類 open issue。\n\n【範圍】\n- 檔案：src/server.mjs:88 的 readBody（`const readBody = () => new Promise(resolve => { let body=\"\"; req.on(\"data\", chunk => body += chunk); ... })`）\n- 這是 admin API（:4199）共用的 body 讀取器，login 等端點都經過它。\n- 不在範圍：不碰其他 issue、不改路由邏輯、不改 auth 行為（唯讀/最小改動）。\n\n【實作注意事項（風險）】\n1. 上限值要有依據：建議 MAX_BODY_BYTES = 64 * 1024（64KB）或與現有 API 實際 payload 相符的合理值；請以常數命名並註明理由。若現有 API（如 backup restore 參數、settings 更新）payload 可能較大，需先確認不會誤殺正常請求（讀 src/server.mjs 全檔確認各路由 body 大小）。\n2. 兩個獨立防線都要做：(a) 以 Content-Length header 提前拒絕（若聲明超過上限，回 413 且不讀 body）；(b) 串流累加時以實際累計位元組計數，超過即中止（不能只信 Content-Length，可被省略或偽造）。注意 chunk 為 Buffer，長度用 chunk.length（bytes）而非字串長度。\n3. 中止行為要正確：超限時停止累加並 destroy / removeListener，避免繼續接收資料；回應 HTTP 413（Payload Too Large），格式與其他錯誤一致（參考現有 sendJSON）。\n4. 不可引入 regression：正常小 body 的 JSON parse 行為與失敗回 {} 的既有語意要保留。\n5. readBody 目前回傳 Promise(resolve)（永不 reject）— 改成可回 413 時，注意呼叫端（src/server.mjs:117 login 等）要能處理「不合法 body」而不會 crash 或 500。\n\n【驗收標準】\n- src/server.mjs 的 readBody 有明確大小上限，且 Content-Length 與實際串流兩道防線都有。\n- 超限請求回 413，連線不會被無限讀取；正常請求行為不變。\n- 補 e2e 測試（既有 tests/e2e/gateway-backup-auth.test.mjs 或 gateway-login-hardening.test.mjs 為樣板，spawn 真 server 的風格）：(a) 正常 body 通過；(b) 超限 body 回 413。\n- npm test 全綠（現況 88 案基準不得退步）。\n- 修完對應的 QA record qr-20261011-073635-9j75 / ISS-008 狀態應可由 QA 複驗關閉。\n\n【產出要求】新增 commit（Conventional Commits，英文，<72 字，不 push）+ staged_summary + Work Summary，並回報是否需同步更新 ISS-008 狀態（由 EM/QA 收尾）。不做 scope 外的改動。",
+      "labels": [
+        "security",
+        "dos",
+        "ISS-008"
+      ],
+      "assignee": null,
+      "createdAt": "2026-10-19T11:30:06.811Z",
+      "updatedAt": "2026-10-19T11:30:06.811Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "issue"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
+    },
+    {
+      "id": "TASK-025",
+      "featureId": "F20261009-002",
+      "title": "e2e 測試去 socket 化：改走 in-process（不 listen），解沙箱 EPERM",
+      "type": "test",
+      "status": "open",
+      "priority": "high",
+      "parentId": null,
+      "description": "沙箱政策禁止 e2e spawn 真 server 綁 127.0.0.1 socket（listen EPERM），導致 test_run/ru_verify 全紅（非程式缺陷）。使用者裁定：不放行 listen，e2e 一律改走 in-process（不 spawn、不 bind 真 socket）。\n\n受影響 5 檔（皆 spawn src/server.mjs + fetch 打 socket）：\n- tests/e2e/gateway-backup-auth.test.mjs\n- tests/e2e/gateway-body-limit.test.mjs（ISS-008 新增）\n- tests/e2e/gateway-login-hardening.test.mjs（含 loopback-only 斷言，需保留語意）\n- tests/e2e/gateway-restart-rbac.test.mjs\n- tests/e2e/gateway-ui-csrf.test.mjs\n（gateway-cli.test.mjs 不 listen，不受影響）\n\n待 Architect 定調 in-process 接縫做法（改 production export handler vs 測試端 mock），再拆子任務。",
+      "labels": [
+        "test",
+        "sandbox",
+        "e2e",
+        "ISS-008"
+      ],
+      "assignee": null,
+      "createdAt": "2026-10-19T12:52:46.105Z",
+      "updatedAt": "2026-10-19T12:52:46.105Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "discussion"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
     }
   ],
-  "updatedAt": "2026-10-18T09:34:35.922Z"
+  "updatedAt": "2026-10-19T12:52:46.105Z"
 }

@@ -1,30 +1,30 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-18T09:33:11.745Z",
-  "headSha": "e2a1144",
+  "generatedAt": "2026-10-19T13:33:02.544Z",
+  "headSha": "ab38683",
   "tableHashes": {
-    "features": "1948593c6572e5de",
+    "features": "3f4beaff1da4d1ed",
     "apis": "de972bba78ed2fa9",
     "tests": "2fab461313ea6efd",
-    "changes": "48bb7ef57a26b702",
-    "knowledgeGaps": "27afef1aefccef42"
+    "changes": "d4d16d9727e5e2cf",
+    "knowledgeGaps": "ca0c4de1bdc51ee6"
   },
   "root": null,
   "summary": {
     "features": 3,
     "apis": 25,
     "apisWithFeature": 25,
-    "files": 27,
+    "files": 28,
     "filesMapped": 18,
     "tests": 16,
-    "commits": 82,
+    "commits": 89,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-10-18T09:33:10.192Z"
+    "featuresUpdatedAt": "2026-10-19T12:52:46.109Z"
   },
   "features": [
     {
@@ -101,10 +101,10 @@
         }
       ],
       "testCount": 27,
-      "changeCount": 13,
-      "lastChangeAt": "2026-10-11T17:40:16+08:00",
+      "changeCount": 16,
+      "lastChangeAt": "2026-10-19T21:16:40+08:00",
       "knowledgeGaps": [],
-      "_h": "5f36d1a26538afd4"
+      "_h": "3c538c8841861ede"
     },
     {
       "id": "F20261011-002",
@@ -161,12 +161,12 @@
         }
       ],
       "testCount": 57,
-      "changeCount": 3,
-      "lastChangeAt": "2026-10-11T12:50:41+08:00",
+      "changeCount": 4,
+      "lastChangeAt": "2026-10-19T21:02:22+08:00",
       "knowledgeGaps": [
         "no-runbook"
       ],
-      "_h": "5e0580c4a168aa38"
+      "_h": "5d1f81efbca551a8"
     },
     {
       "id": "F20261009-001",
@@ -606,6 +606,76 @@
     }
   ],
   "changes": [
+    {
+      "hash": "ab38683",
+      "date": "2026-10-19T21:32:06+08:00",
+      "subject": "refactor(e2e): de-socket gateway-ui-csrf test (ADR-004 final file)",
+      "kind": "refactor",
+      "files": 1,
+      "featureIds": [],
+      "_h": "46aa674748e429c5"
+    },
+    {
+      "hash": "424be84",
+      "date": "2026-10-19T21:16:40+08:00",
+      "subject": "test(e2e): rewrite gateway backup auth tests to in-process",
+      "kind": "chore",
+      "files": 4,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "6f1f188324f10723"
+    },
+    {
+      "hash": "580a017",
+      "date": "2026-10-19T21:02:22+08:00",
+      "subject": "refactor(ui): extract createUIHandler(deps) from cmdUI for in-process e2e (ADR-004 A-2)",
+      "kind": "refactor",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002",
+        "F20261011-002"
+      ],
+      "_h": "40418f8ae091f434"
+    },
+    {
+      "hash": "91a4fee",
+      "date": "2026-10-19T19:33:05+08:00",
+      "subject": "fix(server): cap admin API readBody at 64KB to prevent DoS (ISS-008)",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "f4adfeac06b84434"
+    },
+    {
+      "hash": "8a777d5",
+      "date": "2026-10-18T18:28:18+08:00",
+      "subject": "release unit data",
+      "kind": "other",
+      "files": 32,
+      "featureIds": [],
+      "_h": "df45d23779e04bbc"
+    },
+    {
+      "hash": "9f71bc9",
+      "date": "2026-10-18T17:35:14+08:00",
+      "subject": "test(e2e): add gateway CLI coverage for F20261009-001",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "3dd1f8799e32bf95"
+    },
+    {
+      "hash": "5e214d4",
+      "date": "2026-10-18T17:34:24+08:00",
+      "subject": "test(unit): address remaining review-board minor findings",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "53d29fc80b15f6c1"
+    },
     {
       "hash": "e2a1144",
       "date": "2026-10-18T11:56:04+08:00",
@@ -1432,7 +1502,7 @@
       "F20261009-001"
     ],
     "apisWithoutFeature": [],
-    "filesWithoutFeature": 9,
+    "filesWithoutFeature": 10,
     "hotUnmappedFiles": [
       {
         "file": "ui/index.html",
@@ -1451,6 +1521,10 @@
         "commits": 7
       },
       {
+        "file": "tests/unit/lib-config.test.mjs",
+        "commits": 3
+      },
+      {
         "file": "DEPLOY.md",
         "commits": 2
       },
@@ -1467,11 +1541,19 @@
         "commits": 2
       },
       {
-        "file": "tests/unit/install.test.mjs",
+        "file": "tests/e2e/gateway-body-limit.test.mjs",
         "commits": 2
       },
       {
-        "file": "tests/unit/lib-config.test.mjs",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "commits": 2
+      },
+      {
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "commits": 2
+      },
+      {
+        "file": "tests/unit/install.test.mjs",
         "commits": 2
       },
       {
@@ -1479,20 +1561,8 @@
         "commits": 2
       },
       {
-        "file": "tests/unit/semgrep.test.mjs",
+        "file": "tests/unit/process.test.mjs",
         "commits": 2
-      },
-      {
-        "file": "config.example.json",
-        "commits": 1
-      },
-      {
-        "file": "config.json",
-        "commits": 1
-      },
-      {
-        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
-        "commits": 1
       }
     ]
   }

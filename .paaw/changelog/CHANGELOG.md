@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026-10-19
+### fixed
+- 【目標】修復 ISS-008：管理平台（src/server.mjs，:4199）的 readBody 對 request body 無大小上限，遠端（已登入） (1 new file) (1 modified)
+
+
+
+### changed
+- +435 −62 lines across 14 files
+
+### added
+- 【目標】依 ADR-004（.paaw/DECISIONS.md）施工圖 A 節改動 1，把 src/server.mjs 的 module 頂層組裝抽進 `e (1 modified)
+
+### changed
+- +583 −62 lines across 17 files
+
+### added
+- 【目標】依 ADR-004 施工圖 A 節改動 2，把 src/ui/server.mjs 中 cmdUI() 內的 http.createServer han (1 new file) (2 modified)
+
+### changed
+- +591 −62 lines across 17 files
+
+### added
+- 【目標】依 ADR-004 施工圖 B/C 節，新增零依賴 harness 並把 5 檔 spawn-server e2e 改寫為 in-process（不 s (1 new file) (5 modified)
+
+### changed
+- +1025 −742 lines across 21 files
+
+### changed
+- 【目標】把 tests/e2e/gateway-ui-csrf.test.mjs 從「spawn 真 gateway + net.listen + fake p (1 new file)
+
+### changed
+- +713 −63 lines across 18 files
+
 ## 2026-10-18
 ### fixed
 - 【目標】修復 tests/unit/install.test.mjs 的 env 污染 / temp 殘留 / 清理斷言不足問題。

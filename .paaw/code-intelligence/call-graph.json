@@ -201,6 +201,14 @@
       "async": false
     },
     {
+      "id": "tests/e2e/gateway-cli.test.mjs:runGateway",
+      "name": "runGateway",
+      "file": "tests/e2e/gateway-cli.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
       "id": "tests/e2e/gateway-login-hardening.test.mjs:getFreePort",
       "name": "getFreePort",
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
@@ -1755,7 +1763,7 @@
     ]
   },
   "stats": {
-    "totalFunctions": 150,
+    "totalFunctions": 151,
     "totalCalls": 54,
     "resolvedCalls": 3,
     "unresolvedCalls": 51

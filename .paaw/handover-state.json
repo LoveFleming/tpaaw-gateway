@@ -1,14 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-18T09:36:03.666Z",
+  "generatedAt": "2026-10-19T13:33:02.389Z",
   "initialized": true,
   "currentState": {
     "branch": "main",
-    "headSha": "9f71bc9",
-    "dirtyCount": 28,
+    "headSha": "ab38683",
+    "dirtyCount": 22,
     "dirtyFiles": [
-      "M .paaw/c4-model.json",
-      " M .paaw/changelog/CHANGELOG.md",
+      "M .paaw/changelog/CHANGELOG.md",
       " M .paaw/code-intelligence/call-graph.json",
       " M .paaw/code-intelligence/dependency-graph.json",
       " M .paaw/code-intelligence/file-map.json",
@@ -22,31 +21,18 @@
       " M .paaw/coding-memory/conversations/coding.rm-side/active.json",
       " M .paaw/coding-memory/dispatch-log.jsonl",
       " M .paaw/coding-memory/qa-results.jsonl",
-      " M .paaw/em/config.json",
-      " M .paaw/error-codes.json",
-      " M .paaw/features/FEATURE-MAP-META.json",
+      " M .paaw/decisions/DECISIONS.md",
       " M .paaw/features/FEATURES.json",
-      " M .paaw/features/FILE-FEATURES.json",
-      " M .paaw/features/tree-sitter-analysis.txt",
-      " M .paaw/issues/ISSUES.json",
-      " M .paaw/project/PROJECT.md",
       " M .paaw/release-unit-model.json",
       " M .paaw/tasks/TASKS.json",
-      "?? .paaw/coding-memory/conversations/coding.em/s-2026-10-18T03-23-22-624.json",
-      "?? .paaw/coding-memory/conversations/coding.tester/active.json",
-      "?? .paaw/review-board/20261018-114641-HEAD_1..HEAD.md"
+      "?? .paaw/exec-approval-log.jsonl",
+      "?? .paaw/review-board/20261019-192824-8dd63d7..9f71bc9.md",
+      "?? tests/e2e/network/gateway-bind-host.test.mjs",
+      "?? tests/helpers/inject.mjs"
     ],
-    "unpushedCount": 9,
+    "unpushedCount": 1,
     "unpushedCommits": [
-      "9f71bc9 test(e2e): add gateway CLI coverage for F20261009-001",
-      "5e214d4 test(unit): address remaining review-board minor findings",
-      "e2a1144 test(paaw-control): 以跨平台 node script 取代外部 sleep 指令",
-      "8980569 test(semgrep): snapshot and restore overridden env vars in unit tests",
-      "2771c40 test(lib-config): realpath-normalize getHome assertions, restore cwd in afterEach",
-      "670b14f test(unit): isolate PAAW_HOME env and assert .tmp cleanup in install test",
-      "de7b7ce test(unit): add unit tests for lib and server config/install/process/semgrep/events/paaw-control",
-      "ec100dc chore(config): move config.json out of VCS, add config.example.json template",
-      "4fc5e58 fix(security): harden gateway auth (bcrypt, rate limit, loopback bind)"
+      "ab38683 refactor(e2e): de-socket gateway-ui-csrf test (ADR-004 final file)"
     ]
   },
   "workingPlan": {
@@ -59,12 +45,55 @@
         "phase": "spec",
         "phaseStatus": "pending",
         "next": "run spec"
+      },
+      {
+        "id": "TASK-024",
+        "title": "修 ISS-008：admin API readBody 無大小上限（DoS），加 MAX_BODY 上限 + 補 e2e",
+        "status": "open",
+        "priority": "high",
+        "phase": "spec",
+        "phaseStatus": "pending",
+        "next": "run spec"
+      },
+      {
+        "id": "TASK-025",
+        "title": "e2e 測試去 socket 化：改走 in-process（不 listen），解沙箱 EPERM",
+        "status": "open",
+        "priority": "high",
+        "phase": "spec",
+        "phaseStatus": "pending",
+        "next": "run spec"
       }
     ],
-    "activeCount": 1
+    "activeCount": 3
   },
   "changes": {
     "recentCommits": [
+      {
+        "hash": "ab38683",
+        "date": "2026-10-19T21:32:06+08:00",
+        "subject": "refactor(e2e): de-socket gateway-ui-csrf test (ADR-004 final file)"
+      },
+      {
+        "hash": "424be84",
+        "date": "2026-10-19T21:16:40+08:00",
+        "subject": "test(e2e): rewrite gateway backup auth tests to in-process"
+      },
+      {
+        "hash": "580a017",
+        "date": "2026-10-19T21:02:22+08:00",
+        "subject": "refactor(ui): extract createUIHandler(deps) from cmdUI for in-process e2e (ADR-004 A-2)"
+      },
+      {
+        "hash": "91a4fee",
+        "date": "2026-10-19T19:33:05+08:00",
+        "subject": "fix(server): cap admin API readBody at 64KB to prevent DoS (ISS-008)"
+      },
+      {
+        "hash": "8a777d5",
+        "date": "2026-10-18T18:28:18+08:00",
+        "subject": "release unit data"
+      },
       {
         "hash": "9f71bc9",
         "date": "2026-10-18T17:35:14+08:00",
@@ -89,31 +118,6 @@
         "hash": "2771c40",
         "date": "2026-10-18T11:54:14+08:00",
         "subject": "test(lib-config): realpath-normalize getHome assertions, restore cwd in afterEach"
-      },
-      {
-        "hash": "670b14f",
-        "date": "2026-10-18T11:53:06+08:00",
-        "subject": "test(unit): isolate PAAW_HOME env and assert .tmp cleanup in install test"
-      },
-      {
-        "hash": "de7b7ce",
-        "date": "2026-10-11T18:37:38+08:00",
-        "subject": "test(unit): add unit tests for lib and server config/install/process/semgrep/events/paaw-control"
-      },
-      {
-        "hash": "ec100dc",
-        "date": "2026-10-11T17:42:35+08:00",
-        "subject": "chore(config): move config.json out of VCS, add config.example.json template"
-      },
-      {
-        "hash": "4fc5e58",
-        "date": "2026-10-11T17:40:16+08:00",
-        "subject": "fix(security): harden gateway auth (bcrypt, rate limit, loopback bind)"
-      },
-      {
-        "hash": "ea44ce8",
-        "date": "2026-10-11T15:33:49+08:00",
-        "subject": "paaw data"
       }
     ]
   },
@@ -124,13 +128,13 @@
   },
   "nextAction": {
     "step": "commit",
-    "reason": "28 個未提交檔案",
+    "reason": "22 個未提交檔案",
     "detail": [
-      "M .paaw/c4-model.json",
-      " M .paaw/changelog/CHANGELOG.md",
+      "M .paaw/changelog/CHANGELOG.md",
       " M .paaw/code-intelligence/call-graph.json",
       " M .paaw/code-intelligence/dependency-graph.json",
-      " M .paaw/code-intelligence/file-map.json"
+      " M .paaw/code-intelligence/file-map.json",
+      " M .paaw/code-intelligence/summary.json"
     ]
   }
 }

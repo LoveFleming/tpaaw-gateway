@@ -1085,6 +1085,56 @@
         "restoreBackup"
       ]
     },
+    "tests/e2e/gateway-cli.test.mjs": {
+      "path": "tests/e2e/gateway-cli.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
     "tests/e2e/gateway-login-hardening.test.mjs": {
       "path": "tests/e2e/gateway-login-hardening.test.mjs",
       "language": "javascript",
@@ -1456,9 +1506,9 @@
     }
   ],
   "stats": {
-    "totalFiles": 27,
+    "totalFiles": 28,
     "totalEdges": 28,
     "resolvedImports": 28,
-    "unresolvedImports": 118
+    "unresolvedImports": 125
   }
 }

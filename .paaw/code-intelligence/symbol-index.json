@@ -227,6 +227,15 @@
     },
     {
       "type": "function",
+      "name": "runGateway",
+      "file": "tests/e2e/gateway-cli.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(args, { home, packageUrl = DEAD_PACKAGE_URL, cwd } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "getFreePort",
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "kind": "function",
@@ -2475,6 +2484,17 @@
         "callCount": 5
       }
     ],
+    "runGateway": [
+      {
+        "type": "function",
+        "name": "runGateway",
+        "file": "tests/e2e/gateway-cli.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(args, { home, packageUrl = DEAD_PACKAGE_URL, cwd } = {})",
+        "callCount": 0
+      }
+    ],
     "canConnect": [
       {
         "type": "function",
@@ -4630,8 +4650,8 @@
     ]
   },
   "stats": {
-    "total": 261,
-    "functions": 151,
+    "total": 262,
+    "functions": 152,
     "classes": 1,
     "exports": 84,
     "routes": 25,

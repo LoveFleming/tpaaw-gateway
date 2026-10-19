@@ -621,6 +621,54 @@
       "components": []
     },
     {
+      "file": "tests/e2e/gateway-cli.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "runGateway",
+          "kind": "function",
+          "async": false,
+          "params": "(args, { home, packageUrl = DEAD_PACKAGE_URL, cwd } = {})",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "language": "javascript",
       "exports": [],
@@ -2759,11 +2807,11 @@
     }
   ],
   "stats": {
-    "totalFiles": 27,
-    "parsedFiles": 27,
+    "totalFiles": 28,
+    "parsedFiles": 28,
     "errors": 0,
     "languages": {
-      "javascript": 27
+      "javascript": 28
     }
   }
 }

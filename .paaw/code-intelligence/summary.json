@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-18T09:33:11.856Z",
-  "filesParsed": 27,
-  "totalFiles": 27,
+  "generatedAt": "2026-10-19T11:27:34.367Z",
+  "filesParsed": 28,
+  "totalFiles": 28,
   "languages": {
-    "javascript": 27
+    "javascript": 28
   },
   "callGraph": {
-    "totalFunctions": 150,
+    "totalFunctions": 151,
     "totalCalls": 54,
     "resolvedCalls": 3,
     "unresolvedCalls": 51
@@ -17,19 +17,19 @@
     "withoutHandler": 0
   },
   "dependencyGraph": {
-    "totalFiles": 27,
+    "totalFiles": 28,
     "totalEdges": 28,
     "resolvedImports": 28,
-    "unresolvedImports": 118
+    "unresolvedImports": 125
   },
   "testCodeMap": {
-    "totalTestFiles": 14,
+    "totalTestFiles": 15,
     "matchedTests": 16,
     "totalTestedFunctions": 0
   },
   "symbolIndex": {
-    "total": 261,
-    "functions": 151,
+    "total": 262,
+    "functions": 152,
     "classes": 1,
     "exports": 84,
     "routes": 25,

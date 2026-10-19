@@ -95,6 +95,14 @@
       ]
     },
     {
+      "file": "tests/e2e/gateway-cli.test.mjs",
+      "type": "e2e",
+      "functionCount": 1,
+      "functionNames": [
+        "runGateway"
+      ]
+    },
+    {
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "type": "e2e",
       "functionCount": 6,
@@ -275,6 +283,19 @@
       ]
     },
     {
+      "testFile": "tests/e2e/gateway-cli.test.mjs",
+      "testType": "e2e",
+      "functionCount": 1,
+      "matches": [
+        {
+          "productionFile": "gateway.mjs",
+          "matchType": "reference",
+          "testedFunctions": [],
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
       "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
       "testType": "e2e",
       "functionCount": 6,
@@ -404,6 +425,11 @@
     ],
     "gateway.mjs": [
       {
+        "testFile": "tests/e2e/gateway-cli.test.mjs",
+        "testType": "e2e",
+        "testedFunctions": []
+      },
+      {
         "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
         "testType": "e2e",
         "testedFunctions": []
@@ -500,6 +526,11 @@
     ],
     "gateway.mjs": [
       {
+        "testFile": "tests/e2e/gateway-cli.test.mjs",
+        "testType": "e2e",
+        "reason": "Tests this file"
+      },
+      {
         "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
         "testType": "e2e",
         "reason": "Tests this file"
@@ -543,6 +574,7 @@
       "featureId": "F20261009-001",
       "featureName": "PAAW Gateway 啟動器 CLI（安裝・更新・啟動）",
       "tests": [
+        "tests/e2e/gateway-cli.test.mjs",
         "tests/e2e/gateway-ui-csrf.test.mjs"
       ]
     }
@@ -553,16 +585,16 @@
       {
         "runner": "PAAW test-run",
         "kind": "run",
-        "at": "2026-10-18T03:56:25.900Z",
-        "total": 87,
-        "passed": 87,
+        "at": "2026-10-18T09:36:00.763Z",
+        "total": 88,
+        "passed": 88,
         "failed": 0,
         "skipped": 0,
         "totalLinePct": null,
         "status": "pass",
-        "durationMs": 13743,
-        "id": "RUN-20261018-002",
-        "headSha": "e2a1144",
+        "durationMs": 13746,
+        "id": "RUN-20261018-004",
+        "headSha": "9f71bc9",
         "includeE2e": true,
         "commands": [
           "npm test"
@@ -573,19 +605,19 @@
       {
         "runner": "PAAW test-run",
         "kind": "run",
-        "at": "2026-10-18T03:56:25.900Z",
+        "at": "2026-10-18T09:36:00.763Z",
         "status": "pass",
-        "total": 87,
-        "passed": 87,
+        "total": 88,
+        "passed": 88,
         "failed": 0,
         "skipped": 0,
-        "durationMs": 13743,
-        "id": "RUN-20261018-002",
-        "headSha": "e2a1144",
+        "durationMs": 13746,
+        "id": "RUN-20261018-004",
+        "headSha": "9f71bc9",
         "includeE2e": true,
         "byKind": {
           "mixed": {
-            "passed": 87,
+            "passed": 88,
             "failed": 0,
             "skipped": 0,
             "files": 0
@@ -602,14 +634,14 @@
     "_note": "真實工具 report（deterministic 讀取）。啟發式檔案對映為獨立欄位，不冒充真實覆蓋。"
   },
   "stats": {
-    "totalTestFiles": 14,
+    "totalTestFiles": 15,
     "byType": {
       "unit": 10,
       "integration": 0,
       "contract": 0,
-      "e2e": 4
+      "e2e": 5
     },
-    "totalMappings": 14,
+    "totalMappings": 15,
     "coverageGapFiles": 1,
     "estimatedCoverageRate": "92.3%",
     "featureTestCoverage": 3
