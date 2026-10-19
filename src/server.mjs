@@ -85,10 +85,49 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify(data));
   };
 
+  // ISS-008: cap admin API request bodies. All admin endpoints that read a body
+  // (currently only /api/auth/login, carrying { userId, password }) are tiny, so
+  // 64 KiB is far above any legitimate payload — no normal request is affected.
+  const MAX_BODY_BYTES = 64 * 1024;
+  // readBody resolves { ok:false, status:413 } when the body exceeds the cap; the
+  // caller must short-circuit on that (no 500). Existing semantics are preserved:
+  // empty body or invalid JSON still resolves to a parsed value ({}) on success.
   const readBody = () => new Promise(resolve => {
-    let body = "";
-    req.on("data", chunk => body += chunk);
-    req.on("end", () => { try { resolve(JSON.parse(body)); } catch { resolve({}); } });
+    let bytes = 0;
+    let settled = false;
+    const chunks = [];
+    const settle = (result) => { if (!settled) { settled = true; resolve(result); } };
+    const abort = () => {
+      req.removeListener("data", onData);
+      req.removeListener("end", onEnd);
+      req.removeListener("error", onError);
+      req.destroy();
+      settle({ ok: false, status: 413 });
+    };
+    const onData = (chunk) => {
+      // Defence line 2: count actual streamed bytes (Buffer length), never trust
+      // a possibly absent/forged Content-Length header.
+      bytes += chunk.length;
+      if (bytes > MAX_BODY_BYTES) return abort();
+      chunks.push(chunk);
+    };
+    const onEnd = () => {
+      let parsed = {};
+      try { parsed = JSON.parse(Buffer.concat(chunks).toString("utf-8")); } catch { parsed = {}; }
+      settle({ ok: true, value: parsed });
+    };
+    // A stream error (client abort / reset) is surfaced as 413 so the caller
+    // short-circuits instead of hanging; callers must not 500 on it either way.
+    const onError = () => settle({ ok: false, status: 413 });
+
+    req.on("data", onData);
+    req.on("end", onEnd);
+    req.on("error", onError);
+
+    // Defence line 1: reject early from the declared Content-Length, without
+    // reading the stream at all.
+    const declared = Number(req.headers["content-length"]);
+    if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) abort();
   });
 
   // Auth check (skip login & public routes)
@@ -114,7 +153,9 @@ const server = createServer(async (req, res) => {
 
   // Auth
   if (url.pathname === "/api/auth/login" && method === "POST") {
-    const body = await readBody();
+    const parsed = await readBody();
+    if (!parsed.ok) { sendJSON(parsed.status, { error: "Payload Too Large" }); return; }
+    const body = parsed.value;
     // Per-IP throttling key: the socket address (no proxy trust configured).
     const clientIp = req.socket?.remoteAddress || "unknown";
     const result = await login(body.userId, body.password, clientIp);
