@@ -161,13 +161,22 @@ async function uiStatus() {
 
 // ---------- UI server ----------
 
-// cmdUI：起本機控制台（:4290）。所有請求先過 Host 白名單（防 DNS rebinding），
-// POST 再驗非空 Origin（CSRF）。此為 refactor-only 搬遷，安全邏輯與原 gateway.mjs 等價。
-export async function cmdUI() {
-  const UI_PORT = parseInt(process.env.PAAW_GW_PORT || "4290", 10);
-  const UI_HOST = process.env.PAAW_GW_HOST || "127.0.0.1";
-
-  const srv = http.createServer(async (req, res) => {
+// createUIHandler：回傳 UI server 的 request handler（async (req,res)=>…），
+// 供 cmdUI() 掛上 http.createServer，也供 in-process 測試直接呼叫（不 listen）。
+//
+// 抽出的唯一目的是「可被測試 import」（ADR-004 方案 1：匯出 handler factory）——
+// 沙箱禁 listen（listen EPERM），e2e 需以 mock req/res 直接驅動此 handler。
+// 主體為原 cmdUI() 內 createServer handler 逐字搬移，行為/ API / CLI 不變。
+//
+// deps 注入（皆為既有物件或衍生值，省略即由 cmdUI 依 env 產生）：
+//   UI_HOST   — 監聽 hostname，供 HOST_WHITELIST 衍生（測試可注入不同 host）
+//   job       — 共用 UI job 狀態（runJob/uiStatus/各 handler 讀寫）
+//   jobLog    — job 日誌寫入函式（/api/settings 等寫入活動記錄）
+// 其餘模組依賴（config / install / process / semgrep）以模組層 import 為單一來源，
+// 不另外注入，避免與既有單向依賴約定衝突。
+export function createUIHandler(deps) {
+  const { UI_HOST, job, jobLog } = deps;
+  return async (req, res) => {
     const url = (req.url || "/").split("?")[0];
     const method = req.method;
     const jsonOut = (code, obj) => {
@@ -404,7 +413,18 @@ export async function cmdUI() {
     } catch (e) {
       return jsonOut(500, { error: String((e && e.message) || e) });
     }
-  });
+  };
+}
+
+// cmdUI：起本機控制台（:4290）。所有請求先過 Host 白名單（防 DNS rebinding），
+// POST 再驗非空 Origin（CSRF）。此為 refactor-only 搬遷，安全邏輯與原 gateway.mjs 等價。
+// handler 主體已抽至 createUIHandler（供 in-process 測試），此處僅負責 env 衍生、
+// 建 deps、掛 server 與 listen；bye handler / 進程訊息原樣保留。
+export async function cmdUI() {
+  const UI_PORT = parseInt(process.env.PAAW_GW_PORT || "4290", 10);
+  const UI_HOST = process.env.PAAW_GW_HOST || "127.0.0.1";
+
+  const srv = http.createServer(createUIHandler({ UI_HOST, job, jobLog }));
 
   await new Promise((r) => srv.listen(UI_PORT, UI_HOST, r));
   console.log(`\n⚙️  PAAW Gateway UI → http://${UI_HOST}:${UI_PORT}/\n`);

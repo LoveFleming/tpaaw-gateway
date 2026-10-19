@@ -36,40 +36,58 @@ import { createBackupManager } from "./server/backup.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// ── Config + derived paths (recomputed per load for cache-busted imports) ──
-const cfg = createConfig(__dirname);
-const { config, saveConfig, PAAW_ROOT, BACKUP_DIR, EVENT_LOG_PATH, MAX_BACKUPS, BACKUP_SOURCE_DIRS } = cfg;
+/**
+ * Assemble the management platform: config + derived paths, event log, auth,
+ * PAAW control, backup manager and the HTTP request handler.
+ *
+ * Exported so in-process e2e tests can drive the handler without binding a
+ * socket (ADR-004 — the sandbox forbids `listen`). Refactor-only: the default
+ * path (no overrides) reproduces the previous module-top-level assembly exactly,
+ * reading env-derived state via `createConfig(__dirname)` on every call.
+ *
+ * @param {object} [overrides] - per-case injection points; anything omitted
+ *   falls back to today's env-derived default. Do NOT move env reads here.
+ * @param {object} [overrides.cfg]         - result of createConfig() (config, paths, saveConfig, …)
+ * @param {object} [overrides.events]      - createEventLog() result ({ events, logEvent })
+ * @param {object} [overrides.auth]        - createAuth() result ({ createSession, validateSession, login })
+ * @param {object} [overrides.paawControl] - createPaawControl() result
+ * @param {object} [overrides.backup]      - createBackupManager() result
+ * @returns {object} handler + every existing binding.
+ */
+export function createApp(overrides = {}) {
+  // ── Config + derived paths (recomputed per load for cache-busted imports) ──
+  const cfg = overrides.cfg ?? createConfig(__dirname);
+  const { config, saveConfig, PAAW_ROOT, BACKUP_DIR, EVENT_LOG_PATH, MAX_BACKUPS, BACKUP_SOURCE_DIRS } = cfg;
 
-// ── Events ──
-const { events, logEvent } = createEventLog(EVENT_LOG_PATH);
+  // ── Events ──
+  const { events, logEvent } = overrides.events ?? createEventLog(EVENT_LOG_PATH);
 
-// ── Auth ──
-const { createSession, validateSession, login } = createAuth(config);
+  // ── Auth (per-createApp instance — never a module singleton, so login
+  //    lockout state does not leak across cache-busted test cases) ──
+  const { createSession, validateSession, login } = overrides.auth ?? createAuth(config);
 
-// ── PAAW control (child-process lifecycle) ──
-const {
-  startPaaw, stopPaaw, restartPaaw, healthCheckPaaw,
-  upgradePaaw, getSystemHealth, getCurrentVersion, getGitInfo, getLatestVersion,
-  getPaawProcess,
-} = createPaawControl({ config, PAAW_ROOT, logEvent });
+  // ── PAAW control (child-process lifecycle) ──
+  const paawControl = overrides.paawControl ?? createPaawControl({ config, PAAW_ROOT, logEvent });
+  const {
+    startPaaw, stopPaaw, restartPaaw, healthCheckPaaw,
+    upgradePaaw, getSystemHealth, getCurrentVersion, getGitInfo, getLatestVersion,
+    getPaawProcess,
+  } = paawControl;
 
-// ── Backup manager (depends on paaw-control, one-way) ──
-const { backupPath, listBackups, createBackup, restoreBackup } = createBackupManager({
-  BACKUP_DIR,
-  MAX_BACKUPS,
-  BACKUP_SOURCE_DIRS,
-  PAAW_ROOT,
-  logEvent,
-  startPaaw,
-  getPaawProcess,
-});
+  // ── Backup manager (depends on paaw-control, one-way) ──
+  const backupManager = overrides.backup ?? createBackupManager({
+    BACKUP_DIR,
+    MAX_BACKUPS,
+    BACKUP_SOURCE_DIRS,
+    PAAW_ROOT,
+    logEvent,
+    startPaaw,
+    getPaawProcess,
+  });
+  const { backupPath, listBackups, createBackup, restoreBackup } = backupManager;
 
-// ── Re-exports (external test contract — unchanged) ──
-export { BACKUP_REGEX, BACKUP_DATE_REGEX } from "./server/backup.mjs";
-export { backupPath, listBackups, createBackup, restoreBackup };
-
-// ── HTTP Server ──
-const server = createServer(async (req, res) => {
+  // ── HTTP request handler (moved verbatim from the old createServer callback) ──
+  const handler = async (req, res) => {
   const url = new URL(req.url, `http://localhost:${config.port}`);
   const method = req.method;
 
@@ -304,16 +322,60 @@ const server = createServer(async (req, res) => {
 
   // 404
   sendJSON(404, { error: "Not found" });
-});
+  };
+
+  // ── Public surface: handler + every existing binding (ADR-004) ──
+  return {
+    handler,
+    config,
+    saveConfig,
+    PAAW_ROOT,
+    BACKUP_DIR,
+    EVENT_LOG_PATH,
+    MAX_BACKUPS,
+    BACKUP_SOURCE_DIRS,
+    events,
+    logEvent,
+    createSession,
+    validateSession,
+    login,
+    startPaaw,
+    stopPaaw,
+    restartPaaw,
+    healthCheckPaaw,
+    upgradePaaw,
+    getSystemHealth,
+    getCurrentVersion,
+    getGitInfo,
+    getLatestVersion,
+    getPaawProcess,
+    backupPath,
+    listBackups,
+    createBackup,
+    restoreBackup,
+  };
+}
+
+// ── Module-level app instance ──
+// Built once per module load so the default (no-override) behavior is identical
+// to the old top-level assembly. `?case=N` cache-busting re-runs this module
+// body → a fresh createApp → a fresh createConfig reading env.
+const app = createApp();
+
+// ── Re-exports (external test contract — unchanged) ──
+export { BACKUP_REGEX, BACKUP_DATE_REGEX } from "./server/backup.mjs";
+export const { backupPath, listBackups, createBackup, restoreBackup } = app;
 
 // ── Start Gateway ──
 // Main guard: only auto-listen when executed directly (node src/server.mjs).
 // Being imported (e.g. by unit tests) must not bind the port or spawn anything.
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
+  const server = createServer(app.handler);
+
   // Fail-closed (TASK-018): refuse to start the admin platform without a real
   // credential — a missing/default password must never expose :4199.
-  const authCheck = validateAuthConfig(config);
+  const authCheck = validateAuthConfig(app.config);
   if (!authCheck.ok) {
     console.error(`[PAAW Gateway] ✖ Refusing to start: ${authCheck.error}.`);
     console.error(
@@ -325,16 +387,16 @@ if (isMain) {
 
   // Bind host (TASK-019): default loopback only; widen explicitly via config.host
   // or PAAW_GATEWAY_HOST. Never rely on Node's all-interfaces default.
-  server.listen(config.port, config.host, () => {
-    console.log(`[PAAW Gateway] ⚙️ Running on http://${config.host}:${config.port}`);
-    console.log(`[PAAW Gateway] PAAW root: ${PAAW_ROOT}`);
-    logEvent("gateway_started", `PAAW Gateway started on ${config.host}:${config.port}`);
+  server.listen(app.config.port, app.config.host, () => {
+    console.log(`[PAAW Gateway] ⚙️ Running on http://${app.config.host}:${app.config.port}`);
+    console.log(`[PAAW Gateway] PAAW root: ${app.PAAW_ROOT}`);
+    app.logEvent("gateway_started", `PAAW Gateway started on ${app.config.host}:${app.config.port}`);
 
     // Auto-start PAAW Server
-    if (config.autoStartPaaw !== false) {
+    if (app.config.autoStartPaaw !== false) {
       setTimeout(() => {
         console.log("[PAAW Gateway] Auto-starting PAAW Server...");
-        startPaaw();
+        app.startPaaw();
       }, 1000);
     }
   });
