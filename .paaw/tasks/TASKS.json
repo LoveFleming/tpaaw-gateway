@@ -912,7 +912,30 @@
       "git": null,
       "timeoutSeconds": 0,
       "resolvedAt": null
+    },
+    {
+      "id": "TASK-026",
+      "featureId": "F20261009-002",
+      "title": "修復 CHANGELOG 污染（review board major @ .paaw/changelog/CHANGELOG.md）",
+      "type": "docs",
+      "status": "open",
+      "priority": "high",
+      "parentId": null,
+      "description": "來源：review board 2026-10-19 range 複審 major（zai/glm-5）@ .paaw/changelog/CHANGELOG.md:21。\n\n【問題】\n1. 多筆條目「內容截斷」且被機器殘片污染：條目正文被截成半句（如「...readBody 對 request body 無大小上限，遠端（已登入）」），後接生成器雜訊 `(1 modified)` / `(1 new file)` / `(2 modified)`。\n2. 出現非人類語意的偽條目 `+7079 −2923 lines across 23 files` / `+4814 −776 lines across 23 files` 等 — 這些是 diff stat，不是 changelog 內容。\n3. 同日多筆 `### changed` 各自獨立未合併（2026-10-11 / 10-18 / 10-19 各有多筆重複 heading）。\n\n【目標】把 CHANGELOG.md 整理成乾淨、可讀、語意正確的版本：刪除污染條目與 diff-stat 偽條目；同日同類別多筆合併為單一區塊；保留真實的變更語意（refactor/fix/added 的實質描述），不要把有效紀錄也刪掉。\n\n【範圍】.paaw/changelog/CHANGELOG.md（單檔）\n\n【實作注意事項】\n- 純 docs 清理，不動任何程式碼/測試。\n- 不可捏造未發生的變更；截斷的條目依同日 git log 還原語意（可 read git log）。\n- 保留「由 PAAW AI-Native IDE 自動維護」footer 與日期分節結構。\n- 不確定某條真偽時，以 git log 為準。\n\n【驗收標準】\n- CHANGELOG.md 無 `(N modified)` / `(N new file)` / `+x −y lines across` 類殘片。\n- 同一日期同一類別只有一個 heading 區塊。\n- 各條目為完整句子、語意連貫。\n- 產出 commit（不 push）。",
+      "labels": [],
+      "assignee": null,
+      "createdAt": "2026-10-19T13:51:37.141Z",
+      "updatedAt": "2026-10-19T13:51:37.141Z",
+      "createdBy": "agent",
+      "source": {
+        "type": "discussion"
+      },
+      "notes": [],
+      "result": null,
+      "git": null,
+      "timeoutSeconds": 0,
+      "resolvedAt": null
     }
   ],
-  "updatedAt": "2026-10-19T12:52:46.105Z"
+  "updatedAt": "2026-10-19T13:51:37.141Z"
 }

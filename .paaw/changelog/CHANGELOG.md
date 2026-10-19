@@ -12,6 +12,13 @@
 ### changed
 - 把 tests/e2e/gateway-ui-csrf.test.mjs 從「spawn 真 gateway + net.listen + fake package server listen + 系統 temp」改為 in-process（不 spawn、不 listen）：改以 createUIHandler(deps) / createApp() 注入 handler，並以 monkeypatch globalThis.fetch 取代 fake package server，使該檔在禁 socket 沙箱內全綠（commit ab38683）。
 
+### changed
+- 【目標】清除 .paaw/changelog/CHANGELOG.md 的 review board major 污染，整理成乾淨可讀的 changelog。
+ (1 new file)
+
+### changed
+- +385 −5 lines across 5 files
+
 ## 2026-10-18
 ### fixed
 - 修復 tests/unit/install.test.mjs 的 env 污染 / temp 殘留 / 清理斷言不足問題：記錄 PAAW_HOME 原始值（可能 undefined）並以 module 級 after() 還原（不存在則 delete，不還原成字串 "undefined"），跑完移除 top-level host temp dir；另補上骨架驗證失敗時半成品留在 versions/<ver>.tmp 的實際狀態斷言（commit 670b14f，來源 review board）。
