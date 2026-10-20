@@ -170,3 +170,105 @@ describe("src/server/paaw-control.mjs — healthCheckPaaw（未執行）", () =>
     assert.equal(r.detail, "Server not running");
   });
 });
+
+// ── upgradePaaw：失敗仍嘗試把 server 拉回 / stash pop 失敗要示警 ──
+// exec 以 deps.exec 注入 fake，避免真的跑 git / npm；startPaaw 仍走真 spawn
+// （NOOP_SERVER_CMD 為無害長睡 node script，afterEach 由 control.stopPaaw 收掉）。
+describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重啟）", () => {
+  test("npm install throw → 仍呼叫 startPaaw 拉回 server，回傳 ok:false + recovered:true + 明確 error", async () => {
+    const calls = [];
+    // fake exec：所有 git / npm 指令都成功，唯獨 npm install 丟例外。
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd.startsWith("npm install")) throw new Error("npm ERR! network timeout");
+      return "ok";
+    };
+    const { control, logged } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      // 升級本身失敗
+      assert.equal(r.ok, false);
+      // 但 server 已被拉回（major#1 的核心要求）
+      assert.equal(r.recovered, true);
+      assert.equal(control.isRunning(), true, "server should be restarted after failed upgrade");
+
+      // error 訊息要講清楚：升級失敗 + 已嘗試重啟（成功）
+      assert.match(r.error, /Upgrade failed/);
+      assert.match(r.error, /restarted/);
+
+      // steps 內要有 npm install（失敗）與 restart server（成功）
+      const npmStep = r.steps.find((s) => s.step === "npm install");
+      const restartStep = r.steps.find((s) => s.step === "restart server");
+      assert.equal(npmStep.ok, false);
+      assert.equal(restartStep.ok, true);
+
+      // events 應記錄 recover
+      const types = logged.map((l) => l.type);
+      assert.ok(types.includes("upgrade_recovered"), `expected upgrade_recovered, got ${types}`);
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("成功路徑：回傳仍帶 warnings 陣列（additive，不破壞既有欄位）", async () => {
+    const fakeExec = () => "ok";
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, true);
+      assert.ok(Array.isArray(r.warnings), "warnings must be an array even when empty");
+      assert.equal(r.warnings.length, 0);
+      // 既有欄位維持
+      assert.ok(Array.isArray(r.steps));
+      assert.ok("version" in r);
+      assert.ok("git" in r);
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+});
+
+describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗示警）", () => {
+  test("git stash pop throw → 回傳含 warnings + step 標 warning:true，ok 不受影響", async () => {
+    const fakeExec = (cmd) => {
+      if (cmd === "git stash pop") throw new Error("CONFLICT (content): merge conflict");
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      // stash pop 失敗不是致命錯誤，升級本身仍可完成
+      assert.equal(r.ok, true);
+      assert.ok(Array.isArray(r.warnings));
+      assert.equal(r.warnings.length, 1, "should surface exactly one warning");
+      assert.match(r.warnings[0], /stash pop failed/);
+
+      // 對應 step 要標記 warning，讓前端能凸顯
+      const step = r.steps.find((s) => s.step === "git stash pop");
+      assert.equal(step.ok, false);
+      assert.equal(step.warning, true);
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("git stash 無 stash（throw）維持 ok:true，不產生 warning", async () => {
+    const fakeExec = (cmd) => {
+      if (cmd === "git stash") throw new Error("No local changes to save");
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, true);
+      assert.equal(r.warnings.length, 0);
+      const step = r.steps.find((s) => s.step === "git stash");
+      assert.equal(step.ok, true);
+      assert.equal(step.note, "nothing to stash");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+});

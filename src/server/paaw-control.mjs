@@ -21,10 +21,15 @@ import { execSync, spawn } from "child_process";
  * @param {object} deps.config parsed config (paawServerCmd / paawServerPort)
  * @param {string} deps.PAAW_ROOT PAAW data root
  * @param {(type: string, detail: string, userId?: string) => void} deps.logEvent
+ * @param {typeof execSync} [deps.exec] optional execSync override (test seam);
+ *   defaults to node:child_process execSync. Only the upgrade flow uses it.
  * @returns {object} control API (see exported functions below)
  */
 export function createPaawControl(deps) {
   const { config, PAAW_ROOT, logEvent } = deps;
+  // Test seam: upgradePaaw shells out to git/npm; injecting a fake exec lets us
+  // drive success/failure paths deterministically without touching the FS/git.
+  const execGit = deps.exec ?? execSync;
 
   // ── Process state (private to this closure) ──
   let paawProcess = null;
@@ -226,33 +231,75 @@ export function createPaawControl(deps) {
     logEvent("upgrade_start", "Starting upgrade...", userId);
 
     const steps = [];
+    // Non-fatal issues the caller must surface to the operator (major#2):
+    // e.g. a failed `git stash pop` means local changes may still be in the
+    // stash / conflict — silently reporting ok would hide data-loss risk.
+    const warnings = [];
 
     try {
       // Step 1: git stash (preserve local changes)
       try {
-        execSync("git stash", { cwd: PAAW_ROOT, encoding: "utf-8" });
+        execGit("git stash", { cwd: PAAW_ROOT, encoding: "utf-8" });
         steps.push({ step: "git stash", ok: true });
       } catch {
+        // "nothing to stash" is a normal, non-error outcome — keep ok.
         steps.push({ step: "git stash", ok: true, note: "nothing to stash" });
       }
 
       // Step 2: git pull
       const gitInfo = getGitInfo();
-      const pullResult = execSync(`git pull origin ${gitInfo.branch}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 60000 });
+      const pullResult = execGit(`git pull origin ${gitInfo.branch}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 60000 });
       steps.push({ step: "git pull", ok: true, output: pullResult.trim().slice(0, 200) });
 
       // Step 3: git stash pop (restore local changes)
       try {
-        execSync("git stash pop", { cwd: PAAW_ROOT, encoding: "utf-8" });
+        execGit("git stash pop", { cwd: PAAW_ROOT, encoding: "utf-8" });
         steps.push({ step: "git stash pop", ok: true });
-      } catch {
-        steps.push({ step: "git stash pop", ok: false, note: "no stash or conflict" });
+      } catch (stashErr) {
+        // A failed pop is usually a merge conflict. We must NOT discard local
+        // changes; instead flag it as a warning so the operator can resolve it.
+        const warning = "git stash pop failed — local changes may remain stashed or conflicted; resolve manually.";
+        warnings.push(warning);
+        steps.push({ step: "git stash pop", ok: false, warning: true, note: "no stash or conflict", detail: stashErr.message });
       }
 
       // Step 4: npm install — 正式機只裝 production deps（--omit=dev），
       // 與 src/lib/install.mjs 的 installDeps 一致，避免升級時把 devDependencies 帶上正式機。
-      const installResult = execSync("npm install --omit=dev --no-audit --no-fund", { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
-      steps.push({ step: "npm install", ok: true, output: installResult.trim().split("\n").slice(-3).join(" | ").slice(0, 200) });
+      // Upgrade failure must NOT leave the server down (major#1): on failure we
+      // still try to bring the server back up and reflect that in the response.
+      try {
+        const installResult = execGit("npm install --omit=dev --no-audit --no-fund", { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 300000 });
+        steps.push({ step: "npm install", ok: true, output: installResult.trim().split("\n").slice(-3).join(" | ").slice(0, 200) });
+      } catch (installErr) {
+        steps.push({ step: "npm install", ok: false, detail: installErr.message });
+        logEvent("upgrade_failed", `Upgrade failed at npm install: ${installErr.message}`, userId);
+
+        // Attempt recovery: bring the (previously stopped) server back up.
+        // startPaaw() owns the idempotency guard (checks paawProcess) — reuse it.
+        const recoverResult = startPaaw();
+        steps.push({
+          step: "restart server",
+          ok: recoverResult.ok,
+          detail: recoverResult.ok ? `PID ${recoverResult.pid}` : recoverResult.error,
+        });
+
+        if (!recoverResult.ok) {
+          // Recovery itself failed — fail loud, never pretend success.
+          const warning = `Server recovery failed after upgrade error: ${recoverResult.error}`;
+          warnings.push(warning);
+          logEvent("upgrade_recover_failed", warning, userId);
+        } else {
+          logEvent("upgrade_recovered", `Server restarted after upgrade failure (PID ${recoverResult.pid})`, userId);
+        }
+
+        return {
+          ok: false,
+          steps,
+          warnings,
+          recovered: recoverResult.ok,
+          error: `Upgrade failed: ${installErr.message} — server ${recoverResult.ok ? "restarted" : "restart FAILED"}.`,
+        };
+      }
 
       // Step 5: Start server again
       const startResult = startPaaw();
@@ -267,10 +314,10 @@ export function createPaawControl(deps) {
       const newGit = getGitInfo();
       logEvent("upgrade_done", `Upgraded to ${newVersion} (${newGit.commit})`, userId);
 
-      return { ok: true, steps, version: newVersion, git: newGit };
+      return { ok: true, steps, warnings, version: newVersion, git: newGit };
     } catch (err) {
       logEvent("upgrade_failed", `Upgrade failed: ${err.message}`, userId);
-      return { ok: false, steps, error: err.message };
+      return { ok: false, steps, warnings, error: err.message };
     }
   }
 
