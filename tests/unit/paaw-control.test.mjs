@@ -195,7 +195,7 @@ describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重
 
       // error 訊息要講清楚：升級失敗 + 已嘗試重啟（成功）
       assert.match(r.error, /Upgrade failed/);
-      assert.match(r.error, /restarted/);
+      assert.match(r.error, /running \(recovered\)/);
 
       // steps 內要有 npm install（失敗）與 restart server（成功）
       const npmStep = r.steps.find((s) => s.step === "npm install");
@@ -230,12 +230,14 @@ describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重
 });
 
 describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即中止升級）", () => {
-  test("git stash pop throw（conflict，且確實有 stash）→ ok:false + warning，不執行 npm install，server 保持停止（minor#3）", async () => {
+  test("git stash pop throw（conflict，且本次確實 stash）→ ok:false + warning，不執行 npm install，server 保持停止（minor#3）", async () => {
     const calls = [];
+    // 本次操作特有判定（committee major）：stash 前 count=0、stash 後 count=1。
+    let stashCalls = 0;
     const fakeExec = (cmd) => {
       calls.push(cmd);
-      // 結構化判定（minor#2）：有 stash → git stash list 回非空。
-      if (cmd === "git stash list") return "stash@{0}: WIP on main: abc123 local changes\n";
+      if (cmd === "git stash list") return stashCalls === 0 ? "" : "stash@{0}: WIP on main: abc123 local changes\n";
+      if (cmd === "git stash") { stashCalls++; return "ok"; }
       if (cmd === "git stash pop") throw new Error("CONFLICT (content): merge conflict in foo.mjs");
       return "ok";
     };
@@ -269,10 +271,13 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
     }
   });
 
-  test("git stash pop 無 stash（stash list 空）→ 維持 ok:true，不產生 warning（結構化判定 minor#2）", async () => {
+  test("本次未 stash（stash 前後 count 皆為 0）→ 完全略過 git stash pop，維持 ok:true，不產生 warning", async () => {
+    const calls = [];
     const fakeExec = (cmd) => {
-      // 沒有 stash：git stash list 回空字串。
+      calls.push(cmd);
+      // 沒有新 stash：count 前後都是 0。
       if (cmd === "git stash list") return "";
+      // 若實作錯誤地呼叫 pop，這裡會 throw → 測試必須證明根本沒被呼叫。
       if (cmd === "git stash pop") throw new Error("No stash entries found.");
       return "ok";
     };
@@ -281,6 +286,8 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
       const r = await control.upgradePaaw("admin1");
       assert.equal(r.ok, true);
       assert.equal(r.warnings.length, 0);
+      // 關鍵（committee major）：沒有本次 stash 就絕不 pop（避免 pop 掉別人的舊 stash）。
+      assert.equal(calls.includes("git stash pop"), false, "must NOT run git stash pop when we stashed nothing");
       const step = r.steps.find((s) => s.step === "git stash pop");
       assert.equal(step.ok, true);
       assert.equal(step.note, "no stash entries");
@@ -289,7 +296,33 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
     }
   });
 
-  test("git stash 無 stash（throw，stash list 空）維持 ok:true，不產生 warning", async () => {
+  test("升級前已有舊 stash 且本次未新增（count 前後皆 1）→ 不誤判、不 pop 舊 stash（committee major）", async () => {
+    const calls = [];
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      // 機器上本來就有一個舊 stash；本次 git stash 無新 entry，count 維持 1。
+      if (cmd === "git stash list") return "stash@{0}: WIP on main: deadbeef old operator work\n";
+      if (cmd === "git stash") throw new Error("No local changes to save");
+      // 若實作誤用「list 非空 → pop」，會呼叫到此並 throw → 測試須證明未被呼叫。
+      if (cmd === "git stash pop") throw new Error("CONFLICT (content): would clobber old stash");
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, true, "old pre-existing stash must not fail the upgrade");
+      assert.equal(r.warnings.length, 0, "must not warn about a stash we did not create");
+      assert.equal(calls.includes("git stash pop"), false, "must NOT pop a pre-existing stash we did not create");
+      const stashStep = r.steps.find((s) => s.step === "git stash");
+      assert.equal(stashStep.note, "nothing to stash");
+      const popStep = r.steps.find((s) => s.step === "git stash pop");
+      assert.equal(popStep.note, "no stash entries");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("git stash 無 stash（throw，count 前後皆 0）維持 ok:true，不產生 warning", async () => {
     const fakeExec = (cmd) => {
       if (cmd === "git stash") throw new Error("No local changes to save");
       if (cmd === "git stash list") return "";
@@ -308,9 +341,11 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
     }
   });
 
-  test("結構化判定：stash 成功（list 非空）但 pop 失敗且訊息不含 'No stash entries' → 仍視為衝突失敗（不再依賴訊息字串）", async () => {
+  test("本次 stash 成功（count 0→1）但 pop 失敗且訊息不含 'No stash entries' → 仍視為衝突失敗（不依賴訊息字串）", async () => {
+    let stashCalls = 0;
     const fakeExec = (cmd) => {
-      if (cmd === "git stash list") return "stash@{0}: WIP on main: deadbeef wip\n";
+      if (cmd === "git stash list") return stashCalls === 0 ? "" : "stash@{0}: WIP on main: deadbeef wip\n";
+      if (cmd === "git stash") { stashCalls++; return "ok"; }
       // 訊息刻意不含 "No stash entries" —— 舊的字串比對會誤判，結構化判定不會。
       if (cmd === "git stash pop") throw new Error("error: Your local changes would be overwritten");
       return "ok";
@@ -385,6 +420,44 @@ describe("src/server/paaw-control.mjs — upgradePaaw（復原失敗 / 外層 ca
       const restartStep = r.steps.find((s) => s.step === "restart server");
       assert.equal(restartStep.ok, true);
       assert.ok(logged.map((l) => l.type).includes("upgrade_recovered"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("recovery 時 server 仍在執行（startPaaw 回 'Already running'）→ 視為復原成功，不誤報 recovery failed（committee minor#3）", async () => {
+    // 讓 recovery 當下 paawProcess 仍為 truthy：在 git pull 步驟以 re-entrant 方式
+    // 起一個 noop server，再讓 git pull 丟例外走外層 catch → attemptRecover。
+    // 此時 startPaaw() 回 { ok:false, error:'Already running' } —— 舊實作會誤判失敗。
+    const logged = [];
+    let control;
+    const fakeExec = (cmd) => {
+      if (cmd.startsWith("git pull")) {
+        control.startPaaw(); // server 此刻已在跑
+        throw new Error("fatal: could not read from remote repository");
+      }
+      return "ok";
+    };
+    control = createPaawControl({
+      config: { paawServerCmd: NOOP_SERVER_CMD, paawServerPort: 4991 },
+      PAAW_ROOT: tmp,
+      logEvent: (type) => logged.push(type),
+      exec: fakeExec,
+    });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      assert.equal(r.ok, false, "upgrade itself still fails");
+      assert.equal(r.recovered, true, "a live server means recovery succeeded");
+      assert.equal(control.isRunning(), true);
+
+      const restartStep = r.steps.find((s) => s.step === "restart server");
+      assert.equal(restartStep.ok, true);
+      assert.equal(restartStep.detail, "already running");
+
+      // 不得把「本來就在跑」誤報為 recovery 失敗
+      assert.equal(logged.includes("upgrade_recover_failed"), false);
+      assert.equal(logged.includes("upgrade_recovered"), true);
     } finally {
       await control.stopPaaw();
     }

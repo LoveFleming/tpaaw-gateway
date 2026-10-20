@@ -47,7 +47,6 @@ before(() => {
     backupDir: join(tmp, "backups"),
     autoStartPaaw: false,
     users: [{ id: "admin", name: "Admin", role: "admin", passwordHash: "pw" }],
-    sessionSecret: "unit-secret",
     sessionMaxAge: 86_400_000,
   }));
 
@@ -90,6 +89,17 @@ describe("src/server.mjs — sanitizeAuditField", () => {
       const code = ch.codePointAt(0);
       assert.ok(code >= 0x20 && !(code >= 0x7f && code <= 0x9f), "no control chars may survive");
     }
+  });
+
+  it("strips the Unicode line/paragraph separators U+2028 / U+2029 (minor#2)", () => {
+    // U+2028 (LINE SEPARATOR) / U+2029 (PARAGRAPH SEPARATOR) look printable but
+    // are treated as line breaks by some log/JS consumers — a residual
+    // log-injection vector. They must be dropped like other controls.
+    const raw = "a\u2028b\u2029c";
+    const out = app.sanitizeAuditField(raw);
+    assert.equal(out, "abc", `expected U+2028/U+2029 removed, got ${JSON.stringify(out)}`);
+    assert.equal(out.includes("\u2028"), false);
+    assert.equal(out.includes("\u2029"), false);
   });
 
   it("keeps the printable subset (ASCII + CJK + astral emoji) intact", () => {

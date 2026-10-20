@@ -221,6 +221,28 @@ export function createPaawControl(deps) {
   }
 
   /**
+   * Count entries in the git stash stack (read-only probe).
+   *
+   * Used by upgradePaaw to detect whether THIS run created a new stash entry
+   * (compare before/after counts) rather than trusting "stash list non-empty",
+   * which conflates pre-existing stashes with our own. On any error we return 0:
+   * a failed probe must not abort the upgrade, and treating "unknown" as "no
+   * new stash" keeps us from popping a stash we did not create.
+   *
+   * @returns {number} number of stash entries (0 on error/empty)
+   */
+  function countStashEntries() {
+    try {
+      const out = execCmd("git stash list", { cwd: PAAW_ROOT, encoding: "utf-8" });
+      return String(out ?? "")
+        .split("\n")
+        .filter((line) => line.trim().length > 0).length;
+    } catch {
+      return 0;
+    }
+  }
+
+  /**
    * Bring the (previously stopped) server back up after an upgrade failure.
    *
    * Shared by the npm-install failure branch and the outer catch so the
@@ -229,9 +251,14 @@ export function createPaawControl(deps) {
    * pushes a warning + logs `upgrade_recover_failed` when recovery itself
    * fails (never pretend success), and logs `upgrade_recovered` on success.
    *
-   * Idempotent: startPaaw() owns the guard (returns { ok:false,
-   * error:"Already running" } if a process is still up), so calling this when
-   * stopPaaw() did not actually stop the server will not double-spawn.
+   * Idempotent: startPaaw() owns the guard and returns
+   * { ok:false, error:"Already running" } if a process is still up. That is a
+   * SUCCESS for recovery, not a failure (committee minor, 2026-10-20): the
+   * operator's actual goal is "the server is running" — a live process means
+   * we got there, regardless of which call path started it. In particular the
+   * outer-catch path can reach here when stopPaaw() never actually stopped the
+   * old server (e.g. the failure happened before any stop), so "Already
+   * running" is the *expected* outcome there and must be reported as recovered.
    *
    * @param {string} userId audit actor
    * @param {Array<object>} steps upgrade step log to append to
@@ -247,13 +274,24 @@ export function createPaawControl(deps) {
       // a failed recovery, not a crash of the whole upgrade response.
       recoverResult = { ok: false, error: startErr.message };
     }
+
+    // "Already running" (or a live handle) means the server is up — the goal of
+    // recovery is met even though startPaaw() refused to spawn a second process.
+    const alreadyRunning = !recoverResult.ok
+      && (recoverResult.error === "Already running" || isRunning());
+    const recovered = recoverResult.ok || alreadyRunning;
+
     steps.push({
       step: "restart server",
-      ok: recoverResult.ok,
-      detail: recoverResult.ok ? `PID ${recoverResult.pid}` : recoverResult.error,
+      ok: recovered,
+      detail: recoverResult.ok
+        ? `PID ${recoverResult.pid}`
+        : alreadyRunning
+          ? "already running"
+          : recoverResult.error,
     });
 
-    if (!recoverResult.ok) {
+    if (!recovered) {
       // Recovery itself failed — fail loud, never pretend success.
       const warning = `Server recovery failed after upgrade error: ${recoverResult.error}`;
       warnings.push(warning);
@@ -261,7 +299,11 @@ export function createPaawControl(deps) {
       return false;
     }
 
-    logEvent("upgrade_recovered", `Server restarted after upgrade failure (PID ${recoverResult.pid})`, userId);
+    if (alreadyRunning) {
+      logEvent("upgrade_recovered", "Server already running after upgrade failure", userId);
+    } else {
+      logEvent("upgrade_recovered", `Server restarted after upgrade failure (PID ${recoverResult.pid})`, userId);
+    }
     return true;
   }
 
@@ -286,29 +328,22 @@ export function createPaawControl(deps) {
 
     try {
       // Step 1: git stash (preserve local changes)
-      // Structural stash detection (minor#2): rather than parsing git's
-      // human-readable messages (e.g. "No stash entries found") — which are
-      // locale/version dependent and fragile — we record whether a stash entry
-      // actually exists via `git stash list` AFTER the stash attempt. A non-empty
-      // list means we really stashed something, so a later pop failure is a real
-      // failure; an empty list means there was nothing to stash/pop, so a pop
-      // failure is a normal no-op. `stashed` is the single source of truth.
-      let stashed = false;
+      // Per-operation stash detection (committee major, 2026-10-20): the previous
+      // "git stash list non-empty ⇒ stashed" probe was WRONG — a pre-existing stash
+      // from a prior session made every upgrade think *this* run had stashed, so a
+      // later pop could pop someone else's old stash or misreport a conflict.
+      // We now compare the stash COUNT before vs. after our own push: only a net
+      // +1 means THIS operation created a new entry. `stashed` is the single source
+      // of truth and gates the pop — we never pop a stash we did not create.
+      const stashCountBefore = countStashEntries();
       try {
         execCmd("git stash", { cwd: PAAW_ROOT, encoding: "utf-8" });
       } catch {
-        // "nothing to stash" is a normal, non-error outcome — fall through to the
-        // structural check below, which will report stashed=false.
+        // "nothing to stash" is a normal, non-error outcome — the count probe
+        // below will confirm no new entry was created (stashed=false).
       }
-      try {
-        const stashList = execCmd("git stash list", { cwd: PAAW_ROOT, encoding: "utf-8" });
-        stashed = String(stashList ?? "").trim().length > 0;
-      } catch {
-        // If we cannot even list stashes, be conservative: assume nothing was
-        // stashed (a pop failure will then be treated as a no-op). Listing is a
-        // read-only probe; failing it must not abort the upgrade.
-        stashed = false;
-      }
+      const stashCountAfter = countStashEntries();
+      const stashed = stashCountAfter > stashCountBefore;
       steps.push({ step: "git stash", ok: true, note: stashed ? "stashed" : "nothing to stash" });
 
       // Step 2: git pull
@@ -317,19 +352,17 @@ export function createPaawControl(deps) {
       steps.push({ step: "git pull", ok: true, output: pullResult.trim().slice(0, 200) });
 
       // Step 3: git stash pop (restore local changes)
-      try {
-        execCmd("git stash pop", { cwd: PAAW_ROOT, encoding: "utf-8" });
-        steps.push({ step: "git stash pop", ok: true });
-      } catch (stashErr) {
-        const msg = String(stashErr?.message ?? "");
-        // Boundary (structural, minor#2): only a pop that fails AFTER we actually
-        // stashed something is a real failure. If `stashed` is false there was
-        // nothing to pop — the non-zero exit is a normal no-op, not an error.
-        // This replaces the old /no stash entries/i message sniffing, which was
-        // locale/version dependent.
-        if (!stashed) {
-          steps.push({ step: "git stash pop", ok: true, note: "no stash entries" });
-        } else {
+      // Only pop when WE created a stash this run. When `stashed` is false we must
+      // NOT run `git stash pop` at all — a bare pop would restore whatever stash
+      // already existed on the machine (possibly another operator's work).
+      if (!stashed) {
+        steps.push({ step: "git stash pop", ok: true, note: "no stash entries" });
+      } else {
+        try {
+          execCmd("git stash pop", { cwd: PAAW_ROOT, encoding: "utf-8" });
+          steps.push({ step: "git stash pop", ok: true });
+        } catch (stashErr) {
+          const msg = String(stashErr?.message ?? "");
           // We DID stash, yet the pop failed — almost always a merge conflict.
           // We must NOT discard local changes, and we must NOT continue on top
           // of a dirty/conflicted tree (major#2).
@@ -375,7 +408,7 @@ export function createPaawControl(deps) {
           steps,
           warnings,
           recovered,
-          error: `Upgrade failed: ${installErr.message} — server ${recovered ? "restarted" : "restart FAILED"}.`,
+          error: `Upgrade failed: ${installErr.message} — server ${recovered ? "running (recovered)" : "not running — restart FAILED"}.`,
         };
       }
 
@@ -395,10 +428,17 @@ export function createPaawControl(deps) {
       return { ok: true, steps, warnings, version: newVersion, git: newGit };
     } catch (err) {
       // Any step *outside* the handled branches (most commonly Step 2 `git pull`
-      // — remote conflict / no network) can throw here. The server was already
-      // stopped above, so we must still attempt recovery or a failed upgrade
-      // leaves the production machine down (major#1 — same guarantee as the npm
-      // install branch, previously a hole).
+      // — remote conflict / no network) can throw here. By this point we have
+      // already tried to stop the server (the stop is the first action and a
+      // stop failure returns early, above), so we must still attempt recovery or
+      // a failed upgrade leaves the production machine down (major#1 — same
+      // guarantee as the npm install branch, previously a hole).
+      //
+      // minor#4 (committee, 2026-10-20): this path does NOT strictly guarantee
+      // "the old server was stopped" — attemptRecover() therefore treats a live
+      // process ("Already running") as a successful recovery rather than a
+      // failure, and the wording below reflects the actual end state instead of
+      // asserting a restart that may not have happened.
       logEvent("upgrade_failed", `Upgrade failed: ${err.message}`, userId);
       const recovered = attemptRecover(userId, steps, warnings);
       return {
@@ -406,7 +446,7 @@ export function createPaawControl(deps) {
         steps,
         warnings,
         recovered,
-        error: `Upgrade failed: ${err.message} — server ${recovered ? "restarted" : "restart FAILED"}.`,
+        error: `Upgrade failed: ${err.message} — server ${recovered ? "running (recovered)" : "not running — restart FAILED"}.`,
       };
     }
   }

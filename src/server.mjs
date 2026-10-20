@@ -102,8 +102,11 @@ export function createApp(overrides = {}) {
     let out = "";
     for (const ch of String(value)) {
       const code = ch.codePointAt(0);
-      // Drop C0 controls (0x00–0x1F), DEL (0x7F), and C1 controls (0x80–0x9F).
-      if (code < 0x20 || (code >= 0x7f && code <= 0x9f)) continue;
+      // Drop C0 controls (0x00–0x1F), DEL (0x7F), and C1 controls (0x80–0x9F),
+      // plus the Unicode line/paragraph separators U+2028/U+2029 (minor#2). Some
+      // log/JS consumers still treat these as line breaks, so they are a residual
+      // log-injection vector even though they are printable-looking.
+      if (code < 0x20 || (code >= 0x7f && code <= 0x9f) || code === 0x2028 || code === 0x2029) continue;
       // Cap on UTF-16 code units (String#length): check BEFORE appending so the
       // result never exceeds AUDIT_FIELD_MAX code units. Using code units (not
       // code points) keeps the cap deterministic for JSONL/byte-budget purposes
