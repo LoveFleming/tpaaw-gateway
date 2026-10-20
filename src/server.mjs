@@ -104,11 +104,13 @@ export function createApp(overrides = {}) {
   };
 
   // Audit-log field sanitizer: strip control characters (incl. CR/LF, which
-  // could forge extra log lines) and cap the length. Applied to every
-  // attacker-controlled value that reaches the audit trail so a login attempt
-  // can't inject fake entries — the JSONL writer already escapes quotes, but
-  // control chars are the injection vector. Keeps the printable subset for
-  // traceability; char-by-char filter (no regex backtracking → no ReDoS).
+  // could forge extra log lines) and cap the length. Currently applied to the
+  // only attacker-controlled audit field in the login flow: the userId/clientIp
+  // passed to `login_locked`. (Other audit entries — e.g. `login` — carry
+  // values sourced from config, not from the client.) The JSONL writer already
+  // escapes quotes, but control chars are the injection vector. Keeps the
+  // printable subset for traceability; char-by-char filter (no regex
+  // backtracking → no ReDoS).
   const AUDIT_FIELD_MAX = 128;
   const sanitizeAuditField = (value) => {
     let out = "";

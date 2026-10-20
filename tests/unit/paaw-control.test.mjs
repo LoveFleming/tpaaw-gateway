@@ -229,26 +229,54 @@ describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重
   });
 });
 
-describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗示警）", () => {
-  test("git stash pop throw → 回傳含 warnings + step 標 warning:true，ok 不受影響", async () => {
+describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即中止升級）", () => {
+  test("git stash pop throw（conflict）→ 回 ok:false + warnings，且不執行 npm install，但仍重啟 server", async () => {
+    const calls = [];
     const fakeExec = (cmd) => {
-      if (cmd === "git stash pop") throw new Error("CONFLICT (content): merge conflict");
+      calls.push(cmd);
+      if (cmd === "git stash pop") throw new Error("CONFLICT (content): merge conflict in foo.mjs");
       return "ok";
     };
-    const { control } = makeControl({ exec: fakeExec });
+    const { control, logged } = makeControl({ exec: fakeExec });
     try {
       const r = await control.upgradePaaw("admin1");
 
-      // stash pop 失敗不是致命錯誤，升級本身仍可完成
-      assert.equal(r.ok, true);
+      // (B) stash pop 失敗 = 中止升級（不能在一片 conflict marker 的樹上裝依賴）
+      assert.equal(r.ok, false);
       assert.ok(Array.isArray(r.warnings));
       assert.equal(r.warnings.length, 1, "should surface exactly one warning");
       assert.match(r.warnings[0], /stash pop failed/);
+
+      // 關鍵：不得執行 npm install
+      assert.equal(calls.some((c) => c.startsWith("npm install")), false, "npm install must NOT run after stash pop failure");
 
       // 對應 step 要標記 warning，讓前端能凸顯
       const step = r.steps.find((s) => s.step === "git stash pop");
       assert.equal(step.ok, false);
       assert.equal(step.warning, true);
+
+      // 一致性：server 仍被拉回（與 (A) 保證一致）
+      assert.equal(r.recovered, true);
+      assert.equal(control.isRunning(), true);
+      assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("git stash pop 無 stash（No stash entries）→ 維持 ok:true，不產生 warning", async () => {
+    const fakeExec = (cmd) => {
+      if (cmd === "git stash pop") throw new Error("No stash entries found.");
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, true);
+      assert.equal(r.warnings.length, 0);
+      const step = r.steps.find((s) => s.step === "git stash pop");
+      assert.equal(step.ok, true);
+      assert.equal(step.note, "no stash entries");
     } finally {
       await control.stopPaaw();
     }
@@ -267,6 +295,67 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗示�
       const step = r.steps.find((s) => s.step === "git stash");
       assert.equal(step.ok, true);
       assert.equal(step.note, "nothing to stash");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+});
+
+// ── (E) 復原本身也失敗 + 外層 catch 復原路徑 ──
+describe("src/server/paaw-control.mjs — upgradePaaw（復原失敗 / 外層 catch 復原）", () => {
+  test("npm install 失敗且 startPaaw 也失敗 → recovered:false + warning + upgrade_recover_failed 事件", async () => {
+    const fakeExec = (cmd) => {
+      if (cmd.startsWith("npm install")) throw new Error("npm ERR! network timeout");
+      return "ok";
+    };
+    // paawServerCmd 為空字串 → startPaaw 的 spawn("") 同步 throw → 復原失敗。
+    const { control, logged } = makeControl({
+      exec: fakeExec,
+      config: { paawServerCmd: "", paawServerPort: 4097 },
+    });
+
+    const r = await control.upgradePaaw("admin1");
+
+    assert.equal(r.ok, false);
+    assert.equal(r.recovered, false, "recovery must report false when startPaaw fails");
+
+    // warnings 要包含「recovery failed」
+    assert.ok(r.warnings.some((w) => /recovery failed/i.test(w)), `expected recovery-failed warning, got ${JSON.stringify(r.warnings)}`);
+
+    // 事件要含 upgrade_recover_failed（且不得含 upgrade_recovered）
+    const types = logged.map((l) => l.type);
+    assert.ok(types.includes("upgrade_recover_failed"), `expected upgrade_recover_failed, got ${types}`);
+    assert.equal(types.includes("upgrade_recovered"), false, "must not claim recovered when it failed");
+
+    // 訊息要誠實標示 restart FAILED
+    assert.match(r.error, /restart FAILED/);
+  });
+
+  test("git pull 失敗（外層 catch）→ 仍嘗試 startPaaw，回傳反映 recovered:true", async () => {
+    const calls = [];
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd.startsWith("git pull")) throw new Error("fatal: could not read from remote repository");
+      return "ok";
+    };
+    const { control, logged } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      // 升級失敗（git pull 掛）
+      assert.equal(r.ok, false);
+      assert.match(r.error, /Upgrade failed/);
+
+      // 但 server 已透過 startPaaw 拉回
+      assert.equal(r.recovered, true);
+      assert.equal(control.isRunning(), true, "server should be restarted after git pull failure");
+
+      // 不應執行到 npm install（pull 就爆了）
+      assert.equal(calls.some((c) => c.startsWith("npm install")), false, "npm install must NOT run when git pull fails");
+
+      const restartStep = r.steps.find((s) => s.step === "restart server");
+      assert.equal(restartStep.ok, true);
+      assert.ok(logged.map((l) => l.type).includes("upgrade_recovered"));
     } finally {
       await control.stopPaaw();
     }
