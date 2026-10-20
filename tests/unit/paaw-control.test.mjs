@@ -239,13 +239,15 @@ describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重
 const STASH_SHA = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2";
 
 describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失敗即中止升級）", () => {
-  test("本次確實 stash（create 回 sha）且 apply 衝突 → ok:false + warning，不執行 npm install，server 保持停止（minor#3）", async () => {
+  test("本次確實 stash（create 回 sha）且 apply 衝突（結構化確認：git ls-files -u 有 unmerged）→ ok:false + warning，不執行 npm install，server 保持停止（minor#3 / round-7 major#3）", async () => {
     const calls = [];
     const fakeExec = (cmd) => {
       calls.push(cmd);
       if (cmd === "git stash create") return `${STASH_SHA}\n`;
       if (cmd.startsWith("git stash store")) return "ok";
       if (cmd.startsWith("git stash apply")) throw new Error("CONFLICT (content): merge conflict in foo.mjs");
+      // 結構化衝突確認：git ls-files -u 需回報 unmerged path（非空）。
+      if (cmd.startsWith("git ls-files -u")) return "100644 abcdef1234567890 1\tfoo.mjs\n";
       return "ok";
     };
     const { control, logged } = makeControl({ exec: fakeExec });
@@ -278,7 +280,7 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
     }
   });
 
-  test("本次 stash 但 apply 為『非衝突』失敗（timeout/權限）→ 走一般失敗分支復原，不誤導為 conflict，server 拉回（committee major#1）", async () => {
+  test("本次 stash 但 apply 為『非衝突』失敗（timeout/權限）且工作樹乾淨 → 走一般失敗分支復原，不誤導為 conflict，server 拉回（committee major#1）", async () => {
     const calls = [];
     // 非衝突失敗：訊息不含 CONFLICT / merge conflict 等字樣（如 30s timeout）。
     const nonConflict = "Command failed: git stash apply <sha>\nspawnSync git ETIMEDOUT: operation timed out";
@@ -287,6 +289,8 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
       if (cmd === "git stash create") return `${STASH_SHA}\n`;
       if (cmd.startsWith("git stash store")) return "ok";
       if (cmd.startsWith("git stash apply")) throw new Error(nonConflict);
+      // 工作樹乾淨（git status --porcelain 空）→ 允許安全復原。
+      if (cmd.startsWith("git status --porcelain")) return "";
       return "ok";
     };
     const { control, logged } = makeControl({ exec: fakeExec });
@@ -316,6 +320,145 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
       // npm install 仍不得執行（升級已中止）。
       assert.equal(calls.some((c) => c.startsWith("npm install")), false);
       assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("非衝突失敗但工作樹『不乾淨』→ 保守保持 STOPPED（不回 attemptRecover），避免在 half-applied 髒樹上開機（round-7 major#3）", async () => {
+    const calls = [];
+    const nonConflict = "Command failed: git stash apply <sha>\nENOSPC: no space left on device";
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) throw new Error(nonConflict);
+      // 工作樹不乾淨（有殘留變更 / 部分套用）→ 不得開機。
+      if (cmd.startsWith("git status --porcelain")) return " M src/partially-applied.mjs\n";
+      return "ok";
+    };
+    const { control, logged } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      assert.equal(r.ok, false, "upgrade itself still fails");
+      // 關鍵：不乾淨的樹 → 不得 attemptRecover，server 保持停止。
+      assert.equal(r.recovered, false, "must NOT recover on a dirty tree after a non-conflict apply failure");
+      assert.equal(control.isRunning(), false, "server must stay stopped — do not boot a half-applied tree");
+      assert.equal(r.steps.some((s) => s.step === "restart server"), false, "must not attemptRecover on a dirty tree");
+
+      // 訊息要明講工作樹不乾淨 + 人工介入，而非誤導為 conflict。
+      const joined = r.warnings.join("\n");
+      assert.match(joined, /non-conflict/);
+      assert.match(joined, /working tree is NOT clean/);
+      assert.equal(/resolve the conflict manually/i.test(joined), false, "must NOT instruct manual conflict resolution");
+      assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("stderr 提到 conflict 但工作樹結構上無 unmerged path → 不得誤判為 conflict（round-7 major#3：結構化判定勝過正則）", async () => {
+    const calls = [];
+    // 訊息含 "conflict" 字樣（可能來自無害的提示），但 ls-files -u 為空、
+    // status 乾淨 → 結構化判定認定「非真衝突」→ 走一般復原。
+    const maybeConflict = "warning: a previous conflict was noted; git stash apply returned non-zero";
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) throw new Error(maybeConflict);
+      if (cmd.startsWith("git ls-files -u")) return ""; // no unmerged paths — not a real conflict
+      if (cmd.startsWith("git status --porcelain")) return "";
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, false);
+      // 結構化確認無 unmerged → 不落入 conflict 分支 → 走復原。
+      assert.equal(r.recovered, true, "a message-only 'conflict' must not route into the STOPPED branch");
+      assert.equal(control.isRunning(), true, "server must be recovered when git reports no unmerged paths");
+      assert.equal(r.steps.some((s) => s.step === "restart server"), true);
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("isStashApplyConflict 邊界：timeout / EACCES / ENOSPC 皆不被誤判為 conflict（結構化探測不觸發）", async () => {
+    for (const cause of [
+      "spawnSync git ETIMEDOUT: operation timed out",
+      "EACCES: permission denied, open '.git/index'",
+      "ENOSPC: no space left on device, write",
+    ]) {
+      const calls = [];
+      const fakeExec = (cmd) => {
+        calls.push(cmd);
+        if (cmd === "git stash create") return `${STASH_SHA}\n`;
+        if (cmd.startsWith("git stash store")) return "ok";
+        if (cmd.startsWith("git stash apply")) throw new Error(`Command failed: git stash apply <sha>\n${cause}`);
+        if (cmd.startsWith("git status --porcelain")) return ""; // 乾淨樹 → 復原
+        return "ok";
+      };
+      const { control } = makeControl({ exec: fakeExec });
+      try {
+        const r = await control.upgradePaaw("admin1");
+        // 非衝突 → 一般失敗分支（能復原）。若誤判為 conflict，recovered 會是 false。
+        assert.equal(r.recovered, true, `${cause} must NOT be treated as a conflict`);
+        assert.equal(
+          calls.some((c) => c.startsWith("git ls-files -u")),
+          false,
+          `${cause}: structural unmerged probe must not run when the message shows no conflict`,
+        );
+        const step = r.steps.find((s) => s.step === "git stash restore");
+        assert.equal(step.note, "apply failed", `${cause}: must be a plain apply failure, not 'conflict'`);
+      } finally {
+        await control.stopPaaw();
+      }
+    }
+  });
+
+  test("command-injection 硬化：argv 形式（execFile）不經 shell，惡意 sha 被視為單一原樣參數；git pull 亦走 argv（round-7 major#1/#2/#4）", async () => {
+    // 注入樣本：含分號 / 反引號 / $(...) / 空白 —— shell 拼接會爆開，argv 不會。
+    const evilSha = "deadbeef; rm -rf /tmp/x`id`$(whoami) -- --all";
+    const seenArgv = [];
+    // execFile seam：真正拿到 argv 陣列（第 2 參數）。
+    const fakeExecFile = (file, args, opts) => {
+      seenArgv.push({ file, args, opts });
+      if (file === "git" && args[0] === "stash" && args[1] === "create") return `${evilSha}\n`;
+      if (file === "git" && args[0] === "stash" && args[1] === "apply") throw new Error("boom");
+      if (file === "git" && args[0] === "status") return "";
+      if (file === "git" && args[0] === "ls-files") return "";
+      return "ok";
+    };
+    // getGitInfo 仍走 exec（真實 git 查詢）；stash create 亦走 exec seam。
+    const fakeExec = (cmd) => {
+      if (cmd === "git stash create") return `${evilSha}\n`;
+      if (cmd.startsWith("git rev-parse")) return "main\n";
+      if (cmd.startsWith("git log")) return "2026-01-01 00:00:00 +0000\n";
+      if (cmd.startsWith("git status")) return "";
+      if (cmd.startsWith("git rev-list")) return "0\n";
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec, execFile: fakeExecFile });
+    try {
+      await control.upgradePaaw("admin1");
+
+      const applyCall = seenArgv.find((c) => c.file === "git" && c.args[0] === "stash" && c.args[1] === "apply");
+      assert.ok(applyCall, "stash apply must go through the argv seam");
+      // 關鍵：惡意 payload 必須是「單一原樣參數」，不得被拆開或 shell 展開。
+      assert.deepEqual(applyCall.args, ["stash", "apply", evilSha], "sha must be one verbatim argv element, not shell-split");
+
+      const storeCall = seenArgv.find((c) => c.file === "git" && c.args[0] === "stash" && c.args[1] === "store");
+      assert.ok(storeCall, "stash store must go through the argv seam");
+      // store 的 sha 同樣是單一原樣參數（最後一個位置）。
+      assert.equal(storeCall.args[storeCall.args.length - 1], evilSha, "store sha must be one verbatim argv element");
+
+      // git pull 也必須走 argv seam（不再 shell 拼接 branch）。
+      const pullCall = seenArgv.find((c) => c.file === "git" && c.args[0] === "pull");
+      assert.ok(pullCall, "git pull must go through the argv seam");
+      assert.deepEqual(pullCall.args.slice(0, 2), ["pull", "origin"], "pull base must be fixed literal args");
+      assert.equal(typeof pullCall.args[2], "string", "branch must be a single argv element");
     } finally {
       await control.stopPaaw();
     }

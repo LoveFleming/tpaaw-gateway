@@ -40,13 +40,18 @@ export function createPaawControl(deps) {
   // Second seam for the argv form (no shell). Kept separate from execCmd so a
   // command can pass untrusted-ish args without ever building a shell string.
   //
-  // When a test injects only `exec` (the historical single seam), derive the
-  // argv form from it by flattening argv back into a shell-like string — so the
-  // one fake keeps covering every command without callers having to wire two
-  // seams. In production (no `exec` override) we use the real execFileSync.
+  // The argv form must be a REAL argv pass-through: `execFileSync(file, args)`
+  // never round-trips through a shell, so an arg containing spaces / quotes /
+  // shell metacharacters is delivered verbatim and can never be interpreted.
+  // The fallback shim (when a test injects only the historical single `exec`
+  // seam) therefore must NOT flatten argv with a bare space join — that would
+  // re-introduce the shell-string ambiguity and make the fake diverge from
+  // production (committee major#4). Instead we pass the argv array straight to
+  // the fake via a second argument, and keep a space-joined string as the first
+  // argument purely for backward-compatible prefix matching in older fakes.
   const execFileCmd = deps.execFile
     ?? (deps.exec
-      ? (file, args, opts) => deps.exec(`${file} ${args.join(" ")}`, opts)
+      ? (file, args, opts) => deps.exec(`${file} ${args.join(" ")}`, opts, args)
       : execFileSync);
 
   // Sibling stash ops share one timeout so a hung git never blocks the upgrade
@@ -288,11 +293,75 @@ export function createPaawControl(deps) {
    * non-conflict failures (timeout, EACCES, ENOSPC, corrupt repo, "unable to
    * read tree") are NOT misdiagnosed as conflicts (committee major#1).
    *
+   * This message check is a FAST PRE-FILTER only — the authoritative decision is
+   * made structurally by hasUnmergedPaths() (committee round-7 major: a regex is
+   * fragile and must not be the sole basis for a routing decision).
+   *
    * @param {string} msg the raw error message from the failed apply
-   * @returns {boolean} true only when the message evidences a real conflict
+   * @returns {boolean} true only when the message evidences a likely conflict
    */
   function isStashApplyConflict(msg) {
     return /CONFLICT\b|Automatic merge failed|merge conflict|fix conflicts/i.test(msg);
+  }
+
+  /**
+   * Structural check: does the working tree currently have UNMERGED paths?
+   *
+   * `git ls-files -u` prints one line per unmerged (staged-stage >0) path and
+   * nothing when the tree is clean — a stable, machine-readable signal that does
+   * NOT depend on git's human-facing error wording (committee round-7 major:
+   * "改用 git ls-files -u 等結構化檢查，而非解析 stderr 文字"). Used to
+   * CONFIRM a real conflict before routing into the "server stays STOPPED"
+   * branch, so a transient failure that merely mentions "conflict" can no longer
+   * strand the operator in that higher-risk branch.
+   *
+   * A probe failure (git itself broken) is treated as "unknown" → return false
+   * so we fall through to the conservative working-tree-clean check rather than
+   * falsely declaring a conflict.
+   *
+   * @returns {boolean} true only when git reports unmerged paths
+   */
+  function hasUnmergedPaths() {
+    try {
+      const out = execFileCmd("git", ["ls-files", "-u"], {
+        cwd: PAAW_ROOT,
+        encoding: "utf-8",
+        timeout: STASH_OP_TIMEOUT_MS,
+      });
+      return String(out ?? "").trim().length > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Structural check: is the working tree clean (no modified / staged /
+   * unmerged / untracked changes)?
+   *
+   * `git status --porcelain` empty output == clean. This gates the non-conflict
+   * recovery path (committee round-7 major): a non-conflict `git stash apply`
+   * failure (ENOSPC aborted mid-apply, permission error on one path) can leave a
+   * PARTIALLY-applied dirty tree, and booting the server on that dirty tree is
+   * exactly the half-merged state the conflict branch already refuses to boot
+   * from. So we only recover when the tree is verifiably clean; otherwise we
+   * keep the server STOPPED (third state) and warn.
+   *
+   * A probe failure is treated as "not clean" (conservative → do not recover),
+   * so we never boot on an unverified tree.
+   *
+   * @returns {boolean} true only when git reports a clean working tree
+   */
+  function isWorkingTreeClean() {
+    try {
+      const out = execFileCmd("git", ["status", "--porcelain"], {
+        cwd: PAAW_ROOT,
+        encoding: "utf-8",
+        timeout: STASH_OP_TIMEOUT_MS,
+      });
+      return String(out ?? "").trim().length === 0;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -434,8 +503,14 @@ export function createPaawControl(deps) {
       }
 
       // Step 2: git pull
+      //
+      // argv form (no shell): the branch name is passed as a discrete argument,
+      // so even a hostile/odd branch name (spaces, `;`, backticks) is delivered
+      // verbatim and can never break out of the command (command-injection
+      // hardening — committee round-7 major#2). Only `pull` needs the branch;
+      // the base command is a fixed literal.
       const gitInfo = getGitInfo();
-      const pullResult = execCmd(`git pull origin ${gitInfo.branch}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 60000 });
+      const pullResult = execFileCmd("git", ["pull", "origin", gitInfo.branch], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 60000 });
       steps.push({ step: "git pull", ok: true, output: pullResult.trim().slice(0, 200) });
 
       // Step 3: restore local changes — only for the sha WE created.
@@ -449,16 +524,23 @@ export function createPaawControl(deps) {
         steps.push({ step: "git stash restore", ok: true, note: "no stash entries" });
       } else {
         try {
-          execCmd(`git stash apply ${stashSha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 30000 });
+          // argv form (no shell): the sha is passed as a discrete argument, so
+          // it can never be shell-interpreted (command-injection hardening —
+          // committee round-7 major#1). Apply stays non-destructive: on failure
+          // the stash entry survives (ADR-005).
+          execFileCmd("git", ["stash", "apply", stashSha], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 30000 });
         } catch (stashErr) {
           const msg = String(stashErr?.message ?? "");
           // An apply failure is NOT always a conflict: it can also be a timeout
           // (30s), a permission error, a full disk, a corrupt repo, etc.
           // Conflating all of them as "conflict" (committee major#1) misleads the
           // operator into hand-resolving a conflict that does not exist AND
-          // routes them into the higher-risk "server stays STOPPED" branch. Only
-          // a REAL conflict justifies that. So we classify first:
-          const conflict = isStashApplyConflict(msg);
+          // routes them into the higher-risk "server stays STOPPED" branch.
+          //
+          // Round-7 major: we no longer decide on the stderr wording alone. A
+          // REAL conflict is confirmed STRUCTURALLY (git reports unmerged paths);
+          // the message regex only gates whether it is worth the extra probe.
+          const conflict = isStashApplyConflict(msg) && hasUnmergedPaths();
           // Local changes are preserved in both cases (apply never drops), so no
           // data is lost regardless of the failure kind.
           if (conflict) {
@@ -483,17 +565,39 @@ export function createPaawControl(deps) {
             };
           }
 
-          // NON-conflict failure (timeout / permission / disk / corrupt repo / …):
-          // nothing is half-merged, so booting the restored server is safe. Route
-          // through the standard recovery path (like the other failure branches)
-          // so a transient/non-conflict git failure does NOT needlessly leave the
-          // server down, and surface the raw error so the operator sees the real
-          // cause instead of a misleading "conflict" diagnosis.
+          // NON-conflict failure (timeout / permission / disk / corrupt repo / …).
+          // Round-7 major: such a failure can still leave a PARTIALLY-applied
+          // dirty tree (e.g. ENOSPC aborted mid-apply), and booting on a dirty
+          // tree is exactly the half-merged state the conflict branch refuses to
+          // boot from. So we only recover when the tree is VERIFIABLY clean;
+          // otherwise we keep the server STOPPED (third state) and warn, staying
+          // on the safe side of "never boot a dirty tree" while still honoring
+          // "an upgrade failure must not leave the server DOWN for a plain
+          // transient error".
+          const clean = isWorkingTreeClean();
           const warning = `git stash apply failed (non-conflict) — your local changes remain in the stash; `
             + `cause: ${msg}`;
           warnings.push(warning);
           steps.push({ step: "git stash restore", ok: false, warning: true, note: "apply failed", detail: msg });
           logEvent("upgrade_failed", `Upgrade failed at git stash apply (non-conflict): ${msg}`, userId);
+
+          if (!clean) {
+            // Working tree is dirty after a non-conflict apply failure — do NOT
+            // boot on an unverified/half-applied tree. Keep STOPPED and warn.
+            const dirtyWarning = "git stash apply failed (non-conflict) and the working tree is NOT clean — server left STOPPED "
+              + "to avoid booting on a half-applied tree. Inspect `git status`, then start the server manually.";
+            warnings.push(dirtyWarning);
+            steps.push({ step: "git stash restore", ok: false, warning: true, note: "dirty tree — not recovered", detail: msg });
+
+            return {
+              ok: false,
+              steps,
+              warnings,
+              recovered: false,
+              error: `Upgrade failed at git stash apply (non-conflict, dirty tree): ${msg} — server left stopped; inspect the working tree.`,
+            };
+          }
+
           const recovered = attemptRecover(userId, steps, warnings);
           return {
             ok: false,
@@ -508,7 +612,7 @@ export function createPaawControl(deps) {
         // loses no data (the entry simply remains) — warn so a human can clean
         // up manually, but the upgrade itself proceeds.
         try {
-          execCmd(`git stash drop ${stashSha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 15000 });
+          execFileCmd("git", ["stash", "drop", stashSha], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 15000 });
           steps.push({ step: "git stash restore", ok: true, note: "applied + dropped" });
         } catch (dropErr) {
           const msg = String(dropErr?.message ?? "");
