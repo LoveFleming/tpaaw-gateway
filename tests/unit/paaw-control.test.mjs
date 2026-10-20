@@ -359,23 +359,20 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
   });
 
   test("非衝突失敗且工作樹只有『untracked 檔』（無 tracked/未合併變更）→ 仍視為乾淨並復原，不因 untracked 誤判為 dirty（round-8 major#1）", async () => {
-    const calls = [];
     const nonConflict = "Command failed: git stash apply <sha>\nENOSPC: no space left on device";
-    const fakeExec = (cmd) => {
-      calls.push(cmd);
-      if (cmd === "git stash create") return `${STASH_SHA}\n`;
-      if (cmd.startsWith("git stash store")) return "ok";
-      if (cmd.startsWith("git stash apply")) throw new Error(nonConflict);
+    // 走 execFile seam：拿到真實 argv 陣列，斷言才是契約本身（round-9 minor#4
+    // ——legacy exec seam 的 space-joined 字串僅供 prefix 匹配，非參數契約）。
+    const seenArgv = [];
+    const fakeExecFile = (file, args) => {
+      seenArgv.push({ file, args });
+      if (file === "git" && args[0] === "stash" && args[1] === "create") return `${STASH_SHA}\n`;
+      if (file === "git" && args[0] === "stash" && args[1] === "apply") throw new Error(nonConflict);
       // 情境界定：工作樹的『髒』來自既有 untracked 檔（build artifact / scratch）。
-      // 乾淨判準必須帶 --untracked-files=no，故此 probe 不可被視為 dirty。
-      // 這裡 assert 參數含 --untracked-files=no：若回歸成含 untracked 的舊形式，測試即失敗。
-      if (cmd.startsWith("git status --porcelain")) {
-        assert.match(cmd, /--untracked-files=no/, "clean check must exclude untracked files (round-8 major#1)");
-        return ""; // 排除 untracked 後，tracked 端為乾淨。
-      }
+      // 排除 untracked 後，tracked 端為乾淨。
+      if (file === "git" && args[0] === "status") return "";
       return "ok";
     };
-    const { control } = makeControl({ exec: fakeExec });
+    const { control } = makeControl({ execFile: fakeExecFile });
     try {
       const r = await control.upgradePaaw("admin1");
 
@@ -384,6 +381,14 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
       assert.equal(r.recovered, true, "untracked-only tree must be treated as clean → recovery allowed");
       assert.equal(control.isRunning(), true, "server must be recovered — untracked file is not a half-applied tree");
       assert.ok(r.steps.some((s) => s.step === "restart server"), "must attemptRecover on an untracked-only tree");
+
+      // 乾淨判準必須以 argv 明示排除 untracked（round-8 major#1 的契約本體）。
+      const statusCall = seenArgv.find((c) => c.file === "git" && c.args[0] === "status");
+      assert.ok(statusCall, "the clean check must probe git status");
+      assert.ok(
+        statusCall.args.includes("--untracked-files=no"),
+        `clean check argv must exclude untracked files (round-8 major#1), got: ${JSON.stringify(statusCall.args)}`,
+      );
 
       // 不得出現任何宣稱工作樹髒 / 需人工介入的訊息。
       const joined = r.warnings.join("\n");
@@ -431,6 +436,95 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
       assert.match(r.error, /unverifiable tree/);
       assert.equal(/dirty tree/i.test(r.error), false, "error must not claim a dirty tree when git itself failed");
       assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("hasUnmergedPaths 探測失敗但訊息含 conflict → 折為『非衝突』、不進 conflict 分支，改由工作樹檢查收斂（probe error path，round-9 major#1）", async () => {
+    // 情境：stderr 有 conflict 字樣（正則 pre-filter 命中），但 `git ls-files -u`
+    // 本身拋錯 → tri-state 回 null（unknown）。null 絕不可被讀成 true
+    // （會誤判真衝突、把 server 丟進高風險 STOPPED 分支），也不可讀成 false
+    // 的「確定乾淨」；只能一路保守收斂。
+    const realConflict = "Command failed: git stash apply <sha>\nCONFLICT (content): Merge conflict in src/a.mjs\nAutomatic merge failed; fix conflicts and then commit the result.";
+    const unmergedProbeErr = "Command failed: git ls-files -u\nfatal: not a git repository (or any of the parent directories): .git";
+    const seenArgv = [];
+    const fakeExecFile = (file, args) => {
+      seenArgv.push({ file, args });
+      if (file === "git" && args[0] === "stash" && args[1] === "create") return `${STASH_SHA}\n`;
+      if (file === "git" && args[0] === "stash" && args[1] === "apply") throw new Error(realConflict);
+      if (file === "git" && args[0] === "ls-files") throw new Error(unmergedProbeErr); // 探測失敗 → null
+      if (file === "git" && args[0] === "status") return " M src/partially-applied.mjs\n"; // tracked 髒 → 不可開機
+      return "ok";
+    };
+    const { control, logged } = makeControl({ execFile: fakeExecFile });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      // tri-state 契約：探測確實被呼叫過（證明這是決定性的一步）。
+      assert.ok(
+        seenArgv.some((c) => c.file === "git" && c.args[0] === "ls-files" && c.args[1] === "-u"),
+        "the structural unmerged-path probe must have been attempted",
+      );
+
+      assert.equal(r.ok, false, "upgrade itself still fails");
+      // 關鍵：不得折成 true（conflict）→ 不進 conflict 分支的專屬措辭。
+      const joined = r.warnings.join("\n");
+      assert.equal(/merge conflict\) — server left STOPPED/.test(joined), false, "probe failure must NOT route into the conflict branch");
+      assert.equal(/resolve the conflict manually/i.test(joined), false, "must not instruct manual conflict resolution on an unconfirmed conflict");
+      // 也不得折成「確定乾淨」——工作樹 tracked 髒 → 保守保持 STOPPED。
+      assert.equal(r.recovered, false, "a dirty tracked tree must not be recovered");
+      assert.equal(control.isRunning(), false, "server must stay stopped");
+      assert.equal(r.steps.some((s) => s.step === "restart server"), false, "must not attemptRecover on a dirty tree");
+
+      // 判定依據要誠實：明講 unmerged 探測失敗、僅靠 tracked-clean 判定。
+      assert.match(joined, /unmerged-path probe failed/i);
+      assert.match(joined, /tracked-clean/i);
+
+      const step = r.steps.find((s) => s.step === "git stash restore");
+      assert.equal(step.ok, false);
+      assert.equal(step.note, "dirty tree — not recovered");
+      assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("混合探測（ls-files -u 失敗、status 成功且 tracked-clean）→ 可復原，但訊息/step note 必須揭露判定依據僅為 tracked-clean（round-9 minor#2）", async () => {
+    // 情境：stderr 含 conflict 字樣，unmerged 探測失敗（null），但 tracked-clean
+    // 探測成功且乾淨 → 安全上允許復原（不會在半套用樹上開機），但這比
+    // 「結構上確認無衝突」弱，必須在 warning / step note 誠實標明。
+    const maybeConflict = "Command failed: git stash apply <sha>\nwarning: clobbering conflict-prone file, fix conflicts later";
+    const unmergedProbeErr = "Command failed: git ls-files -u\nspawnSync git ETIMEDOUT: operation timed out";
+    const seenArgv = [];
+    const fakeExecFile = (file, args) => {
+      seenArgv.push({ file, args });
+      if (file === "git" && args[0] === "stash" && args[1] === "create") return `${STASH_SHA}\n`;
+      if (file === "git" && args[0] === "stash" && args[1] === "apply") throw new Error(maybeConflict);
+      if (file === "git" && args[0] === "ls-files") throw new Error(unmergedProbeErr); // unknown
+      if (file === "git" && args[0] === "status") return ""; // tracked 乾淨 → 可復原
+      return "ok";
+    };
+    const { control } = makeControl({ execFile: fakeExecFile });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      assert.equal(r.ok, false, "upgrade itself still fails");
+      // 安全保證未弱化：tracked-clean 明確可驗證時允許復原。
+      assert.equal(r.recovered, true, "a verified tracked-clean tree may still be recovered");
+      assert.equal(control.isRunning(), true, "server must be recovered on a verified clean tree");
+
+      // 誠實性：必須揭露 unmerged 探測失敗、判定依據僅為 tracked-clean。
+      const joined = r.warnings.join("\n");
+      assert.match(joined, /unmerged-path probe failed/i);
+      assert.match(joined, /tracked-clean/i);
+      // 不得誤稱衝突（未經結構確認）。
+      assert.equal(/resolve the conflict manually/i.test(joined), false, "an unconfirmed conflict must not be reported as one");
+
+      const step = r.steps.find((s) => s.step === "git stash restore");
+      assert.equal(step.ok, false);
+      assert.match(step.note, /tracked-clean only/i, "step note must disclose the weaker verification basis");
+      assert.match(step.note, /unmerged probe failed/i);
     } finally {
       await control.stopPaaw();
     }

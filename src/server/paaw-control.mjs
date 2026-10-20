@@ -293,7 +293,12 @@ export function createPaawControl(deps) {
   function stashCreate() {
     // Timeout parity with the sibling stash ops (store/drop 15s, apply 30s): a
     // hung git (index lock, huge repo scan) must not block the upgrade forever.
-    const out = execCmd("git stash create", { cwd: PAAW_ROOT, encoding: "utf-8", timeout: STASH_OP_TIMEOUT_MS });
+    // argv (no-shell) seam — parity with the sibling stash store/apply/drop,
+    // which all go through execFileCmd. Routing create through the legacy
+    // shell-string `execCmd` was an inconsistency: tests that inject only the
+    // `execFile` seam (the documented "new tests" contract) would leave create
+    // on the real `execSync` fallback and never exercise the stash path.
+    const out = execFileCmd("git", ["stash", "create"], { cwd: PAAW_ROOT, encoding: "utf-8", timeout: STASH_OP_TIMEOUT_MS });
     return String(out ?? "").trim();
   }
 
@@ -570,12 +575,27 @@ export function createPaawControl(deps) {
           // REAL conflict is confirmed STRUCTURALLY (git reports unmerged paths);
           // the message regex only gates whether it is worth the extra probe.
           //
-          // Round-8 major#2: hasUnmergedPaths() is tri-state. A probe failure
-          // (null = unknown) must NOT be read as `true` — we only treat it as a
-          // conflict on an EXPLICIT `=== true`, so a broken git falls through to
-          // the (also conservative) working-tree check instead of being folded
-          // into a false "conflict".
-          const conflict = isStashApplyConflict(msg) && hasUnmergedPaths() === true;
+          // Round-9 major#1: the message check is a FAST PRE-FILTER — the
+          // structural unmerged-path probe is only worth running when the
+          // message actually hints at a conflict. A plain transient failure
+          // (timeout / EACCES / ENOSPC) carries no conflict signature, so we
+          // must NOT spend a `git ls-files -u` probe on it.
+          const conflictHinted = isStashApplyConflict(msg);
+          // Round-8 major#2: hasUnmergedPaths() is tri-state. It is consulted
+          // ONLY when the message hinted at a conflict (pre-filter above); a
+          // probe failure (null = unknown) must NOT be read as `true` — we only
+          // treat it as a conflict on an EXPLICIT `=== true`, so a broken git
+          // falls through to the (also conservative) working-tree check instead
+          // of being folded into a false "conflict".
+          const unmerged = conflictHinted ? hasUnmergedPaths() : null;
+          const conflict = conflictHinted && unmerged === true;
+          // Round-9 minor#2: when the message hints at a conflict but the
+          // structural probe FAILED (null), we cannot confirm or deny a real
+          // conflict — we fall through to the tracked-clean check, which is a
+          // WEAKER guarantee (it never inspects the index stages). Record that
+          // the recovery decision rests on tracked-clean alone, so the operator
+          // knows the basis instead of assuming a fully verified tree.
+          const conflictUnverified = conflictHinted && unmerged === null;
           // Local changes are preserved in both cases (apply never drops), so no
           // data is lost regardless of the failure kind.
           if (conflict) {
@@ -618,7 +638,19 @@ export function createPaawControl(deps) {
           const warning = `git stash apply failed (non-conflict) — your local changes remain in the stash; `
             + `cause: ${msg}`;
           warnings.push(warning);
-          steps.push({ step: "git stash restore", ok: false, warning: true, note: "apply failed", detail: msg });
+          if (conflictUnverified) {
+            // The authoritative unmerged-path probe failed, so "not a conflict"
+            // was never structurally confirmed. State the weaker basis explicitly
+            // so a recovery below is not mistaken for a fully verified one.
+            warnings.push("the unmerged-path probe failed (git itself errored) — conflict could not be confirmed or ruled out; "
+              + "the decision rests on the tracked-clean check alone.");
+          }
+          // Hold the step reference directly instead of looking it back up with
+          // steps.find() later (committee round-9 minor#3): a by-name lookup is
+          // fragile and silently no-ops if the label ever changes. We rewrite
+          // this exact object's note below when the tree is unverifiable/dirty.
+          const restoreStep = { step: "git stash restore", ok: false, warning: true, note: "apply failed", detail: msg };
+          steps.push(restoreStep);
           logEvent("upgrade_failed", `Upgrade failed at git stash apply (non-conflict): ${msg}`, userId);
 
           if (clean !== true) {
@@ -634,12 +666,10 @@ export function createPaawControl(deps) {
             const dirtyWarning = `git stash apply failed (non-conflict) and ${reason} — server left STOPPED `
               + "to avoid booting on an unverified/half-applied tree. Inspect `git status` and the git error, then start the server manually.";
             warnings.push(dirtyWarning);
-            // Reuse the already-pushed restore step (do NOT add a duplicate) so
-            // the recorded state distinguishes unknown (probe failed) from dirty.
-            const restoreStep = steps.find((s) => s.step === "git stash restore");
-            if (restoreStep) {
-              restoreStep.note = probeFailed ? "git probe failed — not recovered" : "dirty tree — not recovered";
-            }
+            // Rewrite the SAME step object pushed above (do NOT add a duplicate)
+            // so the recorded state distinguishes unknown (probe failed) from
+            // dirty. We mutate the held reference — never a by-name lookup.
+            restoreStep.note = probeFailed ? "git probe failed — not recovered" : "dirty tree — not recovered";
 
             return {
               ok: false,
@@ -651,6 +681,13 @@ export function createPaawControl(deps) {
           }
 
           const recovered = attemptRecover(userId, steps, warnings);
+          if (conflictUnverified) {
+            // Recovery (if any) ran on a weaker basis — say so on the step
+            // itself so the audit trail reflects what was actually verified.
+            restoreStep.note = recovered
+              ? "apply failed; recovered on tracked-clean only (unmerged probe failed)"
+              : "apply failed; recovery failed (unmerged probe also unavailable)";
+          }
           return {
             ok: false,
             steps,
