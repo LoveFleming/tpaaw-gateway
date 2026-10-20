@@ -86,6 +86,35 @@ export function createApp(overrides = {}) {
   });
   const { backupPath, listBackups, createBackup, restoreBackup } = backupManager;
 
+  // ── Audit-log field sanitizer (createApp scope: exported for unit testing,
+  //    and shared by handler call sites) ──
+  // Strip control characters (incl. CR/LF, which could forge extra log lines)
+  // and cap the length. Today it guards the attacker-controlled fields in the
+  // login flow: the `userId` and `clientIp` passed to `login_locked`. NOTE: some
+  // other audit entries (e.g. `login`) carry config-sourced values, but
+  // `login_locked`'s userId is directly attacker-controlled — so any *future*
+  // audit call site that logs a client-supplied value MUST route it through this
+  // sanitizer. The JSONL writer already escapes quotes, but control chars are
+  // the injection vector. Keeps the printable subset for traceability;
+  // char-by-char filter (no regex backtracking → no ReDoS).
+  const AUDIT_FIELD_MAX = 128;
+  const sanitizeAuditField = (value) => {
+    let out = "";
+    for (const ch of String(value)) {
+      const code = ch.codePointAt(0);
+      // Drop C0 controls (0x00–0x1F), DEL (0x7F), and C1 controls (0x80–0x9F).
+      if (code < 0x20 || (code >= 0x7f && code <= 0x9f)) continue;
+      // Cap on UTF-16 code units (String#length): check BEFORE appending so the
+      // result never exceeds AUDIT_FIELD_MAX code units. Using code units (not
+      // code points) keeps the cap deterministic for JSONL/byte-budget purposes
+      // — an astral char (surrogate pair) therefore counts as 2. A pair is never
+      // split because 2 <= AUDIT_FIELD_MAX always holds.
+      if (out.length + ch.length > AUDIT_FIELD_MAX) break;
+      out += ch;
+    }
+    return out;
+  };
+
   // ── HTTP request handler (moved verbatim from the old createServer callback) ──
   const handler = async (req, res) => {
   const url = new URL(req.url, `http://localhost:${config.port}`);
@@ -101,27 +130,6 @@ export function createApp(overrides = {}) {
   const sendJSON = (code, data) => {
     res.writeHead(code, { "Content-Type": "application/json" });
     res.end(JSON.stringify(data));
-  };
-
-  // Audit-log field sanitizer: strip control characters (incl. CR/LF, which
-  // could forge extra log lines) and cap the length. Currently applied to the
-  // only attacker-controlled audit field in the login flow: the userId/clientIp
-  // passed to `login_locked`. (Other audit entries — e.g. `login` — carry
-  // values sourced from config, not from the client.) The JSONL writer already
-  // escapes quotes, but control chars are the injection vector. Keeps the
-  // printable subset for traceability; char-by-char filter (no regex
-  // backtracking → no ReDoS).
-  const AUDIT_FIELD_MAX = 128;
-  const sanitizeAuditField = (value) => {
-    let out = "";
-    for (const ch of String(value)) {
-      const code = ch.codePointAt(0);
-      // Drop C0 controls (0x00–0x1F), DEL (0x7F), and C1 controls (0x80–0x9F).
-      if (code < 0x20 || (code >= 0x7f && code <= 0x9f)) continue;
-      out += ch;
-      if (out.length >= AUDIT_FIELD_MAX) break;
-    }
-    return out;
   };
 
   // ISS-008: cap admin API request bodies. All admin endpoints that read a body
@@ -360,6 +368,10 @@ export function createApp(overrides = {}) {
   // ── Public surface: handler + every existing binding (ADR-004) ──
   return {
     handler,
+    // Exposed for unit testing the audit-field sanitizer contract (boundary +
+    // control-char stripping) without driving the full login/lockout flow.
+    sanitizeAuditField,
+    AUDIT_FIELD_MAX,
     config,
     saveConfig,
     PAAW_ROOT,

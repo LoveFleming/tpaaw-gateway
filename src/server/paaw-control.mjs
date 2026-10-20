@@ -286,13 +286,30 @@ export function createPaawControl(deps) {
 
     try {
       // Step 1: git stash (preserve local changes)
+      // Structural stash detection (minor#2): rather than parsing git's
+      // human-readable messages (e.g. "No stash entries found") — which are
+      // locale/version dependent and fragile — we record whether a stash entry
+      // actually exists via `git stash list` AFTER the stash attempt. A non-empty
+      // list means we really stashed something, so a later pop failure is a real
+      // failure; an empty list means there was nothing to stash/pop, so a pop
+      // failure is a normal no-op. `stashed` is the single source of truth.
+      let stashed = false;
       try {
         execCmd("git stash", { cwd: PAAW_ROOT, encoding: "utf-8" });
-        steps.push({ step: "git stash", ok: true });
       } catch {
-        // "nothing to stash" is a normal, non-error outcome — keep ok.
-        steps.push({ step: "git stash", ok: true, note: "nothing to stash" });
+        // "nothing to stash" is a normal, non-error outcome — fall through to the
+        // structural check below, which will report stashed=false.
       }
+      try {
+        const stashList = execCmd("git stash list", { cwd: PAAW_ROOT, encoding: "utf-8" });
+        stashed = String(stashList ?? "").trim().length > 0;
+      } catch {
+        // If we cannot even list stashes, be conservative: assume nothing was
+        // stashed (a pop failure will then be treated as a no-op). Listing is a
+        // read-only probe; failing it must not abort the upgrade.
+        stashed = false;
+      }
+      steps.push({ step: "git stash", ok: true, note: stashed ? "stashed" : "nothing to stash" });
 
       // Step 2: git pull
       const gitInfo = getGitInfo();
@@ -304,36 +321,38 @@ export function createPaawControl(deps) {
         execCmd("git stash pop", { cwd: PAAW_ROOT, encoding: "utf-8" });
         steps.push({ step: "git stash pop", ok: true });
       } catch (stashErr) {
-        // A failed pop is usually a merge conflict. We must NOT discard local
-        // changes, and we must NOT continue on top of a dirty/conflicted tree:
-        // running `npm install`+start under conflict markers could silently
-        // lose local changes or install from a broken tree while later steps
-        // "succeed" and mask the risk (major#2). So we abort the upgrade here,
-        // surface a warning for the operator to resolve, and — consistent with
-        // the upgrade-failure guarantee (major#1) — still bring the server back
-        // up rather than leaving it down.
-        //
-        // Boundary (preserved): `git stash pop` with no stash entries exits
-        // non-zero with "No stash entries found" — that is a normal no-op, not a
-        // failure (same spirit as git stash "nothing to stash"), so we keep ok.
         const msg = String(stashErr?.message ?? "");
-        if (/no stash entries/i.test(msg)) {
+        // Boundary (structural, minor#2): only a pop that fails AFTER we actually
+        // stashed something is a real failure. If `stashed` is false there was
+        // nothing to pop — the non-zero exit is a normal no-op, not an error.
+        // This replaces the old /no stash entries/i message sniffing, which was
+        // locale/version dependent.
+        if (!stashed) {
           steps.push({ step: "git stash pop", ok: true, note: "no stash entries" });
         } else {
-          // Heuristic conflict/general-failure detection (loose on purpose — we
-          // do not attempt precise git parsing).
-          const warning = "git stash pop failed — local changes may remain stashed or conflicted; resolve manually.";
+          // We DID stash, yet the pop failed — almost always a merge conflict.
+          // We must NOT discard local changes, and we must NOT continue on top
+          // of a dirty/conflicted tree (major#2).
+          //
+          // minor#3: a conflicted working tree is exactly the state we must NOT
+          // boot from — starting the server here could load half-merged modules
+          // with conflict markers. So we deliberately do NOT attemptRecover();
+          // we keep the server STOPPED and emit a loud, actionable warning for a
+          // human to resolve the conflict manually. This is an intentional
+          // exception to the "never leave the server down" guarantee (major#1):
+          // leaving it down is strictly safer than starting on a broken tree.
+          const warning = "git stash pop failed (conflict) — server left STOPPED. "
+            + "Resolve the merge conflict manually, then start the server.";
           warnings.push(warning);
-          steps.push({ step: "git stash pop", ok: false, warning: true, note: "conflict or failure", detail: msg });
-          logEvent("upgrade_failed", `Upgrade aborted at git stash pop: ${msg}`, userId);
+          steps.push({ step: "git stash pop", ok: false, warning: true, note: "conflict", detail: msg });
+          logEvent("upgrade_failed", `Upgrade aborted at git stash pop (conflict): ${msg}`, userId);
 
-          const recovered = attemptRecover(userId, steps, warnings);
           return {
             ok: false,
             steps,
             warnings,
-            recovered,
-            error: `Upgrade aborted at git stash pop: ${msg} — server ${recovered ? "restarted" : "restart FAILED"}.`,
+            recovered: false,
+            error: `Upgrade aborted at git stash pop (conflict): ${msg} — server left stopped for manual conflict resolution.`,
           };
         }
       }

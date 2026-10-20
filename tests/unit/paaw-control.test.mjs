@@ -230,10 +230,12 @@ describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重
 });
 
 describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即中止升級）", () => {
-  test("git stash pop throw（conflict）→ 回 ok:false + warnings，且不執行 npm install，但仍重啟 server", async () => {
+  test("git stash pop throw（conflict，且確實有 stash）→ ok:false + warning，不執行 npm install，server 保持停止（minor#3）", async () => {
     const calls = [];
     const fakeExec = (cmd) => {
       calls.push(cmd);
+      // 結構化判定（minor#2）：有 stash → git stash list 回非空。
+      if (cmd === "git stash list") return "stash@{0}: WIP on main: abc123 local changes\n";
       if (cmd === "git stash pop") throw new Error("CONFLICT (content): merge conflict in foo.mjs");
       return "ok";
     };
@@ -241,11 +243,12 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
     try {
       const r = await control.upgradePaaw("admin1");
 
-      // (B) stash pop 失敗 = 中止升級（不能在一片 conflict marker 的樹上裝依賴）
+      // stash pop 失敗 = 中止升級（不能在一片 conflict marker 的樹上裝依賴）
       assert.equal(r.ok, false);
       assert.ok(Array.isArray(r.warnings));
       assert.equal(r.warnings.length, 1, "should surface exactly one warning");
       assert.match(r.warnings[0], /stash pop failed/);
+      assert.match(r.warnings[0], /STOPPED/);
 
       // 關鍵：不得執行 npm install
       assert.equal(calls.some((c) => c.startsWith("npm install")), false, "npm install must NOT run after stash pop failure");
@@ -255,17 +258,21 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
       assert.equal(step.ok, false);
       assert.equal(step.warning, true);
 
-      // 一致性：server 仍被拉回（與 (A) 保證一致）
-      assert.equal(r.recovered, true);
-      assert.equal(control.isRunning(), true);
+      // minor#3：絕不在衝突中的髒樹上盲目重啟 —— server 必須保持停止。
+      assert.equal(r.recovered, false);
+      assert.equal(control.isRunning(), false, "server must stay stopped on conflict — do not boot a conflicted tree");
+      // 也不得留下 "restart server" step（沒嘗試復原）。
+      assert.equal(r.steps.some((s) => s.step === "restart server"), false, "must not attemptRecover on a conflicted tree");
       assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
     } finally {
       await control.stopPaaw();
     }
   });
 
-  test("git stash pop 無 stash（No stash entries）→ 維持 ok:true，不產生 warning", async () => {
+  test("git stash pop 無 stash（stash list 空）→ 維持 ok:true，不產生 warning（結構化判定 minor#2）", async () => {
     const fakeExec = (cmd) => {
+      // 沒有 stash：git stash list 回空字串。
+      if (cmd === "git stash list") return "";
       if (cmd === "git stash pop") throw new Error("No stash entries found.");
       return "ok";
     };
@@ -282,9 +289,10 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
     }
   });
 
-  test("git stash 無 stash（throw）維持 ok:true，不產生 warning", async () => {
+  test("git stash 無 stash（throw，stash list 空）維持 ok:true，不產生 warning", async () => {
     const fakeExec = (cmd) => {
       if (cmd === "git stash") throw new Error("No local changes to save");
+      if (cmd === "git stash list") return "";
       return "ok";
     };
     const { control } = makeControl({ exec: fakeExec });
@@ -295,6 +303,27 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
       const step = r.steps.find((s) => s.step === "git stash");
       assert.equal(step.ok, true);
       assert.equal(step.note, "nothing to stash");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("結構化判定：stash 成功（list 非空）但 pop 失敗且訊息不含 'No stash entries' → 仍視為衝突失敗（不再依賴訊息字串）", async () => {
+    const fakeExec = (cmd) => {
+      if (cmd === "git stash list") return "stash@{0}: WIP on main: deadbeef wip\n";
+      // 訊息刻意不含 "No stash entries" —— 舊的字串比對會誤判，結構化判定不會。
+      if (cmd === "git stash pop") throw new Error("error: Your local changes would be overwritten");
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, false);
+      assert.equal(r.warnings.length, 1);
+      const step = r.steps.find((s) => s.step === "git stash pop");
+      assert.equal(step.ok, false);
+      assert.equal(step.warning, true);
+      assert.equal(control.isRunning(), false, "server stays stopped on real pop failure");
     } finally {
       await control.stopPaaw();
     }
