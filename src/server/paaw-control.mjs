@@ -40,15 +40,28 @@ export function createPaawControl(deps) {
   // Second seam for the argv form (no shell). Kept separate from execCmd so a
   // command can pass untrusted-ish args without ever building a shell string.
   //
-  // The argv form must be a REAL argv pass-through: `execFileSync(file, args)`
-  // never round-trips through a shell, so an arg containing spaces / quotes /
-  // shell metacharacters is delivered verbatim and can never be interpreted.
-  // The fallback shim (when a test injects only the historical single `exec`
-  // seam) therefore must NOT flatten argv with a bare space join — that would
-  // re-introduce the shell-string ambiguity and make the fake diverge from
-  // production (committee major#4). Instead we pass the argv array straight to
-  // the fake via a second argument, and keep a space-joined string as the first
-  // argument purely for backward-compatible prefix matching in older fakes.
+  // Production: `execFileSync(file, args)` never round-trips through a shell, so
+  // an arg containing spaces / quotes / shell metacharacters is delivered
+  // verbatim and can never be interpreted.
+  //
+  // Fallback shim (only when a test injects the historical single `exec` seam,
+  // i.e. no `execFile`): a transitional compatibility layer, NOT part of the
+  // production contract. It must NOT flatten argv with a bare space join — that
+  // would re-introduce the shell-string ambiguity and make the fake diverge
+  // from production (committee major#4). So it calls the fake as:
+  //
+  //     deps.exec(<cmd>, opts, <argv array>)
+  //              ^1st      ^2nd    ^3rd
+  //
+  //   • 1st arg  = a space-joined command string, provided ONLY so older fakes
+  //                can keep doing `cmd.startsWith("git ...")` prefix matching.
+  //                It is a display/matching convenience — do NOT parse it for
+  //                arguments (it is lossy by construction).
+  //   • 2nd arg  = the options object (cwd/encoding/timeout).
+  //   • 3rd arg  = the REAL argv array (the authoritative, verbatim arguments).
+  //
+  // New tests should inject `execFile` directly (clean (file, args, opts) shape)
+  // and rely on the 3rd-arg argv only for legacy `exec`-only fakes.
   const execFileCmd = deps.execFile
     ?? (deps.exec
       ? (file, args, opts) => deps.exec(`${file} ${args.join(" ")}`, opts, args)
@@ -315,11 +328,14 @@ export function createPaawControl(deps) {
    * branch, so a transient failure that merely mentions "conflict" can no longer
    * strand the operator in that higher-risk branch.
    *
-   * A probe failure (git itself broken) is treated as "unknown" → return false
-   * so we fall through to the conservative working-tree-clean check rather than
-   * falsely declaring a conflict.
+   * TRI-STATE return (committee round-8 major#2): a probe failure (git itself
+   * broken — timeout / EACCES / corrupt repo) must NOT be folded into a definite
+   * value, or we would either falsely confirm a conflict or falsely deny one.
+   * We surface it as `null` ("unknown") and let the caller fall through to the
+   * honest conservative path.
    *
-   * @returns {boolean} true only when git reports unmerged paths
+   * @returns {true | false | null} true = unmerged paths exist;
+   *   false = git confirmed NO unmerged paths; null = probe failed (unknown)
    */
   function hasUnmergedPaths() {
     try {
@@ -330,37 +346,50 @@ export function createPaawControl(deps) {
       });
       return String(out ?? "").trim().length > 0;
     } catch {
-      return false;
+      return null;
     }
   }
 
   /**
-   * Structural check: is the working tree clean (no modified / staged /
-   * unmerged / untracked changes)?
+   * Structural check: is the working tree clean?
    *
-   * `git status --porcelain` empty output == clean. This gates the non-conflict
-   * recovery path (committee round-7 major): a non-conflict `git stash apply`
-   * failure (ENOSPC aborted mid-apply, permission error on one path) can leave a
-   * PARTIALLY-applied dirty tree, and booting the server on that dirty tree is
-   * exactly the half-merged state the conflict branch already refuses to boot
-   * from. So we only recover when the tree is verifiably clean; otherwise we
-   * keep the server STOPPED (third state) and warn.
+   * "Clean" here means: no modified / staged / UNMERGED TRACKED changes. We
+   * deliberately pass `--untracked-files=no` (committee round-8 major#1): an
+   * untracked file (a build artifact, a stray log, a local scratch file) is NOT
+   * evidence of a half-applied stash and must NOT be misread as a dirty tree.
+   * Counting untracked files would keep the server unnecessarily STOPPED on the
+   * non-conflict recovery path, punishing an operator who merely has an
+   * untracked file lying around. Tracked modifications — the real signal of a
+   * partial apply — are still detected.
    *
-   * A probe failure is treated as "not clean" (conservative → do not recover),
-   * so we never boot on an unverified tree.
+   * This gates the non-conflict recovery path (committee round-7 major): a
+   * non-conflict `git stash apply` failure (ENOSPC aborted mid-apply, permission
+   * error on one path) can leave a PARTIALLY-applied dirty tree, and booting the
+   * server on that dirty tree is exactly the half-merged state the conflict
+   * branch already refuses to boot from. So we only recover when the tree is
+   * VERIFIABLY clean.
    *
-   * @returns {boolean} true only when git reports a clean working tree
+   * TRI-STATE return (committee round-8 major#2): a probe failure must be
+   * surfaced as `null` ("unknown") — never folded into a definite "clean" or
+   * "dirty". Folding the failure into `false` would emit a misleading "dirty
+   * tree" message when git is simply broken; folding it into `true` would boot
+   * on an unverified tree. The caller keeps the server STOPPED for `null` too,
+   * but MUST word the warning honestly ("git probe failed"), not claim the tree
+   * is dirty.
+   *
+   * @returns {true | false | null} true = verifiably clean;
+   *   false = tracked changes present (dirty); null = probe failed (unknown)
    */
   function isWorkingTreeClean() {
     try {
-      const out = execFileCmd("git", ["status", "--porcelain"], {
+      const out = execFileCmd("git", ["status", "--porcelain", "--untracked-files=no"], {
         cwd: PAAW_ROOT,
         encoding: "utf-8",
         timeout: STASH_OP_TIMEOUT_MS,
       });
       return String(out ?? "").trim().length === 0;
     } catch {
-      return false;
+      return null;
     }
   }
 
@@ -540,7 +569,13 @@ export function createPaawControl(deps) {
           // Round-7 major: we no longer decide on the stderr wording alone. A
           // REAL conflict is confirmed STRUCTURALLY (git reports unmerged paths);
           // the message regex only gates whether it is worth the extra probe.
-          const conflict = isStashApplyConflict(msg) && hasUnmergedPaths();
+          //
+          // Round-8 major#2: hasUnmergedPaths() is tri-state. A probe failure
+          // (null = unknown) must NOT be read as `true` — we only treat it as a
+          // conflict on an EXPLICIT `=== true`, so a broken git falls through to
+          // the (also conservative) working-tree check instead of being folded
+          // into a false "conflict".
+          const conflict = isStashApplyConflict(msg) && hasUnmergedPaths() === true;
           // Local changes are preserved in both cases (apply never drops), so no
           // data is lost regardless of the failure kind.
           if (conflict) {
@@ -574,6 +609,11 @@ export function createPaawControl(deps) {
           // on the safe side of "never boot a dirty tree" while still honoring
           // "an upgrade failure must not leave the server DOWN for a plain
           // transient error".
+          // Round-8 major#2: isWorkingTreeClean() is tri-state — only an EXPLICIT
+          // `true` (verifiably clean, tracked-wise) permits recovery. Both a
+          // definite "dirty" (false) and an "unknown" probe failure (null) keep
+          // the server STOPPED, but with DIFFERENT wording: a broken git must
+          // never be reported as a dirty working tree.
           const clean = isWorkingTreeClean();
           const warning = `git stash apply failed (non-conflict) — your local changes remain in the stash; `
             + `cause: ${msg}`;
@@ -581,20 +621,32 @@ export function createPaawControl(deps) {
           steps.push({ step: "git stash restore", ok: false, warning: true, note: "apply failed", detail: msg });
           logEvent("upgrade_failed", `Upgrade failed at git stash apply (non-conflict): ${msg}`, userId);
 
-          if (!clean) {
-            // Working tree is dirty after a non-conflict apply failure — do NOT
-            // boot on an unverified/half-applied tree. Keep STOPPED and warn.
-            const dirtyWarning = "git stash apply failed (non-conflict) and the working tree is NOT clean — server left STOPPED "
-              + "to avoid booting on a half-applied tree. Inspect `git status`, then start the server manually.";
+          if (clean !== true) {
+            // Either a dirty tree (tracked changes present → possibly a
+            // half-applied stash) or an unverifiable state (git probe failed).
+            // In both cases we must NOT boot on an unverified tree; keep the
+            // server STOPPED and word the warning honestly.
+            const probeFailed = clean === null;
+            const reason = probeFailed
+              ? "the git working-tree probe failed (git itself errored — e.g. timeout/permission/corrupt repo), so the tree could not be verified"
+              : "the working tree is NOT clean (tracked changes present)";
+            const errorTag = probeFailed ? "unverifiable tree" : "dirty tree";
+            const dirtyWarning = `git stash apply failed (non-conflict) and ${reason} — server left STOPPED `
+              + "to avoid booting on an unverified/half-applied tree. Inspect `git status` and the git error, then start the server manually.";
             warnings.push(dirtyWarning);
-            steps.push({ step: "git stash restore", ok: false, warning: true, note: "dirty tree — not recovered", detail: msg });
+            // Reuse the already-pushed restore step (do NOT add a duplicate) so
+            // the recorded state distinguishes unknown (probe failed) from dirty.
+            const restoreStep = steps.find((s) => s.step === "git stash restore");
+            if (restoreStep) {
+              restoreStep.note = probeFailed ? "git probe failed — not recovered" : "dirty tree — not recovered";
+            }
 
             return {
               ok: false,
               steps,
               warnings,
               recovered: false,
-              error: `Upgrade failed at git stash apply (non-conflict, dirty tree): ${msg} — server left stopped; inspect the working tree.`,
+              error: `Upgrade failed at git stash apply (non-conflict, ${errorTag}): ${msg} — server left stopped; inspect the working tree.`,
             };
           }
 

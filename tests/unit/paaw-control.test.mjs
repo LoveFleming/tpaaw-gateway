@@ -358,6 +358,84 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
     }
   });
 
+  test("非衝突失敗且工作樹只有『untracked 檔』（無 tracked/未合併變更）→ 仍視為乾淨並復原，不因 untracked 誤判為 dirty（round-8 major#1）", async () => {
+    const calls = [];
+    const nonConflict = "Command failed: git stash apply <sha>\nENOSPC: no space left on device";
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) throw new Error(nonConflict);
+      // 情境界定：工作樹的『髒』來自既有 untracked 檔（build artifact / scratch）。
+      // 乾淨判準必須帶 --untracked-files=no，故此 probe 不可被視為 dirty。
+      // 這裡 assert 參數含 --untracked-files=no：若回歸成含 untracked 的舊形式，測試即失敗。
+      if (cmd.startsWith("git status --porcelain")) {
+        assert.match(cmd, /--untracked-files=no/, "clean check must exclude untracked files (round-8 major#1)");
+        return ""; // 排除 untracked 後，tracked 端為乾淨。
+      }
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      assert.equal(r.ok, false, "upgrade itself still fails (non-conflict apply error)");
+      // 關鍵：untracked-only 不得判 dirty → 必須復原、server 拉回。
+      assert.equal(r.recovered, true, "untracked-only tree must be treated as clean → recovery allowed");
+      assert.equal(control.isRunning(), true, "server must be recovered — untracked file is not a half-applied tree");
+      assert.ok(r.steps.some((s) => s.step === "restart server"), "must attemptRecover on an untracked-only tree");
+
+      // 不得出現任何宣稱工作樹髒 / 需人工介入的訊息。
+      const joined = r.warnings.join("\n");
+      assert.equal(/working tree is NOT clean/i.test(joined), false, "untracked-only must NOT be reported as a dirty tree");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("非衝突失敗且工作樹探測本身拋錯（git status 故障）→ 走 unknown：保持 STOPPED 且訊息不得假稱 dirty tree（round-8 major#2）", async () => {
+    const calls = [];
+    const nonConflict = "Command failed: git stash apply <sha>\nspawnSync git ETIMEDOUT: operation timed out";
+    const probeErr = "Command failed: git status --porcelain\nfatal: not a git repository (or any of the parent directories): .git";
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) throw new Error(nonConflict);
+      // 關鍵：探測本身失敗（git 本身故障）→ 必須顯性 unknown，不得折疊成 dirty。
+      if (cmd.startsWith("git status --porcelain")) throw new Error(probeErr);
+      return "ok";
+    };
+    const { control, logged } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      assert.equal(r.ok, false, "upgrade itself still fails");
+      // 保守：無法驗證 → 不得開機。
+      assert.equal(r.recovered, false, "an unverifiable tree must NOT be recovered (conservative)");
+      assert.equal(control.isRunning(), false, "server must stay stopped when the tree cannot be verified");
+      assert.equal(r.steps.some((s) => s.step === "restart server"), false, "must not attemptRecover when the probe failed");
+
+      // 訊息必須誠實：明講是 git 探測失敗，絕不可宣稱工作樹髒。
+      const joined = r.warnings.join("\n");
+      assert.match(joined, /non-conflict/);
+      assert.match(joined, /working-tree probe failed/i, "must explain the git probe itself failed");
+      assert.equal(/working tree is NOT clean/i.test(joined), false, "must NOT falsely claim a dirty tree when the probe errored");
+
+      // step note 也要區分 unknown 與 dirty。
+      const step = r.steps.find((s) => s.step === "git stash restore");
+      assert.equal(step.ok, false);
+      assert.equal(step.note, "git probe failed — not recovered");
+
+      // error 字串要標示 unverifiable（而非 dirty tree）。
+      assert.match(r.error, /unverifiable tree/);
+      assert.equal(/dirty tree/i.test(r.error), false, "error must not claim a dirty tree when git itself failed");
+      assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
   test("stderr 提到 conflict 但工作樹結構上無 unmerged path → 不得誤判為 conflict（round-7 major#3：結構化判定勝過正則）", async () => {
     const calls = [];
     // 訊息含 "conflict" 字樣（可能來自無害的提示），但 ls-files -u 為空、
@@ -442,7 +520,13 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
     };
     const { control } = makeControl({ exec: fakeExec, execFile: fakeExecFile });
     try {
-      await control.upgradePaaw("admin1");
+      const r = await control.upgradePaaw("admin1");
+
+      // minor#3: assert the return shape, not just the argv wiring — so a
+      // regression in the error path yields a precise failure message.
+      assert.equal(r.ok, false, "upgrade must fail when stash apply throws");
+      assert.equal(typeof r.error, "string", "failed upgrade must carry an error string");
+      assert.ok(Array.isArray(r.steps) && Array.isArray(r.warnings), "return must keep the { steps, warnings } contract");
 
       const applyCall = seenArgv.find((c) => c.file === "git" && c.args[0] === "stash" && c.args[1] === "apply");
       assert.ok(applyCall, "stash apply must go through the argv seam");
