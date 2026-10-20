@@ -132,6 +132,28 @@ describe("E2E · Gateway login lockout (TASK-018, in-process)", () => {
     assert.match(locked.data.error, /too many/i);
   });
 
+  it("login_locked audit entry sanitizes the attacker-controlled userId (no log injection)", async () => {
+    // Fresh app → clean rate-limit counters.
+    const fresh = makeEnv();
+    try {
+      // A userId carrying CR/LF + control chars could forge extra log lines
+      // if written verbatim into the audit trail.
+      const evil = "admin\r\nINJECTED\t\u0000entry";
+      for (let i = 0; i < 5; i++) await fresh.login(evil, "wrong");
+      const locked = await fresh.login(evil, "wrong");
+      assert.equal(locked.status, 429, "the flooding principal must be locked");
+
+      const entry = fresh.app.events.find((e) => e.type === "login_locked");
+      assert.ok(entry, "a login_locked audit entry must exist");
+      assert.equal(/[\r\n\t\u0000-\u001f]/.test(entry.detail), false,
+        `audit detail must contain no control characters: ${JSON.stringify(entry.detail)}`);
+      // Traceability preserved: the printable subset of the id survives.
+      assert.ok(entry.detail.includes("INJECTED"), "printable chars retained for tracing");
+    } finally {
+      fresh.dispose();
+    }
+  });
+
   it("a username flood does NOT lock out the correct password (DoS fix)", async () => {
     // Fresh app so the previous case's counters cannot leak in.
     const fresh = makeEnv();

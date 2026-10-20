@@ -233,7 +233,7 @@ POST /api/backups/restore/paaw-backup-2026-09-04-03.tar.gz
 版控中的範本是 `config.example.json`：
 
 ```bash
-cp config.example.json config.json   # 首次使用；再改 passwordHash / sessionSecret
+cp config.example.json config.json   # 首次使用；再改 passwordHash
 ```
 
 不存在時使用內建預設值（**無預設帳號**，啟動時 fail-closed）。
@@ -250,7 +250,6 @@ cp config.example.json config.json   # 首次使用；再改 passwordHash / sess
 | `maxBackups` | `7` | 保留份數，超過刪最舊 |
 | `autoStartPaaw` | `false` | gateway 啟動時自動帶起 PAAW |
 | `users[]` | 見下 | `{ id, name, role, passwordHash }` |
-| `sessionSecret` | — | session 簽章 |
 | `sessionMaxAge` | `86400000` | token 效期（ms） |
 
 ### 環境變數（測試隔離用）

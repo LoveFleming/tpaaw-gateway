@@ -11,6 +11,5 @@
   "users": [
     { "id": "admin", "name": "Admin", "role": "admin", "passwordHash": "CHANGE_ME" }
   ],
-  "sessionSecret": "change-me-to-a-random-secret",
   "sessionMaxAge": 86400000
 }

@@ -103,6 +103,25 @@ export function createApp(overrides = {}) {
     res.end(JSON.stringify(data));
   };
 
+  // Audit-log field sanitizer: strip control characters (incl. CR/LF, which
+  // could forge extra log lines) and cap the length. Applied to every
+  // attacker-controlled value that reaches the audit trail so a login attempt
+  // can't inject fake entries — the JSONL writer already escapes quotes, but
+  // control chars are the injection vector. Keeps the printable subset for
+  // traceability; char-by-char filter (no regex backtracking → no ReDoS).
+  const AUDIT_FIELD_MAX = 128;
+  const sanitizeAuditField = (value) => {
+    let out = "";
+    for (const ch of String(value)) {
+      const code = ch.codePointAt(0);
+      // Drop C0 controls (0x00–0x1F), DEL (0x7F), and C1 controls (0x80–0x9F).
+      if (code < 0x20 || (code >= 0x7f && code <= 0x9f)) continue;
+      out += ch;
+      if (out.length >= AUDIT_FIELD_MAX) break;
+    }
+    return out;
+  };
+
   // ISS-008: cap admin API request bodies. All admin endpoints that read a body
   // (currently only /api/auth/login, carrying { userId, password }) are tiny, so
   // 64 KiB is far above any legitimate payload — no normal request is affected.
@@ -202,7 +221,7 @@ export function createApp(overrides = {}) {
     } else if (result.locked) {
       const retryAfterSec = Math.max(1, Math.ceil((result.retryAfterMs || 0) / 1000));
       res.setHeader("Retry-After", String(retryAfterSec));
-      logEvent("login_locked", `Login locked for "${body.userId}" from ${clientIp}`);
+      logEvent("login_locked", `Login locked for "${sanitizeAuditField(body.userId)}" from ${sanitizeAuditField(clientIp)}`);
       sendJSON(429, { error: "Too many failed attempts, try again later" });
     } else {
       // Uniform failure — never reveal whether the account exists.

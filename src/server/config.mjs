@@ -49,7 +49,6 @@ export function loadConfig(configPath, baseDir) {
       backupSchedule: "0 3 * * *",
       maxBackups: 7,
       users: [], // no default credential — must be configured (config.json or env)
-      sessionSecret: "paaw-gw-default",
       sessionMaxAge: 86400000,
     };
   }

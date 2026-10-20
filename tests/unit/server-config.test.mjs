@@ -70,7 +70,9 @@ describe("loadConfig", () => {
   test("fallback 的預設不含明文預設密碼（security）", () => {
     const cfg = loadConfig(join(tmp, "nope.json"), BASE_DIR);
     assert.equal(JSON.stringify(cfg).includes("change_me"), false);
-    assert.equal(cfg.sessionSecret, "paaw-gw-default");
+    // sessionSecret 為 dead config（session 走 randomUUID + in-memory Map），
+    // 已從 fallback 移除；確認不再回傳此欄位。
+    assert.equal("sessionSecret" in cfg, false);
   });
 });
 

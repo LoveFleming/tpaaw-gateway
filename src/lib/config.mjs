@@ -11,8 +11,17 @@
  * Shared mutable state (GATEWAY_CFG, and the layout paths that applyHome()
  * recomputes when the user changes paawHome in the UI) lives ONLY here, inside
  * this module's closure. It is exposed through getters / explicit mutators —
- * we never `export let` a writable binding, so there is exactly one owner and
- * consumers cannot accidentally rebind it.
+ * we never `export let` a writable binding, so consumers cannot rebind the
+ * binding itself.
+ *
+ * Deliberate exception: getCfg() returns the LIVE GATEWAY_CFG object (not a
+ * copy). Mutating it is by design — callers update a field then call
+ * saveGatewayCfg(), and because the reference is live they observe their own
+ * write without a re-fetch. Rebinding is impossible (no exported `let`), so
+ * there stays exactly one owner of the object identity. A snapshot here would
+ * silently break that read-after-write contract, so we keep the live ref and
+ * document it instead. Prefer setCfgField/deleteCfgField for new writes so
+ * changes funnel through one place.
  */
 
 import { mkdir, readdir, readFile, rename, writeFile } from "node:fs/promises";

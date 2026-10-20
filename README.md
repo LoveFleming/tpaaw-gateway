@@ -156,7 +156,7 @@ node src/server.mjs        # http://127.0.0.1:4199/
 
 ```bash
 cp config.example.json config.json
-# 編輯 config.json，把 users[].passwordHash 換成 bcrypt 雜湊、sessionSecret 換成隨機值
+# 編輯 config.json，把 users[].passwordHash 換成 bcrypt 雜湊
 # 或改用環境變數注入（見下方），不改檔案
 ```
 
@@ -175,7 +175,6 @@ cp config.example.json config.json
   "maxBackups": 7,
   "autoStartPaaw": false,
   "users": [{ "id": "admin", "name": "Admin", "role": "admin", "passwordHash": "CHANGE_ME" }],
-  "sessionSecret": "change-me-to-a-random-secret",
   "sessionMaxAge": 86400000
 }
 ```
@@ -204,4 +203,4 @@ npm test    # node --test tests/**/*.test.mjs
 - `users[].passwordHash` 為 **bcrypt 雜湊**（TASK-018 起；plaintext 舊值登入時會自動就地升級）
 - 登入有 **per-user / per-IP rate limit + 鎖定**，失敗一律回相同 401（不洩漏帳號是否存在）
 - 啟動時 **fail-closed**：無憑證或仍是預設密碼（如 `CHANGE_ME`）會拒絕啟動
-- Admin server **預設只綁 `127.0.0.1`**（TASK-019）；`sessionSecret` 部署前請換掉預設值
+- Admin server **預設只綁 `127.0.0.1`**（TASK-019）

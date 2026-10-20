@@ -96,7 +96,7 @@ export function startPaaw(versionDir) {
 export function childFailReason(child) {
   const tail = (child.__tail || "").split(/\r?\n/).filter((l) => l.trim()).slice(-15).join("\n");
   const head = child.__spawnError
-    ? `spawn 失敗（${child.__spawnError}）— tsx/bin 不存在或不可執行`
+    ? `spawn 失敗（${child.__spawnError}）— node 執行 packages/server/src/paaw-server.mjs 失敗（entry 不存在 / 權限不足 / node 路徑異常）`
     : `exitCode=${child.exitCode ?? "?"}${child.signalCode ? ` signal=${child.signalCode}` : ""}`;
   return tail ? `${head}\n── child 輸出最後幾行 ──\n${tail}` : head;
 }

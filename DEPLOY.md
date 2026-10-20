@@ -15,7 +15,7 @@
 
 ```bash
 cp config.example.json config.json
-# 編輯 config.json：users[].passwordHash 換成 bcrypt 雜湊、sessionSecret 換成隨機值
+# 編輯 config.json：users[].passwordHash 換成 bcrypt 雜湊
 # 或：PAAW_GATEWAY_PASSWORD='<強密碼>' node src/server.mjs（啟動時自動雜湊注入 admin）
 ```
 
