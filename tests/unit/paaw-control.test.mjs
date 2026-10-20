@@ -44,6 +44,9 @@ function makeControl(overrides = {}) {
     logEvent: (type, detail, userId) => logged.push({ type, detail, userId }),
     ...overrides,
   };
+  // stashStore() uses the argv (no-shell) seam; createPaawControl derives it
+  // from an injected `exec` automatically, so a single fake covers every
+  // command. No extra wiring needed here.
   return { control: createPaawControl(deps), logged };
 }
 
@@ -270,6 +273,67 @@ describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失�
       // 也不得留下 "restart server" step（沒嘗試復原）。
       assert.equal(r.steps.some((s) => s.step === "restart server"), false, "must not attemptRecover on a conflicted tree");
       assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("本次 stash 但 apply 為『非衝突』失敗（timeout/權限）→ 走一般失敗分支復原，不誤導為 conflict，server 拉回（committee major#1）", async () => {
+    const calls = [];
+    // 非衝突失敗：訊息不含 CONFLICT / merge conflict 等字樣（如 30s timeout）。
+    const nonConflict = "Command failed: git stash apply <sha>\nspawnSync git ETIMEDOUT: operation timed out";
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) throw new Error(nonConflict);
+      return "ok";
+    };
+    const { control, logged } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+
+      assert.equal(r.ok, false, "upgrade itself still fails");
+      // 非衝突 → 一般失敗分支：走 attemptRecover，server 被拉回。
+      assert.equal(r.recovered, true, "a non-conflict apply failure must go through recovery");
+      assert.equal(control.isRunning(), true, "server must be recovered on a non-conflict failure");
+
+      // 不得把非衝突誤診為 conflict，也不得誤導 operator 去手動解衝突。
+      const warning = r.warnings[0];
+      assert.match(warning, /non-conflict/);
+      assert.equal(/resolve the conflict manually/i.test(warning), false, "must NOT instruct manual conflict resolution");
+      assert.equal(/failed \(merge conflict\)/i.test(warning), false, "must NOT label a non-conflict failure as a merge conflict");
+
+      // step 應標記一般失敗（note: apply failed，而非 conflict），並帶原始原因。
+      const step = r.steps.find((s) => s.step === "git stash restore");
+      assert.equal(step.ok, false);
+      assert.equal(step.note, "apply failed");
+      assert.equal(step.detail, nonConflict, "raw cause must be surfaced for diagnosis");
+
+      // 必須有 restart server step（已嘗試復原）。
+      assert.ok(r.steps.some((s) => s.step === "restart server"), "must attemptRecover on a non-conflict failure");
+
+      // npm install 仍不得執行（升級已中止）。
+      assert.equal(calls.some((c) => c.startsWith("npm install")), false);
+      assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("stashCreate 帶 timeout（與 store/apply/drop 一致），避免 git 掛死時升級無限阻塞（committee minor#2）", async () => {
+    let createOpts;
+    const fakeExec = (cmd, opts) => {
+      if (cmd === "git stash create") { createOpts = opts; return ""; }
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      await control.upgradePaaw("admin1");
+      assert.ok(createOpts, "git stash create must be invoked with options");
+      assert.equal(typeof createOpts.timeout, "number", "stashCreate must set a timeout");
+      assert.ok(createOpts.timeout > 0, "timeout must be a positive number");
+      assert.equal(createOpts.timeout, 15000, "stashCreate timeout must match the sibling stash ops (15s)");
     } finally {
       await control.stopPaaw();
     }

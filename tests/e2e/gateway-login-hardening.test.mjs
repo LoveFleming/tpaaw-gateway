@@ -81,12 +81,15 @@ function makeEnv(configOverrides = {}) {
     }
   }
 
-  const login = (userId, password) =>
+  const login = (userId, password, opts = {}) =>
     call(app, {
       method: "POST",
       url: "/api/auth/login",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ userId, password }),
+      // `remoteAddress` lets a case drive the per-IP key (which the handler reads
+      // from req.socket.remoteAddress) to exercise clientIp sanitization.
+      ...(opts.remoteAddress ? { remoteAddress: opts.remoteAddress } : {}),
     }).then((r) => ({ status: r.status, data: r.data, headers: r.headers }));
 
   return { app, login, tmp, dispose: () => rmSync(tmp, { recursive: true, force: true }) };
@@ -149,6 +152,54 @@ describe("E2E · Gateway login lockout (TASK-018, in-process)", () => {
         `audit detail must contain no control characters: ${JSON.stringify(entry.detail)}`);
       // Traceability preserved: the printable subset of the id survives.
       assert.ok(entry.detail.includes("INJECTED"), "printable chars retained for tracing");
+    } finally {
+      fresh.dispose();
+    }
+  });
+
+  it("login_locked audit entry sanitizes the clientIp field too (no log injection via socket address)", async () => {
+    const fresh = makeEnv();
+    try {
+      // The per-IP key is derived from req.socket.remoteAddress; a crafted socket
+      // address carrying CR/LF + controls must not forge extra audit lines.
+      const evilIp = "10.0.0.1\r\nINJECTED-IP\t\u0000\u0007";
+      for (let i = 0; i < 5; i++) await fresh.login("admin", "wrong", { remoteAddress: evilIp });
+      const locked = await fresh.login("admin", "wrong", { remoteAddress: evilIp });
+      assert.equal(locked.status, 429, "the flooding IP must be locked");
+
+      const entry = fresh.app.events.find((e) => e.type === "login_locked");
+      assert.ok(entry, "a login_locked audit entry must exist");
+      assert.equal(/[\r\n\t\u0000-\u001f]/.test(entry.detail), false,
+        `audit detail must contain no control characters: ${JSON.stringify(entry.detail)}`);
+      // The printable IP prefix survives for tracing.
+      assert.ok(entry.detail.includes("10.0.0.1"), "printable IP prefix retained for tracing");
+      assert.ok(entry.detail.includes("INJECTED-IP"), "printable chars retained for tracing");
+    } finally {
+      fresh.dispose();
+    }
+  });
+
+  it("login_locked audit entry caps the attacker-controlled field length (AUDIT_FIELD_MAX)", async () => {
+    const fresh = makeEnv();
+    try {
+      // A very long (but printable) userId must be capped so it cannot bloat the
+      // audit trail / JSONL beyond the intended field budget.
+      const longUser = "A".repeat(5000);
+      for (let i = 0; i < 5; i++) await fresh.login(longUser, "wrong");
+      const locked = await fresh.login(longUser, "wrong");
+      assert.equal(locked.status, 429, "the flooding principal must be locked");
+
+      const entry = fresh.app.events.find((e) => e.type === "login_locked");
+      assert.ok(entry, "a login_locked audit entry must exist");
+
+      // The write-layer sanitizer caps the WHOLE detail string at AUDIT_FIELD_MAX
+      // code units, so a 5000-char attacker userId cannot bloat the audit trail.
+      const max = fresh.app.AUDIT_FIELD_MAX;
+      assert.ok(entry.detail.length <= max,
+        `audit detail length ${entry.detail.length} must be capped at AUDIT_FIELD_MAX (${max})`);
+      // Traceability preserved: the fixed prefix + a run of the userId survives.
+      assert.ok(entry.detail.startsWith("Login locked for \""), "the entry prefix must survive the cap");
+      assert.ok(entry.detail.includes("AAAA"), "the printable userId run must be retained");
     } finally {
       fresh.dispose();
     }

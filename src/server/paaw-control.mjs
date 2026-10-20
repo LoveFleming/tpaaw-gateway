@@ -12,7 +12,7 @@
 
 import { readFileSync } from "fs";
 import { join } from "path";
-import { execSync, spawn } from "child_process";
+import { execSync, execFileSync, spawn } from "child_process";
 
 /**
  * Create the PAAW control surface for one server instance.
@@ -23,7 +23,11 @@ import { execSync, spawn } from "child_process";
  * @param {(type: string, detail: string, userId?: string) => void} deps.logEvent
  * @param {typeof execSync} [deps.exec] optional execSync override (test seam);
  *   defaults to node:child_process execSync. Drives the upgrade flow's
- *   git/npm commands. Used only by upgradePaaw.
+ *   git/npm commands that are passed as a SHELL STRING. Used only by upgradePaaw.
+ * @param {typeof execFileSync} [deps.execFile] optional execFileSync override
+ *   (test seam); defaults to node:child_process execFileSync. Used for commands
+ *   whose arguments must NOT pass through a shell (argv array → no quoting /
+ *   injection surface).
  * @returns {object} control API (see exported functions below)
  */
 export function createPaawControl(deps) {
@@ -33,6 +37,22 @@ export function createPaawControl(deps) {
   // exec lets us drive success/failure paths deterministically without touching
   // the FS/git.
   const execCmd = deps.exec ?? execSync;
+  // Second seam for the argv form (no shell). Kept separate from execCmd so a
+  // command can pass untrusted-ish args without ever building a shell string.
+  //
+  // When a test injects only `exec` (the historical single seam), derive the
+  // argv form from it by flattening argv back into a shell-like string — so the
+  // one fake keeps covering every command without callers having to wire two
+  // seams. In production (no `exec` override) we use the real execFileSync.
+  const execFileCmd = deps.execFile
+    ?? (deps.exec
+      ? (file, args, opts) => deps.exec(`${file} ${args.join(" ")}`, opts)
+      : execFileSync);
+
+  // Sibling stash ops share one timeout so a hung git never blocks the upgrade
+  // indefinitely (committee minor#2: stashCreate previously had no timeout while
+  // store/drop used 15s and apply used 30s — now all point at one constant).
+  const STASH_OP_TIMEOUT_MS = 15000;
 
   // ── Process state (private to this closure) ──
   let paawProcess = null;
@@ -253,8 +273,26 @@ export function createPaawControl(deps) {
    * @throws {Error} on any real git failure
    */
   function stashCreate() {
-    const out = execCmd("git stash create", { cwd: PAAW_ROOT, encoding: "utf-8" });
+    // Timeout parity with the sibling stash ops (store/drop 15s, apply 30s): a
+    // hung git (index lock, huge repo scan) must not block the upgrade forever.
+    const out = execCmd("git stash create", { cwd: PAAW_ROOT, encoding: "utf-8", timeout: STASH_OP_TIMEOUT_MS });
     return String(out ?? "").trim();
+  }
+
+  /**
+   * Classify a `git stash apply` failure message as a MERGE CONFLICT or not.
+   *
+   * `git stash apply` reports conflicts on stderr with stable phrasing, and the
+   * node child_process error message carries that stderr verbatim. We match the
+   * git conflict signatures (not generic words like "error" / "failed") so that
+   * non-conflict failures (timeout, EACCES, ENOSPC, corrupt repo, "unable to
+   * read tree") are NOT misdiagnosed as conflicts (committee major#1).
+   *
+   * @param {string} msg the raw error message from the failed apply
+   * @returns {boolean} true only when the message evidences a real conflict
+   */
+  function isStashApplyConflict(msg) {
+    return /CONFLICT\b|Automatic merge failed|merge conflict|fix conflicts/i.test(msg);
   }
 
   /**
@@ -268,7 +306,14 @@ export function createPaawControl(deps) {
    */
   function stashStore(sha) {
     const message = `paaw-upgrade-${new Date().toISOString()}`;
-    execCmd(`git stash store -m "${message}" ${sha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 15000 });
+    // argv form (no shell): the message / sha are passed as separate arguments,
+    // so a future message containing quotes or backticks can never break out of
+    // the command (command-injection hardening — committee minor).
+    execFileCmd("git", ["stash", "store", "-m", message, sha], {
+      cwd: PAAW_ROOT,
+      encoding: "utf-8",
+      timeout: STASH_OP_TIMEOUT_MS,
+    });
     return message;
   }
 
@@ -407,27 +452,55 @@ export function createPaawControl(deps) {
           execCmd(`git stash apply ${stashSha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 30000 });
         } catch (stashErr) {
           const msg = String(stashErr?.message ?? "");
-          // We DID stash, yet the apply failed — almost always a merge conflict.
-          // The stash entry is preserved (apply never drops), so local changes
-          // are safe. We must NOT continue on top of a dirty/conflicted tree:
-          // a conflicted working tree is exactly the state we must NOT boot from
-          // (starting the server here could load half-merged modules with
-          // conflict markers). So we deliberately do NOT attemptRecover(); we
-          // keep the server STOPPED and emit a loud, actionable warning. This is
-          // an intentional exception to the "never leave the server down"
-          // guarantee: leaving it down is strictly safer than starting broken.
-          const warning = "git stash apply failed (conflict) — server left STOPPED. "
-            + "Your local changes are preserved in the stash; resolve the merge conflict manually, then start the server.";
-          warnings.push(warning);
-          steps.push({ step: "git stash restore", ok: false, warning: true, note: "conflict", detail: msg });
-          logEvent("upgrade_failed", `Upgrade aborted at git stash apply (conflict): ${msg}`, userId);
+          // An apply failure is NOT always a conflict: it can also be a timeout
+          // (30s), a permission error, a full disk, a corrupt repo, etc.
+          // Conflating all of them as "conflict" (committee major#1) misleads the
+          // operator into hand-resolving a conflict that does not exist AND
+          // routes them into the higher-risk "server stays STOPPED" branch. Only
+          // a REAL conflict justifies that. So we classify first:
+          const conflict = isStashApplyConflict(msg);
+          // Local changes are preserved in both cases (apply never drops), so no
+          // data is lost regardless of the failure kind.
+          if (conflict) {
+            // A conflicted working tree is exactly the state we must NOT boot
+            // from (starting the server here could load half-merged modules with
+            // conflict markers). Deliberately do NOT attemptRecover(): keep the
+            // server STOPPED and emit a loud, actionable warning. This is an
+            // intentional exception to the "never leave the server down"
+            // guarantee — leaving it down is strictly safer than starting broken.
+            const warning = "git stash apply failed (merge conflict) — server left STOPPED. "
+              + "Your local changes are preserved in the stash; resolve the conflict manually, then start the server.";
+            warnings.push(warning);
+            steps.push({ step: "git stash restore", ok: false, warning: true, note: "conflict", detail: msg });
+            logEvent("upgrade_failed", `Upgrade aborted at git stash apply (conflict): ${msg}`, userId);
 
+            return {
+              ok: false,
+              steps,
+              warnings,
+              recovered: false,
+              error: `Upgrade aborted at git stash apply (conflict): ${msg} — server left stopped for manual conflict resolution.`,
+            };
+          }
+
+          // NON-conflict failure (timeout / permission / disk / corrupt repo / …):
+          // nothing is half-merged, so booting the restored server is safe. Route
+          // through the standard recovery path (like the other failure branches)
+          // so a transient/non-conflict git failure does NOT needlessly leave the
+          // server down, and surface the raw error so the operator sees the real
+          // cause instead of a misleading "conflict" diagnosis.
+          const warning = `git stash apply failed (non-conflict) — your local changes remain in the stash; `
+            + `cause: ${msg}`;
+          warnings.push(warning);
+          steps.push({ step: "git stash restore", ok: false, warning: true, note: "apply failed", detail: msg });
+          logEvent("upgrade_failed", `Upgrade failed at git stash apply (non-conflict): ${msg}`, userId);
+          const recovered = attemptRecover(userId, steps, warnings);
           return {
             ok: false,
             steps,
             warnings,
-            recovered: false,
-            error: `Upgrade aborted at git stash apply (conflict): ${msg} — server left stopped for manual conflict resolution.`,
+            recovered,
+            error: `Upgrade failed at git stash apply (non-conflict): ${msg} — server ${recovered ? "running (recovered)" : "not running — restart FAILED"}.`,
           };
         }
 

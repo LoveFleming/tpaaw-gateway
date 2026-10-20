@@ -29,7 +29,7 @@ import { join, dirname, basename } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 
 import { createConfig, validateAuthConfig } from "./server/config.mjs";
-import { createEventLog } from "./server/events.mjs";
+import { createEventLog, sanitizeAuditField, AUDIT_FIELD_MAX } from "./server/events.mjs";
 import { createAuth } from "./server/auth.mjs";
 import { createPaawControl } from "./server/paaw-control.mjs";
 import { createBackupManager } from "./server/backup.mjs";
@@ -86,37 +86,15 @@ export function createApp(overrides = {}) {
   });
   const { backupPath, listBackups, createBackup, restoreBackup } = backupManager;
 
-  // ── Audit-log field sanitizer (createApp scope: exported for unit testing,
-  //    and shared by handler call sites) ──
-  // Strip control characters (incl. CR/LF, which could forge extra log lines)
-  // and cap the length. Today it guards the attacker-controlled fields in the
-  // login flow: the `userId` and `clientIp` passed to `login_locked`. NOTE: some
-  // other audit entries (e.g. `login`) carry config-sourced values, but
-  // `login_locked`'s userId is directly attacker-controlled — so any *future*
-  // audit call site that logs a client-supplied value MUST route it through this
-  // sanitizer. The JSONL writer already escapes quotes, but control chars are
-  // the injection vector. Keeps the printable subset for traceability;
-  // char-by-char filter (no regex backtracking → no ReDoS).
-  const AUDIT_FIELD_MAX = 128;
-  const sanitizeAuditField = (value) => {
-    let out = "";
-    for (const ch of String(value)) {
-      const code = ch.codePointAt(0);
-      // Drop C0 controls (0x00–0x1F), DEL (0x7F), and C1 controls (0x80–0x9F),
-      // plus the Unicode line/paragraph separators U+2028/U+2029 (minor#2). Some
-      // log/JS consumers still treat these as line breaks, so they are a residual
-      // log-injection vector even though they are printable-looking.
-      if (code < 0x20 || (code >= 0x7f && code <= 0x9f) || code === 0x2028 || code === 0x2029) continue;
-      // Cap on UTF-16 code units (String#length): check BEFORE appending so the
-      // result never exceeds AUDIT_FIELD_MAX code units. Using code units (not
-      // code points) keeps the cap deterministic for JSONL/byte-budget purposes
-      // — an astral char (surrogate pair) therefore counts as 2. A pair is never
-      // split because 2 <= AUDIT_FIELD_MAX always holds.
-      if (out.length + ch.length > AUDIT_FIELD_MAX) break;
-      out += ch;
-    }
-    return out;
-  };
+  // ── Audit-log field sanitizer ──
+  // The sanitizer now lives in the events module and is applied at the WRITE
+  // layer (createEventLog's logEvent), so EVERY audit entry is guarded — not
+  // just the ones whose call site remembered to call it. This removes the
+  // per-call-site human convention the old comment relied on: a failing login
+  // path (or any future call site) that logs a client-supplied `userId` /
+  // `clientIp` is sanitized unconditionally. `sanitizeAuditField` /
+  // `AUDIT_FIELD_MAX` are re-exported from events.mjs for backward-compatible
+  // unit testing (imported at the top of this file).
 
   // ── HTTP request handler (moved verbatim from the old createServer callback) ──
   const handler = async (req, res) => {
@@ -234,7 +212,10 @@ export function createApp(overrides = {}) {
     } else if (result.locked) {
       const retryAfterSec = Math.max(1, Math.ceil((result.retryAfterMs || 0) / 1000));
       res.setHeader("Retry-After", String(retryAfterSec));
-      logEvent("login_locked", `Login locked for "${sanitizeAuditField(body.userId)}" from ${sanitizeAuditField(clientIp)}`);
+      // detail is sanitized at the logEvent write layer (events.mjs), so the
+      // attacker-controlled userId / clientIp cannot inject control chars even
+      // without an explicit call here.
+      logEvent("login_locked", `Login locked for "${body.userId}" from ${clientIp}`);
       sendJSON(429, { error: "Too many failed attempts, try again later" });
     } else {
       // Uniform failure — never reveal whether the account exists.

@@ -50,6 +50,11 @@ export function loadConfig(configPath, baseDir) {
       maxBackups: 7,
       users: [], // no default credential — must be configured (config.json or env)
       sessionMaxAge: 86400000,
+      // NOTE: there is deliberately NO sessionSecret here. Sessions are opaque
+      // randomUUID tokens held in an in-memory Map (see auth.mjs) — no HMAC
+      // signing key is used or read anywhere, so a secret field would be dead
+      // config. (Review board minor#1 was a false positive: no consumer reads
+      // cfg.sessionSecret.)
     };
   }
 }
