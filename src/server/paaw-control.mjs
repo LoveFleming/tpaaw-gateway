@@ -43,10 +43,22 @@ export function createPaawControl(deps) {
 
   /**
    * Start the PAAW Server child process.
-   * @returns {{ ok: boolean, pid?: number, error?: string }}
+   *
+   * Additive contract (ADR-005): besides { ok, pid?, error? } the result also
+   * carries a machine-readable `code` (stable identifier) and, when refused
+   * because a process is already live, `alreadyRunning: true`. Callers must key
+   * off these fields — never the human-facing `error` string, which may change
+   * wording/locale at any time.
+   *
+   *   { ok:true,  pid }
+   *   { ok:false, code:"ALREADY_RUNNING", alreadyRunning:true, error:"Already running" }
+   *
+   * @returns {{ ok: boolean, pid?: number, error?: string, code?: string, alreadyRunning?: boolean }}
    */
   function startPaaw() {
-    if (paawProcess) return { ok: false, error: "Already running" };
+    if (paawProcess) {
+      return { ok: false, code: "ALREADY_RUNNING", alreadyRunning: true, error: "Already running" };
+    }
 
     paawStatus = "starting";
     logEvent("server_starting", "PAAW Server starting...");
@@ -221,25 +233,43 @@ export function createPaawControl(deps) {
   }
 
   /**
-   * Count entries in the git stash stack (read-only probe).
+   * Create a stash commit WITHOUT touching the stash list, returning its sha.
    *
-   * Used by upgradePaaw to detect whether THIS run created a new stash entry
-   * (compare before/after counts) rather than trusting "stash list non-empty",
-   * which conflates pre-existing stashes with our own. On any error we return 0:
-   * a failed probe must not abort the upgrade, and treating "unknown" as "no
-   * new stash" keeps us from popping a stash we did not create.
+   * ADR-005: `git stash create` is the single stable seam for "did THIS run
+   * stash anything". It does not push onto the shared stash stack, it returns a
+   * commit sha on success and an EMPTY string when there is nothing to stash.
+   * The sha is the single source of truth for whether we own a stash — we never
+   * infer from a non-empty `git stash list` or a before/after count delta (both
+   * were proven fragile: pre-existing stashes shift the baseline, and a failed
+   * probe read as 0 can flip the comparison).
    *
-   * @returns {number} number of stash entries (0 on error/empty)
+   * Error policy (ADR-005 edge table): a REAL failure (corrupt repo, permission
+   * denied, git missing) must NOT be swallowed into "nothing to stash" — that is
+   * audit false-success. We rethrow so the caller marks the step failed and the
+   * outer catch restores the server. `git stash create` simply returning "" is
+   * the only "nothing to stash" signal.
+   *
+   * @returns {string} the stash commit sha, or "" when there is nothing to stash
+   * @throws {Error} on any real git failure
    */
-  function countStashEntries() {
-    try {
-      const out = execCmd("git stash list", { cwd: PAAW_ROOT, encoding: "utf-8" });
-      return String(out ?? "")
-        .split("\n")
-        .filter((line) => line.trim().length > 0).length;
-    } catch {
-      return 0;
-    }
+  function stashCreate() {
+    const out = execCmd("git stash create", { cwd: PAAW_ROOT, encoding: "utf-8" });
+    return String(out ?? "").trim();
+  }
+
+  /**
+   * Register a dangling stash commit (from `git stash create`) into the stash
+   * list so it survives across subsequent git commands (a dangling commit can
+   * be lost to gc). The -m message carries an ISO timestamp for human
+   * inspection only; it is never parsed for logic (locale/format independent).
+   *
+   * @param {string} sha stash commit sha returned by stashCreate()
+   * @returns {string} the message used
+   */
+  function stashStore(sha) {
+    const message = `paaw-upgrade-${new Date().toISOString()}`;
+    execCmd(`git stash store -m "${message}" ${sha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 15000 });
+    return message;
   }
 
   /**
@@ -252,13 +282,18 @@ export function createPaawControl(deps) {
    * fails (never pretend success), and logs `upgrade_recovered` on success.
    *
    * Idempotent: startPaaw() owns the guard and returns
-   * { ok:false, error:"Already running" } if a process is still up. That is a
-   * SUCCESS for recovery, not a failure (committee minor, 2026-10-20): the
-   * operator's actual goal is "the server is running" — a live process means
-   * we got there, regardless of which call path started it. In particular the
-   * outer-catch path can reach here when stopPaaw() never actually stopped the
-   * old server (e.g. the failure happened before any stop), so "Already
-   * running" is the *expected* outcome there and must be reported as recovered.
+   * { ok:false, code:"ALREADY_RUNNING", alreadyRunning:true } if a process is
+   * still up. That is a SUCCESS for recovery, not a failure (committee minor,
+   * 2026-10-20): the operator's actual goal is "the server is running" — a live
+   * process means we got there, regardless of which call path started it. In
+   * particular the outer-catch path can reach here when stopPaaw() never
+   * actually stopped the old server (e.g. the failure happened before any stop),
+   * so "already running" is the *expected* outcome there and must be reported
+   * as recovered.
+   *
+   * ADR-005: the check is STRUCTURAL (`alreadyRunning` flag / `code`), never
+   * `error === "Already running"` — the error string is human-facing and may
+   * change wording, which would silently break the recovery decision.
    *
    * @param {string} userId audit actor
    * @param {Array<object>} steps upgrade step log to append to
@@ -275,10 +310,11 @@ export function createPaawControl(deps) {
       recoverResult = { ok: false, error: startErr.message };
     }
 
-    // "Already running" (or a live handle) means the server is up — the goal of
-    // recovery is met even though startPaaw() refused to spawn a second process.
+    // A live server (structured flag, or a handle that is up regardless of which
+    // call path started it) means the goal of recovery is met even though
+    // startPaaw() refused to spawn a second process.
     const alreadyRunning = !recoverResult.ok
-      && (recoverResult.error === "Already running" || isRunning());
+      && (recoverResult.alreadyRunning === true || recoverResult.code === "ALREADY_RUNNING" || isRunning());
     const recovered = recoverResult.ok || alreadyRunning;
 
     steps.push({
@@ -322,71 +358,89 @@ export function createPaawControl(deps) {
 
     const steps = [];
     // Non-fatal issues the caller must surface to the operator (major#2):
-    // e.g. a failed `git stash pop` means local changes may still be in the
+    // e.g. a failed stash restore means local changes may still be in the
     // stash / conflict — silently reporting ok would hide data-loss risk.
     const warnings = [];
 
     try {
-      // Step 1: git stash (preserve local changes)
-      // Per-operation stash detection (committee major, 2026-10-20): the previous
-      // "git stash list non-empty ⇒ stashed" probe was WRONG — a pre-existing stash
-      // from a prior session made every upgrade think *this* run had stashed, so a
-      // later pop could pop someone else's old stash or misreport a conflict.
-      // We now compare the stash COUNT before vs. after our own push: only a net
-      // +1 means THIS operation created a new entry. `stashed` is the single source
-      // of truth and gates the pop — we never pop a stash we did not create.
-      const stashCountBefore = countStashEntries();
-      try {
-        execCmd("git stash", { cwd: PAAW_ROOT, encoding: "utf-8" });
-      } catch {
-        // "nothing to stash" is a normal, non-error outcome — the count probe
-        // below will confirm no new entry was created (stashed=false).
+      // Step 1: stash local changes (if any) — ADR-005.
+      //
+      // Identification uses `git stash create`, which returns a commit sha when
+      // it stashes and an EMPTY string when there is nothing to stash. It does
+      // NOT touch the shared stash stack, so the sha is the single source of
+      // truth for "we own this stash" — no `git stash list` non-empty probe and
+      // no before/after count delta (both proven fragile: old stashes shift the
+      // baseline, and a failed probe read as 0 flips the comparison).
+      //
+      // A REAL error (corrupt repo, permission, git missing) from stashCreate()
+      // / stashStore() propagates to the outer catch: the step is marked failed
+      // and the server is restored — it must never be swallowed into a fake
+      // "nothing to stash" success.
+      const stashSha = stashCreate();
+      const stashed = stashSha.length > 0;
+      if (stashed) {
+        // The create-commit is dangling (no ref) and can be gc'd, so register
+        // it in the stash list to keep it alive across the pull below and to
+        // make it visible to a human via `git stash list`.
+        stashStore(stashSha);
+        steps.push({ step: "git stash", ok: true, note: `stashed ${stashSha.slice(0, 12)}` });
+      } else {
+        steps.push({ step: "git stash", ok: true, note: "nothing to stash" });
       }
-      const stashCountAfter = countStashEntries();
-      const stashed = stashCountAfter > stashCountBefore;
-      steps.push({ step: "git stash", ok: true, note: stashed ? "stashed" : "nothing to stash" });
 
       // Step 2: git pull
       const gitInfo = getGitInfo();
       const pullResult = execCmd(`git pull origin ${gitInfo.branch}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 60000 });
       steps.push({ step: "git pull", ok: true, output: pullResult.trim().slice(0, 200) });
 
-      // Step 3: git stash pop (restore local changes)
-      // Only pop when WE created a stash this run. When `stashed` is false we must
-      // NOT run `git stash pop` at all — a bare pop would restore whatever stash
-      // already existed on the machine (possibly another operator's work).
+      // Step 3: restore local changes — only for the sha WE created.
+      //
+      // We apply the exact sha (never a bare `git stash pop`, which would grab
+      // whatever is on top of the shared stack — possibly another operator's
+      // work). `apply` is non-destructive: if it fails the stash entry survives,
+      // so no data is lost; only a CLEAN apply is followed by `drop` to clean up
+      // our own entry.
       if (!stashed) {
-        steps.push({ step: "git stash pop", ok: true, note: "no stash entries" });
+        steps.push({ step: "git stash restore", ok: true, note: "no stash entries" });
       } else {
         try {
-          execCmd("git stash pop", { cwd: PAAW_ROOT, encoding: "utf-8" });
-          steps.push({ step: "git stash pop", ok: true });
+          execCmd(`git stash apply ${stashSha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 30000 });
         } catch (stashErr) {
           const msg = String(stashErr?.message ?? "");
-          // We DID stash, yet the pop failed — almost always a merge conflict.
-          // We must NOT discard local changes, and we must NOT continue on top
-          // of a dirty/conflicted tree (major#2).
-          //
-          // minor#3: a conflicted working tree is exactly the state we must NOT
-          // boot from — starting the server here could load half-merged modules
-          // with conflict markers. So we deliberately do NOT attemptRecover();
-          // we keep the server STOPPED and emit a loud, actionable warning for a
-          // human to resolve the conflict manually. This is an intentional
-          // exception to the "never leave the server down" guarantee (major#1):
-          // leaving it down is strictly safer than starting on a broken tree.
-          const warning = "git stash pop failed (conflict) — server left STOPPED. "
-            + "Resolve the merge conflict manually, then start the server.";
+          // We DID stash, yet the apply failed — almost always a merge conflict.
+          // The stash entry is preserved (apply never drops), so local changes
+          // are safe. We must NOT continue on top of a dirty/conflicted tree:
+          // a conflicted working tree is exactly the state we must NOT boot from
+          // (starting the server here could load half-merged modules with
+          // conflict markers). So we deliberately do NOT attemptRecover(); we
+          // keep the server STOPPED and emit a loud, actionable warning. This is
+          // an intentional exception to the "never leave the server down"
+          // guarantee: leaving it down is strictly safer than starting broken.
+          const warning = "git stash apply failed (conflict) — server left STOPPED. "
+            + "Your local changes are preserved in the stash; resolve the merge conflict manually, then start the server.";
           warnings.push(warning);
-          steps.push({ step: "git stash pop", ok: false, warning: true, note: "conflict", detail: msg });
-          logEvent("upgrade_failed", `Upgrade aborted at git stash pop (conflict): ${msg}`, userId);
+          steps.push({ step: "git stash restore", ok: false, warning: true, note: "conflict", detail: msg });
+          logEvent("upgrade_failed", `Upgrade aborted at git stash apply (conflict): ${msg}`, userId);
 
           return {
             ok: false,
             steps,
             warnings,
             recovered: false,
-            error: `Upgrade aborted at git stash pop (conflict): ${msg} — server left stopped for manual conflict resolution.`,
+            error: `Upgrade aborted at git stash apply (conflict): ${msg} — server left stopped for manual conflict resolution.`,
           };
+        }
+
+        // Apply succeeded → our entry is now redundant; drop it. A drop failure
+        // loses no data (the entry simply remains) — warn so a human can clean
+        // up manually, but the upgrade itself proceeds.
+        try {
+          execCmd(`git stash drop ${stashSha}`, { cwd: PAAW_ROOT, encoding: "utf-8", timeout: 15000 });
+          steps.push({ step: "git stash restore", ok: true, note: "applied + dropped" });
+        } catch (dropErr) {
+          const msg = String(dropErr?.message ?? "");
+          warnings.push(`git stash dropped failed: ${msg} — local changes were applied; a redundant stash entry may remain (git stash list).`);
+          steps.push({ step: "git stash restore", ok: true, warning: true, note: "applied, drop failed", detail: msg });
         }
       }
 
@@ -436,9 +490,9 @@ export function createPaawControl(deps) {
       //
       // minor#4 (committee, 2026-10-20): this path does NOT strictly guarantee
       // "the old server was stopped" — attemptRecover() therefore treats a live
-      // process ("Already running") as a successful recovery rather than a
-      // failure, and the wording below reflects the actual end state instead of
-      // asserting a restart that may not have happened.
+      // process (structured alreadyRunning flag) as a successful recovery rather
+      // than a failure, and the wording below reflects the actual end state
+      // instead of asserting a restart that may not have happened.
       logEvent("upgrade_failed", `Upgrade failed: ${err.message}`, userId);
       const recovered = attemptRecover(userId, steps, warnings);
       return {

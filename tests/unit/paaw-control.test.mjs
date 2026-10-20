@@ -229,34 +229,38 @@ describe("src/server/paaw-control.mjs — upgradePaaw（npm install 失敗仍重
   });
 });
 
-describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即中止升級）", () => {
-  test("git stash pop throw（conflict，且本次確實 stash）→ ok:false + warning，不執行 npm install，server 保持停止（minor#3）", async () => {
+// ── upgradePaaw：stash create/store/apply/drop（ADR-005 穩定 stash 處理）──
+// 識別改採 `git stash create`（回 sha 或空字串），還原只作用於已知 sha
+// （`git stash apply <sha>` → 成功才 `git stash drop <sha>`）。不再用
+// `git stash list` 非空 / count 差值推斷本次是否 stash。
+const STASH_SHA = "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2";
+
+describe("src/server/paaw-control.mjs — upgradePaaw（stash create/apply 失敗即中止升級）", () => {
+  test("本次確實 stash（create 回 sha）且 apply 衝突 → ok:false + warning，不執行 npm install，server 保持停止（minor#3）", async () => {
     const calls = [];
-    // 本次操作特有判定（committee major）：stash 前 count=0、stash 後 count=1。
-    let stashCalls = 0;
     const fakeExec = (cmd) => {
       calls.push(cmd);
-      if (cmd === "git stash list") return stashCalls === 0 ? "" : "stash@{0}: WIP on main: abc123 local changes\n";
-      if (cmd === "git stash") { stashCalls++; return "ok"; }
-      if (cmd === "git stash pop") throw new Error("CONFLICT (content): merge conflict in foo.mjs");
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) throw new Error("CONFLICT (content): merge conflict in foo.mjs");
       return "ok";
     };
     const { control, logged } = makeControl({ exec: fakeExec });
     try {
       const r = await control.upgradePaaw("admin1");
 
-      // stash pop 失敗 = 中止升級（不能在一片 conflict marker 的樹上裝依賴）
+      // stash apply 失敗（衝突）= 中止升級（不能在一片 conflict marker 的樹上裝依賴）
       assert.equal(r.ok, false);
       assert.ok(Array.isArray(r.warnings));
       assert.equal(r.warnings.length, 1, "should surface exactly one warning");
-      assert.match(r.warnings[0], /stash pop failed/);
+      assert.match(r.warnings[0], /stash apply failed/);
       assert.match(r.warnings[0], /STOPPED/);
 
       // 關鍵：不得執行 npm install
-      assert.equal(calls.some((c) => c.startsWith("npm install")), false, "npm install must NOT run after stash pop failure");
+      assert.equal(calls.some((c) => c.startsWith("npm install")), false, "npm install must NOT run after stash apply failure");
 
       // 對應 step 要標記 warning，讓前端能凸顯
-      const step = r.steps.find((s) => s.step === "git stash pop");
+      const step = r.steps.find((s) => s.step === "git stash restore");
       assert.equal(step.ok, false);
       assert.equal(step.warning, true);
 
@@ -271,14 +275,16 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
     }
   });
 
-  test("本次未 stash（stash 前後 count 皆為 0）→ 完全略過 git stash pop，維持 ok:true，不產生 warning", async () => {
+  test("無事可 stash（create 回空字串）→ 略過 store/apply/drop，維持 ok:true，不產生 warning", async () => {
     const calls = [];
     const fakeExec = (cmd) => {
       calls.push(cmd);
-      // 沒有新 stash：count 前後都是 0。
-      if (cmd === "git stash list") return "";
-      // 若實作錯誤地呼叫 pop，這裡會 throw → 測試必須證明根本沒被呼叫。
-      if (cmd === "git stash pop") throw new Error("No stash entries found.");
+      // 沒有本次 stash：create 回空字串（非錯誤）。
+      if (cmd === "git stash create") return "";
+      // 若實作錯誤地去 apply/drop，這裡會 throw → 測試必須證明根本沒被呼叫。
+      if (cmd.startsWith("git stash apply") || cmd.startsWith("git stash drop")) {
+        throw new Error("no stash entry should be touched");
+      }
       return "ok";
     };
     const { control } = makeControl({ exec: fakeExec });
@@ -286,79 +292,127 @@ describe("src/server/paaw-control.mjs — upgradePaaw（git stash pop 失敗即�
       const r = await control.upgradePaaw("admin1");
       assert.equal(r.ok, true);
       assert.equal(r.warnings.length, 0);
-      // 關鍵（committee major）：沒有本次 stash 就絕不 pop（避免 pop 掉別人的舊 stash）。
-      assert.equal(calls.includes("git stash pop"), false, "must NOT run git stash pop when we stashed nothing");
-      const step = r.steps.find((s) => s.step === "git stash pop");
-      assert.equal(step.ok, true);
-      assert.equal(step.note, "no stash entries");
+      // 關鍵（ADR-005）：沒有本次 stash 就絕不 apply/drop（避免動到別人的舊 stash）。
+      assert.equal(calls.some((c) => c.startsWith("git stash apply")), false, "must NOT apply when we stashed nothing");
+      assert.equal(calls.some((c) => c.startsWith("git stash drop")), false, "must NOT drop when we stashed nothing");
+      assert.equal(calls.some((c) => c.startsWith("git stash store")), false, "must NOT store an empty sha");
+      const stashStep = r.steps.find((s) => s.step === "git stash");
+      assert.equal(stashStep.ok, true);
+      assert.equal(stashStep.note, "nothing to stash");
+      const restoreStep = r.steps.find((s) => s.step === "git stash restore");
+      assert.equal(restoreStep.ok, true);
+      assert.equal(restoreStep.note, "no stash entries");
     } finally {
       await control.stopPaaw();
     }
   });
 
-  test("升級前已有舊 stash 且本次未新增（count 前後皆 1）→ 不誤判、不 pop 舊 stash（committee major）", async () => {
+  test("機器已有舊 stash 且本次未 stash → 不誤判、絕不 apply/drop 舊 stash（committee major）", async () => {
     const calls = [];
     const fakeExec = (cmd) => {
       calls.push(cmd);
-      // 機器上本來就有一個舊 stash；本次 git stash 無新 entry，count 維持 1。
-      if (cmd === "git stash list") return "stash@{0}: WIP on main: deadbeef old operator work\n";
-      if (cmd === "git stash") throw new Error("No local changes to save");
-      // 若實作誤用「list 非空 → pop」，會呼叫到此並 throw → 測試須證明未被呼叫。
-      if (cmd === "git stash pop") throw new Error("CONFLICT (content): would clobber old stash");
+      // 機器上本來就有一個舊 stash；本次 create 回空字串（沒有本 run 的 stash）。
+      // 若實作誤用「list 非空 / count 差值 → 動作」，會呼叫到 apply/drop 並 throw。
+      if (cmd === "git stash create") return "";
+      if (cmd.startsWith("git stash apply") || cmd.startsWith("git stash drop")) {
+        throw new Error("must never touch a pre-existing stash we did not create");
+      }
       return "ok";
     };
     const { control } = makeControl({ exec: fakeExec });
     try {
       const r = await control.upgradePaaw("admin1");
-      assert.equal(r.ok, true, "old pre-existing stash must not fail the upgrade");
+      assert.equal(r.ok, true, "pre-existing stash must not fail the upgrade");
       assert.equal(r.warnings.length, 0, "must not warn about a stash we did not create");
-      assert.equal(calls.includes("git stash pop"), false, "must NOT pop a pre-existing stash we did not create");
+      assert.equal(calls.some((c) => c.startsWith("git stash apply")), false, "must NOT apply a pre-existing stash");
+      assert.equal(calls.some((c) => c.startsWith("git stash drop")), false, "must NOT drop a pre-existing stash");
       const stashStep = r.steps.find((s) => s.step === "git stash");
       assert.equal(stashStep.note, "nothing to stash");
-      const popStep = r.steps.find((s) => s.step === "git stash pop");
-      assert.equal(popStep.note, "no stash entries");
     } finally {
       await control.stopPaaw();
     }
   });
 
-  test("git stash 無 stash（throw，count 前後皆 0）維持 ok:true，不產生 warning", async () => {
+  test("probe 失敗不可吞成假成功：git stash create 丟真錯（目錄壞/權限）→ ok:false，不偽裝 nothing to stash", async () => {
     const fakeExec = (cmd) => {
-      if (cmd === "git stash") throw new Error("No local changes to save");
-      if (cmd === "git stash list") return "";
+      if (cmd === "git stash create") throw new Error("fatal: could not read from repository");
       return "ok";
     };
-    const { control } = makeControl({ exec: fakeExec });
+    const { control, logged } = makeControl({ exec: fakeExec });
     try {
       const r = await control.upgradePaaw("admin1");
-      assert.equal(r.ok, true);
-      assert.equal(r.warnings.length, 0);
-      const step = r.steps.find((s) => s.step === "git stash");
-      assert.equal(step.ok, true);
-      assert.equal(step.note, "nothing to stash");
+      assert.equal(r.ok, false, "a real stash-create error must fail the upgrade, not fake success");
+      assert.match(r.error, /Upgrade failed/);
+      // 不得有任何 step 把失敗當 "nothing to stash" 成功回報。
+      const stashStep = r.steps.find((s) => s.step === "git stash");
+      assert.equal(stashStep, undefined, "no successful git stash step may be recorded on a real error");
+      assert.ok(logged.map((l) => l.type).includes("upgrade_failed"));
     } finally {
       await control.stopPaaw();
     }
   });
 
-  test("本次 stash 成功（count 0→1）但 pop 失敗且訊息不含 'No stash entries' → 仍視為衝突失敗（不依賴訊息字串）", async () => {
-    let stashCalls = 0;
+  test("store 失敗（create 成功但後續失敗）→ 走外層 catch 復原，server 拉回（ADR-005 邊界）", async () => {
     const fakeExec = (cmd) => {
-      if (cmd === "git stash list") return stashCalls === 0 ? "" : "stash@{0}: WIP on main: deadbeef wip\n";
-      if (cmd === "git stash") { stashCalls++; return "ok"; }
-      // 訊息刻意不含 "No stash entries" —— 舊的字串比對會誤判，結構化判定不會。
-      if (cmd === "git stash pop") throw new Error("error: Your local changes would be overwritten");
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) throw new Error("fatal: cannot lock ref");
       return "ok";
     };
     const { control } = makeControl({ exec: fakeExec });
     try {
       const r = await control.upgradePaaw("admin1");
       assert.equal(r.ok, false);
+      // store 失敗屬真實錯誤 → 外層 catch 走復原，server 被拉回。
+      assert.equal(r.recovered, true);
+      assert.equal(control.isRunning(), true, "server must be recovered after a real store failure");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("本次 stash 成功且 apply 成功但 drop 失敗 → ok:true + warning（資料無損，entry 殘留）", async () => {
+    const calls = [];
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      if (cmd.startsWith("git stash store")) return "ok";
+      if (cmd.startsWith("git stash apply")) return "ok";
+      if (cmd.startsWith("git stash drop")) throw new Error("fatal: cannot drop");
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, true, "drop failure must not fail the whole upgrade");
+      assert.ok(calls.some((c) => c.startsWith(`git stash apply ${STASH_SHA}`)), "must apply the exact sha we created");
       assert.equal(r.warnings.length, 1);
-      const step = r.steps.find((s) => s.step === "git stash pop");
-      assert.equal(step.ok, false);
+      assert.match(r.warnings[0], /drop.*failed/i);
+      const step = r.steps.find((s) => s.step === "git stash restore");
+      assert.equal(step.ok, true);
       assert.equal(step.warning, true);
-      assert.equal(control.isRunning(), false, "server stays stopped on real pop failure");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("happy path：stash create → store(sha) → apply(sha) → drop(sha)，全程作用於同一 sha", async () => {
+    const calls = [];
+    const fakeExec = (cmd) => {
+      calls.push(cmd);
+      if (cmd === "git stash create") return `${STASH_SHA}\n`;
+      return "ok";
+    };
+    const { control } = makeControl({ exec: fakeExec });
+    try {
+      const r = await control.upgradePaaw("admin1");
+      assert.equal(r.ok, true);
+      assert.equal(r.warnings.length, 0);
+      assert.ok(calls.some((c) => c.startsWith("git stash store") && c.includes(STASH_SHA)), "store must register our sha");
+      assert.ok(calls.includes(`git stash apply ${STASH_SHA}`), "apply must target our sha");
+      assert.ok(calls.includes(`git stash drop ${STASH_SHA}`), "drop must target our sha");
+      const stashStep = r.steps.find((s) => s.step === "git stash");
+      assert.equal(stashStep.ok, true);
+      assert.match(stashStep.note, /stashed/);
     } finally {
       await control.stopPaaw();
     }
@@ -425,10 +479,11 @@ describe("src/server/paaw-control.mjs — upgradePaaw（復原失敗 / 外層 ca
     }
   });
 
-  test("recovery 時 server 仍在執行（startPaaw 回 'Already running'）→ 視為復原成功，不誤報 recovery failed（committee minor#3）", async () => {
+  test("recovery 時 server 仍在執行（startPaaw 回 alreadyRunning 旗標）→ 結構化判定為復原成功，不誤報 recovery failed（ADR-005 / minor#3）", async () => {
     // 讓 recovery 當下 paawProcess 仍為 truthy：在 git pull 步驟以 re-entrant 方式
     // 起一個 noop server，再讓 git pull 丟例外走外層 catch → attemptRecover。
-    // 此時 startPaaw() 回 { ok:false, error:'Already running' } —— 舊實作會誤判失敗。
+    // 此時 startPaaw() 回 { ok:false, code:'ALREADY_RUNNING', alreadyRunning:true }。
+    // ADR-005：判定改讀結構化旗標/code，不再靠 error 字串比對（字串一改即壞）。
     const logged = [];
     let control;
     const fakeExec = (cmd) => {
@@ -458,6 +513,23 @@ describe("src/server/paaw-control.mjs — upgradePaaw（復原失敗 / 外層 ca
       // 不得把「本來就在跑」誤報為 recovery 失敗
       assert.equal(logged.includes("upgrade_recover_failed"), false);
       assert.equal(logged.includes("upgrade_recovered"), true);
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+
+  test("startPaaw 的 already-running 契約為結構化旗標（ADR-005）：回 { ok:false, code:'ALREADY_RUNNING', alreadyRunning:true }", async () => {
+    const { control } = makeControl();
+    try {
+      const first = control.startPaaw();
+      // 第二個 startPaaw 在已 running 時必須回結構化旗標，而非只靠 error 字串。
+      const second = control.startPaaw();
+      assert.equal(second.ok, false);
+      assert.equal(second.alreadyRunning, true);
+      assert.equal(second.code, "ALREADY_RUNNING");
+      // 保留舊欄位以維持向後相容（routes 仍讀 error/ok）。
+      assert.equal(typeof second.error, "string");
+      assert.equal(first.ok, first.ok); // first may be ok:true (spawn) — not asserted on timing
     } finally {
       await control.stopPaaw();
     }
