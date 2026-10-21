@@ -27,6 +27,10 @@ process.env.PAAW_HOME = hostDir;
 // module 級清理：整檔跑完後移除 top-level 建立的 host temp dir，並把 PAAW_HOME 還原為原始值
 // （原始不存在就 delete），避免污染同一 process 內後續載入的其他測試檔。
 after(() => {
+  L.info = savedLog.info;
+  L.ok = savedLog.ok;
+  L.warn = savedLog.warn;
+  L.err = savedLog.err;
   rmSync(hostDir, { recursive: true, force: true });
   if (originalPaawHome === undefined) {
     delete process.env.PAAW_HOME;
@@ -36,7 +40,18 @@ after(() => {
 });
 
 const { extractZip, verifySkeleton, readZipManifest, installUploadedZip } = await import("../../src/lib/install.mjs");
-const { getHome, getVersionsDir, getLogsDir } = await import("../../src/lib/config.mjs");
+const { getHome, getVersionsDir, getLogsDir, L } = await import("../../src/lib/config.mjs");
+
+// install.mjs logs via the shared `L` logger (config.mjs) → console.log. Under
+// `node --test` the child process stdout IS the TAP channel, so a stray log
+// line corrupts the stream ("Unable to deserialize cloned data") intermittently
+// when it interleaves with the runner's serialised messages. Silence `L` for
+// the whole file and restore it afterwards.
+const savedLog = { info: L.info, ok: L.ok, warn: L.warn, err: L.err };
+L.info = () => {};
+L.ok = () => {};
+L.warn = () => {};
+L.err = () => {};
 
 let tmp;
 beforeEach(() => {

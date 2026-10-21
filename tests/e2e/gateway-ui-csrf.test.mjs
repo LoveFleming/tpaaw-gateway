@@ -66,6 +66,13 @@ function makeEnv({ packageUrl = DEAD_PACKAGE_URL, uiHost = "127.0.0.1" } = {}) {
     PAAW_OPEN_BROWSER: process.env.PAAW_OPEN_BROWSER,
   };
 
+  // saveGatewayCfg() writes gateway.json to process.cwd() (NOT to PAAW_HOME),
+  // so a POST /api/settings here would scribble on the real project root and,
+  // under parallel file execution, race other workers on that same file
+  // (intermittent 500). Isolate by running with cwd inside the throwaway tmp.
+  const savedCwd = process.cwd();
+  process.chdir(tmp);
+
   // Set env before applyHome so getHome()/getVersionsDir() point into tmp
   if (packageUrl) process.env.PAAW_PACKAGE_URL = packageUrl;
   else delete process.env.PAAW_PACKAGE_URL;
@@ -80,15 +87,16 @@ function makeEnv({ packageUrl = DEAD_PACKAGE_URL, uiHost = "127.0.0.1" } = {}) {
   }
 
   const handler = createUIHandler({ UI_HOST: uiHost, job, jobLog });
-  return { handler, job, home, tmp, savedEnv };
+  return { handler, job, home, tmp, savedEnv, savedCwd };
 }
 
 /** Restore env vars saved by makeEnv */
-function cleanupEnv(savedEnv) {
+function cleanupEnv(savedEnv, savedCwd) {
   for (const [k, v] of Object.entries(savedEnv)) {
     if (v === undefined) delete process.env[k];
     else process.env[k] = v;
   }
+  if (savedCwd) process.chdir(savedCwd); // restore cwd BEFORE applyHome so cwd-fallback is correct
   applyHome(); // re-derive HOME from restored env
 }
 
@@ -117,7 +125,7 @@ describe("E2E · Gateway UI CSRF 防護與 GET 煙霧（createUIHandler F7）", 
 
   after(() => {
     if (env) {
-      cleanupEnv(env.savedEnv);
+      cleanupEnv(env.savedEnv, env.savedCwd);
       rmSync(env.tmp, { recursive: true, force: true });
     }
   });
@@ -271,7 +279,7 @@ describe("E2E · TASK-005 安全修復（settings body 上限 / update fail-clos
 
   after(() => {
     if (env) {
-      cleanupEnv(env.savedEnv);
+      cleanupEnv(env.savedEnv, env.savedCwd);
       rmSync(env.tmp, { recursive: true, force: true });
     }
   });
