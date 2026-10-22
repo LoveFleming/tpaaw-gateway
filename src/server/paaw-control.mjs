@@ -152,13 +152,26 @@ export function createPaawControl(deps) {
    * Sequence: SIGTERM → (still alive after 5s) SIGKILL → (still no exit event
    * after 10s) resolve { ok:false } honestly. Fail-closed: callers must NOT
    * start a new process on top of a live one; a reported failure means failure.
+   *
+   * Audit contract: every exited stop outcome writes exactly ONE terminal event
+   * in `finish()` — "server_stopped" (confirmed exit) or "server_stop_failed"
+   * (with the error cause) — mirroring startPaaw's server_started. A stop that
+   * is merely refused ("Not running") or a duplicate caller that joins an
+   * in-flight stop is NOT an outcome: it emits no terminal event (the in-flight
+   * stop already owns the single event for that sequence), so the audit trail
+   * can never show two conflicting terminal states for one stop.
+   *
+   * @param {string} [userId="system"] audit actor — the authenticated user that
+   *   triggered the stop. Optional for backward compatibility: internal callers
+   *   (restart / upgrade / restore) omit it and are attributed to "system".
+   * @returns {Promise<{ ok: boolean, error?: string }>}
    */
-  function stopPaaw() {
+  function stopPaaw(userId = "system") {
     if (!paawProcess) return Promise.resolve({ ok: false, error: "Not running" });
     if (stoppingPromise) return stoppingPromise;
 
     const proc = paawProcess;
-    logEvent("server_stopping", "PAAW Server stopping...");
+    logEvent("server_stopping", "PAAW Server stopping...", userId);
 
     stoppingPromise = new Promise((resolve) => {
       let settled = false;
@@ -170,8 +183,12 @@ export function createPaawControl(deps) {
         stoppingPromise = null;
         if (ok) {
           paawStatus = "stopped"; // intentional stop overrides the "crashed-by-signal" mark from the generic exit handler
+          logEvent("server_stopped", "PAAW Server stopped", userId);
         } else {
           paawStatus = "crashed"; // process refused to die — surface it, don't paper over it
+          // Fail loud in the audit trail too: a failed stop is a security/ops
+          // relevant state (a live process may still hold the port).
+          logEvent("server_stop_failed", `PAAW Server stop failed: ${error}`, userId);
         }
         resolve(ok ? { ok: true } : { ok: false, error });
       };

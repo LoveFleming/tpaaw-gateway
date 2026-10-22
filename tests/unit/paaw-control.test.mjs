@@ -18,6 +18,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 
 import { createPaawControl } from "../../src/server/paaw-control.mjs";
 
@@ -162,6 +163,109 @@ describe("src/server/paaw-control.mjs — startPaaw / logEvent", () => {
     } finally {
       await control.stopPaaw();
     }
+  });
+});
+
+// ── stopPaaw：終態稽核契約（committee major, 2026-10-22）──
+// 重構前 stopPaaw 完成時會寫 event；模組化重構後遺失。契約：
+//   • 成功（exit 已確認）→ 恰一筆 "server_stopped"
+//   • 失敗（SIGTERM/SIGKILL 失敗或逾時未退出）→ 恰一筆 "server_stop_failed"（含 error）
+//   • 未執行（Not running）/ 併發重複呼叫 → 不寫任何終態事件
+describe("src/server/paaw-control.mjs — stopPaaw 稽核事件", () => {
+  // 測試策略：paawProcess 是 closure 私有狀態，無法直接注入假行程，
+  // 因此一律用真 spawn（NOOP_SERVER_CMD，無害長睡 node script）取得 handle，
+  // 再「monkeypatch 該 handle 的 kill()」製造失敗階梯；afterEach/ finally
+  // 以原始 kill 收掉子行程，確保不殘留。
+
+  test("成功停止 → 恰一筆 server_stopped（含 userId），不得有 server_stop_failed", async () => {
+    const { control, logged } = makeControl();
+    control.startPaaw();
+    const r = await control.stopPaaw("admin1");
+    assert.equal(r.ok, true);
+
+    const types = logged.map((l) => l.type);
+    assert.equal(types.filter((t) => t === "server_stopped").length, 1, `expected exactly one server_stopped, got ${types}`);
+    assert.equal(types.includes("server_stop_failed"), false, "a successful stop must not log a failure event");
+    assert.ok(types.includes("server_stopping"), "the starting event must still be logged");
+
+    const stopped = logged.find((l) => l.type === "server_stopped");
+    assert.equal(stopped.userId, "admin1", "stop events must carry the acting user");
+    assert.match(stopped.detail, /stopped/i);
+  });
+
+  test("SIGTERM 送出即失敗（kill 拋錯）→ 恰一筆 server_stop_failed，含 error 原因，回傳 ok:false 且結構不變", async () => {
+    const { control, logged } = makeControl();
+    const proc = control.startPaaw();
+    assert.equal(proc.ok, true);
+    // 讓真正的 handle 拒絕 SIGTERM：模擬權限不足 / 行程已不是我們的子行程。
+    const real = control.getPaawProcess();
+    const originalKill = real.kill.bind(real);
+    real.kill = () => { throw new Error("kill EPERM"); };
+
+    try {
+      const r = await control.stopPaaw("admin1");
+
+      // 對外回傳結構不得改變（只補 audit 副作用）。
+      assert.deepEqual(r, { ok: false, error: "SIGTERM failed: kill EPERM" });
+
+      const stops = logged.filter((l) => l.type === "server_stop_failed");
+      assert.equal(stops.length, 1, `expected exactly one server_stop_failed, got ${logged.map((l) => l.type)}`);
+      assert.match(stops[0].detail, /stop failed/i);
+      assert.match(stops[0].detail, /SIGTERM failed: kill EPERM/, "the error cause must be in the audit detail");
+      assert.equal(stops[0].userId, "admin1");
+      assert.equal(logged.some((l) => l.type === "server_stopped"), false, "a failed stop must not log a success event");
+    } finally {
+      // 收掉真的子行程（用原始 kill），避免殘留。
+      real.kill = originalKill;
+      try { real.kill("SIGKILL"); } catch { /* already gone */ }
+    }
+  });
+
+  test("升級階梯：SIGTERM 拋錯後 SIGKILL 再拋錯 → 失敗事件仍只寫一筆（finish 去重）", async () => {
+    // SIGTERM 立即失敗 → finish(false)（第一筆 server_stop_failed）；
+    // 5s 後 sigkillTimer 觸發，SIGKILL 也失敗 → finish(false) 再次被呼叫，
+    // 必須被 settled 去重擋掉，不得寫第二筆終態事件。
+    const { control, logged } = makeControl();
+    control.startPaaw();
+    const real = control.getPaawProcess();
+    const originalKill = real.kill.bind(real);
+    real.kill = (signal) => { throw new Error(`kill ${signal} EPERM`); };
+    try {
+      const r = await control.stopPaaw("admin1");
+      assert.equal(r.ok, false);
+      assert.match(r.error, /SIGTERM failed: kill SIGTERM EPERM/, "the first failure wins (settled guard)");
+
+      // 等 SIGKILL timer（5s）過去，證明第二個 finish 不會追加事件。
+      await sleep(5200);
+      const stops = logged.filter((l) => l.type === "server_stop_failed");
+      assert.equal(stops.length, 1, `exactly one terminal failure event expected, got ${logged.map((l) => l.type)}`);
+      assert.equal(logged.some((l) => l.type === "server_stopped"), false);
+    } finally {
+      real.kill = originalKill;
+      try { real.kill("SIGKILL"); } catch { /* already gone */ }
+    }
+  });
+
+  test("未執行時呼叫（Not running）→ 不寫任何終態稽核事件（拒絕不是停止結果）", async () => {
+    const { control, logged } = makeControl();
+    const r = await control.stopPaaw("admin1");
+    assert.equal(r.ok, false);
+    const types = logged.map((l) => l.type);
+    assert.equal(types.includes("server_stopped"), false);
+    assert.equal(types.includes("server_stop_failed"), false);
+    assert.equal(types.includes("server_stopping"), false);
+  });
+
+  test("併發重複停止共用同一段流程 → 只寫一筆終態事件（不得兩筆）", async () => {
+    const { control, logged } = makeControl();
+    control.startPaaw();
+    const [a, b] = await Promise.all([control.stopPaaw("admin1"), control.stopPaaw("admin1")]);
+    assert.equal(a.ok, true);
+    assert.equal(b.ok, true, "a joined in-flight stop resolves with the same outcome");
+
+    const types = logged.map((l) => l.type);
+    assert.equal(types.filter((t) => t === "server_stopping").length, 1, "only the owner of the sequence logs the start event");
+    assert.equal(types.filter((t) => t === "server_stopped").length, 1, "exactly one terminal event per stop sequence");
   });
 });
 

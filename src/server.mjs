@@ -280,7 +280,9 @@ export function createApp(overrides = {}) {
 
   if (url.pathname === "/api/server/stop" && method === "POST") {
     if (currentUser.role !== "admin") { sendJSON(403, { error: "Admin only" }); return; }
-    sendJSON(200, await stopPaaw()); // F-01: resolve only after confirmed exit
+    // userId is passed so the stop audit events (server_stopped /
+    // server_stop_failed) attribute the action to the requesting admin.
+    sendJSON(200, await stopPaaw(currentUser.id)); // F-01: resolve only after confirmed exit
     return;
   }
 
