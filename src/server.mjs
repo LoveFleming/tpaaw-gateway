@@ -235,6 +235,13 @@ export function createApp(overrides = {}) {
       sendJSON(429, { error: "Too many failed attempts, try again later" });
     } else {
       // Uniform failure — never reveal whether the account exists.
+      // Audit trail: without this entry a brute-force run against a user that
+      // never reaches the per-user lockout would be invisible in the events log
+      // (only login_locked was recorded) — review board RR-20261018-1738-6f2e,
+      // src/server.mjs:235. detail is sanitized at the logEvent write layer
+      // (events.mjs), so the attacker-controlled userId / clientIp cannot forge
+      // log lines. Same detail shape as login_locked for a consistent trail.
+      logEvent("login_failed", `Login failed for "${body.userId}" from ${clientIp}`);
       sendJSON(401, { error: "Invalid credentials" });
     }
     return;

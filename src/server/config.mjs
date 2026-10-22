@@ -212,16 +212,41 @@ async function withConfigWriteLock(configPath, fn) {
  * atomic replace, so concurrent writers can neither lose each other's patch nor
  * expose a truncated document to a reader (review board round-2, config.mjs:135).
  *
+ * Baseline: the VERBATIM on-disk document (readRawConfig), never loadConfig().
+ * loadConfig() layers fallback defaults on top, so on a missing/unparseable
+ * file `{ ...loadConfig(), ...patch }` would materialise the entire default
+ * config onto disk — the opposite of the conservative "no baseline → do not
+ * write defaults" rule that createConfig().saveConfig() already follows
+ * (review board RR-20261018-1738-6f2e, config.mjs:205).
+ *
+ * Missing/unparseable file (readRawConfig → null) → the patch alone is the
+ * document: a patch is an explicit, caller-owned intent (e.g. POST
+ * /api/settings persisting operator-chosen values), so it is written as-is and
+ * no default is ever introduced. An existing but non-object document
+ * (e.g. `[1,2,3]`) is a corrupt file, not a missing one → fail loud instead of
+ * silently replacing the operator's data.
+ *
  * @param {string} configPath absolute path to config.json
  * @param {object} patch partial config to merge onto the on-disk document
- * @param {string} baseDir base directory used for fallback defaults (see loadConfig)
+ * @param {string} _baseDir unused (kept for call-site/API compatibility)
  * @returns {Promise<void>} resolves after the atomic write completed
  */
-export async function updateConfigOnDisk(configPath, patch, baseDir) {
+export async function updateConfigOnDisk(configPath, patch, _baseDir) {
   await withConfigWriteLock(configPath, () => {
-    const current = loadConfig(configPath, baseDir);
-    if (!current || typeof current !== "object" || Array.isArray(current)) {
+    const { exists, value: current } = readRawConfigDetailed(configPath);
+    if (exists && current === null) {
+      // Present but not a JSON object (array / scalar / invalid JSON): a corrupt
+      // document is never a merge baseline — fail loud instead of overwriting
+      // the operator's file.
       throw new Error("config.json is not a JSON object");
+    }
+    if (!exists) {
+      // No usable baseline: never synthesise defaults, persist only the patch.
+      if (!patch || typeof patch !== "object" || Array.isArray(patch)) {
+        throw new Error("config.json is missing and patch is not an object");
+      }
+      saveConfig(configPath, patch);
+      return;
     }
     saveConfig(configPath, { ...current, ...patch });
   });
@@ -291,6 +316,39 @@ function readRawConfig(configPath) {
     return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : null;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Like readRawConfig(), but distinguishes "file is a valid JSON object" from
+ * "file is present yet not a JSON object" (array / scalar / invalid JSON).
+ *
+ * Why (review board RR-20261018-1738-6f2e, config.mjs:205): a read-merge-write
+ * must fail loud when the on-disk document is corrupt (an array / garbage is an
+ * operator data problem, never a baseline), while a genuinely MISSING file must
+ * not synthesise defaults. readRawConfig() collapses both cases to null, so the
+ * persistence seam cannot tell them apart.
+ *
+ * @param {string} configPath absolute path to config.json
+ * @returns {{ exists: boolean, value: object | null }}
+ *   exists=false → file missing / unreadable; exists=true, value=null → present
+ *   but not a JSON object.
+ */
+function readRawConfigDetailed(configPath) {
+  let raw;
+  try {
+    raw = readFileSync(configPath, "utf-8");
+  } catch {
+    return { exists: false, value: null }; // ENOENT / EACCES → no baseline
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return { exists: true, value: parsed };
+    }
+    return { exists: true, value: null }; // array / scalar → corrupt document
+  } catch {
+    return { exists: true, value: null }; // invalid JSON → corrupt document
   }
 }
 

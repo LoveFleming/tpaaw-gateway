@@ -430,6 +430,43 @@ describe("updateConfigOnDisk", () => {
     assert.equal(written.maxBackups, 3, "第二個 patch 必須落盤");
   });
 
+  // review board RR-20261018-1738-6f2e major（config.mjs:205）：read-merge-write
+  // 不得以 loadConfig() 的 fallback defaults 當 baseline 把預設整份落盤。
+  test("(d1) 檔案缺失：只寫 patch，不得把 loadConfig 的預設值整份落盤", async () => {
+    const file = join(tmp, "missing-baseline.json");
+    assert.equal(existsSync(file), false, "前置：檔案不存在");
+
+    await updateConfigOnDisk(file, { maxBackups: 3 }, BASE_DIR);
+
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.deepEqual(written, { maxBackups: 3 },
+      "缺檔時只允許 patch 本身落盤；預設值（host/port/backupSchedule/users…）不得被寫入");
+  });
+
+  test("(d2) 檔案損毀（非物件）：fail-loud，不得覆蓋成預設或 patch", async () => {
+    const file = join(tmp, "corrupt-baseline.json");
+    const corrupt = JSON.stringify([1, 2, 3]);
+    writeFileSync(file, corrupt);
+
+    await assert.rejects(
+      () => updateConfigOnDisk(file, { maxBackups: 3 }, BASE_DIR),
+      /not a JSON object/,
+      "既有但非物件的文件必須 reject（不可靜默覆寫）",
+    );
+    assert.equal(readFileSync(file, "utf-8"), corrupt, "損毀檔案內容必須原樣保留");
+  });
+
+  test("(d3) 檔案為無效 JSON：同樣 fail-loud 且不落預設", async () => {
+    const file = join(tmp, "invalid-json.json");
+    writeFileSync(file, "{ not json ");
+
+    await assert.rejects(
+      () => updateConfigOnDisk(file, { maxBackups: 3 }, BASE_DIR),
+      /not a JSON object/,
+    );
+    assert.equal(readFileSync(file, "utf-8"), "{ not json ", "無效 JSON 檔案內容必須原樣保留");
+  });
+
   test("(c3) 併發寫入序列化：一個 Promise 失敗不阻塞後續寫入", async () => {
     const file = join(tmp, "queue-recover.json");
     writeFileSync(file, JSON.stringify({ port: 4199, users: [] }));

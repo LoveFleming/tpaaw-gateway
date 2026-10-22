@@ -212,6 +212,93 @@ describe("E2E · Gateway login lockout (TASK-018, in-process)", () => {
     }
   });
 
+  // review board RR-20261018-1738-6f2e major（src/server.mjs:235）：401 失敗分支
+  // 必須留下 login_failed audit event，否則未達 per-user lockout 的暴力嘗試在
+  // 事件軌跡中完全不可見（原本只有 login_locked 有記錄）。
+  it("401 失敗路徑會產生 login_failed event（且 detail 經 sanitize）", async () => {
+    const fresh = makeEnv();
+    try {
+      const r = await fresh.login("admin", "wrong");
+      assert.equal(r.status, 401, JSON.stringify(r.data));
+
+      const entry = fresh.app.events.find((e) => e.type === "login_failed");
+      assert.ok(entry, "401 失敗必須留下 login_failed audit entry");
+      assert.equal(entry.userId, "system", "未認證請求不得歸因為某個 user");
+      assert.ok(entry.detail.includes("admin"), "可列印的 userId 保留以便追蹤");
+      assert.equal(/[\r\n\t\u0000-\u001f]/.test(entry.detail), false,
+        `audit detail 不得含控制字元：${JSON.stringify(entry.detail)}`);
+    } finally {
+      fresh.dispose();
+    }
+  });
+
+  it("login_failed detail 對攻擊者可控的 userId / clientIp 也做 sanitize（無 log injection）", async () => {
+    const fresh = makeEnv();
+    try {
+      const evilUser = "admin\r\nINJECTED-FAILED\t\u0000entry";
+      const evilIp = "10.9.9.9\r\nINJECTED-IP\t\u0000\u0007";
+      const r = await fresh.login(evilUser, "wrong", { remoteAddress: evilIp });
+      assert.equal(r.status, 401, JSON.stringify(r.data));
+
+      const entry = fresh.app.events.find((e) => e.type === "login_failed");
+      assert.ok(entry, "login_failed audit entry 必須存在");
+      assert.equal(/[\r\n\t\u0000-\u001f]/.test(entry.detail), false,
+        `audit detail 不得含控制字元：${JSON.stringify(entry.detail)}`);
+      assert.ok(entry.detail.includes("INJECTED-FAILED"), "可列印的 userId 保留");
+      assert.ok(entry.detail.includes("10.9.9.9"), "可列印的 IP 前綴保留");
+    } finally {
+      fresh.dispose();
+    }
+  });
+
+  // review board RR-20261018-1738-6f2e major（src/server/auth.mjs:186）：per-user
+  // lockout 分支也必須推進 per-IP 計數，否則對「已知帳號」無限送錯密碼只消耗
+  // dummy bcrypt，IP 閘（20 次）永不觸發 → 與未知帳號的防護不對稱。
+  it("已知帳號連續錯密碼 ≥20 次 → 觸發 per-IP 閘回 429", async () => {
+    const fresh = makeEnv();
+    try {
+      // 同一帳號（per-user 上限 5）連續失敗：前 5 次為 401，第 6 次起是
+      // per-user lockout 的 429。這些 locked 回覆必須同樣計入 IP 計數
+      // （修法前不計），累計達 IP 上限（LOGIN_IP_MAX_FAILURES = 20）後，
+      // IP 閘才會接手拒絕。
+      for (let i = 1; i <= 5; i++) {
+        const { status } = await fresh.login("admin", "wrong");
+        assert.equal(status, 401, `失敗 #${i} 應為 401（尚未達 per-user 上限）`);
+      }
+      for (let i = 6; i <= 20; i++) {
+        const { status } = await fresh.login("admin", "wrong");
+        assert.equal(status, 429, `失敗 #${i} 應為 429（locked）`);
+      }
+      // 第 21 次：IP 計數已達上限 → per-IP 閘拒絕
+      const after = await fresh.login("admin", "wrong");
+      assert.equal(after.status, 429, "IP 閘觸發後仍為 429");
+      assert.ok(after.headers["retry-after"], "per-IP 拒絕必須帶 Retry-After");
+
+      // 對稱性：同一 IP 上的未知帳號也被同一道 IP 閘擋下（不會永不觸發）。
+      const ghost = await fresh.login("ghost", "wrong");
+      assert.equal(ghost.status, 429, "IP 閘對未知帳號同樣生效（對稱）");
+    } finally {
+      fresh.dispose();
+    }
+  });
+
+  it("per-user lockout 推進 IP 計數，但仍不拒正確密碼（既有行為不得退化）", async () => {
+    const fresh = makeEnv();
+    try {
+      for (let i = 0; i < 5; i++) await fresh.login("admin", "wrong");
+      const locked = await fresh.login("admin", "wrong");
+      assert.equal(locked.status, 429, "前置：per-user lockout 生效");
+
+      // 修法不得把 per-user lockout 變成拒正確密碼（DoS 修復必須保留）。
+      // 此時 IP 計數僅 6 次（< 20），IP 閘尚未生效 → 正確密碼必須 200。
+      const ok = await fresh.login("admin", PLAIN_PASSWORD);
+      assert.equal(ok.status, 200, JSON.stringify(ok.data));
+      assert.ok(ok.data.token, "正確密碼仍須發 token");
+    } finally {
+      fresh.dispose();
+    }
+  });
+
   it("a username flood does NOT lock out the correct password (DoS fix)", async () => {
     // Fresh app so the previous case's counters cannot leak in.
     const fresh = makeEnv();

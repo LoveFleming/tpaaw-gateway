@@ -192,11 +192,19 @@ export function createAuth(config) {
       // and only the next one is refused (limit = allowed failures). The same
       // shape is returned for known and unknown usernames → no enumeration.
       const userLock = userLimiter.check(userKey, now);
+      // The per-IP counter advances on EVERY failed verification — including
+      // the per-user-locked reply (review board RR-20261018-1738-6f2e,
+      // auth.mjs:186). Otherwise a sprayer that hammers one KNOWN account is
+      // stopped only by the per-user limit while its IP counter never moves, so
+      // the per-IP gate (the documented "only gate that refuses before
+      // verification") would never trip — and unknown-account sprays would be
+      // throttled at a different point than known-account ones, a symmetry leak
+      // that hints at account existence.
+      ipLimiter.fail(ipKey, now);
       if (userLock.limited) {
         return { ok: false, locked: true, retryAfterMs: userLock.retryAfterMs };
       }
       userLimiter.fail(userKey, now);
-      ipLimiter.fail(ipKey, now);
       return { ok: false };
     }
 
