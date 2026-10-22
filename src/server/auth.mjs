@@ -106,10 +106,26 @@ export function createAuth(config) {
   const userLimiter = createRateLimiter({ limit: LOGIN_MAX_FAILURES, windowMs: LOGIN_WINDOW_MS });
   const ipLimiter = createRateLimiter({ limit: LOGIN_IP_MAX_FAILURES, windowMs: LOGIN_WINDOW_MS });
 
-  /** Create a session token for a user id. */
+  /**
+   * Create a session token for a user id.
+   *
+   * Expired sessions were previously only evicted when their own token was
+   * presented again (validateSession), so an abandoned-but-expired entry could
+   * stay in the Map forever (review board minor#6). Sweep on creation — a
+   * cheap O(n) scan, and one login per sweep is far below any login rate — so
+   * the Map only ever holds live sessions plus those created since the last
+   * login.
+   */
   function createSession(userId) {
+    const now = Date.now();
+    // `??` (not `||`): a 0 maxAge is a legitimate "everything expires at once"
+    // setting; `||` would silently fall back to the 1-day default.
+    const maxAge = config.sessionMaxAge ?? 86400000;
+    for (const [token, s] of sessions) {
+      if (now - s.created > maxAge) sessions.delete(token);
+    }
     const token = randomUUID();
-    sessions.set(token, { userId, created: Date.now() });
+    sessions.set(token, { userId, created: now });
     return token;
   }
 
@@ -141,6 +157,13 @@ export function createAuth(config) {
     //    flood from one IP can never lock out a legitimate user on another.
     const ipLock = ipLimiter.check(ipKey, now);
     if (ipLock.limited) {
+      // Deliberately NO dummy bcrypt here (review board minor#4): this branch is
+      // a rate-limiter reply, not a credential check, so its timing necessarily
+      // differs from the verify path. Accepted trade-off — the only thing the
+      // timing reveals is "this IP is already being throttled", which the 429
+      // response tells the caller anyway. Spending ~200ms of bcrypt per request
+      // on a spraying IP would hand the attacker the CPU-DoS it is trying to
+      // cause; short-circuiting keeps the limiter cheap.
       return { ok: false, locked: true, retryAfterMs: ipLock.retryAfterMs };
     }
 
@@ -151,7 +174,13 @@ export function createAuth(config) {
       ? config.users.find((u) => u && u.id === userId)
       : undefined;
     let valid = false;
-    if (user && typeof user.passwordHash === "string" && user.passwordHash.length > 0) {
+    // A non-string password (number / object / null) can never be a credential.
+    // It is routed to the SAME dummy-verify branch as an unknown user rather
+    // than being passed to verifyPassword/hashPassword, so it keeps the uniform
+    // response shape AND the constant bcrypt cost (review board minor#5) —
+    // and hashPassword's TypeError can never surface from the login path.
+    if (typeof password === "string" && password.length > 0
+      && user && typeof user.passwordHash === "string" && user.passwordHash.length > 0) {
       valid = await verifyPassword(password, user.passwordHash);
     } else {
       await consumeDummyVerify(password); // spend the same CPU; never authenticate

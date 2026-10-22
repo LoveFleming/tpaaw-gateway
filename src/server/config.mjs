@@ -146,13 +146,43 @@ export function updateConfigOnDisk(configPath, patch, baseDir) {
  *
  * @param {string} baseDir the entry's __dirname (`<root>/src`)
  * @returns {{
- *   CONFIG_PATH: string, config: object, saveConfig: () => void,
+ *   CONFIG_PATH: string, config: object,
+ *   saveConfig: (patch?: object) => void,
  *   saveCredentialUpgrades: () => void,
  *   PAAW_ROOT: string, BACKUP_DIR: string, EVENT_LOG_PATH: string,
  *   MAX_BACKUPS: number, BACKUP_SOURCE_DIRS: string[]
  * }}
  */
 export function createConfig(baseDir) {
+  return createConfigImpl(baseDir);
+}
+
+/**
+ * Comparative deep equality for JSON-shaped config values (avoids a full
+ * serialise-and-stringify round trip on every key).
+ *
+ * @param {unknown} a
+ * @param {unknown} b
+ * @returns {boolean}
+ */
+function jsonEqual(a, b) {
+  if (a === b) return true;
+  if (a === null || b === null || typeof a !== "object" || typeof b !== "object") return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  const ka = Object.keys(a);
+  const kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every((k) => Object.prototype.hasOwnProperty.call(b, k) && jsonEqual(a[k], b[k]));
+}
+
+/**
+ * Keys of the runtime `config` that createConfig() derives from the
+ * environment (or fallback defaults) rather than reading verbatim from
+ * config.json. createConfig().saveConfig() must never write them back.
+ */
+const ENV_DERIVED_KEYS = new Set(["host", "port", "users"]);
+
+function createConfigImpl(baseDir) {
   // Test-only knob: PAAW_CONFIG overrides the config path (same isolation
   // pattern as PAAW_ROOT / PAAW_BACKUP_DIR / PAAW_EVENT_LOG / PAAW_MAX_BACKUPS).
   // E2E tests use this to spawn the server against a throwaway config and
@@ -187,7 +217,43 @@ export function createConfig(baseDir) {
   return {
     CONFIG_PATH,
     config,
-    saveConfig: () => saveConfig(CONFIG_PATH, config),
+    /**
+     * Persist the current in-memory config to config.json.
+     *
+     * Review board minor#7 (RR-20261018-1738-6f2e, config.mjs:133): the runtime
+     * `config` is NOT a faithful copy of the file — `createConfig` merges env
+     * overrides into it in place (PAAW_GATEWAY_HOST / PAAW_GATEWAY_PORT /
+     * PAAW_GATEWAY_PASSWORD*, see §host/port and applyPasswordOverride above).
+     * Serialising it verbatim would freeze a one-shot env override into the
+     * file, so we merge the DIFF against the pristine on-disk document through
+     * the same read-merge-write seam used by updateConfigOnDisk() (no second
+     * persistence mechanism).
+     *
+     * @param {object} [patch] partial config to merge (defaults to the whole
+     *   in-memory config, with env-derived fields filtered out)
+     */
+    saveConfig: (patch) => {
+      if (patch) {
+        // Explicit patch → caller decides which fields are persisted verbatim.
+        updateConfigOnDisk(CONFIG_PATH, patch, baseDir);
+        return;
+      }
+      // No patch → persist the difference against the pristine file, EXCLUDING
+      // the fields this factory derived from env (see ENV_DERIVED_KEYS): those
+      // were merged into `config` in place, so a plain deep-diff would mistake
+      // them for "changed by this instance" and write them back — the exact
+      // leak this guards against (review board minor#7). users[] keeps its
+      // dedicated path: saveCredentialUpgrades().
+      const pristine = loadConfig(CONFIG_PATH, baseDir);
+      const changed = {};
+      for (const key of Object.keys(config)) {
+        if (ENV_DERIVED_KEYS.has(key)) continue;
+        if (!jsonEqual(config[key], pristine?.[key])) changed[key] = config[key];
+      }
+      // Nothing to persist → leave the file untouched (no needless rewrite).
+      if (Object.keys(changed).length === 0) return;
+      updateConfigOnDisk(CONFIG_PATH, changed, baseDir);
+    },
     /**
      * Persist ONLY the lazily re-hashed credentials (login-time upgrade) by
      * merging `users[].passwordHash` into the on-disk config.json.

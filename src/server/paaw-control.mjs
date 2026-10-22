@@ -15,6 +15,34 @@ import { join } from "path";
 import { execSync, execFileSync, spawn } from "child_process";
 
 /**
+ * Resolve `config.paawServerCmd` into a spawn-compatible [file, ...args] pair.
+ *
+ * Two accepted forms (review board minor#9: the old `split(" ")` broke any
+ * install path containing a space, e.g. `C:\Program Files\...` or
+ * `/Users/a my/node`):
+ *
+ *  - ARRAY — the preferred form: `["/opt/my dir/node", "packages/server/src/index.mjs"]`.
+ *    Used verbatim; no splitting, so spaces in the executable path are safe.
+ *  - STRING — legacy form, split on single spaces. LIMITATION: a string value
+ *    cannot express a path containing a space (nor quoted arguments) — use the
+ *    array form for those. Config docs / UI should prefer the array form for
+ *    any new install.
+ *
+ * An empty / missing command yields [""] (spawn then reports ENOENT via the
+ * child "error" event, exactly as before).
+ *
+ * @param {string | string[]} cmd
+ * @returns {string[]}
+ */
+export function resolveServerCmd(cmd) {
+  if (Array.isArray(cmd)) {
+    // Copy so a caller mutating its config array cannot change spawn args mid-flight.
+    return cmd.map((part) => String(part));
+  }
+  return String(cmd ?? "").split(" ");
+}
+
+/**
  * Create the PAAW control surface for one server instance.
  *
  * @param {object} deps
@@ -101,7 +129,7 @@ export function createPaawControl(deps) {
     paawStatus = "starting";
     logEvent("server_starting", "PAAW Server starting...");
 
-    const [cmd, ...args] = config.paawServerCmd.split(" ");
+    const [cmd, ...args] = resolveServerCmd(config.paawServerCmd);
     paawProcess = spawn(cmd, args, {
       cwd: PAAW_ROOT,
       env: { ...process.env, PORT: String(config.paawServerPort || 4097) },

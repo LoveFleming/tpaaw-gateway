@@ -97,21 +97,24 @@ async function checkSemgrep(force = false) {
   const explicit = (getCfg().semgrepPath || "").trim();
   const fromEnv = (process.env.SEMGREP_PATH || "").trim();
   const env = { ...process.env, PATH: augmentedPath(null, process.env.PATH) };
+  // Windows 的執行檔帶 .exe 副檔名（review board RR-20261018-1738-6f2e minor#1）：
+  // 落點候選與 PATH 偵測都必須用同一個 exe 名，否則 Windows 上永遠判定未安裝。
+  const exe = process.platform === "win32" ? "semgrep.exe" : "semgrep";
   const candidates = [];
   if (fromEnv) candidates.push({ bin: fromEnv, source: "環境變數 SEMGREP_PATH" });
   if (explicit) candidates.push({ bin: explicit, source: "gateway 設定（啟動 PAAW 時注入）" });
   // 2026-10-08：pipx 落點直擊 — ~/.local/bin（symlink）與 venv 內 bin（公司 Linux pipx 裝法，
   // symlink 缺失/損壞時 venv 本體仍在；尊重 PIPX_HOME/PIPX_BIN_DIR 自訂位置）
-  const localSemgrep = process.env.HOME ? join(process.env.HOME, ".local", "bin", "semgrep") : null;
+  const localSemgrep = process.env.HOME ? join(process.env.HOME, ".local", "bin", exe) : null;
   const pxVenvSemgrep = (process.env.PIPX_HOME || (process.env.HOME ? join(process.env.HOME, ".local", "pipx") : null))
-    ? join(process.env.PIPX_HOME || join(process.env.HOME, ".local", "pipx"), "venvs", "semgrep", "bin", "semgrep")
+    ? join(process.env.PIPX_HOME || join(process.env.HOME, ".local", "pipx"), "venvs", "semgrep", "bin", exe)
     : null;
   const directHits = [
     localSemgrep && { bin: localSemgrep, source: "~/.local/bin 直擊（pipx/pip --user 落點）" },
     pxVenvSemgrep && { bin: pxVenvSemgrep, source: "pipx venv 直擊（~/.local/pipx/venvs/semgrep/bin）" },
   ];
   for (const c of directHits) if (c && existsSync(c.bin)) candidates.push(c);
-  candidates.push({ bin: "semgrep", source: "PATH 自動偵測（含 ~/.local/bin）" });
+  candidates.push({ bin: exe, source: "PATH 自動偵測（含 ~/.local/bin）" });
   const diagnostics = [];
   for (const c of candidates) {
     // 2026-10-08：先帶 --disable-version-check（~1s 出答案；公司網路擋 semgrep.dev 時純 --version

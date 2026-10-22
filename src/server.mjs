@@ -206,7 +206,19 @@ export function createApp(overrides = {}) {
       // overrides, which must not become permanent file settings (review board
       // RR-20261018-1738-6f2e — src/server.mjs:205).
       if (result.upgraded) {
-        try { saveCredentialUpgrades(); } catch { /* non-fatal: login still succeeds */ }
+        // Persistence is best-effort (login must still succeed), but a failure
+        // must not be silent: the in-memory credential is now bcrypt while disk
+        // stays legacy, so every future login re-hashes and re-attempts the
+        // write. Record it in the audit trail (review board minor#2).
+        try {
+          saveCredentialUpgrades();
+        } catch (err) {
+          logEvent(
+            "password_upgrade_persist_failed",
+            `Failed to persist re-hashed credential: ${err?.message || err}`,
+            result.user.id,
+          );
+        }
       }
       logEvent("login", `User ${result.user.name} logged in`, result.user.id);
       sendJSON(200, {
@@ -316,7 +328,12 @@ export function createApp(overrides = {}) {
     if (getPaawProcess()) {
       const stopResult = await stopPaaw();
       if (!stopResult.ok) {
-        sendJSON(200, { ok: false, stage: "stop", error: `Stop failed before restore — ${stopResult.error}` });
+        // NOT 200: the request was refused because the server could not be
+        // stopped — a conflict with the current (running) state, not a
+        // successful business rejection. The body keeps the { ok:false, stage,
+        // error } envelope the UI consumes (public/index.html doRestore),
+        // so the 409 only adds the transport-level signal (review board minor#3).
+        sendJSON(409, { ok: false, stage: "stop", error: `Stop failed before restore — ${stopResult.error}` });
         return;
       }
     }

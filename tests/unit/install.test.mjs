@@ -24,9 +24,32 @@ const originalPaawHome = process.env.PAAW_HOME;
 const hostDir = mkdtempSync(join(tmpdir(), "gw-install-host-"));
 process.env.PAAW_HOME = hostDir;
 
-// module 級清理：整檔跑完後移除 top-level 建立的 host temp dir，並把 PAAW_HOME 還原為原始值
-// （原始不存在就 delete），避免污染同一 process 內後續載入的其他測試檔。
+const { extractZip, verifySkeleton, readZipManifest, installUploadedZip } = await import("../../src/lib/install.mjs");
+const { getHome, getVersionsDir, getLogsDir, L } = await import("../../src/lib/config.mjs");
+
+// install.mjs logs via the shared `L` logger (config.mjs) → console.log. Under
+// `node --test` the child process stdout IS the TAP channel, so a stray log
+// line corrupts the stream ("Unable to deserialize cloned data") intermittently
+// when it interleaves with the runner's serialised messages. Silence `L` for
+// the whole file and restore it afterwards.
+//
+// ORDER MATTERS (review board minor#11): the snapshot of the DEFAULT logger and
+// the after() hook that restores it both live HERE — at module evaluation time,
+// AFTER `L` is imported. The previous version registered after() before
+// importing `L` / `savedLog`, so the teardown callback closed over bindings that
+// were still in their temporal dead zone: it either threw a ReferenceError or
+// restored nothing, leaving the TAP channel silenced for the rest of the process.
+const savedLog = { info: L.info, ok: L.ok, warn: L.warn, err: L.err };
+L.info = () => {};
+L.ok = () => {};
+L.warn = () => {};
+L.err = () => {};
+
+// module 級清理：整檔跑完後把 logger 還原為預設實作、PAAW_HOME 還原為原始值
+// （原始不存在就 delete），並移除 top-level 建立的 host temp dir，避免污染同一
+// process 內後續載入的其他測試檔。
 after(() => {
+  assert.equal(typeof savedLog.info, "function", "logger snapshot must be captured before silencing");
   L.info = savedLog.info;
   L.ok = savedLog.ok;
   L.warn = savedLog.warn;
@@ -38,20 +61,6 @@ after(() => {
     process.env.PAAW_HOME = originalPaawHome;
   }
 });
-
-const { extractZip, verifySkeleton, readZipManifest, installUploadedZip } = await import("../../src/lib/install.mjs");
-const { getHome, getVersionsDir, getLogsDir, L } = await import("../../src/lib/config.mjs");
-
-// install.mjs logs via the shared `L` logger (config.mjs) → console.log. Under
-// `node --test` the child process stdout IS the TAP channel, so a stray log
-// line corrupts the stream ("Unable to deserialize cloned data") intermittently
-// when it interleaves with the runner's serialised messages. Silence `L` for
-// the whole file and restore it afterwards.
-const savedLog = { info: L.info, ok: L.ok, warn: L.warn, err: L.err };
-L.info = () => {};
-L.ok = () => {};
-L.warn = () => {};
-L.err = () => {};
 
 let tmp;
 beforeEach(() => {

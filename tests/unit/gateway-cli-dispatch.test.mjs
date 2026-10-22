@@ -28,7 +28,7 @@
  */
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname, sep } from "node:path";
 import { spawn } from "node:child_process";
@@ -59,6 +59,16 @@ process.on("exit", () => {
  * @param {string[]} args            argv（如 ["update"]）
  * @param {object}   env            { home, cwd, scenario, ... }
  */
+/**
+ * 專案根 gateway.json 的狀態快照（存在與否 + mtimeMs）。
+ * 用來證明「本測試沒有寫入專案根」——而不是要求它不存在。
+ */
+function snapshotRootGatewayJson() {
+  const p = join(ROOT, "gateway.json");
+  if (!existsSync(p)) return { exists: false, mtimeMs: null };
+  return { exists: true, mtimeMs: statSync(p).mtimeMs };
+}
+
 function runGatewayWithFakes(args, { home, cwd, scenario, extraEnv = {} } = {}) {
   const hooksPath = join(cwd, "hooks.mjs");
   const installFake = `file://${join(cwd, "fake-install.mjs")}`;
@@ -231,14 +241,22 @@ describe("Unit · gateway.mjs argv 分派（F20261009-001）", () => {
     rmSync(tmp, { recursive: true, force: true });
   });
 
-  /** 每個案例一個乾淨的 cwd + home，互不干擾（不依賴執行順序） */
-  function caseDirs(name) {
+  /**
+   * 每個案例一個乾淨的 cwd + home，互不干擾（不依賴執行順序）。
+   *
+   * hygiene=true：先快照專案根 gateway.json 的狀態（存在與否 + mtimeMs），
+   * 供測試事後比對「本測試沒有寫入專案根」。用快照比對而非假設它不存在：
+   * 開發者本機執行 `node gateway.mjs ui` 後 ROOT/gateway.json 本來就會存在
+   * （它是 gitignored 的 runtime 檔），假設它不存在會讓測試在真機上紅。
+   */
+  function caseDirs(name, { hygiene = false } = {}) {
+    const rootCfg = hygiene ? snapshotRootGatewayJson() : null;
     const base = join(tmp, name);
     const home = join(base, "home");
     const cwd = join(base, "cwd");
     mkdirSync(home, { recursive: true });
     mkdirSync(cwd, { recursive: true });
-    return { home, cwd };
+    return { home, cwd, rootCfg };
   }
 
   // ─────────────────────────── update ───────────────────────────
@@ -395,7 +413,7 @@ describe("Unit · gateway.mjs argv 分派（F20261009-001）", () => {
 
   // ─────────────────────────── 隔離衛生 ───────────────────────────
   it("隔離：替身流程不應在 cwd 留下 gateway.json（僅真 update/start 才寫）", async () => {
-    const { home, cwd } = caseDirs("no-cfg-write");
+    const { home, cwd, rootCfg } = caseDirs("no-cfg-write", { hygiene: true });
     seedCurrent(home, "1.0.0");
     seedVersionDir(home, "1.0.0");
 
@@ -407,6 +425,13 @@ describe("Unit · gateway.mjs argv 分派（F20261009-001）", () => {
     });
 
     assert.equal(existsSync(join(cwd, "gateway.json")), false, "未變更設定時不應寫出 gateway.json");
-    assert.equal(existsSync(join(ROOT, "gateway.json")), false || true); // 專案根不應被此測試寫入（由 e2e 側驗證）
+    // 專案根（ROOT）不得被此測試寫入：gateway 以 process.cwd() 決定寫入位置，
+    // 本測試已把 cwd 指到 case dir，故 ROOT/gateway.json 的狀態必須與測試開始前
+    // 完全一致（先前的 `false || true` 是恆真斷言，等於沒有驗證）。
+    assert.deepEqual(
+      snapshotRootGatewayJson(),
+      rootCfg,
+      "測試不得寫入專案根的 gateway.json（存在狀態與 mtime 都不變）",
+    );
   });
 });

@@ -44,6 +44,10 @@ export function sanitizeAuditField(value) {
  */
 export function createEventLog(eventLogPath) {
   const events = [];
+  // Last append failure already reported (signature), so a disk-full /
+  // read-only volume does not emit one warning per audit event (review board
+  // minor#8). Cleared as soon as an append succeeds again.
+  let lastAppendError = null;
 
   /**
    * Append an audit event to the in-memory ring buffer and the JSONL file.
@@ -66,10 +70,24 @@ export function createEventLog(eventLogPath) {
     events.push(entry);
     // Keep last 500 in memory
     if (events.length > 500) events.splice(0, events.length - 500);
-    // Append to file
+    // Append to file. A failure must not abort the caller (the in-memory ring
+    // buffer already holds the entry and audit logging is never a
+    // request-blocking operation), but it must not be silent either: without a
+    // signal an unwritable event log looks exactly like "no events happened"
+    // (review board minor#8). Warn once per distinct failure.
     try {
       appendFileSync(eventLogPath, JSON.stringify(entry) + "\n");
-    } catch {}
+      lastAppendError = null;
+    } catch (err) {
+      const signature = `${err?.code || ""}:${err?.message || err}`;
+      if (signature !== lastAppendError) {
+        lastAppendError = signature;
+        console.warn(
+          `[PAAW Gateway] ⚠️ audit log append failed (${eventLogPath}): ${err?.message || err}` +
+          " — events continue in memory only; further identical failures suppressed",
+        );
+      }
+    }
   }
 
   return { events, logEvent };

@@ -20,7 +20,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
-import { createPaawControl } from "../../src/server/paaw-control.mjs";
+import { createPaawControl, resolveServerCmd } from "../../src/server/paaw-control.mjs";
 
 let tmp;
 beforeEach(() => {
@@ -50,6 +50,58 @@ function makeControl(overrides = {}) {
   // command. No extra wiring needed here.
   return { control: createPaawControl(deps), logged };
 }
+
+// ── review board minor#9（RR-20261018-1738-6f2e）──
+// paawServerCmd 支援陣列形態：路徑含空白不再被 split(" ") 拆壞。
+describe("src/server/paaw-control.mjs — resolveServerCmd", () => {
+  test("陣列形態原樣使用（含空白路徑不被拆解）", () => {
+    const cmd = ["/opt/Program Files/node", "packages/server/src/index.mjs", "--port", "4097"];
+    assert.deepEqual(resolveServerCmd(cmd), cmd);
+  });
+
+  test("陣列形態回傳副本（呼叫端事後改自己的陣列不影響 spawn 參數）", () => {
+    const cmd = ["node", "index.mjs"];
+    const out = resolveServerCmd(cmd);
+    assert.notEqual(out, cmd);
+    cmd.push("--mutated");
+    assert.deepEqual(out, ["node", "index.mjs"]);
+  });
+
+  test("陣列元素轉字串", () => {
+    assert.deepEqual(resolveServerCmd(["node", 4097]), ["node", "4097"]);
+  });
+
+  test("字串形態維持舊行為（單一空白分割）— 文件已標明含空白路徑的限制", () => {
+    assert.deepEqual(resolveServerCmd("node packages/server/src/index.mjs"), [
+      "node",
+      "packages/server/src/index.mjs",
+    ]);
+    // 舊行為的已知限制：字串形態無法表達含空白的可執行檔路徑
+    assert.deepEqual(resolveServerCmd("C:\\Program Files\\node.exe x.mjs"), [
+      "C:\\Program",
+      "Files\\node.exe",
+      "x.mjs",
+    ]);
+  });
+
+  test("空 / 未定義 → 單一空字串（spawn 會以 ENOENT 的 error 事件回報，與舊行為一致）", () => {
+    assert.deepEqual(resolveServerCmd(""), [""]);
+    assert.deepEqual(resolveServerCmd(undefined), [""]);
+  });
+
+  test("startPaaw 使用陣列形態指令時，以第一個元素為執行檔（真的 spawn 得起來）", async () => {
+    const { control } = makeControl({
+      config: { paawServerCmd: [process.execPath, "-e", "setTimeout(()=>{},300000)"] },
+    });
+    const r = control.startPaaw();
+    try {
+      assert.equal(r.ok, true);
+      assert.equal(typeof r.pid, "number");
+    } finally {
+      await control.stopPaaw();
+    }
+  });
+});
 
 describe("src/server/paaw-control.mjs — 初始狀態", () => {
   test("初始 isRunning 為 false，getPaawProcess 為 null", () => {

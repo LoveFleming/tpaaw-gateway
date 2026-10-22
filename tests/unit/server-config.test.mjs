@@ -205,6 +205,52 @@ describe("createConfig", () => {
     assert.equal(JSON.parse(readFileSync(file, "utf-8")).customFlag, "yes");
   });
 
+  // review board minor#7（RR-20261018-1738-6f2e, config.mjs:133）
+  test("createConfig().saveConfig()：env 衍生的 host / port / users 不得寫回 config.json", () => {
+    const file = join(tmp, "envnoleak.json");
+    writeFileSync(file, JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] }));
+    process.env.PAAW_CONFIG = file;
+    process.env.PAAW_GATEWAY_HOST = "0.0.0.0";
+    process.env.PAAW_GATEWAY_PORT = "5555";
+    process.env.PAAW_GATEWAY_PASSWORD = "env-only-strong-pw";
+    const c = createConfig(BASE_DIR);
+    // runtime config 確實帶 env 值（覆寫生效）
+    assert.equal(c.config.host, "0.0.0.0");
+    assert.equal(c.config.port, 5555);
+    assert.equal(c.config.users.length, 1, "env override 在記憶體中建立了 user");
+
+    c.config.customFlag = "yes"; // 真正屬於檔案的變更
+    c.saveConfig();
+
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.customFlag, "yes", "真正的變更仍要落盤");
+    assert.equal(written.host, "127.0.0.1", "env 衍生的 host 不得寫回 config.json");
+    assert.equal(written.port, 4199, "env 衍生的 port 不得寫回 config.json");
+    assert.deepEqual(written.users, [], "env 建立的 credential 不得凍結進 config.json");
+  });
+
+  test("createConfig().saveConfig(patch)：明確 patch 原樣合併到磁碟文件", () => {
+    const file = join(tmp, "explicitpatch.json");
+    writeFileSync(file, JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] }));
+    process.env.PAAW_CONFIG = file;
+    const c = createConfig(BASE_DIR);
+    // 明確 patch 由呼叫端決定要寫什麼（此處的 env 覆寫不影響 patch 內容）
+    c.saveConfig({ backupSchedule: "0 4 * * *" });
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.backupSchedule, "0 4 * * *");
+    assert.equal(written.port, 4199, "未提及的欄位保留");
+  });
+
+  test("createConfig().saveConfig()：無變更時檔案內容不變", () => {
+    const file = join(tmp, "noop.json");
+    const before = JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] });
+    writeFileSync(file, before);
+    process.env.PAAW_CONFIG = file;
+    const c = createConfig(BASE_DIR);
+    c.saveConfig();
+    assert.equal(readFileSync(file, "utf-8"), before);
+  });
+
   // ---------- saveCredentialUpgrades（review board RR-20261018-1738-6f2e） ----------
   test("saveCredentialUpgrades：只把 users[].passwordHash 寫回，不落地 env 衍生的 host / port", () => {
     const file = join(tmp, "upgrade.json");

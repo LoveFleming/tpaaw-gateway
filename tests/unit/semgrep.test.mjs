@@ -176,3 +176,74 @@ describe("src/lib/semgrep.mjs — getCheckState（初始狀態機）", () => {
     assert.equal(s.result, null);
   });
 });
+
+// ── review board minor#1（RR-20261018-1738-6f2e）──
+// 落點候選（~/.local/bin、pipx venv）與 PATH 自動偵測都必須使用平台對應的
+// 執行檔名（Windows 為 semgrep.exe）。以 platform stub 驗證不依賴當下平台。
+describe("src/lib/semgrep.mjs — 執行檔名（跨平台）", () => {
+  let realPlatform;
+
+  function withPlatform(name, fn) {
+    const descriptor = Object.getOwnPropertyDescriptor(process, "platform");
+    Object.defineProperty(process, "platform", { value: name, configurable: true });
+    try {
+      return fn();
+    } finally {
+      Object.defineProperty(process, "platform", descriptor);
+    }
+  }
+
+  beforeEach(() => {
+    realPlatform = process.platform;
+    process.env.HOME = tmp;
+    delete process.env.SEMGREP_PATH;
+    delete process.env.PIPX_HOME;
+    process.env.PATH = emptyPathUnder(tmp);
+  });
+
+  afterEach(() => {
+    assert.equal(process.platform, realPlatform, "platform stub 必須被還原");
+  });
+
+  test("win32：~/.local/bin/semgrep.exe 會被直擊命中（不是寫死 semgrep）", () => {
+    withPlatform("win32", () => {
+      const bin = makeExecutable(join(tmp, ".local", "bin", "semgrep.exe"));
+      const r = semgrepPresence();
+      assert.equal(r.installed, true, `win32 必須命中 semgrep.exe（path=${r.path}）`);
+      assert.equal(r.path, bin);
+      assert.match(r.source, /~\/\.local\/bin/);
+    });
+  });
+
+  test("win32：pipx venv 落點同樣使用 semgrep.exe", () => {
+    withPlatform("win32", () => {
+      const bin = makeExecutable(join(tmp, ".local", "pipx", "venvs", "semgrep", "bin", "semgrep.exe"));
+      const r = semgrepPresence();
+      assert.equal(r.installed, true);
+      assert.equal(r.path, bin);
+    });
+  });
+
+  test("win32：PATH 目錄內只有 semgrep.exe 時也能偵測到", () => {
+    withPlatform("win32", () => {
+      const bindir = join(tmp, "winbin");
+      const bin = makeExecutable(join(bindir, "semgrep.exe"));
+      process.env.PATH = bindir + delimiter + SYSTEM_PATH;
+      const r = semgrepPresence();
+      assert.equal(r.installed, true);
+      assert.equal(r.path, bin);
+      assert.match(r.source, /PATH/);
+    });
+  });
+
+  test("posix：仍使用無副檔名的 semgrep（不回歸）", () => {
+    withPlatform("linux", () => {
+      const bin = makeExecutable(join(tmp, ".local", "bin", "semgrep"));
+      // 同時放一個 .exe 假檔，證明 posix 不會誤命中它
+      makeExecutable(join(tmp, ".local", "bin", "semgrep.exe"));
+      const r = semgrepPresence();
+      assert.equal(r.installed, true);
+      assert.equal(r.path, bin, "posix 必須命中 semgrep 而非 semgrep.exe");
+    });
+  });
+});
