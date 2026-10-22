@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-19T11:27:34.367Z",
-  "filesParsed": 28,
-  "totalFiles": 28,
+  "generatedAt": "2026-10-21T15:31:23.753Z",
+  "filesParsed": 36,
+  "totalFiles": 36,
   "languages": {
-    "javascript": 28
+    "javascript": 36
   },
   "callGraph": {
-    "totalFunctions": 151,
-    "totalCalls": 54,
-    "resolvedCalls": 3,
-    "unresolvedCalls": 51
+    "totalFunctions": 193,
+    "totalCalls": 252,
+    "resolvedCalls": 66,
+    "unresolvedCalls": 186
   },
   "apiFunctionMap": {
     "totalRoutes": 25,
@@ -17,21 +17,21 @@
     "withoutHandler": 0
   },
   "dependencyGraph": {
-    "totalFiles": 28,
-    "totalEdges": 28,
-    "resolvedImports": 28,
-    "unresolvedImports": 125
+    "totalFiles": 36,
+    "totalEdges": 53,
+    "resolvedImports": 53,
+    "unresolvedImports": 159
   },
   "testCodeMap": {
-    "totalTestFiles": 15,
-    "matchedTests": 16,
-    "totalTestedFunctions": 0
+    "totalTestFiles": 22,
+    "matchedTests": 21,
+    "totalTestedFunctions": 1
   },
   "symbolIndex": {
-    "total": 262,
-    "functions": 152,
+    "total": 334,
+    "functions": 215,
     "classes": 1,
-    "exports": 84,
+    "exports": 93,
     "routes": 25,
     "components": 0
   },

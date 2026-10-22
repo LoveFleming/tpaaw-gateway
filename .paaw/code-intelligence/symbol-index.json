@@ -83,6 +83,87 @@
     },
     {
       "type": "function",
+      "name": "runGatewayWithFakes",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(args, { home, cwd, scenario, extraEnv = {} } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "seedCurrent",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(home, version)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "seedVersionDir",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(home, version)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "caseDirs",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(name)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setHome",
+      "file": "tests/unit/install-download.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(dir)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "mockResponse",
+      "file": "tests/unit/install-download.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "({ ok = true, status = 200, chunks = [] } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "fetchReturning",
+      "file": "tests/unit/install-download.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(resp)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "fetchRefusing",
+      "file": "tests/unit/install-download.test.mjs",
+      "kind": "arrow",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "setPkg",
+      "file": "tests/unit/install-download.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(url)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "makeZipInMemory",
       "file": "tests/unit/install.test.mjs",
       "kind": "function",
@@ -137,6 +218,231 @@
     },
     {
       "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExecFile",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(file, args)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExecFile",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(file, args)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExecFile",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(file, args)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 5
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExecFile",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(file, args, opts)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd, opts)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(cmd)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "makeEnv",
+      "file": "tests/unit/read-body.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "login",
+      "file": "tests/unit/read-body.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(app, opts)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
       "name": "restoreManagedEnv",
       "file": "tests/unit/semgrep.test.mjs",
       "kind": "function",
@@ -164,8 +470,17 @@
     },
     {
       "type": "function",
-      "name": "getFreePort",
-      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "name": "mockReq",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(opts = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "mockRes",
+      "file": "tests/helpers/inject.mjs",
       "kind": "function",
       "async": false,
       "params": "()",
@@ -173,8 +488,44 @@
     },
     {
       "type": "function",
+      "name": "tryParse",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(body)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "call",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(target, opts = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "withFetch",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(impl, fn)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "refusingFetch",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 1
+    },
+    {
+      "type": "function",
       "name": "sleep",
-      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "file": "tests/helpers/inject.mjs",
       "kind": "arrow",
       "async": false,
       "params": "(ms)",
@@ -182,29 +533,96 @@
     },
     {
       "type": "function",
-      "name": "jsonReq",
-      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "name": "withEnv",
+      "file": "tests/helpers/inject.mjs",
       "kind": "function",
       "async": true,
-      "params": "(base, path, { method = \"GET\", token, body } = {})",
+      "params": "(env, fn)",
       "callCount": 0
     },
     {
+      "type": "export",
+      "name": "mockReq",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "mockRes",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "call",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "withFetch",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "refusingFetch",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "sleep",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "withEnv",
+      "file": "tests/helpers/inject.mjs",
+      "kind": "function",
+      "isDefault": false
+    },
+    {
       "type": "function",
-      "name": "startGateway",
+      "name": "makeEnv",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "kind": "function",
-      "async": true,
+      "async": false,
       "params": "(configOverrides = {})",
       "callCount": 0
     },
     {
       "type": "function",
-      "name": "stopGateway",
+      "name": "api",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(method, path, { body, token } = {})",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "login",
+      "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "kind": "arrow",
+      "async": true,
+      "params": "(userId = TEST_USER.id, password = TEST_USER.passwordHash)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "withEnvSync",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "kind": "function",
-      "async": true,
-      "params": "(g)",
+      "async": false,
+      "params": "(env)",
       "callCount": 0
     },
     {
@@ -218,12 +636,48 @@
     },
     {
       "type": "function",
-      "name": "restoreEventsInLog",
+      "name": "restoreEvents",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "kind": "arrow",
       "async": false,
       "params": "()",
-      "callCount": 5
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "makeEnv",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "loginBodyOfSize",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(targetBytes)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "postBody",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(body, headers = {})",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "health",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 1
     },
     {
       "type": "function",
@@ -236,66 +690,21 @@
     },
     {
       "type": "function",
-      "name": "getFreePort",
+      "name": "makeEnv",
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "kind": "function",
       "async": false,
-      "params": "()",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "jsonReq",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(base, path, { method = \"GET\", body, token } = {})",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "startGateway",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "kind": "function",
-      "async": true,
       "params": "(configOverrides = {})",
       "callCount": 0
     },
     {
       "type": "function",
-      "name": "stopGateway",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "kind": "function",
-      "async": true,
-      "params": "(g)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "canConnect",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(host, port, timeoutMs = 1500)",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "done",
+      "name": "login",
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "kind": "arrow",
       "async": false,
-      "params": "(ok)",
-      "callCount": 2
-    },
-    {
-      "type": "function",
-      "name": "getFreePort",
-      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "()",
-      "callCount": 0
+      "params": "(userId, password, opts = {})",
+      "callCount": 3
     },
     {
       "type": "function",
@@ -303,7 +712,7 @@
       "file": "tests/e2e/gateway-restart-rbac.test.mjs",
       "kind": "arrow",
       "async": false,
-      "params": "",
+      "params": "(pid)",
       "callCount": 1
     },
     {
@@ -314,15 +723,96 @@
         "constructor",
         "setup",
         "api",
-        "waitStubReady",
         "setStubMode",
+        "waitStubReady",
         "teardown"
       ]
     },
     {
       "type": "function",
-      "name": "getFreePort",
+      "name": "makeEnv",
       "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "({ packageUrl = DEAD_PACKAGE_URL, uiHost = \"127.0.0.1\" } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "jobLog",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(line)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "cleanupEnv",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(savedEnv, savedCwd)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "req",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(handler, url, { method = \"GET\", headers = {}, body, chunks } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "fakeFetch",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(url, _opts)",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "makeEnv",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "({ packageUrl = DEAD_PACKAGE_URL, setHome = true, semgrepPath } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "jobLog",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(line)",
+      "callCount": 3
+    },
+    {
+      "type": "function",
+      "name": "cleanupEnv",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(savedEnv, savedCwd, tmp)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "req",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "(handler, url, { method = \"GET\", headers = {}, body, chunks } = {})",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "getFreePort",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
       "kind": "function",
       "async": false,
       "params": "()",
@@ -330,35 +820,35 @@
     },
     {
       "type": "function",
-      "name": "sleep",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "name": "canConnect",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(host, port, timeoutMs = 1500)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "done",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
       "kind": "arrow",
       "async": false,
-      "params": "(ms)",
-      "callCount": 1
+      "params": "(ok)",
+      "callCount": 2
     },
     {
       "type": "function",
-      "name": "rawReq",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
-      "kind": "function",
-      "async": false,
-      "params": "(base, path, { method = \"GET\", headers = {}, body } = {})",
-      "callCount": 0
-    },
-    {
-      "type": "function",
-      "name": "startGatewayUi",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "name": "startGateway",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
       "kind": "function",
       "async": true,
-      "params": "({ packageUrl = DEAD_PACKAGE_URL } = {})",
+      "params": "()",
       "callCount": 0
     },
     {
       "type": "function",
-      "name": "stopGatewayUi",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "name": "stopGateway",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
       "kind": "function",
       "async": true,
       "params": "(g)",
@@ -366,12 +856,21 @@
     },
     {
       "type": "function",
-      "name": "startFakePackageServer",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "name": "createApp",
+      "file": "src/server.mjs",
       "kind": "function",
       "async": false,
-      "params": "(manifest)",
+      "params": "(overrides = {})",
       "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "handler",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": true,
+      "params": "(req, res)",
+      "callCount": 103
     },
     {
       "type": "function",
@@ -389,7 +888,59 @@
       "kind": "arrow",
       "async": false,
       "params": "()",
+      "callCount": 19
+    },
+    {
+      "type": "function",
+      "name": "settle",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(result)",
+      "callCount": 1
+    },
+    {
+      "type": "function",
+      "name": "overLimit",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
       "callCount": 5
+    },
+    {
+      "type": "function",
+      "name": "onData",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "(chunk)",
+      "callCount": 2
+    },
+    {
+      "type": "function",
+      "name": "onEnd",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 4
+    },
+    {
+      "type": "function",
+      "name": "onError",
+      "file": "src/server.mjs",
+      "kind": "arrow",
+      "async": false,
+      "params": "()",
+      "callCount": 1
+    },
+    {
+      "type": "export",
+      "name": "createApp",
+      "file": "src/server.mjs",
+      "kind": "function",
+      "isDefault": false
     },
     {
       "type": "export",
@@ -407,30 +958,9 @@
     },
     {
       "type": "export",
-      "name": "backupPath",
+      "name": "{ backupPath, listBackups, createBackup, restoreBackup }",
       "file": "src/server.mjs",
-      "kind": "named",
-      "isDefault": false
-    },
-    {
-      "type": "export",
-      "name": "listBackups",
-      "file": "src/server.mjs",
-      "kind": "named",
-      "isDefault": false
-    },
-    {
-      "type": "export",
-      "name": "createBackup",
-      "file": "src/server.mjs",
-      "kind": "named",
-      "isDefault": false
-    },
-    {
-      "type": "export",
-      "name": "restoreBackup",
-      "file": "src/server.mjs",
-      "kind": "named",
+      "kind": "variable",
       "isDefault": false
     },
     {
@@ -580,11 +1110,11 @@
     },
     {
       "type": "function",
-      "name": "cmdUI",
+      "name": "createUIHandler",
       "file": "src/ui/server.mjs",
       "kind": "function",
-      "async": true,
-      "params": "()",
+      "async": false,
+      "params": "(deps)",
       "callCount": 0
     },
     {
@@ -625,12 +1155,28 @@
     },
     {
       "type": "function",
+      "name": "cmdUI",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "async": true,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "bye",
       "file": "src/ui/server.mjs",
       "kind": "arrow",
       "async": true,
       "params": "()",
       "callCount": 4
+    },
+    {
+      "type": "export",
+      "name": "createUIHandler",
+      "file": "src/ui/server.mjs",
+      "kind": "function",
+      "isDefault": false
     },
     {
       "type": "export",
@@ -780,6 +1326,13 @@
     {
       "type": "export",
       "name": "LOGIN_MAX_FAILURES",
+      "file": "src/server/auth.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "LOGIN_IP_MAX_FAILURES",
       "file": "src/server/auth.mjs",
       "kind": "variable",
       "isDefault": false
@@ -937,6 +1490,15 @@
     },
     {
       "type": "function",
+      "name": "sanitizeAuditField",
+      "file": "src/server/events.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(value)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
       "name": "createEventLog",
       "file": "src/server/events.mjs",
       "kind": "function",
@@ -952,6 +1514,20 @@
       "async": false,
       "params": "(type, detail, userId = \"system\")",
       "callCount": 0
+    },
+    {
+      "type": "export",
+      "name": "AUDIT_FIELD_MAX",
+      "file": "src/server/events.mjs",
+      "kind": "variable",
+      "isDefault": false
+    },
+    {
+      "type": "export",
+      "name": "sanitizeAuditField",
+      "file": "src/server/events.mjs",
+      "kind": "function",
+      "isDefault": false
     },
     {
       "type": "export",
@@ -1039,6 +1615,60 @@
       "kind": "function",
       "async": false,
       "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stashCreate",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "isStashApplyConflict",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(msg)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "hasUnmergedPaths",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "isWorkingTreeClean",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "()",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "stashStore",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(sha)",
+      "callCount": 0
+    },
+    {
+      "type": "function",
+      "name": "attemptRecover",
+      "file": "src/server/paaw-control.mjs",
+      "kind": "function",
+      "async": false,
+      "params": "(userId, steps, warnings)",
       "callCount": 0
     },
     {
@@ -2245,6 +2875,105 @@
         "callCount": 0
       }
     ],
+    "runGatewayWithFakes": [
+      {
+        "type": "function",
+        "name": "runGatewayWithFakes",
+        "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(args, { home, cwd, scenario, extraEnv = {} } = {})",
+        "callCount": 0
+      }
+    ],
+    "seedCurrent": [
+      {
+        "type": "function",
+        "name": "seedCurrent",
+        "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(home, version)",
+        "callCount": 0
+      }
+    ],
+    "seedVersionDir": [
+      {
+        "type": "function",
+        "name": "seedVersionDir",
+        "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(home, version)",
+        "callCount": 0
+      }
+    ],
+    "caseDirs": [
+      {
+        "type": "function",
+        "name": "caseDirs",
+        "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(name)",
+        "callCount": 0
+      }
+    ],
+    "setHome": [
+      {
+        "type": "function",
+        "name": "setHome",
+        "file": "tests/unit/install-download.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(dir)",
+        "callCount": 0
+      }
+    ],
+    "mockResponse": [
+      {
+        "type": "function",
+        "name": "mockResponse",
+        "file": "tests/unit/install-download.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "({ ok = true, status = 200, chunks = [] } = {})",
+        "callCount": 0
+      }
+    ],
+    "fetchReturning": [
+      {
+        "type": "function",
+        "name": "fetchReturning",
+        "file": "tests/unit/install-download.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(resp)",
+        "callCount": 0
+      }
+    ],
+    "fetchRefusing": [
+      {
+        "type": "function",
+        "name": "fetchRefusing",
+        "file": "tests/unit/install-download.test.mjs",
+        "kind": "arrow",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "setPkg": [
+      {
+        "type": "function",
+        "name": "setPkg",
+        "file": "tests/unit/install-download.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(url)",
+        "callCount": 0
+      }
+    ],
     "makeZipInMemory": [
       {
         "type": "function",
@@ -2311,6 +3040,311 @@
         "callCount": 0
       }
     ],
+    "fakeExec": [
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 2
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 5
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd, opts)",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 4
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 2
+      },
+      {
+        "type": "function",
+        "name": "fakeExec",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(cmd)",
+        "callCount": 2
+      }
+    ],
+    "fakeExecFile": [
+      {
+        "type": "function",
+        "name": "fakeExecFile",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(file, args)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "fakeExecFile",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(file, args)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "fakeExecFile",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(file, args)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "fakeExecFile",
+        "file": "tests/unit/paaw-control.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(file, args, opts)",
+        "callCount": 1
+      }
+    ],
+    "makeEnv": [
+      {
+        "type": "function",
+        "name": "makeEnv",
+        "file": "tests/unit/read-body.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "makeEnv",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(configOverrides = {})",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "makeEnv",
+        "file": "tests/e2e/gateway-body-limit.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "makeEnv",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(configOverrides = {})",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "makeEnv",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "({ packageUrl = DEAD_PACKAGE_URL, uiHost = \"127.0.0.1\" } = {})",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "makeEnv",
+        "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "({ packageUrl = DEAD_PACKAGE_URL, setHome = true, semgrepPath } = {})",
+        "callCount": 0
+      }
+    ],
+    "login": [
+      {
+        "type": "function",
+        "name": "login",
+        "file": "tests/unit/read-body.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(app, opts)",
+        "callCount": 1
+      },
+      {
+        "type": "function",
+        "name": "login",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "kind": "arrow",
+        "async": true,
+        "params": "(userId = TEST_USER.id, password = TEST_USER.passwordHash)",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "login",
+        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(userId, password, opts = {})",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "login",
+        "file": "src/server/auth.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(userId, password, ip = \"unknown\")",
+        "callCount": 0
+      }
+    ],
     "restoreManagedEnv": [
       {
         "type": "function",
@@ -2344,121 +3378,162 @@
         "callCount": 0
       }
     ],
-    "getFreePort": [
+    "mockReq": [
       {
         "type": "function",
-        "name": "getFreePort",
-        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "name": "mockReq",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(opts = {})",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "mockReq",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "mockRes": [
+      {
+        "type": "function",
+        "name": "mockRes",
+        "file": "tests/helpers/inject.mjs",
         "kind": "function",
         "async": false,
         "params": "()",
         "callCount": 0
       },
       {
+        "type": "export",
+        "name": "mockRes",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "tryParse": [
+      {
         "type": "function",
-        "name": "getFreePort",
-        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "name": "tryParse",
+        "file": "tests/helpers/inject.mjs",
         "kind": "function",
         "async": false,
-        "params": "()",
+        "params": "(body)",
+        "callCount": 0
+      }
+    ],
+    "call": [
+      {
+        "type": "function",
+        "name": "call",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(target, opts = {})",
         "callCount": 0
       },
       {
-        "type": "function",
-        "name": "getFreePort",
-        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "type": "export",
+        "name": "call",
+        "file": "tests/helpers/inject.mjs",
         "kind": "function",
-        "async": false,
-        "params": "()",
+        "isDefault": false
+      }
+    ],
+    "withFetch": [
+      {
+        "type": "function",
+        "name": "withFetch",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(impl, fn)",
         "callCount": 0
       },
       {
-        "type": "function",
-        "name": "getFreePort",
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "type": "export",
+        "name": "withFetch",
+        "file": "tests/helpers/inject.mjs",
         "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "refusingFetch": [
+      {
+        "type": "function",
+        "name": "refusingFetch",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "arrow",
         "async": false,
         "params": "()",
-        "callCount": 0
+        "callCount": 1
+      },
+      {
+        "type": "export",
+        "name": "refusingFetch",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "variable",
+        "isDefault": false
       }
     ],
     "sleep": [
       {
         "type": "function",
         "name": "sleep",
-        "file": "tests/e2e/gateway-backup-auth.test.mjs",
+        "file": "tests/helpers/inject.mjs",
         "kind": "arrow",
         "async": false,
         "params": "(ms)",
         "callCount": 1
       },
       {
-        "type": "function",
+        "type": "export",
         "name": "sleep",
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "withEnv": [
+      {
+        "type": "function",
+        "name": "withEnv",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(env, fn)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "withEnv",
+        "file": "tests/helpers/inject.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "api": [
+      {
+        "type": "function",
+        "name": "api",
+        "file": "tests/e2e/gateway-backup-auth.test.mjs",
         "kind": "arrow",
         "async": false,
-        "params": "(ms)",
-        "callCount": 1
+        "params": "(method, path, { body, token } = {})",
+        "callCount": 3
       }
     ],
-    "jsonReq": [
+    "withEnvSync": [
       {
         "type": "function",
-        "name": "jsonReq",
+        "name": "withEnvSync",
         "file": "tests/e2e/gateway-backup-auth.test.mjs",
         "kind": "function",
-        "async": true,
-        "params": "(base, path, { method = \"GET\", token, body } = {})",
-        "callCount": 0
-      },
-      {
-        "type": "function",
-        "name": "jsonReq",
-        "file": "tests/e2e/gateway-login-hardening.test.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(base, path, { method = \"GET\", body, token } = {})",
-        "callCount": 0
-      }
-    ],
-    "startGateway": [
-      {
-        "type": "function",
-        "name": "startGateway",
-        "file": "tests/e2e/gateway-backup-auth.test.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(configOverrides = {})",
-        "callCount": 0
-      },
-      {
-        "type": "function",
-        "name": "startGateway",
-        "file": "tests/e2e/gateway-login-hardening.test.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(configOverrides = {})",
-        "callCount": 0
-      }
-    ],
-    "stopGateway": [
-      {
-        "type": "function",
-        "name": "stopGateway",
-        "file": "tests/e2e/gateway-backup-auth.test.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(g)",
-        "callCount": 0
-      },
-      {
-        "type": "function",
-        "name": "stopGateway",
-        "file": "tests/e2e/gateway-login-hardening.test.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(g)",
+        "async": false,
+        "params": "(env)",
         "callCount": 0
       }
     ],
@@ -2473,15 +3548,48 @@
         "callCount": 3
       }
     ],
-    "restoreEventsInLog": [
+    "restoreEvents": [
       {
         "type": "function",
-        "name": "restoreEventsInLog",
+        "name": "restoreEvents",
         "file": "tests/e2e/gateway-backup-auth.test.mjs",
         "kind": "arrow",
         "async": false,
         "params": "()",
-        "callCount": 5
+        "callCount": 2
+      }
+    ],
+    "loginBodyOfSize": [
+      {
+        "type": "function",
+        "name": "loginBodyOfSize",
+        "file": "tests/e2e/gateway-body-limit.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(targetBytes)",
+        "callCount": 0
+      }
+    ],
+    "postBody": [
+      {
+        "type": "function",
+        "name": "postBody",
+        "file": "tests/e2e/gateway-body-limit.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(body, headers = {})",
+        "callCount": 1
+      }
+    ],
+    "health": [
+      {
+        "type": "function",
+        "name": "health",
+        "file": "tests/e2e/gateway-body-limit.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 1
       }
     ],
     "runGateway": [
@@ -2495,11 +3603,128 @@
         "callCount": 0
       }
     ],
+    "pidAlive": [
+      {
+        "type": "function",
+        "name": "pidAlive",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(pid)",
+        "callCount": 1
+      }
+    ],
+    "TestEnv": [
+      {
+        "type": "class",
+        "name": "TestEnv",
+        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+        "methods": [
+          "constructor",
+          "setup",
+          "api",
+          "setStubMode",
+          "waitStubReady",
+          "teardown"
+        ]
+      }
+    ],
+    "jobLog": [
+      {
+        "type": "function",
+        "name": "jobLog",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(line)",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "jobLog",
+        "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(line)",
+        "callCount": 3
+      },
+      {
+        "type": "function",
+        "name": "jobLog",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(line)",
+        "callCount": 0
+      }
+    ],
+    "cleanupEnv": [
+      {
+        "type": "function",
+        "name": "cleanupEnv",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(savedEnv, savedCwd)",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "cleanupEnv",
+        "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(savedEnv, savedCwd, tmp)",
+        "callCount": 0
+      }
+    ],
+    "req": [
+      {
+        "type": "function",
+        "name": "req",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(handler, url, { method = \"GET\", headers = {}, body, chunks } = {})",
+        "callCount": 0
+      },
+      {
+        "type": "function",
+        "name": "req",
+        "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "(handler, url, { method = \"GET\", headers = {}, body, chunks } = {})",
+        "callCount": 0
+      }
+    ],
+    "fakeFetch": [
+      {
+        "type": "function",
+        "name": "fakeFetch",
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(url, _opts)",
+        "callCount": 4
+      }
+    ],
+    "getFreePort": [
+      {
+        "type": "function",
+        "name": "getFreePort",
+        "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
     "canConnect": [
       {
         "type": "function",
         "name": "canConnect",
-        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "file": "tests/e2e/network/gateway-bind-host.test.mjs",
         "kind": "function",
         "async": false,
         "params": "(host, port, timeoutMs = 1500)",
@@ -2510,7 +3735,7 @@
       {
         "type": "function",
         "name": "done",
-        "file": "tests/e2e/gateway-login-hardening.test.mjs",
+        "file": "tests/e2e/network/gateway-bind-host.test.mjs",
         "kind": "arrow",
         "async": false,
         "params": "(ok)",
@@ -2535,74 +3760,55 @@
         "callCount": 1
       }
     ],
-    "pidAlive": [
+    "startGateway": [
       {
         "type": "function",
-        "name": "pidAlive",
-        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
-        "kind": "arrow",
-        "async": false,
-        "params": "",
-        "callCount": 1
-      }
-    ],
-    "TestEnv": [
-      {
-        "type": "class",
-        "name": "TestEnv",
-        "file": "tests/e2e/gateway-restart-rbac.test.mjs",
-        "methods": [
-          "constructor",
-          "setup",
-          "api",
-          "waitStubReady",
-          "setStubMode",
-          "teardown"
-        ]
-      }
-    ],
-    "rawReq": [
-      {
-        "type": "function",
-        "name": "rawReq",
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(base, path, { method = \"GET\", headers = {}, body } = {})",
-        "callCount": 0
-      }
-    ],
-    "startGatewayUi": [
-      {
-        "type": "function",
-        "name": "startGatewayUi",
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "name": "startGateway",
+        "file": "tests/e2e/network/gateway-bind-host.test.mjs",
         "kind": "function",
         "async": true,
-        "params": "({ packageUrl = DEAD_PACKAGE_URL } = {})",
+        "params": "()",
         "callCount": 0
       }
     ],
-    "stopGatewayUi": [
+    "stopGateway": [
       {
         "type": "function",
-        "name": "stopGatewayUi",
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "name": "stopGateway",
+        "file": "tests/e2e/network/gateway-bind-host.test.mjs",
         "kind": "function",
         "async": true,
         "params": "(g)",
         "callCount": 0
       }
     ],
-    "startFakePackageServer": [
+    "createApp": [
       {
         "type": "function",
-        "name": "startFakePackageServer",
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "name": "createApp",
+        "file": "src/server.mjs",
         "kind": "function",
         "async": false,
-        "params": "(manifest)",
+        "params": "(overrides = {})",
         "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "createApp",
+        "file": "src/server.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
+    "handler": [
+      {
+        "type": "function",
+        "name": "handler",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": true,
+        "params": "(req, res)",
+        "callCount": 103
       }
     ],
     "sendJSON": [
@@ -2624,7 +3830,62 @@
         "kind": "arrow",
         "async": false,
         "params": "()",
+        "callCount": 19
+      }
+    ],
+    "settle": [
+      {
+        "type": "function",
+        "name": "settle",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(result)",
+        "callCount": 1
+      }
+    ],
+    "overLimit": [
+      {
+        "type": "function",
+        "name": "overLimit",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
         "callCount": 5
+      }
+    ],
+    "onData": [
+      {
+        "type": "function",
+        "name": "onData",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "(chunk)",
+        "callCount": 2
+      }
+    ],
+    "onEnd": [
+      {
+        "type": "function",
+        "name": "onEnd",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 4
+      }
+    ],
+    "onError": [
+      {
+        "type": "function",
+        "name": "onError",
+        "file": "src/server.mjs",
+        "kind": "arrow",
+        "async": false,
+        "params": "()",
+        "callCount": 1
       }
     ],
     "BACKUP_REGEX": [
@@ -2659,76 +3920,13 @@
         "isDefault": false
       }
     ],
-    "backupPath": [
+    "{ backupPath, listBackups, createBackup, restoreBackup }": [
       {
         "type": "export",
-        "name": "backupPath",
+        "name": "{ backupPath, listBackups, createBackup, restoreBackup }",
         "file": "src/server.mjs",
-        "kind": "named",
+        "kind": "variable",
         "isDefault": false
-      },
-      {
-        "type": "function",
-        "name": "backupPath",
-        "file": "src/server/backup.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(name)",
-        "callCount": 0
-      }
-    ],
-    "listBackups": [
-      {
-        "type": "export",
-        "name": "listBackups",
-        "file": "src/server.mjs",
-        "kind": "named",
-        "isDefault": false
-      },
-      {
-        "type": "function",
-        "name": "listBackups",
-        "file": "src/server/backup.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "()",
-        "callCount": 0
-      }
-    ],
-    "createBackup": [
-      {
-        "type": "export",
-        "name": "createBackup",
-        "file": "src/server.mjs",
-        "kind": "named",
-        "isDefault": false
-      },
-      {
-        "type": "function",
-        "name": "createBackup",
-        "file": "src/server/backup.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(userId = \"system\")",
-        "callCount": 0
-      }
-    ],
-    "restoreBackup": [
-      {
-        "type": "export",
-        "name": "restoreBackup",
-        "file": "src/server.mjs",
-        "kind": "named",
-        "isDefault": false
-      },
-      {
-        "type": "function",
-        "name": "restoreBackup",
-        "file": "src/server/backup.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(filename, userId = \"system\")",
-        "callCount": 0
       }
     ],
     "POST /api/auth/login": [
@@ -2848,17 +4046,6 @@
         "path": "/api/users"
       }
     ],
-    "jobLog": [
-      {
-        "type": "function",
-        "name": "jobLog",
-        "file": "src/ui/server.mjs",
-        "kind": "function",
-        "async": false,
-        "params": "(line)",
-        "callCount": 0
-      }
-    ],
     "uiStart": [
       {
         "type": "function",
@@ -2914,19 +4101,19 @@
         "callCount": 0
       }
     ],
-    "cmdUI": [
+    "createUIHandler": [
       {
         "type": "function",
-        "name": "cmdUI",
+        "name": "createUIHandler",
         "file": "src/ui/server.mjs",
         "kind": "function",
-        "async": true,
-        "params": "()",
+        "async": false,
+        "params": "(deps)",
         "callCount": 0
       },
       {
         "type": "export",
-        "name": "cmdUI",
+        "name": "createUIHandler",
         "file": "src/ui/server.mjs",
         "kind": "function",
         "isDefault": false
@@ -2974,6 +4161,24 @@
         "async": false,
         "params": "(originHeader)",
         "callCount": 3
+      }
+    ],
+    "cmdUI": [
+      {
+        "type": "function",
+        "name": "cmdUI",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "async": true,
+        "params": "()",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "cmdUI",
+        "file": "src/ui/server.mjs",
+        "kind": "function",
+        "isDefault": false
       }
     ],
     "bye": [
@@ -3166,21 +4371,19 @@
         "callCount": 0
       }
     ],
-    "login": [
-      {
-        "type": "function",
-        "name": "login",
-        "file": "src/server/auth.mjs",
-        "kind": "function",
-        "async": true,
-        "params": "(userId, password, ip = \"unknown\")",
-        "callCount": 0
-      }
-    ],
     "LOGIN_MAX_FAILURES": [
       {
         "type": "export",
         "name": "LOGIN_MAX_FAILURES",
+        "file": "src/server/auth.mjs",
+        "kind": "variable",
+        "isDefault": false
+      }
+    ],
+    "LOGIN_IP_MAX_FAILURES": [
+      {
+        "type": "export",
+        "name": "LOGIN_IP_MAX_FAILURES",
         "file": "src/server/auth.mjs",
         "kind": "variable",
         "isDefault": false
@@ -3211,6 +4414,50 @@
         "file": "src/server/backup.mjs",
         "kind": "function",
         "isDefault": false
+      }
+    ],
+    "backupPath": [
+      {
+        "type": "function",
+        "name": "backupPath",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(name)",
+        "callCount": 0
+      }
+    ],
+    "listBackups": [
+      {
+        "type": "function",
+        "name": "listBackups",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "createBackup": [
+      {
+        "type": "function",
+        "name": "createBackup",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(userId = \"system\")",
+        "callCount": 0
+      }
+    ],
+    "restoreBackup": [
+      {
+        "type": "function",
+        "name": "restoreBackup",
+        "file": "src/server/backup.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(filename, userId = \"system\")",
+        "callCount": 0
       }
     ],
     "loadConfig": [
@@ -3294,6 +4541,24 @@
         "isDefault": false
       }
     ],
+    "sanitizeAuditField": [
+      {
+        "type": "function",
+        "name": "sanitizeAuditField",
+        "file": "src/server/events.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(value)",
+        "callCount": 0
+      },
+      {
+        "type": "export",
+        "name": "sanitizeAuditField",
+        "file": "src/server/events.mjs",
+        "kind": "function",
+        "isDefault": false
+      }
+    ],
     "createEventLog": [
       {
         "type": "function",
@@ -3321,6 +4586,15 @@
         "async": false,
         "params": "(type, detail, userId = \"system\")",
         "callCount": 0
+      }
+    ],
+    "AUDIT_FIELD_MAX": [
+      {
+        "type": "export",
+        "name": "AUDIT_FIELD_MAX",
+        "file": "src/server/events.mjs",
+        "kind": "variable",
+        "isDefault": false
       }
     ],
     "createPaawControl": [
@@ -3442,6 +4716,72 @@
         "kind": "function",
         "async": false,
         "params": "()",
+        "callCount": 0
+      }
+    ],
+    "stashCreate": [
+      {
+        "type": "function",
+        "name": "stashCreate",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "isStashApplyConflict": [
+      {
+        "type": "function",
+        "name": "isStashApplyConflict",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(msg)",
+        "callCount": 0
+      }
+    ],
+    "hasUnmergedPaths": [
+      {
+        "type": "function",
+        "name": "hasUnmergedPaths",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "isWorkingTreeClean": [
+      {
+        "type": "function",
+        "name": "isWorkingTreeClean",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "()",
+        "callCount": 0
+      }
+    ],
+    "stashStore": [
+      {
+        "type": "function",
+        "name": "stashStore",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(sha)",
+        "callCount": 0
+      }
+    ],
+    "attemptRecover": [
+      {
+        "type": "function",
+        "name": "attemptRecover",
+        "file": "src/server/paaw-control.mjs",
+        "kind": "function",
+        "async": false,
+        "params": "(userId, steps, warnings)",
         "callCount": 0
       }
     ],
@@ -4650,10 +5990,10 @@
     ]
   },
   "stats": {
-    "total": 262,
-    "functions": 152,
+    "total": 334,
+    "functions": 215,
     "classes": 1,
-    "exports": 84,
+    "exports": 93,
     "routes": 25,
     "components": 0
   }

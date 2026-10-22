@@ -85,6 +85,18 @@
           "names": []
         },
         {
+          "source": "tests/unit/install-download.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-ui-csrf.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-ui-endpoints.test.mjs",
+          "names": []
+        },
+        {
           "source": "src/ui/server.mjs",
           "names": []
         },
@@ -183,6 +195,10 @@
       "importedBy": [
         {
           "source": "gateway.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/unit/install-download.test.mjs",
           "names": []
         },
         {
@@ -370,9 +386,18 @@
         {
           "source": "gateway.mjs",
           "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-ui-csrf.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-ui-endpoints.test.mjs",
+          "names": []
         }
       ],
       "exports": [
+        "createUIHandler",
         "cmdUI"
       ]
     },
@@ -437,6 +462,7 @@
       ],
       "exports": [
         "LOGIN_MAX_FAILURES",
+        "LOGIN_IP_MAX_FAILURES",
         "LOGIN_WINDOW_MS",
         "createAuth"
       ]
@@ -468,7 +494,7 @@
           "names": []
         },
         {
-          "source": "tests/e2e/gateway-login-hardening.test.mjs",
+          "source": "tests/e2e/network/gateway-bind-host.test.mjs",
           "names": []
         },
         {
@@ -608,7 +634,170 @@
         }
       ],
       "exports": [
+        "AUDIT_FIELD_MAX",
+        "sanitizeAuditField",
         "createEventLog"
+      ]
+    },
+    "tests/unit/gateway-cli-dispatch.test.mjs": {
+      "path": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/unit/install-download.test.mjs": {
+      "path": "tests/unit/install-download.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:crypto",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/lib/install.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/helpers/inject.mjs": {
+      "path": "tests/helpers/inject.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:events",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "tests/unit/install-download.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/unit/read-body.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-backup-auth.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-body-limit.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-login-hardening.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-restart-rbac.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-ui-csrf.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-ui-endpoints.test.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "mockReq",
+        "mockRes",
+        "call",
+        "withFetch",
+        "refusingFetch",
+        "sleep",
+        "withEnv"
       ]
     },
     "tests/unit/install.test.mjs": {
@@ -826,6 +1015,281 @@
       "importedBy": [],
       "exports": []
     },
+    "tests/unit/read-body.test.mjs": {
+      "path": "tests/unit/read-body.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "resolved": true,
+          "targetFile": "src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "src/server.mjs": {
+      "path": "src/server.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "http",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "./server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/events.mjs",
+          "resolved": true,
+          "targetFile": "src/server/events.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/auth.mjs",
+          "resolved": true,
+          "targetFile": "src/server/auth.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/paaw-control.mjs",
+          "resolved": true,
+          "targetFile": "src/server/paaw-control.mjs",
+          "names": []
+        },
+        {
+          "source": "./server/backup.mjs",
+          "resolved": true,
+          "targetFile": "src/server/backup.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "tests/unit/read-body.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/unit/sanitize-audit-field.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-backup-auth.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-body-limit.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-login-hardening.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-restart-rbac.test.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "createApp",
+        "BACKUP_REGEX",
+        "BACKUP_DATE_REGEX",
+        "{ backupPath, listBackups, createBackup, restoreBackup }"
+      ]
+    },
+    "src/server/config.mjs": {
+      "path": "src/server/config.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "./password.mjs",
+          "resolved": true,
+          "targetFile": "src/server/password.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [
+        {
+          "source": "tests/unit/read-body.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/unit/sanitize-audit-field.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/unit/server-config.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-backup-auth.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-body-limit.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-login-hardening.test.mjs",
+          "names": []
+        },
+        {
+          "source": "tests/e2e/gateway-restart-rbac.test.mjs",
+          "names": []
+        },
+        {
+          "source": "src/server.mjs",
+          "names": []
+        }
+      ],
+      "exports": [
+        "DEFAULT_HOST",
+        "loadConfig",
+        "validateAuthConfig",
+        "saveConfig",
+        "createConfig"
+      ]
+    },
+    "tests/unit/sanitize-audit-field.test.mjs": {
+      "path": "tests/unit/sanitize-audit-field.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "resolved": true,
+          "targetFile": "src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
     "tests/unit/semgrep.test.mjs": {
       "path": "tests/unit/semgrep.test.mjs",
       "language": "javascript",
@@ -908,47 +1372,6 @@
       "importedBy": [],
       "exports": []
     },
-    "src/server/config.mjs": {
-      "path": "src/server/config.mjs",
-      "language": "javascript",
-      "imports": [
-        {
-          "source": "fs",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "path",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "./password.mjs",
-          "resolved": true,
-          "targetFile": "src/server/password.mjs",
-          "names": []
-        }
-      ],
-      "importedBy": [
-        {
-          "source": "tests/unit/server-config.test.mjs",
-          "names": []
-        },
-        {
-          "source": "src/server.mjs",
-          "names": []
-        }
-      ],
-      "exports": [
-        "DEFAULT_HOST",
-        "loadConfig",
-        "validateAuthConfig",
-        "saveConfig",
-        "createConfig"
-      ]
-    },
     "tests/e2e/gateway-backup-auth.test.mjs": {
       "path": "tests/e2e/gateway-backup-auth.test.mjs",
       "language": "javascript",
@@ -972,7 +1395,63 @@
           "names": []
         },
         {
-          "source": "node:net",
+          "source": "node:os",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "resolved": true,
+          "targetFile": "src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/e2e/gateway-body-limit.test.mjs": {
+      "path": "tests/e2e/gateway-body-limit.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
           "resolved": false,
           "targetFile": null,
           "names": []
@@ -990,12 +1469,6 @@
           "names": []
         },
         {
-          "source": "node:child_process",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
           "source": "node:url",
           "resolved": false,
           "targetFile": null,
@@ -1006,84 +1479,22 @@
           "resolved": true,
           "targetFile": "src/server.mjs",
           "names": []
-        }
-      ],
-      "importedBy": [],
-      "exports": []
-    },
-    "src/server.mjs": {
-      "path": "src/server.mjs",
-      "language": "javascript",
-      "imports": [
-        {
-          "source": "http",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
         },
         {
-          "source": "fs",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "path",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "url",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "./server/config.mjs",
+          "source": "../../src/server/config.mjs",
           "resolved": true,
           "targetFile": "src/server/config.mjs",
           "names": []
         },
         {
-          "source": "./server/events.mjs",
+          "source": "../helpers/inject.mjs",
           "resolved": true,
-          "targetFile": "src/server/events.mjs",
-          "names": []
-        },
-        {
-          "source": "./server/auth.mjs",
-          "resolved": true,
-          "targetFile": "src/server/auth.mjs",
-          "names": []
-        },
-        {
-          "source": "./server/paaw-control.mjs",
-          "resolved": true,
-          "targetFile": "src/server/paaw-control.mjs",
-          "names": []
-        },
-        {
-          "source": "./server/backup.mjs",
-          "resolved": true,
-          "targetFile": "src/server/backup.mjs",
+          "targetFile": "tests/helpers/inject.mjs",
           "names": []
         }
       ],
-      "importedBy": [
-        {
-          "source": "tests/e2e/gateway-backup-auth.test.mjs",
-          "names": []
-        }
-      ],
-      "exports": [
-        "BACKUP_REGEX",
-        "BACKUP_DATE_REGEX",
-        "backupPath",
-        "listBackups",
-        "createBackup",
-        "restoreBackup"
-      ]
+      "importedBy": [],
+      "exports": []
     },
     "tests/e2e/gateway-cli.test.mjs": {
       "path": "tests/e2e/gateway-cli.test.mjs",
@@ -1158,18 +1569,6 @@
           "names": []
         },
         {
-          "source": "node:net",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
-          "source": "node:os",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
           "source": "node:os",
           "resolved": false,
           "targetFile": null,
@@ -1182,21 +1581,27 @@
           "names": []
         },
         {
-          "source": "node:child_process",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
           "source": "node:url",
           "resolved": false,
           "targetFile": null,
           "names": []
         },
         {
-          "source": "../../src/server/password.mjs",
+          "source": "../../src/server.mjs",
           "resolved": true,
-          "targetFile": "src/server/password.mjs",
+          "targetFile": "src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
           "names": []
         }
       ],
@@ -1226,12 +1631,6 @@
           "names": []
         },
         {
-          "source": "node:net",
-          "resolved": false,
-          "targetFile": null,
-          "names": []
-        },
-        {
           "source": "node:os",
           "resolved": false,
           "targetFile": null,
@@ -1244,7 +1643,7 @@
           "names": []
         },
         {
-          "source": "node:child_process",
+          "source": "node:timers/promises",
           "resolved": false,
           "targetFile": null,
           "names": []
@@ -1256,9 +1655,21 @@
           "names": []
         },
         {
-          "source": "node:timers/promises",
-          "resolved": false,
-          "targetFile": null,
+          "source": "../../src/server.mjs",
+          "resolved": true,
+          "targetFile": "src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "resolved": true,
+          "targetFile": "src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
           "names": []
         }
       ],
@@ -1282,7 +1693,113 @@
           "names": []
         },
         {
-          "source": "node:http",
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/ui/server.mjs",
+          "resolved": true,
+          "targetFile": "src/ui/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/e2e/gateway-ui-endpoints.test.mjs": {
+      "path": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../src/ui/server.mjs",
+          "resolved": true,
+          "targetFile": "src/ui/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/config.mjs",
+          "resolved": true,
+          "targetFile": "src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "resolved": true,
+          "targetFile": "tests/helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "importedBy": [],
+      "exports": []
+    },
+    "tests/e2e/network/gateway-bind-host.test.mjs": {
+      "path": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "language": "javascript",
+      "imports": [
+        {
+          "source": "node:test",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
           "resolved": false,
           "targetFile": null,
           "names": []
@@ -1295,6 +1812,12 @@
         },
         {
           "source": "node:net",
+          "resolved": false,
+          "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "node:os",
           "resolved": false,
           "targetFile": null,
           "names": []
@@ -1321,6 +1844,12 @@
           "source": "node:url",
           "resolved": false,
           "targetFile": null,
+          "names": []
+        },
+        {
+          "source": "../../../src/server/password.mjs",
+          "resolved": true,
+          "targetFile": "src/server/password.mjs",
           "names": []
         }
       ],
@@ -1405,6 +1934,21 @@
       "names": []
     },
     {
+      "from": "tests/unit/install-download.test.mjs",
+      "to": "src/lib/install.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/unit/install-download.test.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/unit/install-download.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
       "from": "tests/unit/paaw-control.test.mjs",
       "to": "src/server/paaw-control.mjs",
       "names": []
@@ -1420,6 +1964,31 @@
       "names": []
     },
     {
+      "from": "tests/unit/read-body.test.mjs",
+      "to": "src/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/unit/read-body.test.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/unit/read-body.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/unit/sanitize-audit-field.test.mjs",
+      "to": "src/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/unit/sanitize-audit-field.test.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
       "from": "tests/unit/server-config.test.mjs",
       "to": "src/server/config.mjs",
       "names": []
@@ -1430,7 +1999,92 @@
       "names": []
     },
     {
+      "from": "tests/e2e/gateway-backup-auth.test.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-backup-auth.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-body-limit.test.mjs",
+      "to": "src/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-body-limit.test.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-body-limit.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
       "from": "tests/e2e/gateway-login-hardening.test.mjs",
+      "to": "src/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-login-hardening.test.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-login-hardening.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "to": "src/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "to": "src/server/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "to": "src/ui/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "to": "src/ui/server.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "to": "src/lib/config.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "to": "tests/helpers/inject.mjs",
+      "names": []
+    },
+    {
+      "from": "tests/e2e/network/gateway-bind-host.test.mjs",
       "to": "src/server/password.mjs",
       "names": []
     },
@@ -1506,9 +2160,9 @@
     }
   ],
   "stats": {
-    "totalFiles": 28,
-    "totalEdges": 28,
-    "resolvedImports": 28,
-    "unresolvedImports": 125
+    "totalFiles": 36,
+    "totalEdges": 53,
+    "resolvedImports": 53,
+    "unresolvedImports": 159
   }
 }

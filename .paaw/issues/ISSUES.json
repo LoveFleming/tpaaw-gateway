@@ -188,7 +188,119 @@
         }
       ],
       "updatedAt": "2026-10-19T13:36:41.925Z"
+    },
+    {
+      "id": "ISS-015",
+      "title": "review board major：install.mjs 驗證失敗未清殘檔（sha256/size mismatch 留半下載檔）",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "review-board",
+        "major",
+        "install",
+        "tech-debt"
+      ],
+      "description": "Review 委員會（2026-10-19, range 8dd63d7..HEAD）指出 src/lib/install.mjs:46：downloadVerified 在 sha256/size 驗證失敗時直接拋錯，未清除已下載的殘檔（partial download）。屬既存技術債（非本版引入）。風險：殘檔堆積/佔空間、下次安裝可能誤用殘檔。建議修法：驗證失敗路徑加 try/finally 清除 tmp 下載檔。列管帶走，不卡本次 release。",
+      "featureId": "F20261011-002",
+      "createdAt": "2026-10-19T14:38:36.341Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-016",
+      "title": "review board major：config.mjs 只驗 password 不驗 sessionSecret（fallback 固定值）",
+      "priority": "high",
+      "status": "open",
+      "labels": [
+        "review-board",
+        "major",
+        "security",
+        "config"
+      ],
+      "description": "Review 委員會（2026-10-19, range 8dd63d7..HEAD）指出 src/server/config.mjs:76：validateAuthConfig 只驗證 password 強度，未驗證 sessionSecret；且當 sessionSecret 未設定時使用固定 fallback 值，等同可預測的 session 簽章密鑰。屬既存技術債（非本版引入）。風險：session 偽造。建議修法：validateAuthConfig 增加 sessionSecret 檢查（缺失/過短/為預設值 → 拒絕啟動或強制生成隨機值）。列管帶走，不卡本次 release。",
+      "featureId": "F20261009-002",
+      "createdAt": "2026-10-19T14:38:36.343Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-017",
+      "title": "review board major：paaw-control.mjs git stash pop 失敗仍回 ok / 衝突殘留",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "review-board",
+        "major",
+        "upgrade",
+        "tech-debt"
+      ],
+      "description": "Review 委員會（2026-10-19, range 8dd63d7..HEAD）指出 src/server/paaw-control.mjs:262（upgradePaaw）：git stash pop 失敗（衝突）時，steps 記錄 ok:false，但整體流程仍可能回報成功；衝突殘留未處理。屬既存技術債（非本版引入）。風險：升級後程式碼處於衝突狀態卻被視為成功。建議修法：stash pop 失敗視為升級失敗並明確回報；或改用 stash apply + 檢查。列管帶走，不卡本次 release。",
+      "featureId": "F20261009-002",
+      "createdAt": "2026-10-19T14:38:36.344Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-018",
+      "title": "review board major：createConfig env 衍生值就地突變，saveConfig 會持久化 env 覆寫",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "review-board",
+        "major",
+        "config",
+        "tech-debt"
+      ],
+      "description": "Review 委員會（2026-10-19, range 8dd63d7..HEAD, config.mjs:130/140）指出：createConfig 在內部把 env 衍生值（config.host / applyPasswordOverride）就地突變寫進 config 物件；login 觸發雜湊升級時呼叫 saveConfig(config)，會把這些 env 衍生值永久持久化到 config.json，造成「env 覆寫被寫死」。屬既存技術債（ADR-003 重構時原樣搬移，非本版新引入）。風險：env 與 config 檔來源混淆、不可預期持久化。建議修法：createConfig 不改動 config 物件本身，env 衍生值以獨立欄位或 getter 提供，saveConfig 只持久化使用者設定。列管帶走，不卡本次 release。",
+      "featureId": "F20261009-002",
+      "createdAt": "2026-10-19T14:41:31.482Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-019",
+      "title": "review board major：user lockout 命中提早 return，per-IP flood 上限被旁路",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "review-board",
+        "major",
+        "security",
+        "auth"
+      ],
+      "description": "Review 委員會（2026-10-19, range 8dd63d7..HEAD, auth.mjs:175）指出：user lockout 命中時提早 return，未對 ipLimiter 累積 fail 計數；因此攻擊者持續對「已鎖定用戶」噴失敗請求時，不會觸發 per-IP flood 上限，可繞過 IP 層防護。屬既存技術債（非本版新引入）。風險：per-IP 節流被鎖定路徑旁路。建議修法：lockout 命中時仍應對 ipLimiter 記一次 fail（或獨立計數），維持 IP 層防護有效。列管帶走，不卡本次 release。",
+      "featureId": "F20261009-002",
+      "createdAt": "2026-10-19T14:41:31.483Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-020",
+      "title": "saveGatewayCfg() 寫入 process.cwd()/gateway.json 不受 PAAW_HOME 隔離，測試會污染專案根目錄並造成並行競爭",
+      "priority": "medium",
+      "status": "open",
+      "labels": [
+        "test",
+        "flaky",
+        "config"
+      ],
+      "description": "發現於測試補強工作（RUN-20261021-004）。\n\n現象：\n1. src/lib/config.mjs 的 saveGatewayCfg()（line 74-75）固定寫 join(process.cwd(), \"gateway.json\")，不隨 PAAW_HOME 隔離。\n2. 任何觸發 POST /api/settings 的 e2e 測試因此寫到「真實專案根目錄」的 gateway.json（本機已觀察到殘留 {\"packageServer\":\"http://127.0.0.1:9999\",\"paawHome\":\"/users/steward/App/my-paaw\"}）。\n3. node --test 並行多 child process 時，多個 worker 對同一 gateway.json 做 rename 寫入 → 間歇性競爭（POST /api/settings 偶回 500），造成 e2e flaky。\n\n測試端已用 process.chdir(tmp) 暫時隔離（workaround），但根治應在產品層：saveGatewayCfg() 的落點應改為 getHome()/PAAW_HOME 衍生路徑（或明確可注入），使 gateway.json 與 paawHome 佈局一致、不污染 cwd。\n\n附帶（相關但獨立）：多個測試檔呼叫會 log 的模組函式（install.mjs 的 L.info 等），在 node --test 下污染 TAP stdout 流，觸發 \"Unable to deserialize cloned data\" 間歇失敗。已在測試端靜音 L 緩解；建議評估在測試框架層提供統一的 logger 靜音/di 或改用 test reporter 隔離 console。\n\n建議：由 Developer (Priya) 決定是否調整 saveGatewayCfg 落點；Tester 端 workaround 已就緒，不阻塞。",
+      "featureId": null,
+      "createdAt": "2026-10-21T14:56:45.826Z",
+      "notes": []
+    },
+    {
+      "id": "ISS-021",
+      "title": "release-unit-model 產生器漏收 14/22 個測試檔，並把 8 個 production file 誤填為 testFile（F20261009-001 永遠顯示無測試）",
+      "priority": "high",
+      "status": "open",
+      "labels": [
+        "tool-bug",
+        "release-unit-model",
+        "test-mapping",
+        "false-negative",
+        "evidence-integrity"
+      ],
+      "description": "## 現象\nRelease 頁 / feature 覆蓋統計顯示 F20261009-001「PAAW Gateway 啟動器 CLI」**無測試檔**（✓0），但實際上該 feature 已有 2 個測試檔、1 個 unit + 1 個 e2e，且 RUN-20261021-006 全綠（101 pass / 0 fail）。\n\n## 根因（兩項獨立缺陷，都在 `.paaw/release-unit-model.json` 產生器）\n\n### 缺陷 1：實體測試檔大量漏收\n實體 `tests/**/*.test.mjs` 共 **22 個**，model 只收錄 **8 個**（且這 8 個才是真的測試檔）。漏收 14 個：\n\n```\ntests/e2e/gateway-body-limit.test.mjs\ntests/e2e/gateway-cli.test.mjs              ← F20261009-001 的 e2e\ntests/e2e/gateway-restart-rbac.test.mjs\ntests/e2e/gateway-ui-csrf.test.mjs\ntests/e2e/gateway-ui-endpoints.test.mjs\ntests/e2e/network/gateway-bind-host.test.mjs  ← 巢狀目錄也漏\ntests/unit/backup.test.mjs\ntests/unit/gateway-cli-dispatch.test.mjs    ← F20261009-001 的 unit\ntests/unit/install-download.test.mjs\ntests/unit/install.test.mjs\ntests/unit/lib-config.test.mjs\ntests/unit/read-body.test.mjs\ntests/unit/sanitize-audit-field.test.mjs\ntests/unit/semgrep.test.mjs\n```\n\n### 缺陷 2：production file 被誤填為 testFile\n`tests` 陣列有 8 筆條目的 `testFile` 欄位填的是**產品檔案**：\n```\n{ \"testFile\": \"gateway.mjs\",           \"productionFile\": \"src/lib/config.mjs\", \"kind\": null }\n{ \"testFile\": \"src/lib/install.mjs\",   \"productionFile\": \"src/lib/config.mjs\", \"kind\": null }\n{ \"testFile\": \"src/lib/process.mjs\",   ... }\n{ \"testFile\": \"src/lib/semgrep.mjs\",   ... }\n{ \"testFile\": \"src/server.mjs\",        ... }\n{ \"testFile\": \"src/server/auth.mjs\",   ... }\n{ \"testFile\": \"src/server/config.mjs\", ... }\n{ \"testFile\": \"src/ui/server.mjs\",     ... }\n```\n特徵：`kind: null`、`testFile` 不存在於 `tests/` 下。成因推測為 mapping 反推失敗（找不到「哪個測試 import 這個 production file」）時，把 production file 本身回填進 `testFile`。\n\n連帶效果：`gateway.mjs` 被歸到 **F20261011-002**（錯誤的 feature），而它真正的 owner **F20261009-001** 的 `tests` 為 `[]`。\n\n## 影響\n1. **證據矩陣失真**：F20261009-001 在 Release 頁顯示「無測試」，人類無法據此放行 → 假 NO-GO 風險。\n2. **統計低估**：`summary.tests = 16`，實際 22。安全相關 e2e（`gateway-restart-rbac`、`gateway-ui-csrf`、`gateway-bind-host`）全數漏計，feature 覆蓋被低估。\n3. **與 ADR-001 記載的計數假象同類**（test_run 只數 TAP 頂層條目 42→17），屬工具可靠性系統性問題。\n4. S0 狀態機「已審未過（review-notes）」+ ✓0 的呈現會誤導審查者認為缺測試。\n\n## 建議修法\n1. **以檔案系統為權威**：掃描 `tests/**/*.test.mjs`（含巢狀目錄）作為測試清單來源；mapping 僅用於「補 kind / 補 featureIds」，不作為「是否存在」的判準。\n2. **嚴格驗證**：`testFile` 必須匹配 `tests/**/*.test.mjs`；不符者丟棄並記 warning，**不得回填 production file**。\n3. **feature 歸屬**：mapping 失敗時應 fallback 到 production file 的 feature（`file→feature` index），而非把 production file 塞進 testFile 欄位。\n4. 修正後 `ru_model_refresh()` 重跑一次驗證：期望 `summary.tests = 22`、F20261009-001 `tests` 含 2 檔。\n\n## 驗證現況（測試本身沒問題，勿派 developer 改產品碼）\n- `tests/unit/gateway-cli-dispatch.test.mjs`（10 案，commit 667c7c3）\n- `tests/e2e/gateway-cli.test.mjs`（4 案）\n- RUN-20261021-006：101 pass / 0 fail / 1 skipped，status=pass\n\n## 已嘗試\n`ru_model_refresh()` 已於 2026-10-21T15:18:53 重跑，結果**完全相同** → 確認非快照過期，是產生器邏輯缺陷。",
+      "featureId": null,
+      "createdAt": "2026-10-21T15:21:35.145Z",
+      "notes": []
     }
   ],
-  "nextId": 15
+  "nextId": 22
 }

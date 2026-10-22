@@ -1,9 +1,53 @@
 # Changelog
 
+## 2026-10-22
+
+
+### fixed
+- 【目標】修復 review 委員會 major：login 的 hash 升級持久化會把 env 衍生欄位寫回 config.json。
+
+- 【目標】修復 review 委員會 major：stopPaaw 完成/失敗不再寫 audit event，遺失 stop 稽核契約。
+### changed
+- 【目標】收斂 review 委員會全 scope 的 9 個 minor（跨三 feature），逐一修掉。
+
+- 【目標】修 review 委員會第二輪 triage 出的 2 major + 3 minor（全在 TASK-041/043 引入的 config.
+- 【目標】修全 scope 委員會標記的 3 個 major（皆屬 F20261009-002），一次到位修完，不逐項、不動 scope 外。
+## 2026-10-21
+
+
+### changed
+- 【目標】修 review 委員會第七輪 triage 出的 3 真 major（全部在 src/server/paaw-control.
+
+- 【目標】修 review 委員會第八輪 triage 出的 2 真 major + 3 minor（全部在 src/server/paaw-control.
+- 【目標】修 review 委員會第九輪 triage 出的 1 major + 4 minor（src/server/paaw-control.
+- 【目標】把你已完成但**尚未 commit** 的 TASK-040 改動收尾，產生一個新 commit（source + test，不含 .
+## 2026-10-20
+
+
+### fixed
+- 【目標】修復 `src/server/paaw-control.
+
+- 【目標】補完 `src/server/paaw-control.
+- 【目標】把你已完成但**尚未 commit** 的 TASK-032 改動收尾，產生一個新 commit。
+### removed
+- 【目標】清理 review 委員會 code review 標記的 4 個 minor 問題（殘留 unused import + 過時錯誤訊息 + 稽核…
+
+### changed
+- 【目標】收斂 review 委員會第三輪的 4 個 minor（來源 report：.
+
+- 【目標】TASK-033 未完成：你只改了 src/server.
+- 【目標】收斂 review 委員會第四輪：1 major + 5 minor（來源 .
+- 【目標】依 ADR-005（Architect 已寫入 .paaw/DECISIONS.
+### added
+- 【目標】收斂 review 委員會第六輪：1 major + 4 minor（來源 .
+
 ## 2026-10-19
 ### fixed
 - ISS-008：管理平台（src/server.mjs，:4199）的 readBody 對 request body 無大小上限，遠端（已登入）可藉超大 body 造成 DoS。已將 admin API 的 readBody 上限釘在 64KB，超限即回 413 並中止讀取；新增 tests/e2e/gateway-body-limit.test.mjs 覆蓋（commit 91a4fee）。
 
+- 【目標】修復 login 帳號鎖死 DoS：per-IP 與 per-user rate limiter 門檻分離，且鎖定期不得阻斷合法憑證流程。
+- 【目標】修復 upgradePaaw 的正式機升級安裝了 devDependencies：把 npm install 改為生產安裝 flags，與…
+- 【目標】修復 src/server.mjs 的 readBody：把「client abort / 網路錯誤」與「body 超過上限 (413 Payload…
 ### added
 - ADR-004 施工圖 A 節改動 1：把 src/server.mjs 的 module 頂層組裝（createConfig/EventLog/Auth/PaawControl/BackupManager + async handler 閉包）抽進 `export function createApp(overrides = {})`，回傳 handler 與各 dep 供測試直接注入；入口改為 `const app = createApp()`，行為/API/CLI 不變（refactor-only）。
 - ADR-004 施工圖 A 節改動 2：把 src/ui/server.mjs 中 cmdUI() 內的 `http.createServer` handler 主體抽成 `export function createUIHandler(deps)`，cmdUI() 只負責建 deps 與 `createServer(createUIHandler(deps))` + listen；F7 CSRF Host 白名單與 Origin 檢查逐字保留，HOST_WHITELIST 改由 deps.UI_HOST 推導以便測試注入不同 host（commit 580a017，純重構）。

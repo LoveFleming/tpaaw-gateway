@@ -216,6 +216,162 @@
       "components": []
     },
     {
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:child_process",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "runGatewayWithFakes",
+          "kind": "function",
+          "async": false,
+          "params": "(args, { home, cwd, scenario, extraEnv = {} } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "seedCurrent",
+          "kind": "function",
+          "async": false,
+          "params": "(home, version)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "seedVersionDir",
+          "kind": "function",
+          "async": false,
+          "params": "(home, version)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "caseDirs",
+          "kind": "function",
+          "async": false,
+          "params": "(name)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/install-download.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:crypto",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/install.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "setHome",
+          "kind": "function",
+          "async": false,
+          "params": "(dir)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "mockResponse",
+          "kind": "function",
+          "async": false,
+          "params": "({ ok = true, status = 200, chunks = [] } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "fetchReturning",
+          "kind": "arrow",
+          "async": false,
+          "params": "(resp)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "fetchRefusing",
+          "kind": "arrow",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "setPkg",
+          "kind": "arrow",
+          "async": false,
+          "params": "(url)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
       "file": "tests/unit/install.test.mjs",
       "language": "javascript",
       "exports": [],
@@ -361,6 +517,262 @@
           "params": "(overrides = {})",
           "callCount": 0,
           "calls": []
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 2,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExecFile",
+          "kind": "arrow",
+          "async": false,
+          "params": "(file, args)",
+          "callCount": 1,
+          "calls": [
+            "seenArgv.push"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExecFile",
+          "kind": "arrow",
+          "async": false,
+          "params": "(file, args)",
+          "callCount": 1,
+          "calls": [
+            "seenArgv.push"
+          ]
+        },
+        {
+          "name": "fakeExecFile",
+          "kind": "arrow",
+          "async": false,
+          "params": "(file, args)",
+          "callCount": 1,
+          "calls": [
+            "seenArgv.push"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 5,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExecFile",
+          "kind": "arrow",
+          "async": false,
+          "params": "(file, args, opts)",
+          "callCount": 1,
+          "calls": [
+            "seenArgv.push"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd, opts)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 3,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 3,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 1,
+          "calls": [
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 4,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith",
+            "cmd.startsWith",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 1,
+          "calls": [
+            "calls.push"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 1,
+          "calls": [
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 2,
+          "calls": [
+            "calls.push",
+            "cmd.startsWith"
+          ]
+        },
+        {
+          "name": "fakeExec",
+          "kind": "arrow",
+          "async": false,
+          "params": "(cmd)",
+          "callCount": 2,
+          "calls": [
+            "cmd.startsWith",
+            "control.startPaaw"
+          ]
         }
       ],
       "classes": [],
@@ -405,6 +817,115 @@
         },
         {
           "source": "../../src/lib/process.mjs",
+          "names": []
+        }
+      ],
+      "functions": [],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/read-body.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeEnv",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "login",
+          "kind": "arrow",
+          "async": false,
+          "params": "(app, opts)",
+          "callCount": 1,
+          "calls": [
+            "call"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/unit/sanitize-audit-field.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
           "names": []
         }
       ],
@@ -505,6 +1026,126 @@
       "components": []
     },
     {
+      "file": "tests/helpers/inject.mjs",
+      "language": "javascript",
+      "exports": [
+        {
+          "kind": "function",
+          "name": "mockReq",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "mockRes",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "call",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "withFetch",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "refusingFetch",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "sleep",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "withEnv",
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "node:events",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "mockReq",
+          "kind": "function",
+          "async": false,
+          "params": "(opts = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "mockRes",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "tryParse",
+          "kind": "function",
+          "async": false,
+          "params": "(body)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "call",
+          "kind": "function",
+          "async": true,
+          "params": "(target, opts = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "withFetch",
+          "kind": "function",
+          "async": true,
+          "params": "(impl, fn)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "refusingFetch",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 1,
+          "calls": [
+            "Promise.reject"
+          ]
+        },
+        {
+          "name": "sleep",
+          "kind": "arrow",
+          "async": false,
+          "params": "(ms)",
+          "callCount": 1,
+          "calls": [
+            "setTimeout"
+          ]
+        },
+        {
+          "name": "withEnv",
+          "kind": "function",
+          "async": true,
+          "params": "(env, fn)",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "language": "javascript",
       "exports": [],
@@ -522,7 +1163,114 @@
           "names": []
         },
         {
-          "source": "node:net",
+          "source": "node:os",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeEnv",
+          "kind": "function",
+          "async": false,
+          "params": "(configOverrides = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "api",
+          "kind": "arrow",
+          "async": false,
+          "params": "(method, path, { body, token } = {})",
+          "callCount": 3,
+          "calls": [
+            "call(app, {\n      method,\n      url: path,\n      headers: body !== undefined ? { \"content-type\": \"application/json\" } : {},\n      body: body !== undefined ? JSON.stringify(body) : undefined,\n      token,\n    }).then",
+            "call",
+            "JSON.stringify"
+          ]
+        },
+        {
+          "name": "login",
+          "kind": "arrow",
+          "async": true,
+          "params": "(userId = TEST_USER.id, password = TEST_USER.passwordHash)",
+          "callCount": 3,
+          "calls": [
+            "api",
+            "assert.equal",
+            "JSON.stringify"
+          ]
+        },
+        {
+          "name": "withEnvSync",
+          "kind": "function",
+          "async": false,
+          "params": "(env)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "backupFilesOnDisk",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 3,
+          "calls": [
+            "(existsSync(env.backupDir) ? readdirSync(env.backupDir) : []).sort",
+            "existsSync",
+            "readdirSync"
+          ]
+        },
+        {
+          "name": "restoreEvents",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 2,
+          "calls": [
+            "env.app.events.filter",
+            "/restore_/.test"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
           "names": []
         },
         {
@@ -534,21 +1282,25 @@
           "names": []
         },
         {
-          "source": "node:child_process",
-          "names": []
-        },
-        {
           "source": "node:url",
           "names": []
         },
         {
           "source": "../../src/server.mjs",
           "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "names": []
         }
       ],
       "functions": [
         {
-          "name": "getFreePort",
+          "name": "makeEnv",
           "kind": "function",
           "async": false,
           "params": "()",
@@ -556,63 +1308,31 @@
           "calls": []
         },
         {
-          "name": "sleep",
+          "name": "loginBodyOfSize",
+          "kind": "function",
+          "async": false,
+          "params": "(targetBytes)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "postBody",
           "kind": "arrow",
           "async": false,
-          "params": "(ms)",
+          "params": "(body, headers = {})",
           "callCount": 1,
           "calls": [
-            "setTimeout"
+            "call"
           ]
         },
         {
-          "name": "jsonReq",
-          "kind": "function",
-          "async": true,
-          "params": "(base, path, { method = \"GET\", token, body } = {})",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startGateway",
-          "kind": "function",
-          "async": true,
-          "params": "(configOverrides = {})",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "stopGateway",
-          "kind": "function",
-          "async": true,
-          "params": "(g)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "backupFilesOnDisk",
+          "name": "health",
           "kind": "arrow",
           "async": false,
           "params": "()",
-          "callCount": 3,
+          "callCount": 1,
           "calls": [
-            "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort",
-            "existsSync",
-            "readdirSync"
-          ]
-        },
-        {
-          "name": "restoreEventsInLog",
-          "kind": "arrow",
-          "async": false,
-          "params": "()",
-          "callCount": 5,
-          "calls": [
-            "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter",
-            "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split",
-            "existsSync",
-            "readFileSync",
-            "l.includes"
+            "call"
           ]
         }
       ],
@@ -686,14 +1406,6 @@
           "names": []
         },
         {
-          "source": "node:net",
-          "names": []
-        },
-        {
-          "source": "node:os",
-          "names": []
-        },
-        {
           "source": "node:os",
           "names": []
         },
@@ -702,68 +1414,41 @@
           "names": []
         },
         {
-          "source": "node:child_process",
-          "names": []
-        },
-        {
           "source": "node:url",
           "names": []
         },
         {
-          "source": "../../src/server/password.mjs",
+          "source": "../../src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
           "names": []
         }
       ],
       "functions": [
         {
-          "name": "getFreePort",
+          "name": "makeEnv",
           "kind": "function",
           "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "jsonReq",
-          "kind": "function",
-          "async": true,
-          "params": "(base, path, { method = \"GET\", body, token } = {})",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startGateway",
-          "kind": "function",
-          "async": true,
           "params": "(configOverrides = {})",
           "callCount": 0,
           "calls": []
         },
         {
-          "name": "stopGateway",
-          "kind": "function",
-          "async": true,
-          "params": "(g)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "canConnect",
-          "kind": "function",
-          "async": false,
-          "params": "(host, port, timeoutMs = 1500)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "done",
+          "name": "login",
           "kind": "arrow",
           "async": false,
-          "params": "(ok)",
-          "callCount": 2,
+          "params": "(userId, password, opts = {})",
+          "callCount": 3,
           "calls": [
-            "socket.destroy",
-            "resolve"
+            "call(app, {\n      method: \"POST\",\n      url: \"/api/auth/login\",\n      headers: { \"content-type\": \"application/json\" },\n      body: JSON.stringify({ userId, password }),\n      // `remoteAddress` lets a case drive the per-IP key (which the handler reads\n      // from req.socket.remoteAddress) to exercise clientIp sanitization.\n      ...(opts.remoteAddress ? { remoteAddress: opts.remoteAddress } : {}),\n    }).then",
+            "call",
+            "JSON.stringify"
           ]
         }
       ],
@@ -789,10 +1474,6 @@
           "names": []
         },
         {
-          "source": "node:net",
-          "names": []
-        },
-        {
           "source": "node:os",
           "names": []
         },
@@ -801,7 +1482,7 @@
           "names": []
         },
         {
-          "source": "node:child_process",
+          "source": "node:timers/promises",
           "names": []
         },
         {
@@ -809,24 +1490,24 @@
           "names": []
         },
         {
-          "source": "node:timers/promises",
+          "source": "../../src/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/server/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
           "names": []
         }
       ],
       "functions": [
         {
-          "name": "getFreePort",
-          "kind": "function",
-          "async": false,
-          "params": "()",
-          "callCount": 0,
-          "calls": []
-        },
-        {
           "name": "pidAlive",
           "kind": "arrow",
           "async": false,
-          "params": "",
+          "params": "(pid)",
           "callCount": 1,
           "calls": [
             "process.kill"
@@ -840,8 +1521,8 @@
             "constructor",
             "setup",
             "api",
-            "waitStubReady",
             "setStubMode",
+            "waitStubReady",
             "teardown"
           ]
         }
@@ -863,7 +1544,172 @@
           "names": []
         },
         {
-          "source": "node:http",
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/ui/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeEnv",
+          "kind": "function",
+          "async": false,
+          "params": "({ packageUrl = DEAD_PACKAGE_URL, uiHost = \"127.0.0.1\" } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "jobLog",
+          "kind": "function",
+          "async": false,
+          "params": "(line)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "cleanupEnv",
+          "kind": "function",
+          "async": false,
+          "params": "(savedEnv, savedCwd)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "req",
+          "kind": "function",
+          "async": true,
+          "params": "(handler, url, { method = \"GET\", headers = {}, body, chunks } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "fakeFetch",
+          "kind": "arrow",
+          "async": false,
+          "params": "(url, _opts)",
+          "callCount": 4,
+          "calls": [
+            "String(url).endsWith",
+            "String",
+            "Promise.resolve",
+            "Promise.resolve"
+          ]
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
+          "names": []
+        },
+        {
+          "source": "node:fs",
+          "names": []
+        },
+        {
+          "source": "node:path",
+          "names": []
+        },
+        {
+          "source": "node:url",
+          "names": []
+        },
+        {
+          "source": "../../src/ui/server.mjs",
+          "names": []
+        },
+        {
+          "source": "../../src/lib/config.mjs",
+          "names": []
+        },
+        {
+          "source": "../helpers/inject.mjs",
+          "names": []
+        }
+      ],
+      "functions": [
+        {
+          "name": "makeEnv",
+          "kind": "function",
+          "async": false,
+          "params": "({ packageUrl = DEAD_PACKAGE_URL, setHome = true, semgrepPath } = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "jobLog",
+          "kind": "arrow",
+          "async": false,
+          "params": "(line)",
+          "callCount": 3,
+          "calls": [
+            "job.lines.push",
+            "new Date().toLocaleTimeString",
+            "job.lines.splice"
+          ]
+        },
+        {
+          "name": "cleanupEnv",
+          "kind": "function",
+          "async": false,
+          "params": "(savedEnv, savedCwd, tmp)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "req",
+          "kind": "function",
+          "async": true,
+          "params": "(handler, url, { method = \"GET\", headers = {}, body, chunks } = {})",
+          "callCount": 0,
+          "calls": []
+        }
+      ],
+      "classes": [],
+      "routes": [],
+      "components": []
+    },
+    {
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "language": "javascript",
+      "exports": [],
+      "imports": [
+        {
+          "source": "node:test",
+          "names": []
+        },
+        {
+          "source": "node:assert/strict",
           "names": []
         },
         {
@@ -872,6 +1718,10 @@
         },
         {
           "source": "node:net",
+          "names": []
+        },
+        {
+          "source": "node:os",
           "names": []
         },
         {
@@ -889,6 +1739,10 @@
         {
           "source": "node:url",
           "names": []
+        },
+        {
+          "source": "../../../src/server/password.mjs",
+          "names": []
         }
       ],
       "functions": [
@@ -901,44 +1755,37 @@
           "calls": []
         },
         {
-          "name": "sleep",
+          "name": "canConnect",
+          "kind": "function",
+          "async": false,
+          "params": "(host, port, timeoutMs = 1500)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "done",
           "kind": "arrow",
           "async": false,
-          "params": "(ms)",
-          "callCount": 1,
+          "params": "(ok)",
+          "callCount": 2,
           "calls": [
-            "setTimeout"
+            "socket.destroy",
+            "resolve"
           ]
         },
         {
-          "name": "rawReq",
-          "kind": "function",
-          "async": false,
-          "params": "(base, path, { method = \"GET\", headers = {}, body } = {})",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startGatewayUi",
+          "name": "startGateway",
           "kind": "function",
           "async": true,
-          "params": "({ packageUrl = DEAD_PACKAGE_URL } = {})",
+          "params": "()",
           "callCount": 0,
           "calls": []
         },
         {
-          "name": "stopGatewayUi",
+          "name": "stopGateway",
           "kind": "function",
           "async": true,
           "params": "(g)",
-          "callCount": 0,
-          "calls": []
-        },
-        {
-          "name": "startFakePackageServer",
-          "kind": "function",
-          "async": false,
-          "params": "(manifest)",
           "callCount": 0,
           "calls": []
         }
@@ -952,6 +1799,11 @@
       "language": "javascript",
       "exports": [
         {
+          "kind": "function",
+          "name": "createApp",
+          "isDefault": false
+        },
+        {
           "kind": "named",
           "name": "BACKUP_REGEX",
           "isDefault": false
@@ -962,23 +1814,8 @@
           "isDefault": false
         },
         {
-          "kind": "named",
-          "name": "backupPath",
-          "isDefault": false
-        },
-        {
-          "kind": "named",
-          "name": "listBackups",
-          "isDefault": false
-        },
-        {
-          "kind": "named",
-          "name": "createBackup",
-          "isDefault": false
-        },
-        {
-          "kind": "named",
-          "name": "restoreBackup",
+          "kind": "variable",
+          "name": "{ backupPath, listBackups, createBackup, restoreBackup }",
           "isDefault": false
         }
       ],
@@ -1022,6 +1859,126 @@
       ],
       "functions": [
         {
+          "name": "createApp",
+          "kind": "function",
+          "async": false,
+          "params": "(overrides = {})",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "handler",
+          "kind": "arrow",
+          "async": true,
+          "params": "(req, res)",
+          "callCount": 103,
+          "calls": [
+            "res.setHeader",
+            "res.setHeader",
+            "res.setHeader",
+            "res.writeHead",
+            "res.end",
+            "res.writeHead",
+            "res.end",
+            "JSON.stringify",
+            "resolve",
+            "req.removeListener",
+            "req.removeListener",
+            "req.removeListener",
+            "req.destroy",
+            "settle",
+            "overLimit",
+            "chunks.push",
+            "JSON.parse",
+            "Buffer.concat(chunks).toString",
+            "Buffer.concat",
+            "settle",
+            "settle",
+            "req.on",
+            "req.on",
+            "req.on",
+            "Number",
+            "Number.isFinite",
+            "overLimit",
+            "publicRoutes.some",
+            "url.pathname.startsWith",
+            "url.pathname.startsWith",
+            "auth.startsWith",
+            "validateSession",
+            "auth.slice",
+            "config.users.find",
+            "sendJSON",
+            "readBody",
+            "sendJSON",
+            "sendJSON",
+            "login",
+            "saveConfig",
+            "logEvent",
+            "sendJSON",
+            "Math.max",
+            "Math.ceil",
+            "res.setHeader",
+            "String",
+            "logEvent",
+            "sendJSON",
+            "sendJSON",
+            "sendJSON",
+            "sendJSON",
+            "process.uptime",
+            "healthCheckPaaw",
+            "sendJSON",
+            "getSystemHealth",
+            "getCurrentVersion",
+            "getGitInfo",
+            "listBackups",
+            "listBackups",
+            "events.slice",
+            "sendJSON",
+            "getCurrentVersion",
+            "getGitInfo",
+            "getLatestVersion",
+            "sendJSON",
+            "upgradePaaw",
+            "sendJSON",
+            "sendJSON",
+            "sendJSON",
+            "startPaaw",
+            "sendJSON",
+            "sendJSON",
+            "stopPaaw",
+            "sendJSON",
+            "restartPaaw",
+            "sendJSON",
+            "sendJSON",
+            "listBackups",
+            "sendJSON",
+            "sendJSON",
+            "createBackup",
+            "url.pathname.startsWith",
+            "sendJSON",
+            "url.pathname.split",
+            "getPaawProcess",
+            "stopPaaw",
+            "sendJSON",
+            "sendJSON",
+            "restoreBackup",
+            "parseInt",
+            "url.searchParams.get",
+            "sendJSON",
+            "events.slice",
+            "sendJSON",
+            "sendJSON",
+            "config.users.map",
+            "readFileSync",
+            "join",
+            "res.writeHead",
+            "res.end",
+            "res.writeHead",
+            "res.end",
+            "sendJSON"
+          ]
+        },
+        {
           "name": "sendJSON",
           "kind": "arrow",
           "async": false,
@@ -1038,13 +1995,85 @@
           "kind": "arrow",
           "async": false,
           "params": "()",
+          "callCount": 19,
+          "calls": [
+            "resolve",
+            "req.removeListener",
+            "req.removeListener",
+            "req.removeListener",
+            "req.destroy",
+            "settle",
+            "overLimit",
+            "chunks.push",
+            "JSON.parse",
+            "Buffer.concat(chunks).toString",
+            "Buffer.concat",
+            "settle",
+            "settle",
+            "req.on",
+            "req.on",
+            "req.on",
+            "Number",
+            "Number.isFinite",
+            "overLimit"
+          ]
+        },
+        {
+          "name": "settle",
+          "kind": "arrow",
+          "async": false,
+          "params": "(result)",
+          "callCount": 1,
+          "calls": [
+            "resolve"
+          ]
+        },
+        {
+          "name": "overLimit",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
           "callCount": 5,
           "calls": [
-            "req.on",
-            "req.on",
-            "resolve",
+            "req.removeListener",
+            "req.removeListener",
+            "req.removeListener",
+            "req.destroy",
+            "settle"
+          ]
+        },
+        {
+          "name": "onData",
+          "kind": "arrow",
+          "async": false,
+          "params": "(chunk)",
+          "callCount": 2,
+          "calls": [
+            "overLimit",
+            "chunks.push"
+          ]
+        },
+        {
+          "name": "onEnd",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 4,
+          "calls": [
             "JSON.parse",
-            "resolve"
+            "Buffer.concat(chunks).toString",
+            "Buffer.concat",
+            "settle"
+          ]
+        },
+        {
+          "name": "onError",
+          "kind": "arrow",
+          "async": false,
+          "params": "()",
+          "callCount": 1,
+          "calls": [
+            "settle"
           ]
         }
       ],
@@ -1122,6 +2151,11 @@
       "file": "src/ui/server.mjs",
       "language": "javascript",
       "exports": [
+        {
+          "kind": "function",
+          "name": "createUIHandler",
+          "isDefault": false
+        },
         {
           "kind": "function",
           "name": "cmdUI",
@@ -1216,10 +2250,10 @@
           "calls": []
         },
         {
-          "name": "cmdUI",
+          "name": "createUIHandler",
           "kind": "function",
-          "async": true,
-          "params": "()",
+          "async": false,
+          "params": "(deps)",
           "callCount": 0,
           "calls": []
         },
@@ -1270,6 +2304,14 @@
             "new URL(originHeader).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase",
             "new URL(originHeader).hostname.replace"
           ]
+        },
+        {
+          "name": "cmdUI",
+          "kind": "function",
+          "async": true,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
         },
         {
           "name": "bye",
@@ -1357,6 +2399,11 @@
         {
           "kind": "variable",
           "name": "LOGIN_MAX_FAILURES",
+          "isDefault": false
+        },
+        {
+          "kind": "variable",
+          "name": "LOGIN_IP_MAX_FAILURES",
           "isDefault": false
         },
         {
@@ -1601,6 +2648,16 @@
       "language": "javascript",
       "exports": [
         {
+          "kind": "variable",
+          "name": "AUDIT_FIELD_MAX",
+          "isDefault": false
+        },
+        {
+          "kind": "function",
+          "name": "sanitizeAuditField",
+          "isDefault": false
+        },
+        {
           "kind": "function",
           "name": "createEventLog",
           "isDefault": false
@@ -1617,6 +2674,14 @@
         }
       ],
       "functions": [
+        {
+          "name": "sanitizeAuditField",
+          "kind": "function",
+          "async": false,
+          "params": "(value)",
+          "callCount": 0,
+          "calls": []
+        },
         {
           "name": "createEventLog",
           "kind": "function",
@@ -1739,6 +2804,54 @@
           "kind": "function",
           "async": false,
           "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stashCreate",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "isStashApplyConflict",
+          "kind": "function",
+          "async": false,
+          "params": "(msg)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "hasUnmergedPaths",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "isWorkingTreeClean",
+          "kind": "function",
+          "async": false,
+          "params": "()",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "stashStore",
+          "kind": "function",
+          "async": false,
+          "params": "(sha)",
+          "callCount": 0,
+          "calls": []
+        },
+        {
+          "name": "attemptRecover",
+          "kind": "function",
+          "async": false,
+          "params": "(userId, steps, warnings)",
           "callCount": 0,
           "calls": []
         },
@@ -2807,11 +3920,11 @@
     }
   ],
   "stats": {
-    "totalFiles": 28,
-    "parsedFiles": 28,
+    "totalFiles": 36,
+    "parsedFiles": 36,
     "errors": 0,
     "languages": {
-      "javascript": 28
+      "javascript": 36
     }
   }
 }

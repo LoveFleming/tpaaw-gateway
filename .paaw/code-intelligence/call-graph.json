@@ -73,6 +73,78 @@
       "async": false
     },
     {
+      "id": "tests/unit/gateway-cli-dispatch.test.mjs:runGatewayWithFakes",
+      "name": "runGatewayWithFakes",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/gateway-cli-dispatch.test.mjs:seedCurrent",
+      "name": "seedCurrent",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/gateway-cli-dispatch.test.mjs:seedVersionDir",
+      "name": "seedVersionDir",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/gateway-cli-dispatch.test.mjs:caseDirs",
+      "name": "caseDirs",
+      "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install-download.test.mjs:setHome",
+      "name": "setHome",
+      "file": "tests/unit/install-download.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install-download.test.mjs:mockResponse",
+      "name": "mockResponse",
+      "file": "tests/unit/install-download.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install-download.test.mjs:fetchReturning",
+      "name": "fetchReturning",
+      "file": "tests/unit/install-download.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/unit/install-download.test.mjs:fetchRefusing",
+      "name": "fetchRefusing",
+      "file": "tests/unit/install-download.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": true
+    },
+    {
+      "id": "tests/unit/install-download.test.mjs:setPkg",
+      "name": "setPkg",
+      "file": "tests/unit/install-download.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
       "id": "tests/unit/install.test.mjs:makeZipInMemory",
       "name": "makeZipInMemory",
       "file": "tests/unit/install.test.mjs",
@@ -121,6 +193,38 @@
       "async": false
     },
     {
+      "id": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "name": "fakeExec",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "name": "fakeExecFile",
+      "file": "tests/unit/paaw-control.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/unit/read-body.test.mjs:makeEnv",
+      "name": "makeEnv",
+      "file": "tests/unit/read-body.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/unit/read-body.test.mjs:login",
+      "name": "login",
+      "file": "tests/unit/read-body.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
       "id": "tests/unit/semgrep.test.mjs:restoreManagedEnv",
       "name": "restoreManagedEnv",
       "file": "tests/unit/semgrep.test.mjs",
@@ -145,44 +249,100 @@
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-backup-auth.test.mjs:getFreePort",
-      "name": "getFreePort",
+      "id": "tests/helpers/inject.mjs:mockReq",
+      "name": "mockReq",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/helpers/inject.mjs:mockRes",
+      "name": "mockRes",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/helpers/inject.mjs:tryParse",
+      "name": "tryParse",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/helpers/inject.mjs:call",
+      "name": "call",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/helpers/inject.mjs:withFetch",
+      "name": "withFetch",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/helpers/inject.mjs:refusingFetch",
+      "name": "refusingFetch",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/helpers/inject.mjs:sleep",
+      "name": "sleep",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/helpers/inject.mjs:withEnv",
+      "name": "withEnv",
+      "file": "tests/helpers/inject.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:makeEnv",
+      "name": "makeEnv",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "line": 0,
       "kind": "function",
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-backup-auth.test.mjs:sleep",
-      "name": "sleep",
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "name": "api",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "line": 0,
       "kind": "arrow",
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-backup-auth.test.mjs:jsonReq",
-      "name": "jsonReq",
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:login",
+      "name": "login",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "line": 0,
-      "kind": "function",
+      "kind": "arrow",
       "async": true
     },
     {
-      "id": "tests/e2e/gateway-backup-auth.test.mjs:startGateway",
-      "name": "startGateway",
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:withEnvSync",
+      "name": "withEnvSync",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
       "line": 0,
       "kind": "function",
-      "async": true
-    },
-    {
-      "id": "tests/e2e/gateway-backup-auth.test.mjs:stopGateway",
-      "name": "stopGateway",
-      "file": "tests/e2e/gateway-backup-auth.test.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
+      "async": false
     },
     {
       "id": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
@@ -193,9 +353,41 @@
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
-      "name": "restoreEventsInLog",
+      "id": "tests/e2e/gateway-backup-auth.test.mjs:restoreEvents",
+      "name": "restoreEvents",
       "file": "tests/e2e/gateway-backup-auth.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-body-limit.test.mjs:makeEnv",
+      "name": "makeEnv",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-body-limit.test.mjs:loginBodyOfSize",
+      "name": "loginBodyOfSize",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-body-limit.test.mjs:postBody",
+      "name": "postBody",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-body-limit.test.mjs:health",
+      "name": "health",
+      "file": "tests/e2e/gateway-body-limit.test.mjs",
       "line": 0,
       "kind": "arrow",
       "async": false
@@ -209,59 +401,19 @@
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-login-hardening.test.mjs:getFreePort",
-      "name": "getFreePort",
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:makeEnv",
+      "name": "makeEnv",
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "line": 0,
       "kind": "function",
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-login-hardening.test.mjs:jsonReq",
-      "name": "jsonReq",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "tests/e2e/gateway-login-hardening.test.mjs:startGateway",
-      "name": "startGateway",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "tests/e2e/gateway-login-hardening.test.mjs:stopGateway",
-      "name": "stopGateway",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "tests/e2e/gateway-login-hardening.test.mjs:canConnect",
-      "name": "canConnect",
-      "file": "tests/e2e/gateway-login-hardening.test.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": false
-    },
-    {
-      "id": "tests/e2e/gateway-login-hardening.test.mjs:done",
-      "name": "done",
+      "id": "tests/e2e/gateway-login-hardening.test.mjs:login",
+      "name": "login",
       "file": "tests/e2e/gateway-login-hardening.test.mjs",
       "line": 0,
       "kind": "arrow",
-      "async": false
-    },
-    {
-      "id": "tests/e2e/gateway-restart-rbac.test.mjs:getFreePort",
-      "name": "getFreePort",
-      "file": "tests/e2e/gateway-restart-rbac.test.mjs",
-      "line": 0,
-      "kind": "function",
       "async": false
     },
     {
@@ -273,52 +425,132 @@
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-ui-csrf.test.mjs:getFreePort",
-      "name": "getFreePort",
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:makeEnv",
+      "name": "makeEnv",
       "file": "tests/e2e/gateway-ui-csrf.test.mjs",
       "line": 0,
       "kind": "function",
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-ui-csrf.test.mjs:sleep",
-      "name": "sleep",
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:jobLog",
+      "name": "jobLog",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:cleanupEnv",
+      "name": "cleanupEnv",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:req",
+      "name": "req",
+      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "name": "fakeFetch",
       "file": "tests/e2e/gateway-ui-csrf.test.mjs",
       "line": 0,
       "kind": "arrow",
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-ui-csrf.test.mjs:rawReq",
-      "name": "rawReq",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "id": "tests/e2e/gateway-ui-endpoints.test.mjs:makeEnv",
+      "name": "makeEnv",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
       "line": 0,
       "kind": "function",
       "async": false
     },
     {
-      "id": "tests/e2e/gateway-ui-csrf.test.mjs:startGatewayUi",
-      "name": "startGatewayUi",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "id": "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog",
+      "name": "jobLog",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
       "line": 0,
-      "kind": "function",
-      "async": true
+      "kind": "arrow",
+      "async": false
     },
     {
-      "id": "tests/e2e/gateway-ui-csrf.test.mjs:stopGatewayUi",
-      "name": "stopGatewayUi",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
-      "line": 0,
-      "kind": "function",
-      "async": true
-    },
-    {
-      "id": "tests/e2e/gateway-ui-csrf.test.mjs:startFakePackageServer",
-      "name": "startFakePackageServer",
-      "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "id": "tests/e2e/gateway-ui-endpoints.test.mjs:cleanupEnv",
+      "name": "cleanupEnv",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
       "line": 0,
       "kind": "function",
       "async": false
+    },
+    {
+      "id": "tests/e2e/gateway-ui-endpoints.test.mjs:req",
+      "name": "req",
+      "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/network/gateway-bind-host.test.mjs:getFreePort",
+      "name": "getFreePort",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/network/gateway-bind-host.test.mjs:canConnect",
+      "name": "canConnect",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/network/gateway-bind-host.test.mjs:done",
+      "name": "done",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "tests/e2e/network/gateway-bind-host.test.mjs:startGateway",
+      "name": "startGateway",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "tests/e2e/network/gateway-bind-host.test.mjs:stopGateway",
+      "name": "stopGateway",
+      "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
+    },
+    {
+      "id": "src/server.mjs:createApp",
+      "name": "createApp",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:handler",
+      "name": "handler",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": true
     },
     {
       "id": "src/server.mjs:sendJSON",
@@ -331,6 +563,46 @@
     {
       "id": "src/server.mjs:readBody",
       "name": "readBody",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:settle",
+      "name": "settle",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:overLimit",
+      "name": "overLimit",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:onData",
+      "name": "onData",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:onEnd",
+      "name": "onEnd",
+      "file": "src/server.mjs",
+      "line": 0,
+      "kind": "arrow",
+      "async": false
+    },
+    {
+      "id": "src/server.mjs:onError",
+      "name": "onError",
       "file": "src/server.mjs",
       "line": 0,
       "kind": "arrow",
@@ -385,12 +657,12 @@
       "async": true
     },
     {
-      "id": "src/ui/server.mjs:cmdUI",
-      "name": "cmdUI",
+      "id": "src/ui/server.mjs:createUIHandler",
+      "name": "createUIHandler",
       "file": "src/ui/server.mjs",
       "line": 0,
       "kind": "function",
-      "async": true
+      "async": false
     },
     {
       "id": "src/ui/server.mjs:jsonOut",
@@ -423,6 +695,14 @@
       "line": 0,
       "kind": "arrow",
       "async": false
+    },
+    {
+      "id": "src/ui/server.mjs:cmdUI",
+      "name": "cmdUI",
+      "file": "src/ui/server.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": true
     },
     {
       "id": "src/ui/server.mjs:bye",
@@ -553,6 +833,14 @@
       "async": false
     },
     {
+      "id": "src/server/events.mjs:sanitizeAuditField",
+      "name": "sanitizeAuditField",
+      "file": "src/server/events.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
       "id": "src/server/events.mjs:createEventLog",
       "name": "createEventLog",
       "file": "src/server/events.mjs",
@@ -635,6 +923,54 @@
     {
       "id": "src/server/paaw-control.mjs:getLatestVersion",
       "name": "getLatestVersion",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:stashCreate",
+      "name": "stashCreate",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:isStashApplyConflict",
+      "name": "isStashApplyConflict",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:hasUnmergedPaths",
+      "name": "hasUnmergedPaths",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:isWorkingTreeClean",
+      "name": "isWorkingTreeClean",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:stashStore",
+      "name": "stashStore",
+      "file": "src/server/paaw-control.mjs",
+      "line": 0,
+      "kind": "function",
+      "async": false
+    },
+    {
+      "id": "src/server/paaw-control.mjs:attemptRecover",
+      "name": "attemptRecover",
       "file": "src/server/paaw-control.mjs",
       "line": 0,
       "kind": "function",
@@ -1211,15 +1547,374 @@
   ],
   "edges": [
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:sleep",
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "callee": "seenArgv.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "callee": "seenArgv.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "callee": "seenArgv.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "callee": "seenArgv.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "calls.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "cmd.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/paaw-control.test.mjs:fakeExec",
+      "callee": "control.startPaaw",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/unit/read-body.test.mjs:login",
+      "callee": "call",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/helpers/inject.mjs:refusingFetch",
+      "callee": "Promise.reject",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/helpers/inject.mjs:sleep",
       "callee": "setTimeout",
       "type": "direct",
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
-      "callee": "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort",
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "callee": "call(app, {\n      method,\n      url: path,\n      headers: body !== undefined ? { \"content-type\": \"application/json\" } : {},\n      body: body !== undefined ? JSON.stringify(body) : undefined,\n      token,\n    }).then",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "callee": "call",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "callee": "JSON.stringify",
       "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:login",
+      "callee": "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "type": "direct"
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:login",
+      "callee": "assert.equal",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:login",
+      "callee": "JSON.stringify",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
+      "callee": "(existsSync(env.backupDir) ? readdirSync(env.backupDir) : []).sort",
+      "type": "chained",
       "resolved": false
     },
     {
@@ -1235,45 +1930,45 @@
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
-      "callee": "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter",
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEvents",
+      "callee": "env.app.events.filter",
       "type": "chained",
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
-      "callee": "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split",
+      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEvents",
+      "callee": "/restore_/.test",
       "type": "method",
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
-      "callee": "existsSync",
+      "caller": "tests/e2e/gateway-body-limit.test.mjs:postBody",
+      "callee": "call",
       "type": "direct",
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
-      "callee": "readFileSync",
+      "caller": "tests/e2e/gateway-body-limit.test.mjs:health",
+      "callee": "call",
       "type": "direct",
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog",
-      "callee": "l.includes",
+      "caller": "tests/e2e/gateway-login-hardening.test.mjs:login",
+      "callee": "call(app, {\n      method: \"POST\",\n      url: \"/api/auth/login\",\n      headers: { \"content-type\": \"application/json\" },\n      body: JSON.stringify({ userId, password }),\n      // `remoteAddress` lets a case drive the per-IP key (which the handler reads\n      // from req.socket.remoteAddress) to exercise clientIp sanitization.\n      ...(opts.remoteAddress ? { remoteAddress: opts.remoteAddress } : {}),\n    }).then",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-login-hardening.test.mjs:login",
+      "callee": "call",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-login-hardening.test.mjs:login",
+      "callee": "JSON.stringify",
       "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "tests/e2e/gateway-login-hardening.test.mjs:done",
-      "callee": "socket.destroy",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "tests/e2e/gateway-login-hardening.test.mjs:done",
-      "callee": "resolve",
-      "type": "direct",
       "resolved": false
     },
     {
@@ -1283,10 +1978,622 @@
       "resolved": false
     },
     {
-      "caller": "tests/e2e/gateway-ui-csrf.test.mjs:sleep",
-      "callee": "setTimeout",
+      "caller": "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "callee": "String(url).endsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "callee": "String",
       "type": "direct",
       "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "callee": "Promise.resolve",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "callee": "Promise.resolve",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog",
+      "callee": "job.lines.push",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog",
+      "callee": "new Date().toLocaleTimeString",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog",
+      "callee": "job.lines.splice",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/network/gateway-bind-host.test.mjs:done",
+      "callee": "socket.destroy",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "tests/e2e/network/gateway-bind-host.test.mjs:done",
+      "callee": "resolve",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.setHeader",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.setHeader",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.setHeader",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.writeHead",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.end",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.writeHead",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.end",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "JSON.stringify",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "resolve",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.destroy",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:overLimit",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "chunks.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "JSON.parse",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "Buffer.concat(chunks).toString",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "Buffer.concat",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "Number",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "Number.isFinite",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:overLimit",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "publicRoutes.some",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "url.pathname.startsWith",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "url.pathname.startsWith",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "auth.startsWith",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/auth.mjs:validateSession",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "auth.slice",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "config.users.find",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:readBody",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "login",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "saveConfig",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/events.mjs:logEvent",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "Math.max",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "Math.ceil",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.setHeader",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "String",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/events.mjs:logEvent",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "process.uptime",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:healthCheckPaaw",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getSystemHealth",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getCurrentVersion",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getGitInfo",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/backup.mjs:listBackups",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/backup.mjs:listBackups",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "events.slice",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getCurrentVersion",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getGitInfo",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getLatestVersion",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:upgradePaaw",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "startPaaw",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:stopPaaw",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:restartPaaw",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/backup.mjs:listBackups",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/backup.mjs:createBackup",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "url.pathname.startsWith",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "url.pathname.split",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:getPaawProcess",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/paaw-control.mjs:stopPaaw",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server/backup.mjs:restoreBackup",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "parseInt",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "url.searchParams.get",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "events.slice",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "config.users.map",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "readFileSync",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "join",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.writeHead",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.end",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.writeHead",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "res.end",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:handler",
+      "callee": "src/server.mjs:sendJSON",
+      "type": "direct"
     },
     {
       "caller": "src/server.mjs:sendJSON",
@@ -1308,20 +2615,48 @@
     },
     {
       "caller": "src/server.mjs:readBody",
-      "callee": "req.on",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "src/server.mjs:readBody",
-      "callee": "req.on",
-      "type": "method",
-      "resolved": false
-    },
-    {
-      "caller": "src/server.mjs:readBody",
       "callee": "resolve",
       "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.destroy",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "src/server.mjs:overLimit",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "chunks.push",
+      "type": "method",
       "resolved": false
     },
     {
@@ -1332,9 +2667,134 @@
     },
     {
       "caller": "src/server.mjs:readBody",
+      "callee": "Buffer.concat(chunks).toString",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "Buffer.concat",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "req.on",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "Number",
+      "type": "direct",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "Number.isFinite",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:readBody",
+      "callee": "src/server.mjs:overLimit",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:settle",
       "callee": "resolve",
       "type": "direct",
       "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:overLimit",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:overLimit",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:overLimit",
+      "callee": "req.removeListener",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:overLimit",
+      "callee": "req.destroy",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:overLimit",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:onData",
+      "callee": "src/server.mjs:overLimit",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:onData",
+      "callee": "chunks.push",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:onEnd",
+      "callee": "JSON.parse",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:onEnd",
+      "callee": "Buffer.concat(chunks).toString",
+      "type": "chained",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:onEnd",
+      "callee": "Buffer.concat",
+      "type": "method",
+      "resolved": false
+    },
+    {
+      "caller": "src/server.mjs:onEnd",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
+    },
+    {
+      "caller": "src/server.mjs:onError",
+      "callee": "src/server.mjs:settle",
+      "type": "direct"
     },
     {
       "caller": "src/ui/server.mjs:jsonOut",
@@ -1522,8 +2982,9 @@
     },
     {
       "caller": "src/lib/semgrep.mjs:pump",
-      "callee": "src/ui/server.mjs:jobLog",
-      "type": "direct"
+      "callee": "jobLog",
+      "type": "direct",
+      "resolved": false
     },
     {
       "caller": "src/lib/semgrep.mjs:pump",
@@ -1533,62 +2994,378 @@
     }
   ],
   "callersOf": {
-    "setTimeout": [
-      "tests/e2e/gateway-backup-auth.test.mjs:sleep",
-      "tests/e2e/gateway-ui-csrf.test.mjs:sleep"
+    "calls.push": [
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec"
     ],
-    "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort": [
+    "cmd.startsWith": [
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec",
+      "tests/unit/paaw-control.test.mjs:fakeExec"
+    ],
+    "seenArgv.push": [
+      "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "tests/unit/paaw-control.test.mjs:fakeExecFile",
+      "tests/unit/paaw-control.test.mjs:fakeExecFile"
+    ],
+    "control.startPaaw": [
+      "tests/unit/paaw-control.test.mjs:fakeExec"
+    ],
+    "call": [
+      "tests/unit/read-body.test.mjs:login",
+      "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "tests/e2e/gateway-body-limit.test.mjs:postBody",
+      "tests/e2e/gateway-body-limit.test.mjs:health",
+      "tests/e2e/gateway-login-hardening.test.mjs:login"
+    ],
+    "Promise.reject": [
+      "tests/helpers/inject.mjs:refusingFetch"
+    ],
+    "setTimeout": [
+      "tests/helpers/inject.mjs:sleep"
+    ],
+    "call(app, {\n      method,\n      url: path,\n      headers: body !== undefined ? { \"content-type\": \"application/json\" } : {},\n      body: body !== undefined ? JSON.stringify(body) : undefined,\n      token,\n    }).then": [
+      "tests/e2e/gateway-backup-auth.test.mjs:api"
+    ],
+    "JSON.stringify": [
+      "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "tests/e2e/gateway-backup-auth.test.mjs:login",
+      "tests/e2e/gateway-login-hardening.test.mjs:login",
+      "src/server.mjs:handler",
+      "src/server.mjs:sendJSON",
+      "src/ui/server.mjs:jsonOut"
+    ],
+    "tests/e2e/gateway-backup-auth.test.mjs:api": [
+      "tests/e2e/gateway-backup-auth.test.mjs:login"
+    ],
+    "assert.equal": [
+      "tests/e2e/gateway-backup-auth.test.mjs:login"
+    ],
+    "(existsSync(env.backupDir) ? readdirSync(env.backupDir) : []).sort": [
       "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk"
     ],
     "existsSync": [
-      "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk",
-      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+      "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk"
     ],
     "readdirSync": [
       "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk"
     ],
-    "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter": [
-      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    "env.app.events.filter": [
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEvents"
     ],
-    "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split": [
-      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
+    "/restore_/.test": [
+      "tests/e2e/gateway-backup-auth.test.mjs:restoreEvents"
     ],
-    "readFileSync": [
-      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
-    ],
-    "l.includes": [
-      "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog"
-    ],
-    "socket.destroy": [
-      "tests/e2e/gateway-login-hardening.test.mjs:done"
-    ],
-    "resolve": [
-      "tests/e2e/gateway-login-hardening.test.mjs:done",
-      "src/server.mjs:readBody",
-      "src/server.mjs:readBody",
-      "src/server/paaw-control.mjs:finish"
+    "call(app, {\n      method: \"POST\",\n      url: \"/api/auth/login\",\n      headers: { \"content-type\": \"application/json\" },\n      body: JSON.stringify({ userId, password }),\n      // `remoteAddress` lets a case drive the per-IP key (which the handler reads\n      // from req.socket.remoteAddress) to exercise clientIp sanitization.\n      ...(opts.remoteAddress ? { remoteAddress: opts.remoteAddress } : {}),\n    }).then": [
+      "tests/e2e/gateway-login-hardening.test.mjs:login"
     ],
     "process.kill": [
       "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive"
     ],
+    "String(url).endsWith": [
+      "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch"
+    ],
+    "String": [
+      "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "src/server.mjs:handler",
+      "src/ui/server.mjs:hostOf",
+      "src/lib/semgrep.mjs:pump"
+    ],
+    "Promise.resolve": [
+      "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch",
+      "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch"
+    ],
+    "job.lines.push": [
+      "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog"
+    ],
+    "new Date().toLocaleTimeString": [
+      "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog"
+    ],
+    "job.lines.splice": [
+      "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog"
+    ],
+    "socket.destroy": [
+      "tests/e2e/network/gateway-bind-host.test.mjs:done"
+    ],
+    "resolve": [
+      "tests/e2e/network/gateway-bind-host.test.mjs:done",
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:settle",
+      "src/server/paaw-control.mjs:finish"
+    ],
+    "res.setHeader": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
     "res.writeHead": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
       "src/server.mjs:sendJSON",
       "src/ui/server.mjs:jsonOut"
     ],
     "res.end": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
       "src/server.mjs:sendJSON",
       "src/ui/server.mjs:jsonOut"
     ],
-    "JSON.stringify": [
-      "src/server.mjs:sendJSON",
-      "src/ui/server.mjs:jsonOut"
+    "req.removeListener": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server.mjs:overLimit",
+      "src/server.mjs:overLimit",
+      "src/server.mjs:overLimit"
+    ],
+    "req.destroy": [
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:overLimit"
+    ],
+    "src/server.mjs:settle": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server.mjs:overLimit",
+      "src/server.mjs:onEnd",
+      "src/server.mjs:onError"
+    ],
+    "src/server.mjs:overLimit": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:readBody",
+      "src/server.mjs:onData"
+    ],
+    "chunks.push": [
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:onData"
+    ],
+    "JSON.parse": [
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:onEnd"
+    ],
+    "Buffer.concat(chunks).toString": [
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:onEnd"
+    ],
+    "Buffer.concat": [
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
+      "src/server.mjs:onEnd"
     ],
     "req.on": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody",
       "src/server.mjs:readBody",
       "src/server.mjs:readBody"
     ],
-    "JSON.parse": [
+    "Number": [
+      "src/server.mjs:handler",
       "src/server.mjs:readBody"
+    ],
+    "Number.isFinite": [
+      "src/server.mjs:handler",
+      "src/server.mjs:readBody"
+    ],
+    "publicRoutes.some": [
+      "src/server.mjs:handler"
+    ],
+    "url.pathname.startsWith": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "auth.startsWith": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/auth.mjs:validateSession": [
+      "src/server.mjs:handler"
+    ],
+    "auth.slice": [
+      "src/server.mjs:handler"
+    ],
+    "config.users.find": [
+      "src/server.mjs:handler"
+    ],
+    "src/server.mjs:sendJSON": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "src/server.mjs:readBody": [
+      "src/server.mjs:handler"
+    ],
+    "login": [
+      "src/server.mjs:handler"
+    ],
+    "saveConfig": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/events.mjs:logEvent": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "Math.max": [
+      "src/server.mjs:handler"
+    ],
+    "Math.ceil": [
+      "src/server.mjs:handler"
+    ],
+    "process.uptime": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:healthCheckPaaw": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:getSystemHealth": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:getCurrentVersion": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:getGitInfo": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "src/server/backup.mjs:listBackups": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "events.slice": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:getLatestVersion": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:upgradePaaw": [
+      "src/server.mjs:handler"
+    ],
+    "startPaaw": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:stopPaaw": [
+      "src/server.mjs:handler",
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:restartPaaw": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/backup.mjs:createBackup": [
+      "src/server.mjs:handler"
+    ],
+    "url.pathname.split": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/paaw-control.mjs:getPaawProcess": [
+      "src/server.mjs:handler"
+    ],
+    "src/server/backup.mjs:restoreBackup": [
+      "src/server.mjs:handler"
+    ],
+    "parseInt": [
+      "src/server.mjs:handler"
+    ],
+    "url.searchParams.get": [
+      "src/server.mjs:handler"
+    ],
+    "config.users.map": [
+      "src/server.mjs:handler"
+    ],
+    "readFileSync": [
+      "src/server.mjs:handler"
+    ],
+    "join": [
+      "src/server.mjs:handler"
     ],
     "new URL(`http://${h}`).hostname.replace(/^\\[|\\]$/g, \"\").toLowerCase": [
       "src/ui/server.mjs:hostOf"
@@ -1598,10 +3375,6 @@
     ],
     "String(h).toLowerCase": [
       "src/ui/server.mjs:hostOf"
-    ],
-    "String": [
-      "src/ui/server.mjs:hostOf",
-      "src/lib/semgrep.mjs:pump"
     ],
     "HOST_WHITELIST.has": [
       "src/ui/server.mjs:isTrustedHost",
@@ -1661,7 +3434,7 @@
     "line.trim": [
       "src/lib/semgrep.mjs:pump"
     ],
-    "src/ui/server.mjs:jobLog": [
+    "jobLog": [
       "src/lib/semgrep.mjs:pump"
     ],
     "s.slice": [
@@ -1669,30 +3442,223 @@
     ]
   },
   "calleesOf": {
-    "tests/e2e/gateway-backup-auth.test.mjs:sleep": [
+    "tests/unit/paaw-control.test.mjs:fakeExec": [
+      "calls.push",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "calls.push",
+      "cmd.startsWith",
+      "cmd.startsWith",
+      "control.startPaaw"
+    ],
+    "tests/unit/paaw-control.test.mjs:fakeExecFile": [
+      "seenArgv.push",
+      "seenArgv.push",
+      "seenArgv.push",
+      "seenArgv.push"
+    ],
+    "tests/unit/read-body.test.mjs:login": [
+      "call"
+    ],
+    "tests/helpers/inject.mjs:refusingFetch": [
+      "Promise.reject"
+    ],
+    "tests/helpers/inject.mjs:sleep": [
       "setTimeout"
     ],
+    "tests/e2e/gateway-backup-auth.test.mjs:api": [
+      "call(app, {\n      method,\n      url: path,\n      headers: body !== undefined ? { \"content-type\": \"application/json\" } : {},\n      body: body !== undefined ? JSON.stringify(body) : undefined,\n      token,\n    }).then",
+      "call",
+      "JSON.stringify"
+    ],
+    "tests/e2e/gateway-backup-auth.test.mjs:login": [
+      "tests/e2e/gateway-backup-auth.test.mjs:api",
+      "assert.equal",
+      "JSON.stringify"
+    ],
     "tests/e2e/gateway-backup-auth.test.mjs:backupFilesOnDisk": [
-      "(existsSync(backupDirRef) ? readdirSync(backupDirRef) : []).sort",
+      "(existsSync(env.backupDir) ? readdirSync(env.backupDir) : []).sort",
       "existsSync",
       "readdirSync"
     ],
-    "tests/e2e/gateway-backup-auth.test.mjs:restoreEventsInLog": [
-      "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\")\n      .split(\"\\n\").filter",
-      "(existsSync(eventLogPath) ? readFileSync(eventLogPath, \"utf-8\") : \"\").split",
-      "existsSync",
-      "readFileSync",
-      "l.includes"
+    "tests/e2e/gateway-backup-auth.test.mjs:restoreEvents": [
+      "env.app.events.filter",
+      "/restore_/.test"
     ],
-    "tests/e2e/gateway-login-hardening.test.mjs:done": [
-      "socket.destroy",
-      "resolve"
+    "tests/e2e/gateway-body-limit.test.mjs:postBody": [
+      "call"
+    ],
+    "tests/e2e/gateway-body-limit.test.mjs:health": [
+      "call"
+    ],
+    "tests/e2e/gateway-login-hardening.test.mjs:login": [
+      "call(app, {\n      method: \"POST\",\n      url: \"/api/auth/login\",\n      headers: { \"content-type\": \"application/json\" },\n      body: JSON.stringify({ userId, password }),\n      // `remoteAddress` lets a case drive the per-IP key (which the handler reads\n      // from req.socket.remoteAddress) to exercise clientIp sanitization.\n      ...(opts.remoteAddress ? { remoteAddress: opts.remoteAddress } : {}),\n    }).then",
+      "call",
+      "JSON.stringify"
     ],
     "tests/e2e/gateway-restart-rbac.test.mjs:pidAlive": [
       "process.kill"
     ],
-    "tests/e2e/gateway-ui-csrf.test.mjs:sleep": [
-      "setTimeout"
+    "tests/e2e/gateway-ui-csrf.test.mjs:fakeFetch": [
+      "String(url).endsWith",
+      "String",
+      "Promise.resolve",
+      "Promise.resolve"
+    ],
+    "tests/e2e/gateway-ui-endpoints.test.mjs:jobLog": [
+      "job.lines.push",
+      "new Date().toLocaleTimeString",
+      "job.lines.splice"
+    ],
+    "tests/e2e/network/gateway-bind-host.test.mjs:done": [
+      "socket.destroy",
+      "resolve"
+    ],
+    "src/server.mjs:handler": [
+      "res.setHeader",
+      "res.setHeader",
+      "res.setHeader",
+      "res.writeHead",
+      "res.end",
+      "res.writeHead",
+      "res.end",
+      "JSON.stringify",
+      "resolve",
+      "req.removeListener",
+      "req.removeListener",
+      "req.removeListener",
+      "req.destroy",
+      "src/server.mjs:settle",
+      "src/server.mjs:overLimit",
+      "chunks.push",
+      "JSON.parse",
+      "Buffer.concat(chunks).toString",
+      "Buffer.concat",
+      "src/server.mjs:settle",
+      "src/server.mjs:settle",
+      "req.on",
+      "req.on",
+      "req.on",
+      "Number",
+      "Number.isFinite",
+      "src/server.mjs:overLimit",
+      "publicRoutes.some",
+      "url.pathname.startsWith",
+      "url.pathname.startsWith",
+      "auth.startsWith",
+      "src/server/auth.mjs:validateSession",
+      "auth.slice",
+      "config.users.find",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:readBody",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "login",
+      "saveConfig",
+      "src/server/events.mjs:logEvent",
+      "src/server.mjs:sendJSON",
+      "Math.max",
+      "Math.ceil",
+      "res.setHeader",
+      "String",
+      "src/server/events.mjs:logEvent",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "process.uptime",
+      "src/server/paaw-control.mjs:healthCheckPaaw",
+      "src/server.mjs:sendJSON",
+      "src/server/paaw-control.mjs:getSystemHealth",
+      "src/server/paaw-control.mjs:getCurrentVersion",
+      "src/server/paaw-control.mjs:getGitInfo",
+      "src/server/backup.mjs:listBackups",
+      "src/server/backup.mjs:listBackups",
+      "events.slice",
+      "src/server.mjs:sendJSON",
+      "src/server/paaw-control.mjs:getCurrentVersion",
+      "src/server/paaw-control.mjs:getGitInfo",
+      "src/server/paaw-control.mjs:getLatestVersion",
+      "src/server.mjs:sendJSON",
+      "src/server/paaw-control.mjs:upgradePaaw",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "startPaaw",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server/paaw-control.mjs:stopPaaw",
+      "src/server.mjs:sendJSON",
+      "src/server/paaw-control.mjs:restartPaaw",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server/backup.mjs:listBackups",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server/backup.mjs:createBackup",
+      "url.pathname.startsWith",
+      "src/server.mjs:sendJSON",
+      "url.pathname.split",
+      "src/server/paaw-control.mjs:getPaawProcess",
+      "src/server/paaw-control.mjs:stopPaaw",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "src/server/backup.mjs:restoreBackup",
+      "parseInt",
+      "url.searchParams.get",
+      "src/server.mjs:sendJSON",
+      "events.slice",
+      "src/server.mjs:sendJSON",
+      "src/server.mjs:sendJSON",
+      "config.users.map",
+      "readFileSync",
+      "join",
+      "res.writeHead",
+      "res.end",
+      "res.writeHead",
+      "res.end",
+      "src/server.mjs:sendJSON"
     ],
     "src/server.mjs:sendJSON": [
       "res.writeHead",
@@ -1700,11 +3666,48 @@
       "JSON.stringify"
     ],
     "src/server.mjs:readBody": [
-      "req.on",
-      "req.on",
       "resolve",
+      "req.removeListener",
+      "req.removeListener",
+      "req.removeListener",
+      "req.destroy",
+      "src/server.mjs:settle",
+      "src/server.mjs:overLimit",
+      "chunks.push",
       "JSON.parse",
+      "Buffer.concat(chunks).toString",
+      "Buffer.concat",
+      "src/server.mjs:settle",
+      "src/server.mjs:settle",
+      "req.on",
+      "req.on",
+      "req.on",
+      "Number",
+      "Number.isFinite",
+      "src/server.mjs:overLimit"
+    ],
+    "src/server.mjs:settle": [
       "resolve"
+    ],
+    "src/server.mjs:overLimit": [
+      "req.removeListener",
+      "req.removeListener",
+      "req.removeListener",
+      "req.destroy",
+      "src/server.mjs:settle"
+    ],
+    "src/server.mjs:onData": [
+      "src/server.mjs:overLimit",
+      "chunks.push"
+    ],
+    "src/server.mjs:onEnd": [
+      "JSON.parse",
+      "Buffer.concat(chunks).toString",
+      "Buffer.concat",
+      "src/server.mjs:settle"
+    ],
+    "src/server.mjs:onError": [
+      "src/server.mjs:settle"
     ],
     "src/ui/server.mjs:jsonOut": [
       "res.writeHead",
@@ -1758,14 +3761,14 @@
       "String(c).split",
       "String",
       "line.trim",
-      "src/ui/server.mjs:jobLog",
+      "jobLog",
       "s.slice"
     ]
   },
   "stats": {
-    "totalFunctions": 151,
-    "totalCalls": 54,
-    "resolvedCalls": 3,
-    "unresolvedCalls": 51
+    "totalFunctions": 193,
+    "totalCalls": 252,
+    "resolvedCalls": 66,
+    "unresolvedCalls": 186
   }
 }

@@ -1,30 +1,30 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-19T13:33:02.544Z",
-  "headSha": "ab38683",
+  "generatedAt": "2026-10-21T15:31:35.117Z",
+  "headSha": "667c7c3",
   "tableHashes": {
-    "features": "3f4beaff1da4d1ed",
-    "apis": "de972bba78ed2fa9",
-    "tests": "2fab461313ea6efd",
-    "changes": "d4d16d9727e5e2cf",
-    "knowledgeGaps": "ca0c4de1bdc51ee6"
+    "features": "1c7e4bde441fe35d",
+    "apis": "b0206f889a7bf3d1",
+    "tests": "ce2b0edf3299f707",
+    "changes": "425c38ebb4579ee1",
+    "knowledgeGaps": "0b6960a3dabe8ef8"
   },
   "root": null,
   "summary": {
     "features": 3,
     "apis": 25,
     "apisWithFeature": 25,
-    "files": 28,
+    "files": 36,
     "filesMapped": 18,
-    "tests": 16,
-    "commits": 89,
+    "tests": 21,
+    "commits": 108,
     "commitLimit": 200
   },
   "sources": {
     "apiMapGeneratedAt": null,
     "testMapGeneratedAt": null,
     "depGraphGeneratedAt": null,
-    "featuresUpdatedAt": "2026-10-19T12:52:46.109Z"
+    "featuresUpdatedAt": "2026-10-20T22:15:23.482Z"
   },
   "features": [
     {
@@ -60,27 +60,31 @@
       "apiCount": 13,
       "tests": [
         {
-          "file": "src/server.mjs",
-          "kind": null
-        },
-        {
-          "file": "src/server/auth.mjs",
-          "kind": null
-        },
-        {
-          "file": "src/server/config.mjs",
-          "kind": null
-        },
-        {
           "file": "tests/e2e/gateway-backup-auth.test.mjs",
           "kind": "e2e"
+        },
+        {
+          "file": "tests/e2e/gateway-body-limit.test.mjs",
+          "kind": null
         },
         {
           "file": "tests/e2e/gateway-login-hardening.test.mjs",
           "kind": "e2e"
         },
         {
+          "file": "tests/e2e/gateway-restart-rbac.test.mjs",
+          "kind": "e2e"
+        },
+        {
+          "file": "tests/e2e/network/gateway-bind-host.test.mjs",
+          "kind": null
+        },
+        {
           "file": "tests/unit/auth.test.mjs",
+          "kind": "unit"
+        },
+        {
+          "file": "tests/unit/backup.test.mjs",
           "kind": "unit"
         },
         {
@@ -96,15 +100,23 @@
           "kind": "unit"
         },
         {
+          "file": "tests/unit/read-body.test.mjs",
+          "kind": null
+        },
+        {
+          "file": "tests/unit/sanitize-audit-field.test.mjs",
+          "kind": null
+        },
+        {
           "file": "tests/unit/server-config.test.mjs",
           "kind": "unit"
         }
       ],
-      "testCount": 27,
-      "changeCount": 16,
-      "lastChangeAt": "2026-10-19T21:16:40+08:00",
+      "testCount": 49,
+      "changeCount": 29,
+      "lastChangeAt": "2026-10-21T06:21:04+08:00",
       "knowledgeGaps": [],
-      "_h": "3c538c8841861ede"
+      "_h": "b4a129a3737a1b0e"
     },
     {
       "id": "F20261011-002",
@@ -136,37 +148,37 @@
       "apiCount": 12,
       "tests": [
         {
-          "file": "gateway.mjs",
+          "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+          "kind": "e2e"
+        },
+        {
+          "file": "tests/e2e/gateway-ui-endpoints.test.mjs",
           "kind": null
         },
         {
-          "file": "src/lib/install.mjs",
+          "file": "tests/unit/install-download.test.mjs",
           "kind": null
         },
         {
-          "file": "src/lib/process.mjs",
-          "kind": null
-        },
-        {
-          "file": "src/lib/semgrep.mjs",
-          "kind": null
-        },
-        {
-          "file": "src/ui/server.mjs",
-          "kind": null
+          "file": "tests/unit/install.test.mjs",
+          "kind": "unit"
         },
         {
           "file": "tests/unit/process.test.mjs",
           "kind": "unit"
+        },
+        {
+          "file": "tests/unit/semgrep.test.mjs",
+          "kind": "unit"
         }
       ],
-      "testCount": 57,
-      "changeCount": 4,
-      "lastChangeAt": "2026-10-19T21:02:22+08:00",
+      "testCount": 20,
+      "changeCount": 5,
+      "lastChangeAt": "2026-10-20T21:15:26+08:00",
       "knowledgeGaps": [
         "no-runbook"
       ],
-      "_h": "5d1f81efbca551a8"
+      "_h": "78412653d3ba888d"
     },
     {
       "id": "F20261009-001",
@@ -179,16 +191,24 @@
       ],
       "apis": [],
       "apiCount": 0,
-      "tests": [],
-      "testCount": 0,
+      "tests": [
+        {
+          "file": "tests/e2e/gateway-cli.test.mjs",
+          "kind": "e2e"
+        },
+        {
+          "file": "tests/unit/gateway-cli-dispatch.test.mjs",
+          "kind": null
+        }
+      ],
+      "testCount": 5,
       "changeCount": 24,
       "lastChangeAt": "2026-10-11T11:49:00+08:00",
       "knowledgeGaps": [
-        "no-tests",
         "no-api-mapped",
         "no-runbook"
       ],
-      "_h": "fbb796e394af08e4"
+      "_h": "0c7033f1cca830bb"
     }
   ],
   "apis": [
@@ -196,71 +216,71 @@
       "method": "POST",
       "path": "/api/auth/login",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "1fbb6e50b684f222"
+      "_h": "3c37c1b4ef1d2e2d"
     },
     {
       "method": "GET",
       "path": "/api/auth/me",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "ca0c47e7567eb62c"
+      "_h": "766cf4ebfbedf0ee"
     },
     {
       "method": "GET",
       "path": "/api/backups",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "42e201f6b9f59688"
+      "_h": "96cdc9bd4b8d5cb0"
     },
     {
       "method": "POST",
       "path": "/api/backups/create",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "f0e10af0325467bf"
+      "_h": "fe30eab629535e30"
     },
     {
       "method": "GET",
       "path": "/api/dashboard",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "411ac51de91595d7"
+      "_h": "0325dc0a66313ba5"
     },
     {
       "method": "GET",
       "path": "/api/events",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "8d1dbb6c5cb2088b"
+      "_h": "c11d8585fd535cca"
     },
     {
       "method": "GET",
       "path": "/api/health",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "a04a7703d8ef7283"
+      "_h": "84bea899e2fb16c5"
     },
     {
       "method": "GET",
@@ -306,31 +326,31 @@
       "method": "POST",
       "path": "/api/server/restart",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "1cb6bd6772bed24b"
+      "_h": "f69b95b3de3ebc1f"
     },
     {
       "method": "POST",
       "path": "/api/server/start",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "eada2f1c179db20f"
+      "_h": "0ba11eaae91443e9"
     },
     {
       "method": "POST",
       "path": "/api/server/stop",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "8162d4de9d5085a4"
+      "_h": "57bfe504cefb5ae9"
     },
     {
       "method": "GET",
@@ -396,11 +416,11 @@
       "method": "POST",
       "path": "/api/upgrade",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "b784b77426df82da"
+      "_h": "b6413887a046860c"
     },
     {
       "method": "POST",
@@ -416,21 +436,21 @@
       "method": "GET",
       "path": "/api/users",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "773c27924c8e3da6"
+      "_h": "51f4c481a7f7cbf8"
     },
     {
       "method": "GET",
       "path": "/api/version",
       "file": "src/server.mjs",
-      "handler": "sendJSON",
+      "handler": "handler",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "19e4960d7e597829"
+      "_h": "c3e3ae91291ebac6"
     },
     {
       "method": "GET",
@@ -445,104 +465,85 @@
   ],
   "tests": [
     {
-      "testFile": "gateway.mjs",
-      "productionFile": "src/lib/config.mjs",
-      "testCount": 4,
-      "kind": null,
-      "featureIds": [
-        "F20261011-002"
-      ],
-      "_h": "255dd927ba58bc6c"
-    },
-    {
-      "testFile": "src/lib/install.mjs",
-      "productionFile": "src/lib/config.mjs",
-      "testCount": 11,
-      "kind": null,
-      "featureIds": [
-        "F20261011-002"
-      ],
-      "_h": "f2af6c779a1ce6a8"
-    },
-    {
-      "testFile": "src/lib/process.mjs",
-      "productionFile": "src/lib/config.mjs",
-      "testCount": 19,
-      "kind": null,
-      "featureIds": [
-        "F20261011-002"
-      ],
-      "_h": "6807517aa17be7dc"
-    },
-    {
-      "testFile": "src/lib/semgrep.mjs",
-      "productionFile": "src/lib/config.mjs",
-      "testCount": 11,
-      "kind": null,
-      "featureIds": [
-        "F20261011-002"
-      ],
-      "_h": "3948a7280fa35ca2"
-    },
-    {
-      "testFile": "src/server.mjs",
-      "productionFile": "src/server/config.mjs",
-      "testCount": 2,
-      "kind": null,
-      "featureIds": [
-        "F20261009-002"
-      ],
-      "_h": "f8202d9f514e56eb"
-    },
-    {
-      "testFile": "src/server/auth.mjs",
-      "productionFile": "src/server/password.mjs",
-      "testCount": 6,
-      "kind": null,
-      "featureIds": [
-        "F20261009-002"
-      ],
-      "_h": "32b6771566c52fc1"
-    },
-    {
-      "testFile": "src/server/config.mjs",
-      "productionFile": "src/server/password.mjs",
-      "testCount": 4,
-      "kind": null,
-      "featureIds": [
-        "F20261009-002"
-      ],
-      "_h": "66bcd5b5b057d754"
-    },
-    {
-      "testFile": "src/ui/server.mjs",
-      "productionFile": "src/lib/config.mjs",
-      "testCount": 12,
-      "kind": null,
-      "featureIds": [
-        "F20261011-002"
-      ],
-      "_h": "e7def0a2b26069f2"
-    },
-    {
       "testFile": "tests/e2e/gateway-backup-auth.test.mjs",
       "productionFile": "src/server.mjs",
-      "testCount": 7,
+      "testCount": 6,
       "kind": "e2e",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "ec828f1159f3c616"
+      "_h": "4677a5599a69f1e8"
+    },
+    {
+      "testFile": "tests/e2e/gateway-body-limit.test.mjs",
+      "productionFile": "src/server.mjs",
+      "testCount": 4,
+      "kind": null,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "8f1eccfb084d0d11"
+    },
+    {
+      "testFile": "tests/e2e/gateway-cli.test.mjs",
+      "productionFile": "gateway.mjs",
+      "testCount": 1,
+      "kind": "e2e",
+      "featureIds": [
+        "F20261009-001"
+      ],
+      "_h": "526930539b7be66c"
     },
     {
       "testFile": "tests/e2e/gateway-login-hardening.test.mjs",
-      "productionFile": "src/server/password.mjs",
-      "testCount": 6,
+      "productionFile": "src/server.mjs",
+      "testCount": 2,
       "kind": "e2e",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "97df8ccf28c1c52f"
+      "_h": "76449ea6e957badc"
+    },
+    {
+      "testFile": "tests/e2e/gateway-restart-rbac.test.mjs",
+      "productionFile": "src/server.mjs",
+      "testCount": 1,
+      "kind": "e2e",
+      "featureIds": [
+        "F20261009-002",
+        "F20260918-002"
+      ],
+      "_h": "3d2bb526ed0c0c28"
+    },
+    {
+      "testFile": "tests/e2e/gateway-ui-csrf.test.mjs",
+      "productionFile": "src/ui/server.mjs",
+      "testCount": 5,
+      "kind": "e2e",
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "493f2e14d329c4e2"
+    },
+    {
+      "testFile": "tests/e2e/gateway-ui-endpoints.test.mjs",
+      "productionFile": "src/ui/server.mjs",
+      "testCount": 4,
+      "kind": null,
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "27de3f8dffb0fe7a"
+    },
+    {
+      "testFile": "tests/e2e/network/gateway-bind-host.test.mjs",
+      "productionFile": "src/server/password.mjs",
+      "testCount": 5,
+      "kind": null,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "95f6fa3661444024"
     },
     {
       "testFile": "tests/unit/auth.test.mjs",
@@ -555,6 +556,16 @@
       "_h": "bd4fbb8256db624f"
     },
     {
+      "testFile": "tests/unit/backup.test.mjs",
+      "productionFile": "src/server/backup.mjs",
+      "testCount": 4,
+      "kind": "unit",
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "6f57410960f8fb18"
+    },
+    {
       "testFile": "tests/unit/events.test.mjs",
       "productionFile": "src/server/events.mjs",
       "testCount": 0,
@@ -565,14 +576,44 @@
       "_h": "a5c67851b0e4266f"
     },
     {
+      "testFile": "tests/unit/gateway-cli-dispatch.test.mjs",
+      "productionFile": "gateway.mjs",
+      "testCount": 4,
+      "kind": null,
+      "featureIds": [
+        "F20261009-001"
+      ],
+      "_h": "11b15d51a1b12c33"
+    },
+    {
+      "testFile": "tests/unit/install-download.test.mjs",
+      "productionFile": "src/lib/install.mjs",
+      "testCount": 5,
+      "kind": null,
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "94840547231f6ecb"
+    },
+    {
+      "testFile": "tests/unit/install.test.mjs",
+      "productionFile": "src/lib/install.mjs",
+      "testCount": 3,
+      "kind": "unit",
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "26c2bd68bb6c5111"
+    },
+    {
       "testFile": "tests/unit/paaw-control.test.mjs",
       "productionFile": "src/server/paaw-control.mjs",
-      "testCount": 1,
+      "testCount": 24,
       "kind": "unit",
       "featureIds": [
         "F20261009-002"
       ],
-      "_h": "e120c43e34a71a7f"
+      "_h": "c69533b5a9fe0738"
     },
     {
       "testFile": "tests/unit/password.test.mjs",
@@ -595,6 +636,36 @@
       "_h": "7ddcd25faaf6ea9c"
     },
     {
+      "testFile": "tests/unit/read-body.test.mjs",
+      "productionFile": "src/server.mjs",
+      "testCount": 2,
+      "kind": null,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "b8d30db154fd4f0b"
+    },
+    {
+      "testFile": "tests/unit/sanitize-audit-field.test.mjs",
+      "productionFile": "src/server.mjs",
+      "testCount": 0,
+      "kind": null,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "79cb7ff7c6436a1b"
+    },
+    {
+      "testFile": "tests/unit/semgrep.test.mjs",
+      "productionFile": "src/lib/semgrep.mjs",
+      "testCount": 3,
+      "kind": "unit",
+      "featureIds": [
+        "F20261011-002"
+      ],
+      "_h": "b408d64ce69c155c"
+    },
+    {
       "testFile": "tests/unit/server-config.test.mjs",
       "productionFile": "src/server/config.mjs",
       "testCount": 0,
@@ -606,6 +677,204 @@
     }
   ],
   "changes": [
+    {
+      "hash": "667c7c3",
+      "date": "2026-10-21T23:15:27+08:00",
+      "subject": "test(cli): cover gateway.mjs update/start dispatch decisions",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "f45126534a506b7e"
+    },
+    {
+      "hash": "ffe79f0",
+      "date": "2026-10-21T22:57:02+08:00",
+      "subject": "test(gateway): cover UI console endpoints + install download/update logic; fix e2e/unit flaky",
+      "kind": "chore",
+      "files": 4,
+      "featureIds": [],
+      "_h": "692a565f3d8324ee"
+    },
+    {
+      "hash": "fcd121e",
+      "date": "2026-10-21T06:21:04+08:00",
+      "subject": "fix(server): tri-state stash probe + argv assertions (round-9 review)",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "14c2f8d1e659a820"
+    },
+    {
+      "hash": "bb3de26",
+      "date": "2026-10-21T06:14:55+08:00",
+      "subject": "fix(paaw-control): tri-state git probes, untracked-aware clean check, honest unknown wording",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "c29c800434b25613"
+    },
+    {
+      "hash": "4115ff0",
+      "date": "2026-10-21T06:11:41+08:00",
+      "subject": "fix(paaw-control): argv-form stash/pull to kill injection; structural conflict + clean-tree gating (review round 7)",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "1e89d3ca4ac0fa39"
+    },
+    {
+      "hash": "8fb4cf7",
+      "date": "2026-10-20T22:17:59+08:00",
+      "subject": "fix(paaw-control): classify stash-apply failures + audit-sanitize at write layer (review round 6)",
+      "kind": "fix",
+      "files": 6,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "970a5f02d5d3869c"
+    },
+    {
+      "hash": "12abdc7",
+      "date": "2026-10-20T21:56:10+08:00",
+      "subject": "fix(paaw-control): stable stash handling via git stash create + structural attemptRecover (ADR-005)",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "bf8966caf9a6affe"
+    },
+    {
+      "hash": "cee2b89",
+      "date": "2026-10-20T21:51:38+08:00",
+      "subject": "fix(gateway): per-operation stash detection + recovery/sanitizer minors",
+      "kind": "fix",
+      "files": 4,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "677baeaac753809f"
+    },
+    {
+      "hash": "8f480b5",
+      "date": "2026-10-20T21:44:05+08:00",
+      "subject": "fix(server): complete TASK-033 minors — sanitize UTF-16 boundary, structural stash detection, no-blind-recover on conflict",
+      "kind": "fix",
+      "files": 4,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "b12c3dca007e785f"
+    },
+    {
+      "hash": "9a01e98",
+      "date": "2026-10-20T21:37:52+08:00",
+      "subject": "fix(paaw-control): restore server on all upgrade-failure paths, abort on stash conflict",
+      "kind": "fix",
+      "files": 3,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "6bd9ec897d052cde"
+    },
+    {
+      "hash": "d932135",
+      "date": "2026-10-20T21:15:26+08:00",
+      "subject": "chore: clean up review-board minors (log sanitize, dead config)",
+      "kind": "chore",
+      "files": 10,
+      "featureIds": [
+        "F20261009-002",
+        "F20261011-002"
+      ],
+      "_h": "7bd82ab0dc3e11ee"
+    },
+    {
+      "hash": "44547c9",
+      "date": "2026-10-20T21:12:31+08:00",
+      "subject": "fix(paaw-control): keep server up on upgrade fail, warn on stash pop",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "3a749d7e79da3bc4"
+    },
+    {
+      "hash": "9329b49",
+      "date": "2026-10-19T22:40:02+08:00",
+      "subject": "fix(server): separate client abort from body-over-limit in readBody",
+      "kind": "fix",
+      "files": 2,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "1d8226f7d1710e38"
+    },
+    {
+      "hash": "fb8e928",
+      "date": "2026-10-19T22:13:00+08:00",
+      "subject": "fix(upgrade): omit dev deps in upgradePaaw install",
+      "kind": "fix",
+      "files": 1,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "6f8c5ad30b4c41b7"
+    },
+    {
+      "hash": "a94adfe",
+      "date": "2026-10-19T22:12:19+08:00",
+      "subject": "fix(auth): separate per-IP and per-user login lockout to prevent account-lockout DoS",
+      "kind": "fix",
+      "files": 3,
+      "featureIds": [
+        "F20261009-002"
+      ],
+      "_h": "5657b8cad3b210f5"
+    },
+    {
+      "hash": "d6a23dd",
+      "date": "2026-10-19T21:54:36+08:00",
+      "subject": "release unit data",
+      "kind": "other",
+      "files": 6,
+      "featureIds": [],
+      "_h": "543780baaf6b223a"
+    },
+    {
+      "hash": "d743edf",
+      "date": "2026-10-19T21:53:25+08:00",
+      "subject": "docs(changelog): scrub generator fragments and restore truncated entries",
+      "kind": "chore",
+      "files": 1,
+      "featureIds": [],
+      "_h": "2a67a3ae4e3c5f6c"
+    },
+    {
+      "hash": "014c71f",
+      "date": "2026-10-19T21:42:11+08:00",
+      "subject": "test(e2e): add opt-in gateway bind host network suite",
+      "kind": "chore",
+      "files": 2,
+      "featureIds": [],
+      "_h": "b7f7d62f43f12cf2"
+    },
+    {
+      "hash": "4d3c249",
+      "date": "2026-10-19T21:41:01+08:00",
+      "subject": "release unit data",
+      "kind": "other",
+      "files": 23,
+      "featureIds": [],
+      "_h": "e3790eca6fe14e42"
+    },
     {
       "hash": "ab38683",
       "date": "2026-10-19T21:32:06+08:00",
@@ -1494,15 +1763,13 @@
     }
   ],
   "knowledgeGaps": {
-    "featuresWithoutTests": [
-      "F20261009-001"
-    ],
+    "featuresWithoutTests": [],
     "featuresWithoutRunbooks": [
       "F20261011-002",
       "F20261009-001"
     ],
     "apisWithoutFeature": [],
-    "filesWithoutFeature": 10,
+    "filesWithoutFeature": 18,
     "hotUnmappedFiles": [
       {
         "file": "ui/index.html",
@@ -1513,23 +1780,39 @@
         "commits": 13
       },
       {
+        "file": "tests/unit/paaw-control.test.mjs",
+        "commits": 11
+      },
+      {
         "file": "README.md",
-        "commits": 9
+        "commits": 10
       },
       {
         "file": "package.json",
         "commits": 7
       },
       {
+        "file": "DEPLOY.md",
+        "commits": 3
+      },
+      {
+        "file": "docs/api.md",
+        "commits": 3
+      },
+      {
+        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
+        "commits": 3
+      },
+      {
+        "file": "tests/unit/install.test.mjs",
+        "commits": 3
+      },
+      {
         "file": "tests/unit/lib-config.test.mjs",
         "commits": 3
       },
       {
-        "file": "DEPLOY.md",
-        "commits": 2
-      },
-      {
-        "file": "docs/api.md",
+        "file": "config.example.json",
         "commits": 2
       },
       {
@@ -1546,22 +1829,6 @@
       },
       {
         "file": "tests/e2e/gateway-restart-rbac.test.mjs",
-        "commits": 2
-      },
-      {
-        "file": "tests/e2e/gateway-ui-csrf.test.mjs",
-        "commits": 2
-      },
-      {
-        "file": "tests/unit/install.test.mjs",
-        "commits": 2
-      },
-      {
-        "file": "tests/unit/paaw-control.test.mjs",
-        "commits": 2
-      },
-      {
-        "file": "tests/unit/process.test.mjs",
         "commits": 2
       }
     ]

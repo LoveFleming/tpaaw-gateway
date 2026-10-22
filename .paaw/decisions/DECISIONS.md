@@ -34,3 +34,24 @@
 (4) loopback 綁定保證（login-hardening 的 'listens on loopback only, not 0.0.0.0'）本質需真 listen，無法 in-process 化：移入 opt-in 網路套件，預設 skip（PAAW_E2E_ALLOW_LISTEN=1 才跑）；對應的設定面保證由 unit 的 DEFAULT_HOST / config.host 斷言承接。
 - **後果**: 正面：5 檔 e2e 在禁 listen 沙箱全綠；不 spawn server 使測試更快且無孤兒進程 kill-switch 需求；handler 可被單獨驅動、斷言更確定（可精準注入 chunked/no-Content-Length 等）。負面/風險：去 socket 化弱化「真 binding loopback」網路層事實、真 HTTP 序列化/framing、EADDRINUSE、TCP backpressure 等保證——以 opt-in 網路套件 + unit config 斷言緩解；mock req/res 保真度差異以最小 mock + 斷言 raw 參數緩解。實作由 Developer (Priya) 執行，測試改寫由 Tester (Divya) 執行；Architect 提供施工圖與驗收條件。
 
+## ADR-005: ADR-005: upgradePaaw stash 識別改用 git stash create sha（取代 list count 差值）；attemptRecover 改結構化判定
+- **日期**: 2026-10-20
+- **狀態**: Proposed
+- **背景**: review 委員會連續三輪（HEAD~4..HEAD、HEAD~5..HEAD）對 src/server/paaw-control.mjs 的 stash 邏輯抓缺陷。根因：以「git 訊息字串比對 / stash list count 差值」推斷本次是否 stash，本質脆弱。具體缺陷：(1) 舊 stash 造成 count 基線偏移；(2) probe 失敗當 0，第一次失敗/第二次成功會誤判本次有 stash，可能 pop 掉別人的 stash；(3) 真實 git 錯誤（目錄壞掉/權限）被吞成「nothing to stash」→ audit 偽成功；(4) stash 成功但 list probe 失敗 → 本次 local changes 被隱性留在 stash；(5) attemptRecover 以 error === "Already running" 字串比對判定，訊息一改即壞。TASK-032/033/034 三輪未收斂，需一次定調。
+- **決定**: 採 `git stash create` 為唯一 stash 識別接縫：
+(1) 識別：執行 `git stash create` — 不進 stash list、成功時回傳 commit sha、無事可 stash 時回傳空字串。以 sha 非空作為「本次確實 stash」的唯一真實來源（single source of truth），完全取代 stash list 非空 / count 差值推斷。sha 為空 = 本次無 stash，直接略過還原。
+(2) store：`git stash create` 產生的 commit 是 dangling（無 ref 指向，可能在 gc 後消失）。因此當 sha 非空時，緊接執行 `git stash store -m "paaw-upgrade-<ISO-TS>" <sha>` 把該 commit 登記進 stash list，保證跨 git pull 指令期間存活、且可供人工 `git stash list` 檢視。
+(3) 還原：只針對該 sha — 優先用 `git stash apply <sha>`（非破壞性：apply 失敗或衝突時 stash entry 仍在、資料不遺失），成功且 apply 乾淨後才 `git stash drop <sha>` 清掉自己建的 entry；若 apply 回報衝突，保留 stash entry、server 保持 STOPPED 並大聲示警（安全優先於可用性）。
+(4) 不採 `git stash push -m <unique-tag>`：push 會把本次變更直接推入共享 stash stack 頂端，辨識仍需解析 `git stash list` 找 tag（回到字串解析），且 push 失敗與 no-op 都以 throw/exit 表達、仍需訊息比對；create+store 提供 sha 這個穩定 handle，優於 tag 的字串匹配。
+邊界處理：見 ADR 後果段的四情境表（無事可 stash / probe 失敗 / 衝突 / 還原失敗）。
+attemptRecover 結構化：startPaaw 回傳物件新增 ok 之外的結構化欄位（已運行狀態以 boolean 旗標 + 穩定 error code 表達，而非靠字串），attemptRecover 改讀旗標/code 判定，杜絕 "Already running" 字串一改即壞。
+refactor-only：不改對外 API/CLI、不改 upgradePaaw 回傳結構（仍 { ok, steps, warnings, recovered?, version?, git?, error? }），只換內部探測/判定機制。
+- **後果**: 正面：(1) 徹底移除「list count 差值」與訊息字串推斷兩個脆弱點，舊 stash 基線偏移、probe 假 0、locale/git 版本差異皆不再誤判；(2) sha 為穩定 handle，apply/drop 精準作用於本次 commit，不可能誤 pop 他人 stash；(3) probe 失敗改為顯性 not-stashed（保守不還原）或 fail-loud，不再偽成功；(4) attemptRecover 不再依賴字串。
+邊界四情境表：
+- 無事可 stash：`git stash create` 回空字串 → stashed=false → 略過 apply/store，step note "nothing to stash"，ok:true。
+- probe/create 本身失敗（真錯誤）：不再吞掉 → step ok:false，走既有外層 catch 復原路徑（server 拉回），或若發生在 pull 前則 abort+復原；不得標為 nothing to stash。
+- store 成功但後續 pull 失敗：stash entry 已登記、sha 仍存活；走外層 catch 復原；還原步驟仍需在最終狀態嘗試 apply（或至少示警 local changes 留存於 stash@{N}）。
+- 衝突（apply 回報 conflict）：保留 stash entry、server 保持 STOPPED、push warning + logEvent upgrade_failed，不 attemptRecover（不在 conflict marker 樹上開機）。
+- 還原（drop）失敗：資料無損（entry 仍在），push warning 提示手動清理，回 ok:true 或 ok:false 依主流程成敗而定但必帶 warning。
+成本/風險：`git stash create` 在極舊 git（<1.7.7）不存在 → 以 feature-detect（create 若 unavailable 則 fail-loud 而非靜默 fallback 到脆弱邏輯）。stash store 的 -m 訊息含時間戳，不參與比對，故 locale/格式無關。實作由 Developer (Priya) 執行，測試由 Tester (Divya) 補；Architect 提供施工圖。
+
