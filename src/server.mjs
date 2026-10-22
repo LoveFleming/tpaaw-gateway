@@ -57,7 +57,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export function createApp(overrides = {}) {
   // ── Config + derived paths (recomputed per load for cache-busted imports) ──
   const cfg = overrides.cfg ?? createConfig(__dirname);
-  const { config, saveConfig, PAAW_ROOT, BACKUP_DIR, EVENT_LOG_PATH, MAX_BACKUPS, BACKUP_SOURCE_DIRS } = cfg;
+  const { config, saveConfig, saveCredentialUpgrades, PAAW_ROOT, BACKUP_DIR, EVENT_LOG_PATH, MAX_BACKUPS, BACKUP_SOURCE_DIRS } = cfg;
 
   // ── Events ──
   const { events, logEvent } = overrides.events ?? createEventLog(EVENT_LOG_PATH);
@@ -201,8 +201,12 @@ export function createApp(overrides = {}) {
     const result = await login(body.userId, body.password, clientIp);
     if (result.ok) {
       // Persist the re-hashed credential if the stored one was legacy/weak.
+      // ONLY users[].passwordHash is merged into the on-disk config.json — the
+      // in-memory config also carries env-derived host/port/credential
+      // overrides, which must not become permanent file settings (review board
+      // RR-20261018-1738-6f2e — src/server.mjs:205).
       if (result.upgraded) {
-        try { saveConfig(config); } catch { /* non-fatal: login still succeeds */ }
+        try { saveCredentialUpgrades(); } catch { /* non-fatal: login still succeeds */ }
       }
       logEvent("login", `User ${result.user.name} logged in`, result.user.id);
       sendJSON(200, {
@@ -358,6 +362,7 @@ export function createApp(overrides = {}) {
     AUDIT_FIELD_MAX,
     config,
     saveConfig,
+    saveCredentialUpgrades,
     PAAW_ROOT,
     BACKUP_DIR,
     EVENT_LOG_PATH,

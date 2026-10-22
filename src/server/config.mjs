@@ -96,11 +96,46 @@ export function validateAuthConfig(config) {
 
 /**
  * Persist config back to config.json.
+ *
+ * WARNING: serialises the given object verbatim. Do NOT pass the runtime config
+ * built by createConfig() — it carries env-derived fields (host/port/password
+ * override). Use saveCredentialUpgrades() / updateConfigOnDisk() instead when
+ * persisting from the request path.
+ *
  * @param {string} configPath absolute path to config.json
  * @param {object} config config object
  */
 export function saveConfig(configPath, config) {
   writeFileSync(configPath, JSON.stringify(config, null, 2), "utf-8");
+}
+
+/**
+ * Overlay `patch` onto the config currently on disk (read-merge-write) instead
+ * of serialising an in-memory config wholesale.
+ *
+ * Why (review board RR-20261018-1738-6f2e, src/server.mjs:205 / config.mjs:133):
+ * the runtime `config` object is NOT a faithful copy of config.json — env
+ * overrides (PAAW_GATEWAY_HOST / PAAW_GATEWAY_PORT) and the boot-time credential
+ * override (PAAW_GATEWAY_PASSWORD* via applyPasswordOverride) are merged into it
+ * in place. Writing that object back would turn a one-shot env override into a
+ * permanent setting (and, for the password case, freeze the env-derived
+ * credential into the file). Merging the patch into the on-disk document keeps
+ * env-derived values out of the file by construction — the caller never has to
+ * know which fields are env-derived.
+ *
+ * The file is re-read immediately before the write so fields changed by other
+ * writer paths (e.g. POST /api/settings) are preserved.
+ *
+ * @param {string} configPath absolute path to config.json
+ * @param {object} patch partial config to merge onto the on-disk document
+ * @param {string} baseDir base directory used for fallback defaults (see loadConfig)
+ */
+export function updateConfigOnDisk(configPath, patch, baseDir) {
+  const current = loadConfig(configPath, baseDir);
+  if (!current || typeof current !== "object" || Array.isArray(current)) {
+    throw new Error("config.json is not a JSON object");
+  }
+  saveConfig(configPath, { ...current, ...patch });
 }
 
 /**
@@ -112,6 +147,7 @@ export function saveConfig(configPath, config) {
  * @param {string} baseDir the entry's __dirname (`<root>/src`)
  * @returns {{
  *   CONFIG_PATH: string, config: object, saveConfig: () => void,
+ *   saveCredentialUpgrades: () => void,
  *   PAAW_ROOT: string, BACKUP_DIR: string, EVENT_LOG_PATH: string,
  *   MAX_BACKUPS: number, BACKUP_SOURCE_DIRS: string[]
  * }}
@@ -152,6 +188,42 @@ export function createConfig(baseDir) {
     CONFIG_PATH,
     config,
     saveConfig: () => saveConfig(CONFIG_PATH, config),
+    /**
+     * Persist ONLY the lazily re-hashed credentials (login-time upgrade) by
+     * merging `users[].passwordHash` into the on-disk config.json.
+     *
+     * Never serialise the whole in-memory `config`: it carries env-derived
+     * fields (PAAW_GATEWAY_HOST / PAAW_GATEWAY_PORT / PAAW_GATEWAY_PASSWORD*
+     * override) that must not become permanent file settings — same root cause
+     * as the env-override persistence issue at this file's env merge (§host/port
+     * above) and at the login handler.
+     *
+     * Merge granularity: users are matched by `id`; a patched user replaces the
+     * on-disk user object wholesale (so a stale legacy hash is never kept
+     * alongside the upgraded one). A user absent from disk is NOT created here —
+     * its credential came from the env override, and persisting it would freeze
+     * that override into the file.
+     *
+     * @returns {number} how many persisted users carried a patched hash
+     */
+    saveCredentialUpgrades: () => {
+      const current = loadConfig(CONFIG_PATH, baseDir);
+      if (!current || typeof current !== "object" || Array.isArray(current)) {
+        throw new Error("config.json is not a JSON object");
+      }
+      const onDiskUsers = Array.isArray(current.users) ? current.users : [];
+      const liveUsers = Array.isArray(config.users) ? config.users : [];
+      let patched = 0;
+      const users = onDiskUsers.map((diskUser) => {
+        const live = liveUsers.find((u) => u && diskUser && u.id === diskUser.id);
+        if (!live || typeof live.passwordHash !== "string") return diskUser;
+        if (live.passwordHash === diskUser.passwordHash) return diskUser;
+        patched += 1;
+        return { ...diskUser, passwordHash: live.passwordHash };
+      });
+      if (patched > 0) saveConfig(CONFIG_PATH, { ...current, users });
+      return patched;
+    },
     PAAW_ROOT,
     BACKUP_DIR,
     EVENT_LOG_PATH,

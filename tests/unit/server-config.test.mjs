@@ -18,6 +18,7 @@ import {
   loadConfig,
   validateAuthConfig,
   saveConfig,
+  updateConfigOnDisk,
   createConfig,
 } from "../../src/server/config.mjs";
 
@@ -29,7 +30,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   rmSync(tmp, { recursive: true, force: true });
-  for (const k of ["PAAW_CONFIG", "PAAW_ROOT", "PAAW_BACKUP_DIR", "PAAW_EVENT_LOG", "PAAW_MAX_BACKUPS", "PAAW_GATEWAY_HOST", "PAAW_GATEWAY_PORT"]) {
+  for (const k of ["PAAW_CONFIG", "PAAW_ROOT", "PAAW_BACKUP_DIR", "PAAW_EVENT_LOG", "PAAW_MAX_BACKUPS", "PAAW_GATEWAY_HOST", "PAAW_GATEWAY_PORT", "PAAW_GATEWAY_PASSWORD", "PAAW_GATEWAY_PASSWORD_HASH", "PAAW_GATEWAY_ADMIN_ID"]) {
     delete process.env[k];
   }
 });
@@ -202,5 +203,82 @@ describe("createConfig", () => {
     c.config.customFlag = "yes";
     c.saveConfig();
     assert.equal(JSON.parse(readFileSync(file, "utf-8")).customFlag, "yes");
+  });
+
+  // ---------- saveCredentialUpgrades（review board RR-20261018-1738-6f2e） ----------
+  test("saveCredentialUpgrades：只把 users[].passwordHash 寫回，不落地 env 衍生的 host / port", () => {
+    const file = join(tmp, "upgrade.json");
+    writeFileSync(file, JSON.stringify({
+      host: "127.0.0.1",
+      port: 4199,
+      users: [{ id: "admin", name: "Admin", role: "admin", passwordHash: "legacy-plain" }],
+    }));
+    process.env.PAAW_CONFIG = file;
+    process.env.PAAW_GATEWAY_HOST = "0.0.0.0";
+    process.env.PAAW_GATEWAY_PORT = "5555";
+    const c = createConfig(BASE_DIR);
+    // 模擬 login 的 lazy rehash：只改記憶體中的 passwordHash
+    assert.equal(c.config.host, "0.0.0.0", "env 覆寫確實生效於 runtime config");
+    c.config.users[0].passwordHash = "$2b$12$upgraded-hash-value";
+
+    const patched = c.saveCredentialUpgrades();
+    assert.equal(patched, 1);
+
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.users[0].passwordHash, "$2b$12$upgraded-hash-value");
+    assert.equal(written.host, "127.0.0.1", "env 衍生的 host 不得寫回 config.json");
+    assert.equal(written.port, 4199, "env 衍生的 port 不得寫回 config.json");
+  });
+
+  test("saveCredentialUpgrades：無變更 → 不動檔案", () => {
+    const file = join(tmp, "nochange.json");
+    const before = JSON.stringify({ users: [{ id: "admin", passwordHash: "$2b$12$same" }] });
+    writeFileSync(file, before);
+    process.env.PAAW_CONFIG = file;
+    const c = createConfig(BASE_DIR);
+    assert.equal(c.saveCredentialUpgrades(), 0);
+    assert.equal(readFileSync(file, "utf-8"), before);
+  });
+
+  test("saveCredentialUpgrades：env 才有的 user（磁碟上不存在）不被建立 → env 密碼不會被凍結進檔", () => {
+    const file = join(tmp, "envuser.json");
+    writeFileSync(file, JSON.stringify({ users: [] }));
+    process.env.PAAW_CONFIG = file;
+    process.env.PAAW_GATEWAY_PASSWORD = "env-only-strong-pw";
+    const c = createConfig(BASE_DIR);
+    assert.equal(c.config.users.length, 1, "env override 在記憶體中建立了 user");
+    assert.equal(c.saveCredentialUpgrades(), 0);
+    assert.deepEqual(JSON.parse(readFileSync(file, "utf-8")).users, []);
+  });
+
+  test("saveCredentialUpgrades：保留磁碟上其他 user 的欄位（by id merge，不是整份覆寫）", () => {
+    const file = join(tmp, "merge.json");
+    writeFileSync(file, JSON.stringify({
+      backupSchedule: "0 3 * * *",
+      users: [
+        { id: "a", name: "A", role: "admin", passwordHash: "legacy-a" },
+        { id: "b", name: "B", role: "viewer", passwordHash: "$2b$12$keep-b" },
+      ],
+    }));
+    process.env.PAAW_CONFIG = file;
+    const c = createConfig(BASE_DIR);
+    c.config.users[0].passwordHash = "$2b$12$upgraded-a";
+    assert.equal(c.saveCredentialUpgrades(), 1);
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.backupSchedule, "0 3 * * *", "非 user 欄位原樣保留");
+    assert.deepEqual(written.users[0], { id: "a", name: "A", role: "admin", passwordHash: "$2b$12$upgraded-a" });
+    assert.deepEqual(written.users[1], { id: "b", name: "B", role: "viewer", passwordHash: "$2b$12$keep-b" });
+  });
+});
+
+// ---------- updateConfigOnDisk（config.mjs:133 同根因的 merge 接縫） ----------
+describe("updateConfigOnDisk", () => {
+  test("patch 合併到磁碟既有文件上，未提及的欄位保留", () => {
+    const file = join(tmp, "patch.json");
+    writeFileSync(file, JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] }));
+    updateConfigOnDisk(file, { port: 4300 }, BASE_DIR);
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.port, 4300);
+    assert.equal(written.host, "127.0.0.1");
   });
 });

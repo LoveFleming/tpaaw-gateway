@@ -19,7 +19,7 @@
  */
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -36,8 +36,12 @@ const PLAIN_PASSWORD = "e2e-hardened-pw";
 /**
  * Build a fresh in-process gateway (no listen) against a throwaway env.
  * @param {object} [configOverrides]
+ * @param {object} [opts]
+ * @param {Record<string,string|undefined>} [opts.env] extra env set while the
+ *   app's config is built (e.g. PAAW_GATEWAY_HOST to prove env overrides are
+ *   never persisted by the login credential upgrade).
  */
-function makeEnv(configOverrides = {}) {
+function makeEnv(configOverrides = {}, opts = {}) {
   const tmp = mkdtempSync(join(tmpdir(), "paaw-gw-auth-"));
   const paawRoot = join(tmp, "paaw-root");
   const backupDir = join(tmp, "backups");
@@ -67,6 +71,9 @@ function makeEnv(configOverrides = {}) {
     PAAW_ROOT: paawRoot,
     PAAW_BACKUP_DIR: backupDir,
     PAAW_EVENT_LOG: eventLogPath,
+    // 由 makeEnv 注入的額外 env（例如 PAAW_GATEWAY_HOST），供個別案例驗證
+    // env 覆寫不會被 login 的 credential 持久化一併寫回 config.json。
+    ...(opts.env || {}),
   })) {
     saved.set(k, Object.prototype.hasOwnProperty.call(process.env, k) ? process.env[k] : undefined);
     process.env[k] = v;
@@ -92,7 +99,7 @@ function makeEnv(configOverrides = {}) {
       ...(opts.remoteAddress ? { remoteAddress: opts.remoteAddress } : {}),
     }).then((r) => ({ status: r.status, data: r.data, headers: r.headers }));
 
-  return { app, login, tmp, dispose: () => rmSync(tmp, { recursive: true, force: true }) };
+  return { app, login, tmp, configPath, dispose: () => rmSync(tmp, { recursive: true, force: true }) };
 }
 
 describe("E2E · Gateway login hardening (TASK-018, in-process)", () => {
@@ -217,6 +224,35 @@ describe("E2E · Gateway login lockout (TASK-018, in-process)", () => {
       const ok = await fresh.login("admin", PLAIN_PASSWORD);
       assert.equal(ok.status, 200, JSON.stringify(ok.data));
       assert.ok(ok.data.token, "a token must still be issued");
+    } finally {
+      fresh.dispose();
+    }
+  });
+});
+
+describe("E2E · login hash upgrade must not persist env-derived config (in-process)", () => {
+  it("hash 升級只寫回 users[].passwordHash，config.json 不落地 env 覆寫的 host/port", async () => {
+    // PAAW_GATEWAY_HOST 只在 createConfig 建構時生效（模擬 operator 的一次性
+    // env 覆寫）；login 的 credential 持久化不得把它焊回 config.json。
+    const fresh = makeEnv({}, { env: { PAAW_GATEWAY_HOST: "0.0.0.0", PAAW_GATEWAY_PORT: "5599" } });
+    try {
+      assert.equal(fresh.app.config.host, "0.0.0.0", "前置：env 覆寫確實生效於 runtime config");
+      assert.equal(fresh.app.config.port, 5599, "前置：env 覆寫確實生效於 runtime config");
+
+      const onDiskBefore = JSON.parse(readFileSync(fresh.configPath, "utf-8"));
+      assert.equal(onDiskBefore.host, "127.0.0.1", "前置：磁碟上的 host 是 loopback");
+
+      // 觸發真實 login 流程（legacy 明文憑證 → 200 + lazy rehash → 持久化）。
+      const r = await fresh.login("admin", PLAIN_PASSWORD);
+      assert.equal(r.status, 200, JSON.stringify(r.data));
+
+      const onDiskAfter = JSON.parse(readFileSync(fresh.configPath, "utf-8"));
+      // 憑證確實升級並落地（本次修法的目標行為必須保留）
+      assert.match(onDiskAfter.users[0].passwordHash, /^\$2[aby]\$\d{2}\$/,
+        "升級後的 bcrypt hash 必須寫回 config.json");
+      // env 衍生的 host/port 不得被寫回
+      assert.equal(onDiskAfter.host, "127.0.0.1", "env 衍生的 host 不得持久化");
+      assert.equal(onDiskAfter.port, 4199, "env 衍生的 port 不得持久化");
     } finally {
       fresh.dispose();
     }
