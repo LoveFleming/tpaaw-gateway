@@ -326,7 +326,9 @@ export function createApp(overrides = {}) {
     // F-01: exit-confirmed stop BEFORE restore; fail-closed — if the stop
     // fails we refuse to extract over a possibly-live server.
     if (getPaawProcess()) {
-      const stopResult = await stopPaaw();
+      // Attribute the stop (server_stopping / server_stopped / server_stop_failed)
+      // to the requesting admin, not "system" — same as the dedicated stop route.
+      const stopResult = await stopPaaw(currentUser.id);
       if (!stopResult.ok) {
         // NOT 200: the request was refused because the server could not be
         // stopped — a conflict with the current (running) state, not a

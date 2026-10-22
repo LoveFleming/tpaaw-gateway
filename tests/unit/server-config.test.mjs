@@ -9,7 +9,7 @@
 
 import { test, describe, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -195,18 +195,18 @@ describe("createConfig", () => {
     assert.equal(c.EVENT_LOG_PATH, ev);
   });
 
-  test("saveConfig() 綁定，呼叫後 config.json 落地當前 config", () => {
+  test("saveConfig() 綁定，呼叫後 config.json 落地當前 config", async () => {
     const file = join(tmp, "bound.json");
     writeFileSync(file, JSON.stringify({ users: [] }));
     process.env.PAAW_CONFIG = file;
     const c = createConfig(BASE_DIR);
     c.config.customFlag = "yes";
-    c.saveConfig();
+    await c.saveConfig();
     assert.equal(JSON.parse(readFileSync(file, "utf-8")).customFlag, "yes");
   });
 
   // review board minor#7（RR-20261018-1738-6f2e, config.mjs:133）
-  test("createConfig().saveConfig()：env 衍生的 host / port / users 不得寫回 config.json", () => {
+  test("createConfig().saveConfig()：env 衍生的 host / port / users 不得寫回 config.json", async () => {
     const file = join(tmp, "envnoleak.json");
     writeFileSync(file, JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] }));
     process.env.PAAW_CONFIG = file;
@@ -220,7 +220,7 @@ describe("createConfig", () => {
     assert.equal(c.config.users.length, 1, "env override 在記憶體中建立了 user");
 
     c.config.customFlag = "yes"; // 真正屬於檔案的變更
-    c.saveConfig();
+    await c.saveConfig();
 
     const written = JSON.parse(readFileSync(file, "utf-8"));
     assert.equal(written.customFlag, "yes", "真正的變更仍要落盤");
@@ -229,25 +229,101 @@ describe("createConfig", () => {
     assert.deepEqual(written.users, [], "env 建立的 credential 不得凍結進 config.json");
   });
 
-  test("createConfig().saveConfig(patch)：明確 patch 原樣合併到磁碟文件", () => {
+  test("createConfig().saveConfig(patch)：明確 patch 原樣合併到磁碟文件", async () => {
     const file = join(tmp, "explicitpatch.json");
     writeFileSync(file, JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] }));
     process.env.PAAW_CONFIG = file;
     const c = createConfig(BASE_DIR);
     // 明確 patch 由呼叫端決定要寫什麼（此處的 env 覆寫不影響 patch 內容）
-    c.saveConfig({ backupSchedule: "0 4 * * *" });
+    await c.saveConfig({ backupSchedule: "0 4 * * *" });
     const written = JSON.parse(readFileSync(file, "utf-8"));
     assert.equal(written.backupSchedule, "0 4 * * *");
     assert.equal(written.port, 4199, "未提及的欄位保留");
   });
 
-  test("createConfig().saveConfig()：無變更時檔案內容不變", () => {
+  // review board round-2 major#1（config.mjs:235）：TASK-041 把 users 整個鍵永久
+  // 排除在無參數 saveConfig() 之外 → 非 env 情境下合法的 users 變更被靜默丟棄。
+  test("(a) 非 env override 情境：users 的合法變更經 saveConfig() 落盤", async () => {
+    const file = join(tmp, "usersnonenv.json");
+    writeFileSync(file, JSON.stringify({
+      host: "127.0.0.1",
+      port: 4199,
+      users: [{ id: "admin", name: "Admin", role: "admin", passwordHash: "$2b$12$abc" }],
+    }));
+    process.env.PAAW_CONFIG = file;
+    // 沒有 PAAW_GATEWAY_PASSWORD* → 無 credential override
+    const c = createConfig(BASE_DIR);
+    assert.equal(c.config.users.length, 1);
+
+    // 合法的 admin 變更：新增一個 viewer、調整名稱
+    c.config.users[0].name = "Renamed Admin";
+    c.config.users.push({ id: "viewer", name: "Viewer", role: "viewer", passwordHash: "$2b$12$def" });
+    await c.saveConfig();
+
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.users.length, 2, "新增的 user 必須落盤（不得被靜默丟棄）");
+    assert.equal(written.users[0].name, "Renamed Admin", "既有 user 的變更必須落盤");
+    assert.equal(written.users[1].id, "viewer");
+  });
+
+  test("(b) env override 情境：users 內由 env 衍生的 credential 仍不落盤（TASK-041 原意）", async () => {
+    const file = join(tmp, "usersenvoverride.json");
+    writeFileSync(file, JSON.stringify({
+      host: "127.0.0.1",
+      port: 4199,
+      users: [{ id: "admin", name: "Admin", role: "admin", passwordHash: "$2b$12$ondisk" }],
+    }));
+    process.env.PAAW_CONFIG = file;
+    process.env.PAAW_GATEWAY_PASSWORD = "env-only-strong-pw";
+    const c = createConfig(BASE_DIR);
+    // override 已把記憶體中的 admin 憑證換成 env 衍生值
+    assert.notEqual(c.config.users[0].passwordHash, "$2b$12$ondisk");
+
+    await c.saveConfig();
+
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.users.length, 1);
+    assert.equal(written.users[0].passwordHash, "$2b$12$ondisk",
+      "env 衍生的 credential 絕不可凍結進 config.json");
+    // 無其他變更時檔案內容不留任何 trace（整份不變）
+    assert.deepEqual(written.users, [{ id: "admin", name: "Admin", role: "admin", passwordHash: "$2b$12$ondisk" }]);
+  });
+
+  test("(e) 無參數 saveConfig()：file 缺失時的預設值不得被寫回", async () => {
+    const file = join(tmp, "missing-config.json");
+    // 檔案不存在 → loadConfig 整個 fallback 到含大量預設值的物件
+    process.env.PAAW_CONFIG = file;
+    const c = createConfig(BASE_DIR);
+    assert.equal(c.config.backupSchedule, "0 3 * * *", "fallback 預設值確實進了記憶體");
+    await c.saveConfig();
+    assert.equal(existsSync(file), false,
+      "以預設值為基線寫回會無中生有一份 config.json —— 不得發生");
+  });
+
+  test("(e2) 無參數 saveConfig()：檔案既有欄位不得被 loadConfig 預設值覆寫", async () => {
+    const file = join(tmp, "defaults.json");
+    const original = { host: "127.0.0.1", port: 4199, users: [], backupSchedule: "*/5 * * * *" };
+    writeFileSync(file, JSON.stringify(original));
+    process.env.PAAW_CONFIG = file;
+    const c = createConfig(BASE_DIR);
+    // 檔案既有值原樣沿用（不是預設）；缺的欄位在記憶體中是 undefined。
+    // 重點：比較基準若取「預設化後的物件」，缺席欄位會被誤判為「已變更」而寫回。
+    assert.equal(c.config.backupSchedule, "*/5 * * * *");
+    assert.equal(c.config.sessionMaxAge, undefined);
+    await c.saveConfig();
+
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.deepEqual(written, original,
+      "loadConfig 的預設值不得被寫回檔案（比較基準必須是原始 JSON）");
+  });
+
+  test("createConfig().saveConfig()：無變更時檔案內容不變", async () => {
     const file = join(tmp, "noop.json");
     const before = JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] });
     writeFileSync(file, before);
     process.env.PAAW_CONFIG = file;
     const c = createConfig(BASE_DIR);
-    c.saveConfig();
+    await c.saveConfig();
     assert.equal(readFileSync(file, "utf-8"), before);
   });
 
@@ -319,12 +395,53 @@ describe("createConfig", () => {
 
 // ---------- updateConfigOnDisk（config.mjs:133 同根因的 merge 接縫） ----------
 describe("updateConfigOnDisk", () => {
-  test("patch 合併到磁碟既有文件上，未提及的欄位保留", () => {
+  test("patch 合併到磁碟既有文件上，未提及的欄位保留", async () => {
     const file = join(tmp, "patch.json");
     writeFileSync(file, JSON.stringify({ host: "127.0.0.1", port: 4199, users: [] }));
-    updateConfigOnDisk(file, { port: 4300 }, BASE_DIR);
+    await updateConfigOnDisk(file, { port: 4300 }, BASE_DIR);
     const written = JSON.parse(readFileSync(file, "utf-8"));
     assert.equal(written.port, 4300);
     assert.equal(written.host, "127.0.0.1");
+  });
+
+  // review board round-2 major#2（config.mjs:135）：read-merge-write 非原子。
+  test("(c1) 原子替換：寫入後不殘留暫存檔，且檔案是完整 JSON", async () => {
+    const file = join(tmp, "atomic.json");
+    writeFileSync(file, JSON.stringify({ port: 4199, users: [] }));
+    await updateConfigOnDisk(file, { port: 4300 }, BASE_DIR);
+
+    // 目標檔完整可解析（不會是截斷的半份文件）
+    assert.equal(JSON.parse(readFileSync(file, "utf-8")).port, 4300);
+    // 目錄內不得殘留任何 .tmp 暫存檔
+    const leftovers = readdirSync(tmp).filter((f) => f.endsWith(".tmp"));
+    assert.deepEqual(leftovers, [], `atomic write must not leave temp files: ${leftovers.join(", ")}`);
+  });
+
+  test("(c2) 並發寫入：同 process 內序列化，兩個 patch 都不遺失（no lost update）", async () => {
+    const file = join(tmp, "concurrent.json");
+    writeFileSync(file, JSON.stringify({ port: 4199, users: [] }));
+    // 同時送兩個 read-merge-write：非序列化實作會讓後寫者覆蓋前者（讀到舊文件）
+    await Promise.all([
+      updateConfigOnDisk(file, { backupSchedule: "0 4 * * *" }, BASE_DIR),
+      updateConfigOnDisk(file, { maxBackups: 3 }, BASE_DIR),
+    ]);
+    const written = JSON.parse(readFileSync(file, "utf-8"));
+    assert.equal(written.backupSchedule, "0 4 * * *", "第一個 patch 不得被第二個寫入覆蓋");
+    assert.equal(written.maxBackups, 3, "第二個 patch 必須落盤");
+  });
+
+  test("(c3) 併發寫入序列化：一個 Promise 失敗不阻塞後續寫入", async () => {
+    const file = join(tmp, "queue-recover.json");
+    writeFileSync(file, JSON.stringify({ port: 4199, users: [] }));
+    const badFile = join(tmp, "not-an-object.json");
+    writeFileSync(badFile, JSON.stringify([1, 2, 3])); // 陣列 → updateConfigOnDisk 會 throw
+
+    const [failed] = await Promise.allSettled([
+      updateConfigOnDisk(badFile, { x: 1 }, BASE_DIR),
+      updateConfigOnDisk(file, { maxBackups: 5 }, BASE_DIR),
+    ]);
+    assert.equal(failed.status, "rejected", "非物件文件應 reject");
+    // 另一個檔案的寫入仍完成
+    assert.equal(JSON.parse(readFileSync(file, "utf-8")).maxBackups, 5);
   });
 });

@@ -16,7 +16,7 @@
  * (src/ -> src/server/) does not shift path depth.
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, renameSync, unlinkSync } from "fs";
 import { join, resolve } from "path";
 
 import { applyPasswordOverride, isWeakDefaultPassword } from "./password.mjs";
@@ -106,7 +106,90 @@ export function validateAuthConfig(config) {
  * @param {object} config config object
  */
 export function saveConfig(configPath, config) {
-  writeFileSync(configPath, JSON.stringify(config, null, 2), "utf-8");
+  atomicWriteJson(configPath, config);
+}
+
+/**
+ * Write `data` to `filePath` atomically: serialise to a sibling temp file, then
+ * renameSync over the target (rename on the same filesystem is atomic on POSIX
+ * and ReplaceFile-backed on Windows).
+ *
+ * Why: the previous `writeFileSync(target)` truncated the target first, so a
+ * concurrent reader (or a crash mid-write) could observe a truncated / empty
+ * config.json. With temp+rename a reader always sees either the old or the new
+ * complete document (review board round-2, config.mjs:135).
+ *
+ * The temp name carries pid + a counter + randomness so two writers in the same
+ * process (serialised by the queue below) and any cross-process writer never
+ * collide on the temp path. On failure the temp file is removed so a half-write
+ * never lingers on disk.
+ *
+ * @param {string} filePath absolute path of the target file
+ * @param {unknown} data JSON-serialisable value
+ */
+function atomicWriteJson(filePath, data) {
+  const tmpPath = `${filePath}.${process.pid}.${tempSeq++}.${Math.random().toString(36).slice(2, 8)}.tmp`;
+  try {
+    writeFileSync(tmpPath, JSON.stringify(data, null, 2), "utf-8");
+    renameSync(tmpPath, filePath);
+  } catch (err) {
+    try {
+      unlinkSync(tmpPath);
+    } catch {
+      /* best effort — the original error is the one worth reporting */
+    }
+    throw err;
+  }
+}
+
+/** Monotonic counter for temp-file uniqueness within one process. */
+let tempSeq = 0;
+
+/**
+ * Per-file in-process write queue (tail promise per config path).
+ *
+ * Why (review board round-2, config.mjs:135): updateConfigOnDisk() is a
+ * read-merge-write; two writers overlapping (login hash upgrade vs settings
+ * save) would each read the OLD document and the last writer would silently
+ * drop the other's patch. The Gateway is a single process, so serialising the
+ * read-merge-write critical section on a promise chain per config path is
+ * sufficient. The chain advances with `.then(run, run)` so one failure never
+ * stalls the queue for later writers.
+ *
+ * @type {Map<string, Promise<void>>}
+ */
+const writeQueues = new Map();
+
+/**
+ * Run the synchronous critical section `fn` in FIFO order per config path.
+ *
+ * `fn` MUST be synchronous: it reads and writes the file inside one turn of
+ * the event loop, so the promise chain is the only concurrency boundary that
+ * needs to be respected. A rejection from `fn` is rethrown to the caller and
+ * does not poison the queue.
+ *
+ * @template T
+ * @param {string} configPath queue key (the config file being mutated)
+ * @param {() => T} fn critical section (read-merge-write)
+ * @returns {Promise<T>} resolves with fn's return value
+ */
+async function withConfigWriteLock(configPath, fn) {
+  const key = resolve(configPath);
+  const previous = writeQueues.get(key) ?? Promise.resolve();
+  let release;
+  const gate = new Promise((r) => { release = r; });
+  const tail = previous.then(() => gate, () => gate); // ignore a prior failure
+  writeQueues.set(key, tail);
+  try {
+    await previous.catch(() => {}); // wait our turn (prior failure is not ours)
+    return fn();
+  } finally {
+    release();
+    // Drop the entry once no one is queued behind us (bounded: ~1 config file).
+    tail.then(() => {
+      if (writeQueues.get(key) === tail) writeQueues.delete(key);
+    });
+  }
 }
 
 /**
@@ -124,18 +207,24 @@ export function saveConfig(configPath, config) {
  * know which fields are env-derived.
  *
  * The file is re-read immediately before the write so fields changed by other
- * writer paths (e.g. POST /api/settings) are preserved.
+ * writer paths (e.g. POST /api/settings) are preserved. That read-merge-write
+ * runs inside a per-path write queue AND the write itself is a temp+rename
+ * atomic replace, so concurrent writers can neither lose each other's patch nor
+ * expose a truncated document to a reader (review board round-2, config.mjs:135).
  *
  * @param {string} configPath absolute path to config.json
  * @param {object} patch partial config to merge onto the on-disk document
  * @param {string} baseDir base directory used for fallback defaults (see loadConfig)
+ * @returns {Promise<void>} resolves after the atomic write completed
  */
-export function updateConfigOnDisk(configPath, patch, baseDir) {
-  const current = loadConfig(configPath, baseDir);
-  if (!current || typeof current !== "object" || Array.isArray(current)) {
-    throw new Error("config.json is not a JSON object");
-  }
-  saveConfig(configPath, { ...current, ...patch });
+export async function updateConfigOnDisk(configPath, patch, baseDir) {
+  await withConfigWriteLock(configPath, () => {
+    const current = loadConfig(configPath, baseDir);
+    if (!current || typeof current !== "object" || Array.isArray(current)) {
+      throw new Error("config.json is not a JSON object");
+    }
+    saveConfig(configPath, { ...current, ...patch });
+  });
 }
 
 /**
@@ -180,7 +269,30 @@ function jsonEqual(a, b) {
  * environment (or fallback defaults) rather than reading verbatim from
  * config.json. createConfig().saveConfig() must never write them back.
  */
-const ENV_DERIVED_KEYS = new Set(["host", "port", "users"]);
+const ENV_DERIVED_KEYS = new Set(["host", "port"]);
+
+/**
+ * Read the on-disk config as raw JSON (no defaults applied), or null when the
+ * file is missing / unparseable.
+ *
+ * Why (review board round-2, config.mjs:240): createConfig().saveConfig() diffs
+ * the runtime config against a "pristine" baseline. Using loadConfig() for that
+ * baseline is wrong — loadConfig() layers fallback defaults on top, so a field
+ * absent from the file but defaulted in memory (e.g. `maxBackups`) would look
+ * "changed" and be eagerly written back. The true baseline is the verbatim
+ * document.
+ *
+ * @param {string} configPath absolute path to config.json
+ * @returns {object | null}
+ */
+function readRawConfig(configPath) {
+  try {
+    const parsed = JSON.parse(readFileSync(configPath, "utf-8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
 
 function createConfigImpl(baseDir) {
   // Test-only knob: PAAW_CONFIG overrides the config path (same isolation
@@ -199,7 +311,14 @@ function createConfigImpl(baseDir) {
 
   // ── Credential override from env (TASK-018) ──
   // Lets an operator set a strong password without editing config.json.
-  applyPasswordOverride(config, process.env);
+  //
+  // `users` is env-derived ONLY on this path: once an override is active, any
+  // users[] difference between memory and disk is (at least partly) the env
+  // credential, which must never be frozen into the file. Without an override,
+  // users[] is ordinary file data and its changes MUST be persisted — a blanket
+  // exclusion silently dropped legitimate admin changes (review board round-2,
+  // config.mjs:235 = TASK-041 over-correction).
+  const passwordOverrideApplied = applyPasswordOverride(config, process.env) === true;
 
   const PAAW_ROOT = resolve(baseDir, process.env.PAAW_ROOT || config.paawRoot || "../../..");
   const BACKUP_DIR = resolve(baseDir, process.env.PAAW_BACKUP_DIR || config.backupDir || "../../../backups");
@@ -231,28 +350,35 @@ function createConfigImpl(baseDir) {
      *
      * @param {object} [patch] partial config to merge (defaults to the whole
      *   in-memory config, with env-derived fields filtered out)
+     * @returns {Promise<void>} resolves after the write (if any) completed
      */
-    saveConfig: (patch) => {
+    saveConfig: async (patch) => {
       if (patch) {
         // Explicit patch → caller decides which fields are persisted verbatim.
-        updateConfigOnDisk(CONFIG_PATH, patch, baseDir);
-        return;
+        return updateConfigOnDisk(CONFIG_PATH, patch, baseDir);
       }
-      // No patch → persist the difference against the pristine file, EXCLUDING
-      // the fields this factory derived from env (see ENV_DERIVED_KEYS): those
-      // were merged into `config` in place, so a plain deep-diff would mistake
-      // them for "changed by this instance" and write them back — the exact
-      // leak this guards against (review board minor#7). users[] keeps its
-      // dedicated path: saveCredentialUpgrades().
-      const pristine = loadConfig(CONFIG_PATH, baseDir);
+      // No patch → persist the difference against the VERBATIM on-disk document.
+      //
+      // Baseline is readRawConfig (raw JSON), not loadConfig: loadConfig layers
+      // fallback defaults, which would make a merely-defaulted field look
+      // "changed" and be written back (review board round-2, config.mjs:240).
+      const pristine = readRawConfig(CONFIG_PATH);
       const changed = {};
       for (const key of Object.keys(config)) {
+        // host/port are always env-derived (merged in place above) → never write.
         if (ENV_DERIVED_KEYS.has(key)) continue;
-        if (!jsonEqual(config[key], pristine?.[key])) changed[key] = config[key];
+        // users is env-derived only while the credential override is active
+        // (TASK-041 original intent). Without an override it is ordinary file
+        // data — an admin change must persist (review board round-2, major#1).
+        if (key === "users" && passwordOverrideApplied) continue;
+        // A file that is missing/unparseable is not a baseline: persisting the
+        // whole in-memory config there would freeze every default onto disk.
+        if (pristine === null) continue;
+        if (!jsonEqual(config[key], pristine[key])) changed[key] = config[key];
       }
       // Nothing to persist → leave the file untouched (no needless rewrite).
       if (Object.keys(changed).length === 0) return;
-      updateConfigOnDisk(CONFIG_PATH, changed, baseDir);
+      return updateConfigOnDisk(CONFIG_PATH, changed, baseDir);
     },
     /**
      * Persist ONLY the lazily re-hashed credentials (login-time upgrade) by

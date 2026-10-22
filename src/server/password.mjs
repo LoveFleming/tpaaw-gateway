@@ -139,11 +139,15 @@ export async function consumeDummyVerify(plain) {
  *
  * @param {object} config parsed config (mutated in place)
  * @param {NodeJS.ProcessEnv} [env]
+ * @returns {boolean} true when an override was actually applied to `config`;
+ *   false when neither env var was set (no-op). Callers use this to know that
+ *   `config.users` now carries an env-derived credential which must not be
+ *   persisted back to config.json (review board round-2, config.mjs:235).
  */
 export function applyPasswordOverride(config, env = process.env) {
   const hash = env.PAAW_GATEWAY_PASSWORD_HASH;
   const plain = env.PAAW_GATEWAY_PASSWORD;
-  if (!hash && !plain) return;
+  if (!hash && !plain) return false;
   if (hash && !isHashed(hash)) {
     throw new Error("PAAW_GATEWAY_PASSWORD_HASH must be a bcrypt hash");
   }
@@ -157,4 +161,5 @@ export function applyPasswordOverride(config, env = process.env) {
     config.users.push(user);
   }
   user.passwordHash = credential;
+  return true;
 }

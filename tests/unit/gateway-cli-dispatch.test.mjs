@@ -49,6 +49,16 @@ process.on("exit", () => {
 });
 
 /**
+ * 專案根 gateway.json 的狀態快照（存在與否 + mtimeMs）。
+ * 用來證明「本測試沒有寫入專案根」——而不是要求它不存在。
+ */
+function snapshotRootGatewayJson() {
+  const p = join(ROOT, "gateway.json");
+  if (!existsSync(p)) return { exists: false, mtimeMs: null };
+  return { exists: true, mtimeMs: statSync(p).mtimeMs };
+}
+
+/**
  * 在子進程內以 module hook 替換上游模組後 import gateway.mjs，跑一次 argv 分派。
  *
  * hooks.mjs 由本檔寫入 temp dir，動態產生（用絕對路徑，不依賴 cwd 解析）。
@@ -59,16 +69,6 @@ process.on("exit", () => {
  * @param {string[]} args            argv（如 ["update"]）
  * @param {object}   env            { home, cwd, scenario, ... }
  */
-/**
- * 專案根 gateway.json 的狀態快照（存在與否 + mtimeMs）。
- * 用來證明「本測試沒有寫入專案根」——而不是要求它不存在。
- */
-function snapshotRootGatewayJson() {
-  const p = join(ROOT, "gateway.json");
-  if (!existsSync(p)) return { exists: false, mtimeMs: null };
-  return { exists: true, mtimeMs: statSync(p).mtimeMs };
-}
-
 function runGatewayWithFakes(args, { home, cwd, scenario, extraEnv = {} } = {}) {
   const hooksPath = join(cwd, "hooks.mjs");
   const installFake = `file://${join(cwd, "fake-install.mjs")}`;
